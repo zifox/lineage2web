@@ -1,4 +1,8 @@
 <?php 
+define('INWEB', True);
+require_once("include/config.php");
+//пароль
+head("Admin");
 includeLang('admin/settings');
 
 if (logedin() && $CURUSER['accessLevel'] == '127'){
@@ -12,10 +16,10 @@ while ( $row = mysql_fetch_assoc($sql) ) {
     mysql_query("UPDATE `".$DB['webdb']."`.`config` SET `config_value` = '". mysql_real_escape_string($_POST[$row['config_name']])."' WHERE `config_name` = '{$row['config_name']}'") OR mysql_error();
     }
 echo $Lang['saved'];
-echo "<meta http-equiv=\"refresh\" content=\"1; URL=index.php?id=admin\" />";
+echo "<meta http-equiv=\"refresh\" content=\"1; URL=admin.php\" />";
 }else{
     ?>
-<form action="index.php?id=admin" method="POST">
+<form action="index.php?id=admin" method="post">
 <table width="519" style="color:#FFFFFF">
 <tbody>
 <?php
@@ -36,4 +40,6 @@ while ( $row = mysql_fetch_assoc($sql) ) {
 <?php
 }
 } else { die('nothing here!!!');}
+foot();
+mysql_close($link);
 ?>

@@ -1,8 +1,12 @@
 <?php
+define('INWEB', True);
+require_once("include/config.php");
+//пароль
+head("Castles");
 include("module/stat-menu.php");
 
 $noneed=1;
-//include("../../config/config.php");
+
 
 $result = mysql_query("SELECT castle.name, clan_data.clan_name FROM castle,clan_data WHERE clan_data.hasCastle=castle.id");
 while($row= mysql_fetch_assoc($result)){
@@ -367,3 +371,7 @@ if($s11=="1"){print '';}
 else
 print 'NPC</table></table></td></tr>';
 ?></table>
+<?php
+ foot();
+mysql_close($link);
+?>

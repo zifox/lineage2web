@@ -1,4 +1,8 @@
 <?php
+define('INWEB', True);
+require_once("include/config.php");
+//пароль
+head("Rules");
 include_once('module/stat-menu.php');
 includeLang('module');
 
@@ -15,6 +19,10 @@ switch($stat){
 	Case 'clantop':
 	
 	break;
+    
+    Case 'ss':
+    
+    break;
 	
 	Case 'gm':
 	$data=mysql_query("SELECT * FROM characters WHERE accesslevel>0 ORDER BY accesslevel DESC");
@@ -180,7 +188,9 @@ while ($top=mysql_fetch_array($data))
 }
 
 ?>
-</table> <?php }
-//}else{
-//echo"<h1>{$Lang['selectserv2']}</h1>";}
+</table>
+<?php
+}
+foot();
+mysql_close($link);
 ?>

@@ -1,3 +1,9 @@
+<?php
+define('INWEB', True);
+require_once("include/config.php");
+//пароль
+head("Rules");
+?>
 <ul>
 <li><h3>For newbies</h3></li></ul><hr />
 You must respect all Paranormal Lineage 2 Staff..<br />
@@ -18,3 +24,7 @@ GMs do not restore lost or dropped items.<br />
 Each player allowed to have max 3 accounts. ( dual box )<br />
 No dual box in olympiad or you will be pernament banned.<br />
 </ul>
+<?php
+foot();
+mysql_close($link);
+?>

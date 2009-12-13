@@ -20,7 +20,7 @@ else
 <table border="0" cellpadding="0">
 <tr><td><?php echo sprintf($Lang['welcome'], $CURUSER['login']);?></td></tr>
 <?php
-if($CURUSER['accessLevel'] == '127'){echo "<tr><td><center><a href=\"index.php?id=admin\"><font color=\"red\">{$Lang['admin']}</font></a></center></td></tr>";}
+if($CURUSER['accessLevel'] == '127'){echo "<tr><td><center><a href=\"admin.php\"><font color=\"red\">{$Lang['admin']}</font></a></center></td></tr>";}
 
 $time=$CURUSER['voted']+60*60*12;
 echo "<tr><td align=\"center\"><font color=\"red\">";
@@ -33,7 +33,7 @@ echo "{$Lang['vote_after']} <br />";
 <script language="JavaScript" type="text/javascript">
 <!--
 TimeFormat = "%%H%% <?php echo $Lang['hours'];?>, %%M%% <?php echo $Lang['minutes'];?>, %%S%% <?php echo $Lang['seconds'];?>.";
-endmsg = "<a href=index.php?id=vote><?php echo $Lang['vote'];?></a>";
+endmsg = "<a href=vote.php><?php echo $Lang['vote'];?></a>";
 secs = "<?php echo $time;?>";
 var date = new Date();
 var time = date.getTime()/1000;
@@ -43,8 +43,8 @@ secs = Math.floor(secs - time);
 <script type="text/javascript" src="http://l2.pvpland.lv/scripts/clock.js"></script>
 <span id="vote">&nbsp;</span><script type="text/javascript">Clock(secs.valueOf());</script>
 </font></td></tr>
-    <tr><td><center><a href="index.php?id=myacc"><?php echo $Lang['my_account'];?></a></center></td></tr>
-    <tr><td><center><a href="index.php?id=mychars"><?php echo $Lang['my_chars'];?></a></center></td></tr>
+    <tr><td><center><a href="myacc.php"><?php echo $Lang['my_account'];?></a></center></td></tr>
+    <tr><td><center><a href="mychars.php"><?php echo $Lang['my_chars'];?></a></center></td></tr>
     <tr><td><center><a href="logout.php"><?php echo $Lang['logout'];?></a></center></td></tr>
     </table>
     <?php

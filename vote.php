@@ -1,5 +1,8 @@
 <?php
+define('INWEB', True);
+require_once("include/config.php");
 //пароль
+head("Vote");
 includeLang('vote');
 if (logedin())
 {
@@ -51,8 +54,7 @@ mysql_query("UPDATE `characters` SET `vitality_points`='20000' WHERE `charId`='$
 <b><?php echo $Lang['vote_for_server'];?></b><br /></center>
 
 <script language="javascript" src="scripts/vote.js"></script>
-<script src="http://wos.lv/a.php?b=468x60&c=11603"></script> 
-<form name="vote" method="POST" action="index.php?id=vote&action=vote">
+<form name="vote" method="post" action="vote.php?action=vote">
 <table border="1" cellspacing="0" cellpadding="5">
 <tr><td><img src="http://www.xtremeTop100.com/votenew.jpg" /></td><td><input type="button" onclick="one()" value="xtremetop" /></td></tr>
 
@@ -86,4 +88,6 @@ while($row=mysql_fetch_assoc($query))
 </form>
 <?php
 } else { msg('Error', 'You need to login', 'error'); }
+foot();
+mysql_close($link);
 ?>
