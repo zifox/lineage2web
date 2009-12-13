@@ -1,5 +1,8 @@
 <?php
-    
+define('INWEB', True);
+require_once("include/config.php");
+//пароль
+head("UserInfo");
 if ($_GET['cid'])
 {
     $id=0+$_GET['cid'];
@@ -68,4 +71,6 @@ echo "<tr><td><img src=\"./module/face/".$otherchar['race']."_".$otherchar['sex'
     }
 }else{echo $Lang['not_found'];}
 }
+foot();
+mysql_close($link);
 ?>

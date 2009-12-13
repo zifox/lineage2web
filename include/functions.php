@@ -28,23 +28,22 @@ function includeBlock($file, $block_name='Menu', $link=false)
 	global $langpath, $skin, $Lang, $Config, $CURUSER;
 	echo '
 <table cellpadding="0" cellspacing="0" border="0"><tr>
-<td background="skins/'.$skin.'/img/t_h_lc2.gif" width="16" height="48"></td>
-<td background="skins/'.$skin.'/img/t_h_rp.gif" width="120" height="48" align="center">
-<strong>'.$block_name.'</strong></td>
-<td background="skins/'.$skin.'/img/t_h_rc2.gif" width="19" height="48"></td></tr>
-<tr><td background="skins/'.$skin.'/img/t_h_bl.jpg" width="16" ></td>
-<td background="skins/'.$skin.'/img/t_bg.gif" width="120" align="center" valign="top">
+<td class="head_left_corner2"></td>
+<td class="head_center" align="center" width="120"><strong>'.$block_name.'</strong></td>
+<td class="head_right_corner2"></td></tr>
+<tr><td class="head_left_border"></td>
+<td class="head_background" align="center" valign="top" width="120">
 ';
 includeLang('blocks/'.$file);
 require_once('blocks/'.$file.'.php');
 echo '
 </td>
-<td background="skins/'.$skin.'/img/t_h_br.jpg" width="16" ></td>
+<td class="head_right_border"></td>
 </tr>
 <tr>
-<td background="skins/'.$skin.'/img/t_b_lc.gif" width="16" height="22"></td>
-<td background="skins/'.$skin.'/img/t_b_c.gif" width="120" height="22"></td>
-<td background="skins/'.$skin.'/img/t_b_rc.gif" width="19" height="22"></td>
+<td class="bottom_left_corner"></td>
+<td class="bottom_center" width="122"></td>
+<td class="bottom_right_corner"></td>
 </tr>
 </table>';
 }
@@ -59,14 +58,14 @@ function logincookie($account, $password, $rememberme)
 	if($rememberme){$expiretime = time() + 31536000;}else{$expiretime=0;}
 	setcookie('account', $account, $expiretime, '/', '', '',true);
 	setcookie('password', $password, $expiretime, '/', '', '',true);
-	header('Location: '.$Config['url'].'/index.php?id=logedin');
+	header('Location: index.php');
 }
 
 function logout()
 {
     setcookie('account', '', 0, '/');
 	setcookie('password', '', 0, '/');
-    header('Location: '.$Config['url'].'/index.php');
+    header('Location: index.php');
 }
 
 function logedin()
@@ -93,16 +92,32 @@ function msg($heading = '', $text = '', $div = 'success', $return=false) {
 }
 
 function error($id){
-    header('Location:'.$Config['url'].'/index.php?id=error&error='.$id);
+    header('Location: error.php?error='.$id);
 }
 
-function head()
+function head($title = "")
 {
-    
+    global $skin, $Config, $Lang;
+DEFINE('INSKIN', True);
+if($_COOKIE['skin'])
+{
+$skin = mysql_real_escape_string(isset($_COOKIE['skin']));
+}
+else
+{
+	$skin = $Config['DSkin'];
+}
+		if ($title == "")
+			$title = $Config['Title'];
+		else
+			$title = $Config['Title']." :: ".$title;
+    require_once("skins/" . $skin . "/config.php");
+	require_once("skins/" . $skin . "/head.php");
 }
 
 function foot()
 {
-    
+    global $skin, $Config, $Lang;
+    require_once("skins/" . $skin . "/foot.php");
 }
 ?>

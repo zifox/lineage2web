@@ -1,6 +1,16 @@
 <?php 
-if(!logedin())
+//пароль
+define('INWEB', True);
+require_once("include/config.php");
+if(logedin())
 {
+    head("Registration");
+    msg('Error', 'You already have account', 'error');
+    foot();
+    mysql_close($link);
+    die();
+}
+
 If($_POST)
 {
     if(ereg("^([a-zA-Z0-9_-])*$", $_POST['account']) && ereg("^([a-zA-Z0-9_-])*$", $_POST['password']) && ereg("^([a-zA-Z0-9_-])*$", $_POST['password2']))
@@ -8,8 +18,7 @@ If($_POST)
 	if ($_POST['account'] && strlen($_POST['account'])<16 && strlen($_POST['account'])>3 && $_POST['password'] && $_POST['password2'] && $_POST['password']==$_POST['password2'])
 	{	
 		$check=mysql_query("select * from accounts where login='".mysql_real_escape_string($_POST['account'])."'");
-		$check1=mysql_num_rows($check);
-		if($check1>0)
+		if(mysql_num_rows($check))
 		{
 			error('6');
 		}
@@ -29,9 +38,8 @@ else
 {
 	error('4');
 }
-}else
-{
-
+}
+head("Registration");
 ?>
 <h4>Registration</h4>
 <br /><br /><ul>
@@ -83,7 +91,7 @@ function checkform(f)
   return true;
 }
 //]]></script>
-<form method="POST" action="index.php?id=reg" onsubmit="return checkform(this)">
+<form method="post" action="reg.php" onsubmit="return checkform(this)">
 <table>
  <tr>
   <td>Login</td>
@@ -103,11 +111,8 @@ function checkform(f)
  </tr>
 </table>
 </form>
-
 <?php
-}
-}else
-{
-    error('7');
-}
+foot();
+mysql_close($link);
+die();
 ?>         

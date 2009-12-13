@@ -1,6 +1,6 @@
 <?php
 DEFINE('INSKIN', True);
-require_once('skins/l2/l2_config.php');
+require_once('skins/l2/config.php');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
@@ -88,7 +88,6 @@ if($Config['enable_news'])
 }
 ?>
 								<hr /><br /><br /><br />
-
 <?php
 if($id && file_exists('module/'.$id . '.php'))
 	{

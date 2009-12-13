@@ -15,4 +15,5 @@ $Lang['vote_after'] = 'Next vote after';
 $Lang['hours'] = 'Hours';
 $Lang['minutes'] = 'Minutes';
 $Lang['seconds'] = 'Seconds';
+$Lang['register'] = 'Registration';
 ?>

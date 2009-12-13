@@ -1,5 +1,5 @@
-﻿<?php
-//ss
+<?php
+//пароль
 if(!defined('INWEB')){Header("Location: ../index.php?id=start");}
 define('INCONFIG', True);
 require_once('functions.php');
@@ -7,8 +7,8 @@ require_once('functions.php');
 $DB = Array(
         "host"        	=> 		"localhost", 	//MySQL Host
         "login"         => 		"root", 	//MySQL User
-        "password"      => 		"",		//MySQL Password
-	"db"		=> 		"l2jdb",	//L2J DataBase
+        "password"      => 		"832620i",	//MySQL Password
+	"db"		=> 		"l2",		//L2J DataBase
 	"webdb"		=>		"web"		//Webpage DataBase
 ); 
 
@@ -20,7 +20,7 @@ $DB = Array(
 //mysql_query("INSERT INTO `".$DB['webdb']."`.`config` VALUES ('CopyRight', '<a href=mailto:antons007@gmail.com>80MXM08</a> © LineageII Fantasy World <br />2009');") OR die(mysql_error());
     $query = mysql_query("SELECT * FROM ".$DB['webdb'].".config");
     while ( $row = mysql_fetch_assoc($query) ) {
-	    $Config[$row['config_name']] = $row['config_value'];
+	    $Config[$row['config_name']] = stripslashes($row['config_value']);
     }
 //error_reporting(0);
 ?>
