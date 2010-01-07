@@ -22,7 +22,7 @@
 				</td>
 			</tr>
 			<tr align="center" valign="top">
-			 <td align="center" valign="middle"><?php echo $Config['CopyRight']; ?></td>
+			 <td align="center" valign="middle"><b>Lineage II</b> is a trademark of NCsoft Corporation. Copyright © <b>NCsoft Corporation</b>. All rights reserved.<br /><?php echo $Config['CopyRight']; ?></td>
 			</tr>
 		</table>
 </body>
