@@ -1,10 +1,16 @@
-<?php
+﻿<?php
 //пароль
-
+# LS
 $fp = @fsockopen($Config['LServerIP'], $Config['LServerPort'], $errno, $errstr, 1);
 If($fp >= 1){
 $loginonline = '<img src="img/online.png" border="0" alt="Online" title="Online" />';}
 else{ $loginonline = '<img src="img/offline.png" border="0" alt="Offline" title="Offline" />'; }
+
+# Comunity Server OnLine/OffLine
+$fp = @fsockopen($Config['CServerIP'], $Config['CServerPort'], $errno, $errstr, 1);
+if($fp >= 1){
+$comunityonline = '<img src="img/online.png" border="0" alt="Online" title="Online" />';}
+else{ $comunityonline = '<img src="img/offline.png" border="0" alt="Offline" title="Offline" />'; }
 
 # Server1 OnLine/OffLine
 $fp = @fsockopen($Config['GServerIP'], $Config['GServerPort'], $errno, $errstr, 1);
@@ -45,6 +51,7 @@ $clannum = mysql_result($sql, 0, 0);
 
 <table align="center">
 <tr><td align="left">Login Server:</td><td align="left"><?php echo $loginonline;?></td></tr>
+<tr><td align="left">Comunity Server:</td><td align="left"><?php echo $comunityonline;?></td></tr>
 <tr><td align="left"><?php echo $Config['ServerName']; ?>:</td><td align="left"><?php echo $gameonline; ?></td></tr>
 <tr><td align="left">Accounts:</td><td align="left"><?php echo $accountsnum;?></td></tr>
 <tr><td align="left">Clans: <?php echo $clannum; ?></td></tr>
