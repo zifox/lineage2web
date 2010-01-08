@@ -100,7 +100,9 @@ li.vote
 td.records {
 color : #a1967c;
 }
-
+ol,ul,li.left {
+    text-align: left;
+}
 input.login {
 border : 1px solid #506479;
 font-family : Verdana, Arial, Helvetica, sans-serif;

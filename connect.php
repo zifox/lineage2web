@@ -5,8 +5,8 @@ require_once("include/config.php");
 head("How to connect");
 ?>
 <b>
-<ol>
-	<li>If you have LineAgeII client (game) then go to step 2 otherwise download <b>Gracia Epilogue</b> client from:
+<ol class="left">
+	<li>If you have LineAgeII client (game) then go to step 2<br /> otherwise download <b>Gracia Epilogue</b> client from:
     <ul><li><a href="http://www.gamershell.com/download_53076.shtml">GamersHell.com</a></li>
     <li><a href="http://www.fileplanet.com/promotions/lineage2/gracia-epilogue/">FilePlanet.com</a></li>
     <li><a href="files/LineAgeII.rar">LineAgeII.exe ONLY</a></li>
