@@ -51,7 +51,7 @@ $clannum = mysql_result($sql, 0, 0);
 
 <table align="center">
 <tr><td align="left">Login Server:</td><td align="left"><?php echo $loginonline;?></td></tr>
-<tr><td align="left">Comunity Server:</td><td align="left"><?php echo $comunityonline;?></td></tr>
+<tr><td align="left">Community Server:</td><td align="left"><?php echo $comunityonline;?></td></tr>
 <tr><td align="left"><?php echo $Config['ServerName']; ?>:</td><td align="left"><?php echo $gameonline; ?></td></tr>
 <tr><td align="left">Accounts:</td><td align="left"><?php echo $accountsnum;?></td></tr>
 <tr><td align="left">Clans: <?php echo $clannum; ?></td></tr>

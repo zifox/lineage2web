@@ -19,7 +19,7 @@ echo $Lang['saved'];
 echo "<meta http-equiv=\"refresh\" content=\"1; URL=admin.php\" />";
 }else{
     ?>
-<form action="index.php?id=admin" method="post">
+<form action="admin.php" method="post">
 <table width="519" style="color:#FFFFFF">
 <tbody>
 <?php
