@@ -10,6 +10,7 @@ head("How to connect");
     <ul><li><a href="http://www.gamershell.com/download_53076.shtml">GamersHell.com</a></li>
     <li><a href="http://www.fileplanet.com/promotions/lineage2/gracia-epilogue/">FilePlanet.com</a></li>
     <li><a href="files/LineAgeII.rar">LineAgeII.exe ONLY</a></li>
+    <li><a href="files/torrent.torrent">LineAgeII.exe + Patch.torrent Using P2P (BitTorrent)</a></li>
     </ul></li>
     <li>Run LineAgeII.exe and do full check</li>
     <li>Download our patch <a href="files/hosts.exe">Hosts.exe</a></li>
