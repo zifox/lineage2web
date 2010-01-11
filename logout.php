@@ -1,6 +1,6 @@
 <?php
 
 Define('INWEB', True);
-require_once('./../include/config.php');
+require_once('include/config.php');
 	logout();	
 ?>
