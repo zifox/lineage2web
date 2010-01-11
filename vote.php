@@ -4,9 +4,13 @@ require_once("include/config.php");
 //пароль
 head("Vote");
 includeLang('vote');
+if (!logedin())
+{
+    msg('Error', 'You need to login', 'error'); 
+}
+
 if (logedin())
 {
-
 $action = $_GET['action'];
 $hidden = $HTTP_POST_VARS['secrethiddenfromyou'];
 
@@ -50,6 +54,7 @@ mysql_query("UPDATE `characters` SET `vitality_points`='20000' WHERE `charId`='$
 {
     error('8');
 }
+}
 ?>
 <b><?php echo $Lang['vote_for_server'];?></b><br /></center>
 
@@ -68,6 +73,11 @@ mysql_query("UPDATE `characters` SET `vitality_points`='20000' WHERE `charId`='$
 <center><script src="http://wos.lv/v.php?11603"></script></center></td></tr><tr><td>
 <script src="http://wos.lv/a.php?b=180x250&c=11603"></script> 
 </tr></td></table><br />
+
+<?php
+if(logedin())
+{
+?>
 <table border="1" cellspacing="0" cellpadding="5">
 <tr><td><select id="reward" name="reward">
 <option value="vitality" id="vitality"><?php echo $Lang['vitality_4lvl'];?></option>
@@ -84,10 +94,11 @@ while($row=mysql_fetch_assoc($query))
 ?>
 </select>
 <tr><td align="center"><input type="hidden" value="1" name="secrethiddenfromyou" /><input name="go" type="submit" disabled="true" value="<?php echo $Lang['get_reward'];?>" /></tr></td></table>
-
+<?php
+}
+?>
 </form>
 <?php
-} else { msg('Error', 'You need to login', 'error'); }
 foot();
 mysql_close($link);
 ?>
