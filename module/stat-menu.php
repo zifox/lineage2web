@@ -1,5 +1,5 @@
 <center>
-<?php includeLang('stat-menu'); ?>
+<?php includeLang('stat'); ?>
 <h4><?php echo $Lang['server_stat'];?></h4><hr />
  | <a href="stat.php"><?php echo $Lang['home'];?></a>
  | <a href="stat.php?stat=online"><?php echo $Lang['online'];?></a> 
@@ -16,11 +16,11 @@
  | <a href="stat.php?stat=maxCp"><?php echo $Lang['cp'];?></a>
  | <a href="stat.php?stat=maxHp"><?php echo $Lang['hp'];?></a>
  | <a href="stat.php?stat=maxMp"><?php echo $Lang['mp'];?></a> |<br /><hr />
- | <a href="stat.php?stat=top"><?php echo $Lang['top'];?> <?php echo $top;?></a>
- | <a href="stat.php?stat=human"><?php echo $Lang['humans'];?></a>
- | <a href="stat.php?stat=elf"><?php echo $Lang['elfs'];?></a>
- | <a href="stat.php?stat=dark_elf"><?php echo $Lang['dark_elfs'];?></a>
- | <a href="stat.php?stat=orc"><?php echo $Lang['orcs'];?></a>
- | <a href="stat.php?stat=dwarf"><?php echo $Lang['dwarfs'];?></a>
- | <a href="stat.php?stat=kamael"><?php echo $Lang['kamaels'];?></a> |<br /><hr />
+ | <a href="stat.php?stat=top"><?php echo $Lang['top'].' '.$Config['TOP'];?> <?php echo $top;?></a>
+ | <a href="stat.php?stat=human"><?php echo $Lang['race'][0];?></a>
+ | <a href="stat.php?stat=dark_elf"><?php echo $Lang['race'][1];?></a>
+ | <a href="stat.php?stat=elf"><?php echo $Lang['race'][2];?></a>
+ | <a href="stat.php?stat=orc"><?php echo $Lang['race'][3];?></a>
+ | <a href="stat.php?stat=dwarf"><?php echo $Lang['race'][4];?></a>
+ | <a href="stat.php?stat=kamael"><?php echo $Lang['race'][5];?></a> |<br /><hr />
    </center>  

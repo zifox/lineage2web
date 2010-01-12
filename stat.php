@@ -2,117 +2,144 @@
 define('INWEB', True);
 require_once("include/config.php");
 //пароль
-head("Rules");
-include_once('module/stat-menu.php');
-includeLang('module');
+head("{$Lang['statistic']}");
+includeLang('stat');
 
+//////////////////////////MENU
+?>
+<center>
+<h4><?php echo $Lang['server_stat'];?></h4><hr />
+ | <a href="stat.php"><?php echo $Lang['home'];?></a>
+ | <a href="stat.php?stat=online"><?php echo $Lang['online'];?></a> 
+ | <a href="module/onlinemap/index.php"target= "_blank"><?php echo $Lang['map'];?></a> 
+ | <a href="module/castles/index.php "target= "_blank"><?php echo $Lang['castles_map'];?></a> 
+ | <a href="castle.php"><?php echo $Lang['castles'];?></a> 
+ | <a href="ss.php"><?php echo $Lang['seven_signs'];?></a> 
+ | <a href="clantop.php"><?php echo $Lang['top_clans'];?></a> |<br /><hr />
+ | <a href="stat.php?stat=gm"><?php echo $Lang['gm'];?></a>
+ | <a href="stat.php?stat=count"><?php echo $Lang['rich_players'];?></a> 
+ | <a href="stat.php?stat=top_pvp"><?php echo $Lang['pvp'];?></a>  
+ | <a href="stat.php?stat=top_pk"><?php echo $Lang['pk'];?></a>
+ | <a href="stat.php?stat=top_time"><?php echo $Lang['activity'];?></a> 
+ | <a href="stat.php?stat=maxCp"><?php echo $Lang['cp'];?></a>
+ | <a href="stat.php?stat=maxHp"><?php echo $Lang['hp'];?></a>
+ | <a href="stat.php?stat=maxMp"><?php echo $Lang['mp'];?></a> |<br /><hr />
+ | <a href="stat.php?stat=top"><?php echo $Lang['top'].' '.$Config['TOP'];?> <?php echo $top;?></a>
+ | <a href="stat.php?stat=human"><?php echo $Lang['race'][0];?></a>
+ | <a href="stat.php?stat=dark_elf"><?php echo $Lang['race'][1];?></a>
+ | <a href="stat.php?stat=elf"><?php echo $Lang['race'][2];?></a>
+ | <a href="stat.php?stat=orc"><?php echo $Lang['race'][3];?></a>
+ | <a href="stat.php?stat=dwarf"><?php echo $Lang['race'][4];?></a>
+ | <a href="stat.php?stat=kamael"><?php echo $Lang['race'][5];?></a> |<br /><hr />
+   </center>  
+   <?php
+   //////////////////////////////MENU
 
 $stat = mysql_real_escape_string($_GET['stat']);
 
 switch($stat){
 	
 	Case 'online':
-	$data=mysql_query ("SELECT * FROM characters WHERE online and !accesslevel ORDER BY exp DESC");
-	echo '<br><center><b>'.$Lang['online_users'].'</b></center><br><hr>';
+	$data=mysql_query ("SELECT * FROM characters WHERE online ORDER BY exp DESC");
+	echo '<h1>'.$Lang['online'].'</h1>';
 	break;
 	
-	Case 'clantop':
-	
-	break;
-    
-    Case 'ss':
-    
+	Case 'clantop': //NOTDONE
+    Case 'ss': //NOTDONE
     break;
 	
 	Case 'gm':
 	$data=mysql_query("SELECT * FROM characters WHERE accesslevel>0 ORDER BY accesslevel DESC");
-	echo '<br><center><b>..:: GameMasters List ::..</b></center><br><hr>';
-	$addheader='<td><b>Send Message</b></td>';
+	echo '<h1>'.$Lang['gm'].'</h1>';
+	$addheader='<td><b>'.$Lang['send_message'].'</b></td>';
 	$addcol=true;
-	$addcolcont='<td><a href=index.php?id=msg>Message</a></td>';
+	$addcolcont='<td><a href=index.php?id=msg>'.$Lang['send_message'].'</a></td>';
 	break;
+    
 	Case 'count':
 	$data = mysql_query("SELECT `characters`.`char_name`, `characters`.`sex`, `characters`.`pvpkills`, `characters`.`pkkills`, `characters`.`race`, `characters`.`classid`, `characters`.`base_class`, `characters`.`onlinetime`, `characters`.`online`, `characters`.`level`, `characters`.`clanid`, `items`.`count` FROM characters, items WHERE items.item_id = '57' AND characters.charId = items.owner_id AND characters.accesslevel=0 ORDER BY items.count DESC LIMIT {$Config['TOP']}");
-	echo'<br><b><center><b>..:: Rich Players ::..</b></center></b><br><hr>';
+	echo'<h1>'.$Lang['rich_players'].'</h1>';
 	$addheader='<td><b>Adena</b></td>';
 	$addcol=true;
 	break;
 	
 	Case 'top_pvp';
 	$data=mysql_query("SELECT * FROM characters WHERE !accesslevel AND pvpkills>0 ORDER BY pvpkills DESC LIMIT {$Config['TOP']}");
-	echo '<br><center><b>..:: TOP PVP ::..</b></center><br><hr>';
+	echo '<h1>'.$Lang['pvp'].'</h1>';
 	break;
 	
 	Case 'top_pk':
 	$data=mysql_query("SELECT * FROM characters WHERE accesslevel=0 AND pkkills>0 ORDER BY pkkills DESC LIMIT {$Config['TOP']}");
-	echo '<br><center><b>..:: TOP PK ::..</b></center><br><hr>';
+	echo '<h1>'.$Lang['pk'].'</h1>';
 	break;
 	
 	Case 'top_time':
 	$data=mysql_query("SELECT * FROM characters WHERE !accesslevel ORDER BY onlinetime DESC LIMIT {$Config['TOP']}");
-	echo '<br><center><b>..:: TOP Activity ::..</b></center><br><hr>';
+	echo '<h1>'.$Lang['activity'].'</h1>';
 	break;
 	
 	Case 'maxCp':
 	$data=mysql_query("SELECT * FROM characters WHERE !accesslevel ORDER BY maxCp DESC LIMIT {$Config['TOP']}");
-	echo '<br><center><b>..:: TOP CP ::..</b></center><br><hr>';
+	echo '<h1>'.$Lang['cp'].'</h1>';
 	$addheader='<td><b>Max CP</b></td>';
 	$addcol=true;
 	break;
 	
 	Case 'maxHp':
 	$data=mysql_query("SELECT * FROM characters WHERE !accesslevel ORDER BY maxHp DESC LIMIT {$Config['TOP']}");
-	echo '<br><center><b>..:: TOP HP ::..</b></center><br><hr>';
+	echo '<h1>'.$Lang['hp'].'</h1>';
 	$addheader='<td><b>Max HP</b></td>';
 	$addcol=true;
 	break;
 	
 	Case 'maxMp':
 	$data=mysql_query("SELECT * FROM characters WHERE !accesslevel ORDER BY maxMp DESC LIMIT {$Config['TOP']}");
-	echo '<br><center><b>..:: TOP MP ::..</b></center><br><hr>';
+	echo '<h1>'.$Lang['mp'].'</h1>';
 	$addheader='<td><b>Max MP</b></td>';
 	$addcol=true;
 	break;
 	
 	Case 'top':
 	$data=mysql_query("SELECT * FROM characters WHERE accesslevel=0  ORDER BY  level  DESC LIMIT {$Config['TOP']} ");
-	echo '<br><center><b>'.$Lang['top_players'].'</b></center><br><hr>';
+	echo '<h1>'.$Lang['top'].' '.$Config['TOP'].'</h1>';
 	break;
 	
 	Case 'human':
 	$data=mysql_query("SELECT characters.*,classname FROM characters,char_templates WHERE !accesslevel AND race=0 AND char_templates.ClassId=characters.classid ORDER BY level DESC LIMIT {$Config['TOP']}");
-	echo '<br><center><b>'.$Lang['top_humans'].'</b></center><br><hr>';
+	echo '<h1>'.$Lang['race'][0].'</h1>';
 	break;
 	
-	Case 'elf':
+    	Case 'dark_elf':
 	$data=mysql_query("SELECT characters.*,classname FROM characters,char_templates WHERE !accesslevel AND race=1 AND char_templates.ClassId=characters.classid ORDER BY level DESC LIMIT {$Config['TOP']}");
+	echo '<h1>'.$Lang['race'][1].'</h1>';
+	break;
+    
+	Case 'elf':
+	$data=mysql_query("SELECT characters.*,classname FROM characters,char_templates WHERE !accesslevel AND race=2 AND char_templates.ClassId=characters.classid ORDER BY level DESC LIMIT {$Config['TOP']}");
 
-	echo '<br><center><b>'.$Lang['top_elfs'].'</b></center><br><hr>';
+	echo '<h1>'.$Lang['race'][2].'</h1>';
 	break;
 	
-	Case 'dark_elf':
-	$data=mysql_query("SELECT characters.*,classname FROM characters,char_templates WHERE !accesslevel AND race=2 AND char_templates.ClassId=characters.classid ORDER BY level DESC LIMIT {$Config['TOP']}");
-	echo '<br><center><b>'.$Lang['top_delfs'].'</b></center><br><hr>';
-	break;
+
 	
 	Case 'orc':
 	$data=mysql_query("SELECT characters.*,classname FROM characters,char_templates WHERE !accesslevel AND race=3 AND char_templates.ClassId=characters.classid ORDER BY level DESC LIMIT {$Config['TOP']}");
-	echo '<br><center><b>'.$Lang['top_orcs'].'</b></center><br><hr>';
+	echo '<h1>'.$Lang['race'][3].'</h1>';
 	break;
 	
 	Case 'dwarf':
 	$data=mysql_query("SELECT characters.*,classname FROM characters,char_templates WHERE !accesslevel AND race=4 AND char_templates.ClassId=characters.classid ORDER BY level DESC LIMIT {$Config['TOP']}");
-	echo '<br><center><b>'.$Lang['top_kamaels'].'</b></center><br><hr>';
+	echo '<h1>'.$Lang['race'][4].'</h1>';
 	break;
 	
 	Case 'kamael':
 	$data=mysql_query("SELECT characters.*,classname FROM characters,char_templates WHERE !accesslevel AND race=5 AND char_templates.ClassId=characters.classid ORDER BY level DESC LIMIT {$Config['TOP']}");
-	echo '<br><center><b>'.$Lang['top_kamaels'].'</b></center><br><hr>';
+	echo '<h1>'.$Lang['race'][5].'</h1>';
 	break;
 	
-	Default: ?>
-<b><center>..:: For all ::..</center></b><br /> 
-<?php 
+	Default: 
+    echo '<h1>'.$Lang['home'].'</h1><hr />';
+
 echo '<table border="0" width="90%"><tr><td><table border="1" width="90%">';
 $tchar=mysql_result(mysql_query("SELECT Count(*) FROM characters"), 0, 0);
 for($i=0; $i<6; $i++)
@@ -141,7 +168,7 @@ echo "<td><img src=\"module/stat/sexline.jpg\" height=\"10px\" width=\"".$dawn/$
 
 ?>
 <br />
-<b><center>..:: Castles ::..</center></b>
+<h1>Castles</h1>
 <br /><hr />
 
 <table width="90%" border="1"><tr><td width="20%"><b>Castle</b></td><td width="30%"><b>Owners</b></td><td width="35%"><b>Siege Date</b></td><td width="15%"><b>Tax Rate</b></td></tr>
@@ -163,19 +190,15 @@ break;
 }
 if($stat){
 includeLang('table');
-echo '<table border="1"><tr><td>'.$Lang['place'].'</td><td>'.$Lang['face'].'</td><td><center>'.$Lang['nick'].'</center></td><td>'.$Lang['level'].'</td><td><center>'.$Lang['proffesion'].'</center></td><td><center>'.$Lang['clan'].'</center></td><td>'.$Lang['pvp_pk'].'</td><td><center>'.$Lang['time_in_game'].'</center></td><td>'.$Lang['status'].'</td>'.$addheader.'</tr>';
+echo '<hr /><table border="1"><tr><td>'.$Lang['place'].'</td><td>'.$Lang['face'].'</td><td><center>'.$Lang['nick'].'</center></td><td>'.$Lang['level'].'</td><td><center>'.$Lang['proffesion'].'</center></td><td><center>'.$Lang['clan'].'</center></td><td>'.$Lang['pvp_pk'].'</td><td><center>'.$Lang['time_in_game'].'</center></td><td>'.$Lang['status'].'</td>'.$addheader.'</tr>';
 
-/* $result2 = mysql_query("SELECT clan_id,clan_name FROM clan_data");
-  while ($row2=mysql_fetch_row($result2))
-    $clans_array[$row2[0]]=$row2[1];
-  $clans_array[0]=""; */
 $n=1;
 while ($top=mysql_fetch_array($data))
 {
 	$onlinetimeH=round(($top['onlinetime']/60/60)-0.5);
 	$onlinetimeM=round(((($top['onlinetime']/60/60)-$onlinetimeH)*60)-0.5);
 	$clan=mysql_fetch_array(mysql_query("select clan_name from clan_data where clan_id=$top[clanid]"));
-	if ($clan['clan_name']=='') { $clan['clan_name']="No Clan"; }
+	if ($clan['clan_name']=='') { $clan['clan_name']=$Lang['no_clan']; }
 	if ($top['sex']==0) { $color='#8080FF'; } else { $color='#FF8080'; }
 	$class=mysql_fetch_array(mysql_query("select ClassName from char_templates where ClassId=$top[classid]"));
 

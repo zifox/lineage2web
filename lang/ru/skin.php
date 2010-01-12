@@ -1,7 +1,9 @@
 <?php
-//Пожалуйста, введите своё имя и пароль
+//пароль
 if(!defined('INLANG')){Header("Location: ../../index.php?id=start");}
-
-$Lang['selectserv']='PLEASE SELECT SERVER';
-$Lang['selectserv2']='SELECT SERVER TO SEE SERVER STATUS';
+$Lang['login']              =               'Login';
+$Lang['menu']               =               'Menu';
+$Lang['stats']              =               'Stats';
+$Lang['top10']              =               'Top10';
+$Lang['Language']           =               'Language';
 ?>
