@@ -1,5 +1,7 @@
 <?php
 if(!defined('INLANG')){Header("Location: ../../index.php?id=start");}
+$Lang['online'] = 'Online';
+$Lang['offline'] = 'Offline';
 $Lang['exp'] = 'Exp';
 $Lang['sp'] = 'SP';
 $Lang['adena'] = 'Adena';

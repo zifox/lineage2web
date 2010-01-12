@@ -228,4 +228,5 @@ echo gmdate("Y/m/j H:i:s", time() + 3600*($timezone+date("I")));
                         </table>
  <?php
   foot();
+  mysql_close($link);
 ?>

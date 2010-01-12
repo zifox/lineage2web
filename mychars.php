@@ -20,14 +20,14 @@ WHERE `characters`.`classid` = `char_templates`.`ClassId` AND `account_name` = '
     {
         $onlinetimeH=round(($char['onlinetime']/60/60)-0.5);
 	$onlinetimeM=round(((($char['onlinetime']/60/60)-$onlinetimeH)*60)-0.5);
-        if ($char['online']) {$online='<img src="img/online.png" />';} 
-	else {$online='<img src="img/offline.png" />';} 
+        if ($char['online']) {$online='<img src="img/status/online.png" />';} 
+	else {$online='<img src="img/status/offline.png" />';} 
         $clanq=mysql_query("SELECT `clan_name` FROM `clan_data` WHERE `clan_id` = '$char[clanid]'");
         $clan = mysql_fetch_assoc($clanq);
         if(mysql_num_rows($clanq) == 0){
             $clanname= $Lang['no_clan'];
         }else{$clanname="<a href=\"claninfo.php?clan={$clan['clan_name']}\">{$clan['clan_name']}</a>";}
-        echo "<tr><td><img src=\"./module/face/".$char['race']."_".$char['sex'].".gif\"></td><td><a href=user.php?cid={$char['charId']}><font color=\"$color\">$char[char_name]</font></a></td><td><center> $char[level]</center></td><td><center>$char[ClassName]</center></td><td><center>$char[maxCp]</center></td><td><center>$char[maxHp]</center></td><td><center>$char[maxMp]</center></td><td><center>$clanname</center></td><td><center><b>$char[pvpkills]</b>/<b><font color=red>$char[pkkills]</font></b></center></td><td><center>$onlinetimeH {$Lang['hours']} $onlinetimeM {$Lang['min']}.</center></td><td>$online</td><td><a href=\"unstuck.php?cid={$char['charId']}\">{$Lang['unstuck']}</a></td></tr>";
+        echo "<tr><td><img src=\"./img/face/".$char['race']."_".$char['sex'].".gif\"></td><td><a href=user.php?cid={$char['charId']}><font color=\"$color\">$char[char_name]</font></a></td><td><center> $char[level]</center></td><td><center>$char[ClassName]</center></td><td><center>$char[maxCp]</center></td><td><center>$char[maxHp]</center></td><td><center>$char[maxMp]</center></td><td><center>$clanname</center></td><td><center><b>$char[pvpkills]</b>/<b><font color=red>$char[pkkills]</font></b></center></td><td><center>$onlinetimeH {$Lang['hours']} $onlinetimeM {$Lang['min']}.</center></td><td>$online</td><td><a href=\"unstuck.php?cid={$char['charId']}\">{$Lang['unstuck']}</a></td></tr>";
         
     }
     echo "</table>";

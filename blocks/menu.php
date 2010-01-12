@@ -9,7 +9,7 @@
 <tr><td align="center"><a href="rules.php"><img src="./img/menu/<?php echo $langpath;?>/rules.png" border="0" width="120" title="<?php echo $Lang['Rules'];?>" alt="<?php echo $Lang['Rules'];?>"/></a></td></tr>
 </table>
 <?php 
-//Пожалуйста, введите своё имя и пароль
+//пароль
 /*
 <tr><td align="center"><a href="index.php?id=donate"><img src="./img/menu/<?php echo $langpath;?>/donate.png" border="0" width="120" title="<?php echo $Lang['Donate'];?>" alt="<?php echo $Lang['Donate'];?>"/></a></td></tr>
 */
@@ -34,7 +34,6 @@ $borderen=0;
 $borderru=0;
 }
 ?>
-
-<a href="server.php?lang=1"><img src="img/lv.png" border="<?php echo $borderlv;?>" title="Latviski" alt="Latviski"/></a>
-<a href="server.php?lang=2"><img src="img/en.png" border="<?php echo $borderen;?>" title="English" alt="English"/></a>
-<a href="server.php?lang=3"><img src="img/ru.png" border="<?php echo $borderru;?>" title="по-русски" alt="по-русски"/></a>
+<a href="server.php?lang=1"><img src="img/lang/lv.png" border="<?php echo $borderlv;?>" title="Latviski" alt="Latviski"/></a>
+<a href="server.php?lang=2"><img src="img/lang/en.png" border="<?php echo $borderen;?>" title="English" alt="English"/></a>
+<a href="server.php?lang=3"><img src="img/lang/ru.png" border="<?php echo $borderru;?>" title="по-русски" alt="по-русски"/></a>

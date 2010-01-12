@@ -41,7 +41,7 @@ WHERE `characters`.`classid` = `char_templates`.`ClassId` AND `characters`.`char
     <tr><td><?php echo $Lang['clan'];?>:</td><td><?php echo $clan['clan_name'];?></td></tr>
     <tr><td><?php echo $Lang['pvp'];?>/<font color="red"><?php echo $Lang['pk'];?></font>:</td><td><b><?php echo $char['pvpkills'];?></b>/<b><font color="red"><?php echo $char['pkkills'];?></font></b></td></tr>
      <tr><td><?php echo $Lang['online_time'];?>:</td><td><?php echo $onlinetimeH.' '.$Lang['hours'].' '.$onlinetimeM.' '.$Lang['min'];?></td></tr>
-    <tr><td><?php echo $online;?>:</td><td><img src="img/<?php echo $onoff;?>line.png" title="<?php echo $online;?>" alt="<?php echo $online;?>" /></td></tr></table>
+    <tr><td><?php echo $online;?>:</td><td><img src="img/status/<?php echo $onoff;?>line.png" title="<?php echo $online;?>" alt="<?php echo $online;?>" /></td></tr></table>
     <?
 
 $sql2=mysql_query("SELECT `characters`.`account_name`, `characters`.`charId`, `characters`.`char_name`, `characters`.`level`,
