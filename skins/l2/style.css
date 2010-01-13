@@ -2,7 +2,7 @@ body{
 	margin: 5px;
 	font-size: 12px;
 	font-family: Arial, Helvetica, sans-serif;
-    color : #7F00FF;
+    color : #FFFFFF;
 	background: #191919;
     cursor: url('cursors/cursor.cur'), auto;
 }
@@ -100,6 +100,12 @@ li.vote
 td.records {
 color : #a1967c;
 }
+td.noborder {
+border-bottom-width: 0px;
+border-left-width: 0px;
+border-right-width: 0px;
+border-top-width: 0px;
+}
 ol,ul,li.left {
     text-align: left;
 }
@@ -161,7 +167,7 @@ color : #FF4500;
 td, pre {
 font-family : Tahoma, Verdana, Arial, Helvetica, sans-serif;
 font-size : 11px;
-color : #7F00FF;
+color : #FFFFFF;
 margin: 5px;
 }
 
