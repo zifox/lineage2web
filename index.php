@@ -26,16 +26,16 @@ if ($_POST['account'] && $_POST['password'])
 head("");
 includeLang('start');
 ?>
-<img src="img/line.png" height="29" width="419" alt="" title="" />
-<br/>
 
-<font color="#cc5500" face="arial black,avant garde" size="3">
-:<?php echo $Lang['serverinfo'];?>: <br/>
-<?php echo $Config['ServerName'];?><br/>
-<?php echo $Lang['rates'];?> - Exp:<?php echo $Config['Exp'];?> SP:<?php echo $Config['SP'];?> Adena:<?php echo $Config['Adena'];?> Items:<?php echo $Config['Items'];?> Spoil:<?php echo $Config['Spoil'];?> <br/>
+<br/>
+<h1>
+<?php echo $Lang['rates'];?></h1>
+<table border="1"><tr class="header"><td class="header">Server</td><td class="header">Exp</td><td class="header">SP</td><td class="header">Adena</td><td class="header">Items</td><td class="header">Spoil</td></tr>
+<tr class="content"><td class="content"><?php echo $Config['ServerName'];?>:</td><td class="content"><?php echo $Config['Exp'];?></td><td class="content"><?php echo $Config['SP'];?></td><td class="content"><?php echo $Config['Adena'];?></td><td class="content"><?php echo $Config['Items'];?></td><td class="content"><?php echo $Config['Spoil'];?></td></tr>
+</table><br /><font size="3">
 <?php echo $Lang['events'];?>: <font color="green"><?php echo $Config['Events'];?></font><br />
-<?php echo $Lang['addinfo'];?>: <font color="blue"><?php echo $Config['Features'];?></font><br />
-<img src="img/line.png" height="29" width="419" alt="" title="" /><br />
+<?php echo $Lang['addinfo'];?>: <font color="blue"><?php echo $Config['Features'];?></font><br /></font>
+
 </font>
 <br/>
 <font color="#ff9900" face="arial black,avant garde" size="3"><?php echo $Lang['Desc'];?></font>

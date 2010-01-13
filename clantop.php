@@ -5,18 +5,19 @@ require_once("include/config.php");
 head("Clans");
 include("module/stat-menu.php");
 includeLang('module');
-  $result = mysql_query("SELECT clan_data.*,char_name,csum,ccount,cavg FROM clan_data INNER JOIN characters ON clan_data.leader_id=characters.charId LEFT JOIN (SELECT clanid, SUM(level) AS csum, count(level) AS ccount, AVG(level) AS cavg FROM characters WHERE clanid GROUP BY clanid) AS levels ON clan_data.clan_id=levels.clanid WHERE accesslevel < 50 ORDER BY clan_level DESC, csum DESC");
 
-	echo '<br><center><b>..:: GameMasters List ::..</b></center><br><hr>';
-	echo '<table border=1><tr><td><b>Clan Name</b></td>
-<td><b>Leader</b></td>
-<td><b>Level</b></td>
-<td><b>Castle</b></td>
-<td><b>Total Level</b></td>
-<td><b>Members</b></td>
-<td><b>Avg. of Levels</b></td>
-</tr>
-<tr><td colspan="7" style="text-align: center;">'.$Lang["clantop_total"].': '.mysql_num_rows($result).'</td></tr>';
+  $result = mysql_query("SELECT clan_data.*,char_name,csum,ccount,cavg FROM clan_data INNER JOIN characters ON clan_data.leader_id=characters.charId LEFT JOIN (SELECT clanid, SUM(level) AS csum, count(level) AS ccount, AVG(level) AS cavg FROM characters WHERE clanid GROUP BY clanid) AS levels ON clan_data.clan_id=levels.clanid WHERE !accessLevel ORDER BY clan_level DESC, csum DESC");
+
+	echo '<h1> TOP Clans </h1><hr>';
+    echo '<h2>'.$Lang["clantop_total"].': '.mysql_num_rows($result).'</h2>';
+	echo '<table border=1><thead><tr style="color: green;"><th><b>Clan Name</b></th>
+<th><b>Leader</b></th>
+<th><b>Level</b></th>
+<th><b>Castle</b></th>
+<th><b>Total Level</b></th>
+<th><b>Members</b></th>
+<th><b>Avg. of Levels</b></th>
+</tr></thead>';
 
   $i=1;
   while ($row=mysql_fetch_array($result))
@@ -31,7 +32,7 @@ includeLang('module');
       case 6: $row["hasCastle"]="Innadril"; break;
       default: $row["hasCastle"]="No castle";
     }
-    print "<tr". (($i++ % 2) ? "" : " class=\"alternateRow\"") ."><td><a href=\"index.php?d=module&p=clanview&clan_name=". $row["clan_name"]."\">". htmlspecialchars($row["clan_name"]). "</a></td><td>". $row["char_name"]. "</td><td class=\"numeric sortedColumn\">".$row["clan_level"]. "</td><td>".$row["hasCastle"]. "</td><td class=\"numeric\">".$row["csum"]. "</td><td class=\"numeric\">".$row["ccount"]. "</td><td class=\"numeric\">".$row["cavg"]. "</td></tr>\n";
+    print "<tr". (($i++ % 2) ? "" : " class=\"altRow\"") ."><td><a href=\"claninfo.php?clan=". $row["clan_name"]."\">". htmlspecialchars($row["clan_name"]). "</a></td><td><a href=\"user.php?cid={$row['leader_id']}\">". $row["char_name"]. "</a></td><td class=\"numeric sortedColumn\">".$row["clan_level"]. "</td><td>".$row["hasCastle"]. "</td><td class=\"numeric\">".$row["csum"]. "</td><td class=\"numeric\">".$row["ccount"]. "</td><td class=\"numeric\">".$row["cavg"]. "</td></tr>\n";
   }
   print "</tbody>\n</table>\n";
  foot();

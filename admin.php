@@ -28,7 +28,7 @@ $sql=mysql_query("SELECT * FROM ".$DB['webdb'].".config");
 while ( $row = mysql_fetch_assoc($sql) ) {
     echo "<tr>
 	<td>".$Lang[$row['config_name']].":</td>
-	<td><input name=\"{$row['config_name']}\" size=\"50\" value=\"{$row['config_value']}\" type=\"text\"></td>
+	<td><input name=\"{$row['config_name']}\" size=\"50\" value=\"".htmlspecialchars(stripslashes($row['config_value']))."\" type=\"text\"></td>
 </tr>";
     }
     echo "<tr><td></td><td align = left><input value=\"{$Lang['save']}\" type=\"submit\"></td></tr>";

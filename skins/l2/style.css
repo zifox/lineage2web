@@ -7,14 +7,17 @@ body{
     cursor: url('cursors/cursor.cur'), auto;
 }
 a {
-	color: #90FEFB;
+    font-weight: bold;
+    color: #0099FF;
 	text-decoration: none;
     cursor: url('cursors/hand.cur'), auto ;
 }
 a:hover {
 	color: #FFFFFF;
 	text-decoration: underline;
+    font-weight: bold;
 }
+
 #langlist {
 text-align : center;
 float : right;
@@ -27,6 +30,14 @@ text-decoration : none;
 }
 #langlist a:hover, #langlist a:active {
 text-decoration : none;
+}
+
+tr,td.header{
+    font-weight: bold;
+    font-size: 16px;
+}
+tr,td.content{
+    font-size: 14px;
 }
 td.head_left_corner{
     background-image : url(img/t_h_lc.gif);
@@ -96,7 +107,9 @@ li.vote
 {
    color: #EFDE05;
 }
-
+tr.altRow{
+    background-color: #505050;
+}
 td.records {
 color : #a1967c;
 }
@@ -200,7 +213,17 @@ color : #7ba813;
 text-align : center;
 font-weight: bold;
 }
-H4 {
+h2 {
+font-size : 16px;
+color : #7daa94;
+text-align : center;
+}
+h3 {
+font-size : 16px;
+color : teal;
+text-align : center;
+}
+h4 {
 font-size : 16px;
 color : #fecc64;
 text-align : center;
