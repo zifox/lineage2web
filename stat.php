@@ -39,10 +39,10 @@ $stat = mysql_real_escape_string($_GET['stat']);
 switch($stat){
 	
 	Case 'online':
-	$data=mysql_query ("SELECT * FROM characters WHERE online ORDER BY exp DESC");
+	$data=mysql_query ("SELECT charId, char_name, level, sex, pvpkills, pkkills, race, online, onlinetime, ClassName, clanid, clan_name FROM characters INNER JOIN char_templates ON characters.classid=char_templates.ClassId LEFT OUTER JOIN clan_data ON characters.clanid=clan_data.clan_id WHERE online ORDER BY exp DESC");
 	echo '<h1>'.$Lang['online'].'</h1>';
 	break;
-	
+    
     Case 'castles':
     $result = mysql_query("SELECT id, name, taxPercent, siegeDate, charId, char_name, clan_id, clan_name FROM castle LEFT OUTER JOIN clan_data ON clan_data.hasCastle=castle.id LEFT OUTER JOIN characters ON clan_data.leader_id=characters.charId ORDER by id ASC");
 
@@ -60,7 +60,7 @@ $r++;
 <br /><img src = "img/castle/<?php echo $row['name'];?>.png" width = "170" alt="<?php echo $row['name'];?>" />
 <table border="0" width="170">
 <tr style="background-color: #2391ab;"><td><?php echo $Lang['castle'];?></td><td><?php echo $Lang['details'];?></td></tr>
-echo '<tr><td>'.$Lang['owner_clan'].'</td><td>';
+<tr><td><?php echo $Lang['owner_clan'];?></td><td>
 <?php
 if ($row['clan_id'])
 {echo '<a href="claninfo.php?clan='.$row['clan_id'].'">'.$row['clan_name'].'</a>';}
@@ -105,11 +105,11 @@ echo '<a href="claninfo.php?clanid='.mysql_result($result2,0,'clan_id').'">'.mys
     break;
 	
 	Case 'gm':
-	$data=mysql_query("SELECT * FROM characters WHERE accesslevel>0 ORDER BY accesslevel DESC");
+    $data=mysql_query("SELECT charId, char_name, level, sex, pvpkills, pkkills, race, online, onlinetime, ClassName, clanid, clan_name FROM characters INNER JOIN char_templates ON characters.classid=char_templates.ClassId LEFT OUTER JOIN clan_data ON characters.clanid=clan_data.clan_id WHERE accesslevel>0 ORDER BY accesslevel DESC");
 	echo '<h1>'.$Lang['gm'].'</h1>';
 	$addheader='<td><b>'.$Lang['send_message'].'</b></td>';
 	$addcol=true;
-	$addcolcont='<td><a href=index.php?id=msg>'.$Lang['send_message'].'</a></td>';
+	$addcolcont='<td><a href="contact.php?action=send">'.$Lang['send_message'].'</a></td>';
 	break;
     
 	Case 'count':
@@ -200,15 +200,15 @@ for($i=0; $i<6; $i++)
 {
 	$sql = mysql_query("SELECT Count(*) FROM characters WHERE race = ".$i);
 	$tfg = round(mysql_result($sql, 0, 0)/($tchar/100), 2);
-	echo('<tr><td>'.$Lang['race'][$i].'</td><td><img src="img/stat/sexline.jpg" height="10px" width="'.$tfg .'"px"> '.$tfg .'%</td></tr>');
+	echo('<tr><td>'.$Lang['race'][$i].'</td><td><img src="img/stat/sexline.jpg" height="10px" width="'.$tfg .'px" alt="'.$tfg.'%" title="'.$tfg.'%" /> '.$tfg .'%</td></tr>');
 
 }
 $male = mysql_query("select count(*) from characters where sex = 0");
 $mc = round(mysql_result($male, 0, 0)/($tchar/100) , 2);
 $female = mysql_query("select count(*) from characters where sex = 1");
 $fc = round(mysql_result($female, 0, 0)/($tchar/100) , 2);
-echo('<tr><td>'.$Lang['male'].'<img src="img/stat/sex.jpg" /></td><td><img src="img/stat/sexline.jpg" height="10px" width="'.$mc .'"px" /> '.$mc .'%</td></tr>');
-echo('<tr><td>'.$Lang['female'].'<img src="img/stat/sex1.jpg" /></td><td><img src="img/stat/sexline.jpg" height="10px" width="'.$fc .'"px" /> '.$fc .'%</td></tr>');
+echo('<tr><td>'.$Lang['male'].'<img src="img/stat/sex.jpg" alt="'.$Lang['male'].'" /></td><td><img src="img/stat/sexline.jpg" height="10px" width="'.$mc .'px" alt="'.$mc.'px" /> '.$mc .'%</td></tr>');
+echo('<tr><td>'.$Lang['female'].'<img src="img/stat/sex1.jpg" alt="'.$Lang['female'].'" /></td><td><img src="img/stat/sexline.jpg" height="10px" width="'.$fc .'px" alt="'.$fc.'px" /> '.$fc .'%</td></tr>');
 echo '</table><hr />';
 
 echo '<h1>Seven Signs</h1>';
@@ -249,31 +249,31 @@ var seal6 = 0;
 var seal7 = 1;
 </script>
 
-<table style="MARGIN-TOP:0px; width:500px;" cellspacing="0" cellpadding="0" border="0" align="center"><tbody><tr valign="top"><td style="background: url(img/ss/ssqViewBg.jpg)" height="225">
-<table><tbody><tr valign="top"><td>
+<table style="MARGIN-TOP:0px; width:500px;" cellspacing="0" cellpadding="0" border="0" align="center"><tr valign="top"><td style="background: url(img/ss/ssqViewBg.jpg)" height="225">
+<table><tr valign="top"><td>
 <table style="MARGIN: 18px 0px 0px 54px" cellspacing="0" cellpadding="0" border="0" width="141">
-<tbody><tr align="middle" style="height: 26px;">
+<tr align="center" style="height: 26px;">
 <td style="BACKGROUND: url(img/ss/ssqViewimg1.gif);">
 <script language="javascript" type="text/javascript">
 if (0 == ssStatus) {
 document.write('Start');
 }
 else if (1 == ssStatus) {
-document.write('Competition <b style="color:#E10000"> day ' + nthDay + '</b>');
+document.write("Competition day <b> " + nthDay + " </b>");
 }
 else if (2 == ssStatus) {
 document.write('Result');
 }
 else if (3 == ssStatus) {
-document.write('ss result<b style="color:#E10000"> day ' + nthDay + '</b>');
+document.write('ss result day ' + nthDay);
 }
 </script>
-</td></tr></tbody></table>
+</td></tr></table>
 <table style="MARGIN: 3px 0px 0px 10px" cellspacing="0" cellpadding="0" width="141" border="0">
-<tbody><tr><td></td><td><img height="16" src="img/ss/timeBox1.jpg" width="140" border="0" /></td>
+<tr><td></td><td><img height="16" src="img/ss/timeBox1.jpg" width="140" border="0" alt="" /></td>
 <td></td></tr>
 <tr>
-<td valign="bottom" rowspan="2"><img height="125" src="img/ss/timeBox2.jpg" width="45" border="0" /></td>
+<td valign="bottom" rowspan="2"><img height="125" src="img/ss/timeBox2.jpg" width="45" border="0" alt="" /></td>
 <td>
 <script language="javascript" type="text/javascript">
 var timeImage;
@@ -289,79 +289,79 @@ else if (3 == ssStatus || 2 == ssStatus) {
 tempImageNum = nthDay + 7;
 }
 timeImage = 'time'+tempImageNum+'.jpg';
-document.write('<img src="img/ss/time/'+ timeImage +'" width="140" height="139" border="0" />');
+document.write('<img src="img/ss/time/'+ timeImage +'" width="140" height="139" border="0" alt="" />');
 </script>
 </td>
-<td valign="bottom" rowspan="2"><img height="125" src="img/ss/timeBox3.jpg" width="66" border="0" /></td></tr><tr>
-<td><img height="12" src="img/ss/timeBox4.jpg" width="140" border="0" /></td>
-</tr></tbody></table></td>
+<td valign="bottom" rowspan="2"><img height="125" src="img/ss/timeBox3.jpg" width="66" border="0" alt="" /></td></tr><tr>
+<td><img height="12" src="img/ss/timeBox4.jpg" width="140" border="0" alt="" /></td>
+</tr></table></td>
 <td><table style="MARGIN: 27px 0px 0px 22px" cellspacing="0" cellpadding="0" width="200" border="0">
-<tbody><tr align="middle" bgcolor="#606d6f" style="height: 17px;">
+<tr align="center" bgcolor="#606d6f" style="height: 17px;">
 <td>
 <?php
 $timezone  = 2;
 echo gmdate("Y/m/j H:i:s", time() + 3600*($timezone+date("I")));
 ?>
-</td></tr></tbody></table>
+</td></tr></table>
 <table style="MARGIN: 21px 0px 0px 22px" cellspacing="0" cellpadding="0" border="0">
-<colgroup><col width="74" /><col width="*" />
-<tbody><tr>
-<td style="font-size:11px; color:#000;"><img style="MARGIN: 0px 6px 5px 0px" height="1" src="/ssq/ssq_image/dot.gif" width="1" border="0" />Dawn</td>
+<colgroup><col width="74" /><col width="*" /></colgroup>
+<tr>
+<td style="font-size:11px; color:#000;"><img style="MARGIN: 0px 6px 5px 0px" height="1" src="/ssq/ssq_image/dot.gif" width="1" border="0" alt="" />Dawn</td>
 <td style="COLOR: #000;">
 <script language="javascript" type="text/javascript">
 var twilPointWidth = maxPointWidth * twilPoint / 100;
-document.write('<img src="img/ss/ssqbar2.gif" width="' + twilPointWidth + '" height="9" border="0" /> ' + twilPoint);
+document.write('<img src="img/ss/ssqbar2.gif" width="' + twilPointWidth + '" height="9" border="0" alt="" /> ' + twilPoint);
 </script>
 </td></tr><tr><td colspan="2" height="7"></td>
 </tr><tr>
-<td style="font-size:11px; color:#000;"><img style="MARGIN: 0px 6px 5px 0px" height="1" src="/ssq/ssq_image/dot.gif" width="1" border="0" />Dusk</td>
+<td style="font-size:11px; color:#000;"><img style="MARGIN: 0px 6px 5px 0px" height="1" src="/ssq/ssq_image/dot.gif" width="1" border="0" alt="" />Dusk</td>
 <td style="COLOR: #000; font-size:11px;">
 <script language="javascript" type="text/javascript">
 var dawnPointWidth = maxPointWidth * dawnPoint / 100;
-document.write('<img src="img/ss/ssqbar1.gif" width="' + dawnPointWidth + '" height="9" border="0" /> ' + dawnPoint);
+document.write('<img src="img/ss/ssqbar1.gif" width="' + dawnPointWidth + '" height="9" border="0" alt="" /> ' + dawnPoint);
 </script>
-</td></tr></tbody></table>
+</td></tr></table>
 <table border="0">
-<tbody><tr valign="bottom" align="middle" style="height: 95px;">
+<tr valign="bottom" align="center" style="height: 95px;">
 <td>
 <script language="javascript" type="text/javascript">
 if (3 == ssStatus) {
 if (0 == seal1)
-document.write('<img src="img/ss/Seals/SOA/bongin1close.gif" width="85" height="86" border="0" />');
+document.write('<img src="img/ss/Seals/SOA/bongin1close.gif" width="85" height="86" border="0" alt="" />');
 else
-document.write('<img src="img/ss/Seals/SOA/bongin1open.gif" width="85" height="86" border="0" />');
+document.write('<img src="img/ss/Seals/SOA/bongin1open.gif" width="85" height="86" border="0" alt="" />');
 }   else {
-document.write('<img src="img/ss/Seals/SOA/bongin1.gif" width="85" height="86" border="0" />');
+document.write('<img src="img/ss/Seals/SOA/bongin1.gif" width="85" height="86" border="0" alt="" />');
 }
 </script>
 </td><td>
 <script language="javascript" type="text/javascript">
 if (3 == ssStatus) {
 if (0 == seal2)
-document.write('<img src="img/ss/Seals/SOG/bongin2close.gif" width="85" height="86" border="0" />');
+document.write('<img src="img/ss/Seals/SOG/bongin2close.gif" width="85" height="86" border="0" alt="" />');
 else
-document.write('<img src="img/ss/Seals/SOG/bongin2open.gif" width="85" height="86" border="0" />');
+document.write('<img src="img/ss/Seals/SOG/bongin2open.gif" width="85" height="86" border="0" alt="" />');
 }   else {
-document.write('<img src="img/ss/Seals/SOG/bongin2.gif" width="85" height="86" border="0" />');
+document.write('<img src="img/ss/Seals/SOG/bongin2.gif" width="85" height="86" border="0" alt="" />');
 }
 </script>
 </td><td>
 <script language="javascript" type="text/javascript">
 if (3 == ssStatus) {
 if (0 == seal3)
-document.write('<img src="img/ss/Seals/SOS/bongin3close.gif" width="85" height="86" border="0" />');
+document.write('<img src="img/ss/Seals/SOS/bongin3close.gif" width="85" height="86" border="0" alt="" />');
 else
-document.write('<img src="img/ss/Seals/SOS/bongin3open.gif" width="85" height="86" border="0" />');
+document.write('<img src="img/ss/Seals/SOS/bongin3open.gif" width="85" height="86" border="0" alt="" />');
 }   else {
-document.write('<img src="img/ss/Seals/SOS/bongin3.gif" width="85" height="86" border="0" />');
+document.write("<img src='img/ss/Seals/SOS/bongin3.gif' width='85' height='86' border='0' alt='' />");
 }
 </script>
 </td></tr>
 <tr>
-<td colspan="3"><div align="center" style="margin-left:10px;"><img height="16" src="img/ss/bonginName.gif" width="258" border="0" /> </div></td>
+<td colspan="3"><div align="center" style="margin-left:10px;"><img height="16" src="img/ss/bonginName.gif" width="258" border="0" alt="" /> </div></td>
 </tr>
-</tbody></table></td></tr></tbody>
-</table></td></tr></tbody></table>
+</table></td></tr>
+</table></td></tr></table>
 <?php
 break;
 }
@@ -370,18 +370,16 @@ includeLang('table');
 echo '<hr /><table border="1"><tr><td>'.$Lang['place'].'</td><td>'.$Lang['face'].'</td><td><center>'.$Lang['nick'].'</center></td><td>'.$Lang['level'].'</td><td><center>'.$Lang['proffesion'].'</center></td><td><center>'.$Lang['clan'].'</center></td><td>'.$Lang['pvp_pk'].'</td><td><center>'.$Lang['time_in_game'].'</center></td><td>'.$Lang['status'].'</td>'.$addheader.'</tr>';
 
 $n=1;
-while ($top=mysql_fetch_array($data))
+while ($top=mysql_fetch_assoc($data))
 {
 	$onlinetimeH=round(($top['onlinetime']/60/60)-0.5);
 	$onlinetimeM=round(((($top['onlinetime']/60/60)-$onlinetimeH)*60)-0.5);
-	$clan=mysql_fetch_array(mysql_query("select clan_name from clan_data where clan_id=$top[clanid]"));
-	if ($clan['clan_name']=='') { $clan['clan_name']=$Lang['no_clan']; }
+	if ($top['clan_name']) { $clan_link='<a href="claninfo.php?clan='.$top['clanid'].'">'.$top['clan_name'].'</a>'; }else{$clan_link='No Clan';}
 	if ($top['sex']==0) { $color='#8080FF'; } else { $color='#FF8080'; }
-	$class=mysql_fetch_array(mysql_query("select ClassName from char_templates where ClassId=$top[classid]"));
-
-	if ($top['online']) {$online='<font color=green>'.$Lang['online'].'</font>'; } 
-	else {$online='<font color=red>'.$Lang['offline'].'</font>'; } 
-	echo "<tr><td><b><center>$n</center></b></td><td><img src=\"./img/face/".$top['race']."_".$top['sex'].".gif\"></td><td><a href=\"user.php?cid={$top['charId']}\"><font color=\"$color\">$top[char_name]</font></a></td><td><center> $top[level]</center></td><td><center>$class[ClassName]</center></td><td><center><a href=index.php?id=stat&stat=clantop>$clan[clan_name]</a></center></td><td><center><b>$top[pvpkills]</b>/<b><font color=red>$top[pkkills]</font></b></center></td><td><center>$onlinetimeH {$Lang['hours']} $onlinetimeM {$Lang['min']}.</center></td><td>$online</td>";
+	if ($top['online']) {$online='<font color="green">'.$Lang['online'].'</font>'; } 
+	else {$online='<font color="red">'.$Lang['offline'].'</font>'; } 
+    
+	echo "<tr><td align=\"center\"><b>$n</b></td><td><img src=\"./img/face/".$top['race']."_".$top['sex'].".gif\" alt=\"\" /></td><td><a href=\"user.php?cid={$top['charId']}\"><font color=\"$color\">$top[char_name]</font></a></td><td><center> $top[level]</center></td><td><center>$top[ClassName]</center></td><td>$clan_link</td><td><center><b>$top[pvpkills]</b>/<b><font color=\"red\">$top[pkkills]</font></b></center></td><td><center>$onlinetimeH {$Lang['hours']} $onlinetimeM {$Lang['min']}.</center></td><td>$online</td>";
 	if($addcol && $addcolcont){echo $addcolcont;}elseif($addcol && !$addcolcont){echo('<td>'.$top[$stat].'</td>');}else{}
 	echo('</tr>');
 	$n++;

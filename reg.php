@@ -42,10 +42,11 @@ else
 head("Registration");
 ?>
 <h4>Registration</h4>
-<br /><br /><ul>
-<li> Account and password can not be empty .</li><br />
-<li> Account and password can not be less than 4 and Over 15 characters .</li><br />
-<li>Account and password are written in English letters and numerals .</li><br /><br /><br />
+<br /><br />
+<ul>
+<li> Account and password can not be empty .</li>
+<li> Account and password can not be less than 4 and Over 15 characters .</li>
+<li>Account and password are written in English letters and numerals .</li>
 </ul>
 
 <script type="text/javascript">//<![CDATA[
@@ -114,5 +115,4 @@ function checkform(f)
 <?php
 foot();
 mysql_close($link);
-die();
 ?>         

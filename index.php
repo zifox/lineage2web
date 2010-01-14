@@ -36,24 +36,12 @@ includeLang('start');
 <?php echo $Lang['events'];?>: <font color="green"><?php echo $Config['Events'];?></font><br />
 <?php echo $Lang['addinfo'];?>: <font color="blue"><?php echo $Config['Features'];?></font><br /></font>
 
-</font>
 <br/>
 <font color="#ff9900" face="arial black,avant garde" size="3"><?php echo $Lang['Desc'];?></font>
 <hr />
-<br/><font color="#cc5500" face="arial black,avant garde" size="3">
-<a href="vote.php"><?php echo $Lang['vote_and_receive'];?></a>
-</font>
-<br />
-<hr />
-<script src="http://wos.lv/d.php?11603" type="text/javascript"></script>
-<br />
-<a href="http://validator.w3.org/check?uri=referer" target="_blank">
-<img style="border:0;width:88px;height:31px" src="http://www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" />
-</a>
-<br />
-<a href="http://jigsaw.w3.org/css-validator/check/referer" target="_blank">
-<img style="border:0;width:88px;height:31px" src="http://jigsaw.w3.org/css-validator/images/vcss-blue" alt="<?php echo $Lang['ValidCSS'];?>!" />
-</a>
+<br/>
+<a href="vote.php"><font size="3"><?php echo $Lang['vote_and_receive'];?></font></a>
+
 <?php
 foot();
 mysql_close($link);
