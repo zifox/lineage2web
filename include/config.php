@@ -15,7 +15,7 @@ $DB = Array(
 ############################################# DO NOT MODIFY #################################
 
   $link = mysql_connect($DB['host'], $DB['login'], $DB['password']);
-  @mysql_select_db($DB['db'], $link);
+  @mysql_select_db($DB['db'], $link) OR die('Cannot connect to DataBase!!!');
     $query = mysql_query("SELECT * FROM ".$DB['webdb'].".config");
     while ( $row = mysql_fetch_assoc($query) ) {
 	    $Config[$row['config_name']] = stripslashes($row['config_value']);

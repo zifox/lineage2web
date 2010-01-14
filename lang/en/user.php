@@ -18,6 +18,6 @@ $Lang['min']='min';
 $Lang['otherchars']='Other chars';
 $Lang['cp']='<font color="orange">CP</font>';
 $Lang['hp']='<font color="red">HP</font>';
-$Lang['mp']='<font color="blue">MP</font>';
-$Lang['not_found']='Not Found';
+$Lang['mp']='<font color="#0099FF">MP</font>';
+$Lang['not_found']='User Not Found';
 ?>
