@@ -7,12 +7,12 @@ includeLang('stat');
 
 //////////////////////////MENU
 ?>
-<center>
+<div align="center">
 <h4><?php echo $Lang['server_stat'];?></h4><hr />
  | <a href="stat.php"><?php echo $Lang['home'];?></a>
  | <a href="stat.php?stat=online"><?php echo $Lang['online'];?></a> 
- | <a href="module/onlinemap/index.php"target= "_blank"><?php echo $Lang['map'];?></a> 
- | <a href="module/castles/index.php "target= "_blank"><?php echo $Lang['castles_map'];?></a> 
+ | <a href="module/onlinemap/index.php" target="_blank"><?php echo $Lang['map'];?></a> 
+ | <a href="module/castles/index.php" target="_blank"><?php echo $Lang['castles_map'];?></a> 
  | <a href="stat.php?stat=castles"><?php echo $Lang['castles'];?></a> 
  | <a href="clantop.php"><?php echo $Lang['top_clans'];?></a> |<br /><hr />
  | <a href="stat.php?stat=gm"><?php echo $Lang['gm'];?></a>
@@ -30,7 +30,7 @@ includeLang('stat');
  | <a href="stat.php?stat=orc"><?php echo $Lang['race'][3];?></a>
  | <a href="stat.php?stat=dwarf"><?php echo $Lang['race'][4];?></a>
  | <a href="stat.php?stat=kamael"><?php echo $Lang['race'][5];?></a> |<br /><hr />
-   </center>  
+   </div>  
    <?php
    //////////////////////////////MENU
 
@@ -47,50 +47,58 @@ switch($stat){
     $result = mysql_query("SELECT id, name, taxPercent, siegeDate, charId, char_name, clan_id, clan_name FROM castle LEFT OUTER JOIN clan_data ON clan_data.hasCastle=castle.id LEFT OUTER JOIN characters ON clan_data.leader_id=characters.charId ORDER by id ASC");
 
 $r=0;
-echo '<table border="0" cellpadding="3" cellspacing="3">';
+?><table border="0" cellpadding="3" cellspacing="3">
+<?php
 while($row = mysql_fetch_array($result)){
 
 if ($r==0){echo '<tr>';}
 $r++;
-echo '<td><table border = "1"><tr><td class="noborder">';
-echo '<h1>'.sprintf($Lang['castle_of'],$row['name'],'%s').'</h1>';
-echo $Lang['next_siege'].date('D j M Y H:i',$row['siegeDate']/1000);
-echo '<br /><img src = "img/castle/'.$row['name'].'.png" width = "170"';
-
-echo '<table border = "0" width = "170"><tr style="background-color: #2391ab;"><td>'.$Lang['castle'].'</td><td>'.$Lang['details'].'</td></tr>';
+?>
+<td><table border="1"><tr><td class="noborder">
+<h1><?php echo sprintf($Lang['castle_of'],$row['name'],'%s');?></h1>
+<?php echo $Lang['next_siege'].date('D j M Y H:i',$row['siegeDate']/1000); ?>
+<br /><img src = "img/castle/<?php echo $row['name'];?>.png" width = "170" alt="<?php echo $row['name'];?>" />
+<table border="0" width="170">
+<tr style="background-color: #2391ab;"><td><?php echo $Lang['castle'];?></td><td><?php echo $Lang['details'];?></td></tr>
 echo '<tr><td>'.$Lang['owner_clan'].'</td><td>';
+<?php
 if ($row['clan_id'])
 {echo '<a href="claninfo.php?clan='.$row['clan_id'].'">'.$row['clan_name'].'</a>';}
 else{echo $Lang['no_owner'];}
-echo '</td></tr>';
-echo '<tr class="altRow"><td>'.$Lang['lord'].'</td><td>';
+?></td></tr>
+<tr class="altRow"><td><?php echo $Lang['lord'];?></td><td>
+<?php
 if ($row['charId'])
 {echo '<a href="user.php?cid='.$row['charId'].'">'.$row['char_name'].'</a>';}
 else{echo $Lang['no_lord'];}
-echo'</td></tr>';
-echo '<tr><td>'.$Lang['tax'].'</td><td>'.$row['taxPercent'].'%</td></tr>';
+?></td></tr>
+<tr><td><?php echo $Lang['tax'];?></td><td><?php echo $row['taxPercent'];?>%</td></tr>
 
-echo '<tr class="altRow"><td>'.$Lang['attackers'].'</td><td>';
+<tr class="altRow"><td><?php echo $Lang['attackers'];?></td><td>
+<?php
 $result1 = mysql_query("SELECT clan_id, clan_name FROM siege_clans INNER JOIN clan_data USING (clan_id)  WHERE castle_id='{$row['id']}' AND type='1'");
 if(mysql_num_rows($result1)){
 echo '<a href="claninfo.php?clanid='.mysql_result($result1,0,'clan_id').'">'.mysql_result($result1,0,'clan_name').'</a><br />';
 }
-
-echo '</td></tr><tr><td>'.$Lang['defenders'].'</td><td>';
+?>
+</td></tr><tr><td><?php echo $Lang['defenders'];?></td><td>
+<?php
 $result2 = mysql_query("SELECT clan_id, clan_name FROM siege_clans INNER JOIN clan_data USING (clan_id)  WHERE castle_id='{$row['id']}' AND type='0'");
 if(mysql_num_rows($result2)){
 echo '<a href="claninfo.php?clanid='.mysql_result($result2,0,'clan_id').'">'.mysql_result($result2,0,'clan_name').'</a><br /> ';
 }else echo $Lang['npc'];
-
-echo '</td></tr></table></td></tr></table>';
-echo '</td>';
-if($r==3)
+?>
+</td></tr></table></td></tr></table>
+</td>
+<?php if($r==3)
 {
     echo '</tr>';
     $r=0;
 }
 }
-echo '</table>';
+?>
+</table>
+<?php
     break;
     
 	Case 'clantop': //NOTDONE
@@ -192,15 +200,15 @@ for($i=0; $i<6; $i++)
 {
 	$sql = mysql_query("SELECT Count(*) FROM characters WHERE race = ".$i);
 	$tfg = round(mysql_result($sql, 0, 0)/($tchar/100), 2);
-	echo('<tr><td>'.$Lang['race'][$i].'</td><td><img src="module/stat/sexline.jpg" height="10px" width="'.$tfg .'"px"> '.$tfg .'%</td></tr>');
+	echo('<tr><td>'.$Lang['race'][$i].'</td><td><img src="img/stat/sexline.jpg" height="10px" width="'.$tfg .'"px"> '.$tfg .'%</td></tr>');
 
 }
 $male = mysql_query("select count(*) from characters where sex = 0");
 $mc = round(mysql_result($male, 0, 0)/($tchar/100) , 2);
 $female = mysql_query("select count(*) from characters where sex = 1");
 $fc = round(mysql_result($female, 0, 0)/($tchar/100) , 2);
-echo('<tr><td>'.$Lang['male'].'<img src="module/stat/sex.jpg" /></td><td><img src="module/stat/sexline.jpg" height="10px" width="'.$mc .'"px" /> '.$mc .'%</td></tr>');
-echo('<tr><td>'.$Lang['female'].'<img src="module/stat/sex1.jpg" /></td><td><img src="module/stat/sexline.jpg" height="10px" width="'.$fc .'"px" /> '.$fc .'%</td></tr>');
+echo('<tr><td>'.$Lang['male'].'<img src="img/stat/sex.jpg" /></td><td><img src="img/stat/sexline.jpg" height="10px" width="'.$mc .'"px" /> '.$mc .'%</td></tr>');
+echo('<tr><td>'.$Lang['female'].'<img src="img/stat/sex1.jpg" /></td><td><img src="img/stat/sexline.jpg" height="10px" width="'.$fc .'"px" /> '.$fc .'%</td></tr>');
 echo '</table><hr />';
 
 echo '<h1>Seven Signs</h1>';
@@ -373,7 +381,7 @@ while ($top=mysql_fetch_array($data))
 
 	if ($top['online']) {$online='<font color=green>'.$Lang['online'].'</font>'; } 
 	else {$online='<font color=red>'.$Lang['offline'].'</font>'; } 
-	echo "<tr><td><b><center>$n</center></b></td><td><img src=\"./module/face/".$top['race']."_".$top['sex'].".gif\"></td><td><font color=\"$color\">$top[char_name]</font></td><td><center> $top[level]</center></td><td><center>$class[ClassName]</center></td><td><center><a href=index.php?id=stat&stat=clantop>$clan[clan_name]</a></center></td><td><center><b>$top[pvpkills]</b>/<b><font color=red>$top[pkkills]</font></b></center></td><td><center>$onlinetimeH {$Lang['hours']} $onlinetimeM {$Lang['min']}.</center></td><td>$online</td>";
+	echo "<tr><td><b><center>$n</center></b></td><td><img src=\"./img/face/".$top['race']."_".$top['sex'].".gif\"></td><td><a href=\"user.php?cid={$top['charId']}\"><font color=\"$color\">$top[char_name]</font></a></td><td><center> $top[level]</center></td><td><center>$class[ClassName]</center></td><td><center><a href=index.php?id=stat&stat=clantop>$clan[clan_name]</a></center></td><td><center><b>$top[pvpkills]</b>/<b><font color=red>$top[pkkills]</font></b></center></td><td><center>$onlinetimeH {$Lang['hours']} $onlinetimeM {$Lang['min']}.</center></td><td>$online</td>";
 	if($addcol && $addcolcont){echo $addcolcont;}elseif($addcol && !$addcolcont){echo('<td>'.$top[$stat].'</td>');}else{}
 	echo('</tr>');
 	$n++;
