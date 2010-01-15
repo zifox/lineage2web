@@ -26,17 +26,15 @@ $query='SELECT count(*) FROM characters WHERE online = 1 AND !accesslevel';
 $result = mysql_query($query);
 $onlineplayers=mysql_result($result, 0, 0);
 if( $onlineplayers <= 80){
-$playsonline = "<font color=\"green\">" . $onlineplayers . "</font>";}
+$playsonline = "<a href=\"stat.php?stat=online\"><font color=\"green\">" . $onlineplayers . "</font></a>";}
 elseif( mysql_result($result, 0, 0) >= 80 AND mysql_result($result, 0, 0) <= 150){
-$playsonline = "<font color=\"orange\">" . mysql_result($result, 0, 0) . "</font>";}
+$playsonline = "<a href=\"stat.php?stat=online\"><font color=\"orange\">" . mysql_result($result, 0, 0) . "</font></a>";}
 elseif( mysql_result($result, 0, 0) > 150){
-$playsonline = "<font color=\"red\">" . mysql_result($result, 0, 0) . "</font>";}
+$playsonline = "<a href=\"stat.php?stat=online\"><font color=\"red\">" . mysql_result($result, 0, 0) . "</font></a>";}
 
 #GM Online
 $sql = mysql_query("SELECT count(*) FROM characters WHERE online ='1' AND accesslevel");
 $gmonline = mysql_result($sql, 0, 0);
-//$sql = mysql_query("SELECT count(*) FROM characters Where accesslevel");
-//$gmnum = mysql_result($sql, 0, 0);
 
 #Total accounts
 $sql = mysql_query("SELECT count(*) FROM accounts");
@@ -59,5 +57,5 @@ $clannum = mysql_result($sql, 0, 0);
 <tr><td align="left">Clans: <?php echo $clannum; ?></td></tr>
 <tr><td align="left">Chars: <?php echo $charnum; ?></td></tr>
 <tr><td align="left">Online: <?php echo $playsonline;
-if ($gmonline) echo ' / <font color="green">'.$gmonline.'</font>'; ?></td></tr>
+if ($gmonline) echo ' / <a href="stat.php?stat=gm"><font color="green">'.$gmonline.'</font></a>'; ?></td></tr>
 </table>
