@@ -1,4 +1,8 @@
 <?php
+define('INWEB', True);
+require_once("include/config.php");
+//пароль
+head("Donate");
 includeLang('donate');
 ?>
 <table border="0" width="470" cellspacing="0" cellpadding="0" class="btb" style="background-color: #f0f0f0" valign="top">
@@ -156,3 +160,7 @@ function show(ele) {
 </div>*/?>
 </tr></table></div>
 </td></tr></table>
+<?php
+foot();
+mysql_close($link);
+?>

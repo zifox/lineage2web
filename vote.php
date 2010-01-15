@@ -56,23 +56,23 @@ mysql_query("UPDATE `characters` SET `vitality_points`='20000' WHERE `charId`='$
 }
 }
 ?>
-<b><?php echo $Lang['vote_for_server'];?></b><br /></center>
+<b><?php echo $Lang['vote_for_server'];?></b><br />
 
-<script language="javascript" src="scripts/vote.js"></script>
+<script language="javascript" src="scripts/vote.js" type="text/javascript"></script>
 <form name="vote" method="post" action="vote.php?action=vote">
 <table border="1" cellspacing="0" cellpadding="5">
-<tr><td><img src="http://www.xtremeTop100.com/votenew.jpg" /></td><td><input type="button" onclick="one()" value="xtremetop" /></td></tr>
+<tr><td><img src="http://www.xtremeTop100.com/votenew.jpg" alt="xtremeTop100" /></td><td><input type="button" onclick="one()" value="xtremetop" /></td></tr>
 
-<tr><td><img src="http://www.gamingsites100.com/imgs/button_14.jpg" /></td><td><input type="button" onclick="two()" disabled="true" value="gamingsites" /></td></tr>
+<tr><td><img src="http://www.gamingsites100.com/imgs/button_14.jpg" alt="gamingsites100" /></td><td><input type="button" onclick="two()" disabled="disabled" value="gamingsites" /></td></tr>
 
-<tr><td><img src="http://www.gtop100.com/images/votebutton.jpg" /></td><td><input type="button" onclick="finish()" disabled="true" value="gtop100" /></td></tr>
+<tr><td><img src="http://www.gtop100.com/images/votebutton.jpg" alt="gtop100" /></td><td><input type="button" onclick="finish()" disabled="disabled" value="gtop100" /></td></tr>
 </table>
 <br />
 <table border="1" cellspacing="0" cellpadding="5">
 <tr><td>
-<center><script src="http://wos.lv/v.php?11603"></script></center></td></tr><tr><td>
-<script src="http://wos.lv/a.php?b=180x250&c=11603"></script> 
-</tr></td></table><br />
+<center><script src="http://wos.lv/v.php?11603" type="text/javascript"></script></center></td></tr><tr><td>
+<script language="javasript" src="http://wos.lv/a.php?b=180x250&amp;c=11603" type="text/javascript"></script> 
+</td></tr></table><br />
 
 <?php
 if(logedin())
@@ -92,8 +92,8 @@ while($row=mysql_fetch_assoc($query))
     echo "<option value=\"{$row['charId']}\">{$row['char_name']}</option>";
 }
 ?>
-</select>
-<tr><td align="center"><input type="hidden" value="1" name="secrethiddenfromyou" /><input name="go" type="submit" disabled="true" value="<?php echo $Lang['get_reward'];?>" /></tr></td></table>
+</select></td></tr>
+<tr><td align="center"><input type="hidden" value="1" name="secrethiddenfromyou" /><input name="go" type="submit" disabled="disabled" value="<?php echo $Lang['get_reward'];?>" /></td></tr></table>
 <?php
 }
 ?>

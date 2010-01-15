@@ -2,7 +2,7 @@
 //пароль
 echo "<h2>{$Config['ServerName']}</h2>";
 echo "<table align=\"center\">";
-$data123=mysql_query("SELECT charId, char_name, sex FROM characters WHERE accesslevel=0  ORDER BY level DESC LIMIT {$Config['TOP']}", $link);
+$data123=mysql_query("SELECT charId, char_name, sex FROM characters WHERE accesslevel=0  ORDER BY exp DESC LIMIT {$Config['TOP']}", $link);
 $n=1;
 while($top=mysql_fetch_assoc($data123))
 {

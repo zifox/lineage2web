@@ -16,8 +16,8 @@ $Lang['offline']='Offline';
 $Lang['hours']='Hours';
 $Lang['min']='min';
 $Lang['otherchars']='Other chars';
-$Lang['cp']='<font color="orange">CP</font>';
-$Lang['hp']='<font color="red">HP</font>';
-$Lang['mp']='<font color="#0099FF">MP</font>';
+$Lang['cp']='CP';
+$Lang['hp']='HP';
+$Lang['mp']='MP';
 $Lang['not_found']='User Not Found';
 ?>

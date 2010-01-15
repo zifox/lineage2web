@@ -1,6 +1,13 @@
 <?php 
-includeLang('changepass');
-
+define('INWEB', True);
+require_once("include/config.php");
+//пароль
+head("Change Password");
+includeLang('change_pass');
+if (!logedin())
+{
+    msg('Error', 'You need to login', 'error'); 
+}else{
 if($_POST){
     if(ereg("^([a-zA-Z0-9_-])*$", $_POST['oldpassword']) && ereg("^([a-zA-Z0-9_-])*$", $_POST['newpassword']) && ereg("^([a-zA-Z0-9_-])*$", $_POST['newpassword2']))
 {
@@ -65,7 +72,7 @@ function checkform(f)
 return true;
 }
 //]]></script>
-<form method="post" action="index.php?id=changepass" onsubmit="return checkform(this)">
+<form method="post" action="changepass.php" onsubmit="return checkform(this)">
 <table>
  <tr>
   <td>Old Password</td>
@@ -87,4 +94,7 @@ return true;
 
 <?php
 }
+}
+foot();
+mysql_close($link);
 ?>

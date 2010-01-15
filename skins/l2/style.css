@@ -31,7 +31,15 @@ text-decoration : none;
 #langlist a:hover, #langlist a:active {
 text-decoration : none;
 }
-
+td.maxCp{
+    color: orange;
+}
+td.maxHp{
+    color: red;
+}
+td.maxMp{
+    color: #0099FF;
+}
 tr,td.header{
     font-weight: bold;
     font-size: 16px;
