@@ -14,13 +14,11 @@ FROM `characters` INNER JOIN `char_templates`
 ON `characters`.`classid` = `char_templates`.`ClassId` LEFT OUTER JOIN clan_data ON characters.clanid=clan_data.clan_id WHERE `characters`.`charId` = '$id'");
 
     if(mysql_num_rows($sql)!= 0){
+    $char=mysql_fetch_assoc($sql);
     if ($char['sex']==0) { $color='#8080FF'; } else { $color='#FF8080'; }
     echo "<h1 style=\"color: $color; font-weight: bold;\">{$char['char_name']}</h1>";
     ?>
     <img src="img/face/<?php echo $char['race'];?>_<?php echo $char['sex'];?>.gif"  height="25" alt="" /><?
-    echo '<table border="1">';
-
-    $char=mysql_fetch_assoc($sql);
     $onlinetimeH=round(($char['onlinetime']/60/60)-0.5);
 	$onlinetimeM=round(((($char['onlinetime']/60/60)-$onlinetimeH)*60)-0.5);
 	if ($char['clan_id']) {$clan_link = "<a href=\"claninfo.php?clan={$char['clan_id']}\">{$char['clan_name']}</a>";}else{$clan_link = "No Clan";}
@@ -28,7 +26,7 @@ ON `characters`.`classid` = `char_templates`.`ClassId` LEFT OUTER JOIN clan_data
     $onoff='on'; } 
 	else {$online=$Lang['offline']; 
     $onoff='off';} ?>
-    
+    <table border="1">
     <tr><td><?php echo $Lang['level'];?>:</td><td><?php echo $char['level'];?></td></tr>
     <tr><td class="maxCp"><?php echo $Lang['cp'];?>:</td><td class="maxCp"><?php echo $char['maxCp'];?></td></tr>
     <tr><td class="maxHp"><?php echo $Lang['hp'];?>:</td><td class="maxHp"><?php echo $char['maxHp'];?></td></tr>
