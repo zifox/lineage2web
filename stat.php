@@ -39,7 +39,7 @@ $stat = mysql_real_escape_string($_GET['stat']);
 switch($stat){
 	
 	Case 'online':
-	$data=mysql_query ("SELECT charId, char_name, level, sex, pvpkills, pkkills, race, online, onlinetime, ClassName, clanid, clan_name FROM characters INNER JOIN char_templates ON characters.classid=char_templates.ClassId LEFT OUTER JOIN clan_data ON characters.clanid=clan_data.clan_id WHERE online ORDER BY exp DESC");
+	$data=mysql_query ("SELECT charId, char_name, level, sex, pvpkills, pkkills, race, online, onlinetime, ClassName, clanid, clan_name FROM characters INNER JOIN char_templates ON characters.classid=char_templates.ClassId LEFT OUTER JOIN clan_data ON characters.clanid=clan_data.clan_id WHERE online AND !accesslevel ORDER BY exp DESC");
 	echo '<h1>'.$Lang['online'].'</h1>';
 	break;
     
