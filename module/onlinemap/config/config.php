@@ -1,7 +1,7 @@
-<?
+<?php
 
  $dbhost="localhost";                
- $dbname="l2jdb";
+ $dbname="l2";
  $dbuser="root";
  $dbpass="832620i";
 
@@ -19,6 +19,6 @@
                                     
  $r_boss_help="1";                    //this hide/show the Raid Boss help pic
 
-error_reporting(0);         ///// to see advanced error messages and warnings,just comment this line, not recomended
+//error_reporting(0);         ///// to see advanced error messages and warnings,just comment this line, not recomended
 
 ?>

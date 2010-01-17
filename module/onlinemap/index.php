@@ -31,7 +31,7 @@ $rb_stat="";
 $connection=MYSQL_CONNECT($dbhost,$dbuser,$dbpass) or die ("<Font color='red'>Could not conntect to Database, please , check the server status and/or the DB settings at config.cfg</color>");
 mysql_select_db($dbname,$connection);
 
- $get_config_data="SELECT online FROM characters WHERE online>0";
+ $get_config_data="SELECT online FROM characters WHERE online";
  $config_data=MYSQL_QUERY($get_config_data);
  $config['num_online']=mysql_num_rows($config_data);
  
@@ -44,7 +44,7 @@ mysql_select_db($dbname,$connection);
  {$plyr_on="<font color=green>Enabled</font>";
  
 
-  $get_char_data="SELECT characters.charId, characters.char_name, characters.x, characters.y, characters.z, characters.race, characters.level, characters.sex, characters.clanid, characters.accesslevel, clan_data.clan_id, clan_data.clan_name FROM characters,clan_data WHERE characters.clanid in(0,clan_data.clan_id) and online > 0";
+  $get_char_data="SELECT characters.charId, characters.char_name, characters.x, characters.y, characters.z, characters.race, characters.level, characters.sex, characters.clanid, characters.accesslevel, clan_data.clan_id, clan_data.clan_name FROM characters,clan_data WHERE characters.clanid in(0,clan_data.clan_id) and online";
   $char_data=MYSQL_QUERY($get_char_data);
   
    if (mysql_num_rows($char_data)!=0)
