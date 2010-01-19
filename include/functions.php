@@ -1,6 +1,6 @@
 <?php
 //пароль
-if(!defined('INCONFIG')){Header("Location: ../index.php?id=start");}
+if(!defined('INCONFIG')){Header("Location: ../index.php");}
 includeLang('system');
 function includeLang($file)
 {
@@ -53,42 +53,38 @@ function encodePassword($password)
 	return base64_encode(pack('H*', sha1(mysql_real_escape_string($password))));
 }
 
-function logincookie($account, $password, $rememberme)
-{
-	if($rememberme){$expiretime = time() + 31536000;}else{$expiretime=0;}
-	setcookie('account', $account, $expiretime, '/', '', '',true);
-	setcookie('password', $password, $expiretime, '/', '', '',true);
-	header('Location: index.php');
-}
-
-function logout()
-{
-    setcookie('account', '', 0, '/');
-	setcookie('password', '', 0, '/');
-    header('Location: index.php');
-}
-
 function logedin()
 {
-    $account=mysql_real_escape_string($_COOKIE['account']);
-    $password=mysql_real_escape_string($_COOKIE['password']);
-    $CUSER=mysql_fetch_array(mysql_query("SELECT * FROM `accounts` WHERE `login` = '".$account."'"));
-    if ($CUSER && md5($CUSER['password'])==$password){
-  //      global $CUSER;
-  $GLOBALS['CURUSER']=$CUSER;
-    return true;
-        }else{
-        //logout();
-        return false;
-}
-}
-function msg($heading = '', $text = '', $div = 'success', $return=false) {
-    print("<table width=\"90%\" border=\"0\"><tr><td>\n");
-    if($return)
+    global $Config;
+    if(isset($_SESSION['account']) && $_SESSION['IP']==$_SERVER['REMOTE_ADDR'])
     {
-        $back="<meta http-equiv=\"refresh\" content=\"3;url={$Config['url']}/index.php\" />";
+        if(!$_SESSION['remember'] && $_SESSION['last_act']<(time()-$Config['session_expire_time'])){
+            session_unset();
+            return false;
+        }else{
+            return true;
+        }
+    }else{
+        session_unset();
+        return false;
     }
-    print("<div align = \"center\" class=\"$div\">".($heading ? "<b>$heading</b><br />" : "")."$text $back</div></td></tr></table>\n");
+}
+
+function is_admin(){
+    if($_SESSION['admin']==true){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+function msg($heading = '', $text = '', $div = 'success', $return=false) {
+     if($return)
+    {
+        $back="<meta http-equiv=\"refresh\" content=\"3;url={$Config['url']}/l2/index.php\" />";
+    }
+    echo '<table width="90%" border="0"><tr><td>';
+    echo '<div align="center" class="'.$div.'">'.($heading ? '<b>'.$heading.'</b><br />' : '').$text.$back.'</div></td></tr></table>';
 }
 
 function error($id){
@@ -99,9 +95,9 @@ function head($title = "")
 {
     global $skin, $Config, $Lang;
 DEFINE('INSKIN', True);
-if($_COOKIE['skin'])
+if(isset($_COOKIE['skin']))
 {
-$skin = mysql_real_escape_string(isset($_COOKIE['skin']));
+$skin = mysql_real_escape_string($_COOKIE['skin']);
 }
 else
 {
@@ -117,7 +113,8 @@ else
 
 function foot()
 {
-    global $skin, $Config, $Lang;
+    global $link, $skin, $Config, $Lang, $starttime;
     require_once("skins/" . $skin . "/foot.php");
+    mysql_close($link);
 }
 ?>

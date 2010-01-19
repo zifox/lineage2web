@@ -2,28 +2,42 @@
 define('INWEB', True);
 require_once("include/config.php");
 //пароль
-if ($_POST['account'] && $_POST['password'])
-{
-    $login = mysql_fetch_array(mysql_query("SELECT * FROM accounts WHERE `login` = '" . mysql_real_escape_string($_POST['account'])."' AND `password`='".encodePassword($_POST['password'])."'"));
+if (isset($_POST['account']) && isset($_POST['password'])){
+    $account=mysql_real_escape_string($_POST['account']);
+    $pass=encodePassword($_POST['password']);
+    $login = mysql_fetch_array(mysql_query("SELECT * FROM `accounts` WHERE `login` = '" . $account."' AND `password`='".$pass."'"));
+    unset($account);
+    unset($pass);
     if ($login) 
     {
-        if (isset($_POST["rememberme"]))
+        $_SESSION['account']=$login['login'];
+        $_SESSION['IP']=$_SERVER['REMOTE_ADDR'];
+        $_SESSION['last_act']=time();
+        $_SESSION['vote_time']=$login['voted'];
+        
+        if ($login['accessLevel']==127){
+            $_SESSION['admin']=true;
+        }else{
+            $_SESSION['admin']=false;
+        }
+        
+        if (isset($_POST["rememberme"]) && $_POST['rememberme'] == true)
             {
-				$rememberme=1;
+                $_SESSION['remember']=true;
             } 
             else 
             {
-				$rememberme=0;
+                $_SESSION['remember']=false;
         }
-    logincookie(mysql_real_escape_string($_POST['account']), md5(encodePassword(($_POST['password']))), $rememberme);
-    header('Location:index.php');
+        unset($login);
+    //header('Location:index.php');
     }  
     else 
     { 
         error('1'); 
     }
 }
-head("");
+head("Home");
 includeLang('start');
 ?>
 
@@ -44,5 +58,4 @@ includeLang('start');
 
 <?php
 foot();
-mysql_close($link);
 ?>

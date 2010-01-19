@@ -60,5 +60,4 @@ echo "<tr><td><img src=\"./img/face/".$otherchar['race']."_".$otherchar['sex']."
     }else{echo msg('Error',$Lang['not_found'], 'error', false);}
 }else{echo msg('Error',$Lang['not_found'], 'error', false);}
 foot();
-mysql_close($link);
 ?>

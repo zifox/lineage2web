@@ -1,7 +1,14 @@
 <?php
 //пароль
-if(!defined('INWEB')){Header("Location: ../index.php?id=start");}
-define('INCONFIG', True);
+if(!defined('INWEB')){Header("Location: ../index.php");}
+$timeparts = explode(" ",microtime());
+$starttime = $timeparts[1].substr($timeparts[0],1);
+define('INCONFIG', true);
+session_start();
+if(isset($_SESSION['last_act'])){
+    $_SESSION['last_act']=time();
+}
+
 require_once('functions.php');
 ####################      DB CONFIG         ##########################################
 $DB = Array(
@@ -12,11 +19,11 @@ $DB = Array(
         "webdb"		    =>		"web"		//Webpage DataBase
 ); 
 
-############################################# DO NOT MODIFY #################################
+###################################### DO NOT MODIFY #################################
 
   $link = mysql_connect($DB['host'], $DB['login'], $DB['password']);
   @mysql_select_db($DB['db'], $link) OR die('Cannot connect to DataBase!!!');
-    $query = mysql_query("SELECT * FROM ".$DB['webdb'].".config");
+    $query = mysql_query("SELECT * FROM `".$DB['webdb']."`.`config`");
     while ( $row = mysql_fetch_assoc($query) ) {
 	    $Config[$row['config_name']] = stripslashes($row['config_value']);
     }

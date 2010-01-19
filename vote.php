@@ -100,5 +100,4 @@ while($row=mysql_fetch_assoc($query))
 </form>
 <?php
 foot();
-mysql_close($link);
 ?>

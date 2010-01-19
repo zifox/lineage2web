@@ -10,6 +10,8 @@ $Lang['err'] = array(
 5=>'Passwords do not match, or account is too short or too length',
 6=>'Account already exists',
 7=>'You already have an account',
-8=>'You have already voted'
+8=>'You have already voted',
+9=>'You already have account',
+10=>'You are already loged in'
 );
 ?>

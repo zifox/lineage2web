@@ -2,9 +2,10 @@
 //пароль
 define('INWEB', True);
 require_once("include/config.php");
-head("Login");
+
 if (!logedin())
 {
+    head("Login");
 ?>
 <form action="index.php" method="post">
 <table border="1" cellpadding="0">
@@ -16,7 +17,6 @@ if (!logedin())
 </table></form>
 <center><a href="reg.php"><?php echo $Lang['register'];?></a></center>
 <?php
-}else{msg('Error','You are already logedin','error');}
+}else{error('10'); exit();}
 foot();
-mysql_close($link);
 ?>

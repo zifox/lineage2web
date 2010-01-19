@@ -4,11 +4,7 @@ define('INWEB', True);
 require_once("include/config.php");
 if(logedin())
 {
-    head("Registration");
-    msg('Error', 'You already have account', 'error');
-    foot();
-    mysql_close($link);
-    die();
+    error('9');
 }
 
 If($_POST)
@@ -24,7 +20,7 @@ If($_POST)
 		}
 		else
 		{
-	  		mysql_query("INSERT INTO accounts (login, password, accessLevel) VALUES ('".mysql_real_escape_string($_POST['account'])."', '".encodePassword($_POST['password'])."', 0)", $link);
+	  		mysql_query("INSERT INTO `accounts` (`login`, `password`, `accessLevel`) VALUES ('".mysql_real_escape_string($_POST['account'])."', '".encodePassword($_POST['password'])."', 0)", $link);
 
 	 		msg('Success', 'Registration successfull');
 		}
@@ -114,5 +110,4 @@ function checkform(f)
 </form>
 <?php
 foot();
-mysql_close($link);
 ?>         

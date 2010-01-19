@@ -162,5 +162,4 @@ function show(ele) {
 </td></tr></table>
 <?php
 foot();
-mysql_close($link);
 ?>

@@ -19,5 +19,4 @@ head("How to connect");
 </ol>
 <?php
 foot();
-mysql_close($link);
 ?>

@@ -2,23 +2,23 @@
 define('INWEB', True);
 require_once("include/config.php");
 //пароль
-head("Change Password");
-includeLang('change_pass');
 if (!logedin())
 {
-    msg('Error', 'You need to login', 'error'); 
-}else{
+    error('3'); 
+}
+head("Change Password");
+includeLang('change_pass');
+
 if($_POST){
     if(ereg("^([a-zA-Z0-9_-])*$", $_POST['oldpassword']) && ereg("^([a-zA-Z0-9_-])*$", $_POST['newpassword']) && ereg("^([a-zA-Z0-9_-])*$", $_POST['newpassword2']))
 {
     
 	if ($_POST['newpassword']==$_POST['newpassword2'])
 	{
-  	$result=mysql_query("SELECT login,password FROM accounts WHERE login='{$CURUSER['login']}' AND password='".encodePass($_POST['oldpassword']));
+  	$result=mysql_query("SELECT `login`, `password` FROM `accounts` WHERE `login`='{$CURUSER['login']}' AND `password`='".encodePass($_POST['oldpassword']));
   	if (mysql_num_rows($result))
   	{
-    	mysql_query("UPDATE accounts SET password='".encodePass($_POST['newpassword'])."' WHERE login='{$CURUSER['login']}'");
-        logincookie($CURUSER['login'], encodePass($_POST['newpassword']), false);
+    	mysql_query("UPDATE `accounts` SET `password`='".encodePass($_POST['newpassword'])."' WHERE `login`='{$CURUSER['login']}'");
 	    echo $Lang['password_changed'];
   	}
   	else
@@ -94,7 +94,6 @@ return true;
 
 <?php
 }
-}
+
 foot();
-mysql_close($link);
 ?>

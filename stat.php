@@ -389,5 +389,4 @@ while ($top=mysql_fetch_assoc($data))
 <?php
 }
 foot();
-mysql_close($link);
 ?>

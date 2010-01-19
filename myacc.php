@@ -6,10 +6,10 @@ head("My Account");
 includeLang('myacc');
 
 if (logedin()){
-    echo sprintf($Lang['welcome'], $CURUSER['login']);
+    echo sprintf($Lang['welcome'], $_SESSION['account']);
     echo '<br />';
 
-$timevoted = $CURUSER['voted'];
+$timevoted = $_SESSION['vote_time'];
 $now = time();
 
 if ($timevoted <= ($now-60*60*12))
@@ -23,5 +23,4 @@ if ($timevoted <= ($now-60*60*12))
     
 }else {echo '<h1>'.$Lang['login'].'</h1>';}
 foot();
-mysql_close($link);
 ?>

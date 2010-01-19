@@ -1,9 +1,10 @@
 <?php
-//Пожалуйста, введите своё имя и пароль
+//пароль
 if(!defined('INLANG')){Header("Location: ../../index.php?id=start");}
 $Lang['admin_settings'] = 'Admin Settings';
 $Lang['save']='Save';
 $Lang['saved']='Settings Saved';
+$Lang['nothing_here']='Nothing Here!!!';
 
 $Lang['Exp'] = 'Expierence';
 $Lang['SP'] = 'Skill Points';
@@ -33,4 +34,5 @@ $Lang['url'] = 'Site URL';
 $Lang['Quest'] = 'Quest Drop/Reward';
 $Lang['enable_news'] = 'Enable News (1 - enabled, 0 - disabled)';
 $Lang['news'] = 'News(if Enable News = 1)';
+$Lang['session_expire_time'] = 'Session Expire Time';
 ?>

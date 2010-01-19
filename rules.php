@@ -26,5 +26,4 @@ head("Rules");
 </ul>
 <?php
 foot();
-mysql_close($link);
 ?>

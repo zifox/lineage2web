@@ -36,5 +36,4 @@ includeLang('module');
   }
   print "</tbody>\n</table>\n";
  foot();
-mysql_close($link);
 ?>

@@ -18,16 +18,18 @@ else
 {
 ?>
 <table border="0" cellpadding="0">
-<tr><td><?php echo sprintf($Lang['welcome'], $CURUSER['login']);?></td></tr>
+<tr><td><?php echo sprintf($Lang['welcome'], $_SESSION['account']);?></td></tr>
 <?php
-if($CURUSER['accessLevel'] == '127'){echo "<tr><td><center><a href=\"admin.php\"><font color=\"red\">{$Lang['admin']}</font></a></center></td></tr>";}
-
-$time=$CURUSER['voted']+60*60*12;
-echo "<tr><td align=\"center\"><font color=\"red\">";
+if(is_admin()){ ?>
+<tr><td><center><a href="admin.php"><font color="red"><?php echo $Lang['admin'];?></font></a></center></td></tr>
+<tr><td><center><a href="contact.php?action=read"><font color="red"><?php echo $Lang['contact'];?></font></a></center></td></tr>
+<?php }
+$time=$_SESSION['vote_time']+60*60*12;
+?><tr><td align="center"><font color="red"><?php
 if($time > time())
 {
 
-echo "{$Lang['vote_after']} <br />";
+echo $Lang['vote_after'].'<br />';
 }
 ?>
 <script language="JavaScript" type="text/javascript">

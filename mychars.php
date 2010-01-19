@@ -10,7 +10,7 @@ if (logedin())
 `characters`.`maxHp`, `characters`.`maxCp`, `characters`.`maxMp`, `characters`.`sex`, `characters`.`karma`, `characters`.`fame`,
 `characters`.`pvpkills`, `characters`.`pkkills`, `characters`.`clanid`, `characters`.`race`, `characters`.`classid`, `characters`.`base_class`, `characters`.`title`, `characters`.`rec_have`, `characters`.`accesslevel`, `characters`.`online`, `characters`.`onlinetime`, `characters`.`lastAccess`, `characters`.`nobless`, `characters`.`vitality_points`, `char_templates`.`ClassName`
 FROM `characters` , `char_templates`
-WHERE `characters`.`classid` = `char_templates`.`ClassId` AND `account_name` = '{$CURUSER['login']}'");
+WHERE `characters`.`classid` = `char_templates`.`ClassId` AND `account_name` = '{$_SESSION['account']}'");
     if (mysql_num_rows($sql) != 0)
     {
         includeLang('user');
@@ -34,5 +34,4 @@ WHERE `characters`.`classid` = `char_templates`.`ClassId` AND `account_name` = '
     } else {echo '<h1>'.$Lang['no_characters'].'</h1>';}
 } else {echo '<h1>'.$Lang['login'].'</h1>';}
 foot();
-mysql_close($link);
 ?>

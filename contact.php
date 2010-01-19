@@ -8,7 +8,7 @@ $action=$_GET['action'];
 
 switch($action){
 Case 'delete':
-if(logedin() && $CURUSER['accessLevel'=='127'])
+if(logedin() && is_admin())
 {
 $filename="module/data.txt";
 if (unlink($filename))
@@ -81,7 +81,7 @@ fclose($handle);
 <?
 break;
 Case 'read':
-if(logedin() && $CURUSER['accessLevel'] == '127'){
+if(logedin() && is_admin()){
 $filename="module/data.txt";
 if ( file_exists($filename) )
 {
@@ -153,7 +153,7 @@ else
      echo "";
 }*/
 default:
-if(logedin() && $CURUSER['accessLevel']=='127')
+if(logedin() && is_admin())
 {
     echo '<a href="contact.php?action=read">Read Messages</a>';
 }

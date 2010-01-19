@@ -1,14 +1,12 @@
 <?php
-if ($_GET['error'])
+if (isset($_GET['error']))
 {
 //пароль
 define('INWEB', True);
 require_once("include/config.php");
+includeLang('error');
 head($Lang['error']);
-    includeLang('error');
-    msg($Lang['error'], $Lang['err'][$_GET['error']], 'error', true);
+msg($Lang['error'], $Lang['err'][$_GET['error']], 'error', true);
 foot();
-mysql_close($link);
-die();
 }
 ?>
