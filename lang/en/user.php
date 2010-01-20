@@ -1,6 +1,7 @@
 <?php
 //пароль
 if(!defined('INLANG')){Header("Location: ../../index.php");}
+
 $Lang['face']='Face';
 $Lang['name']='Name';
 $Lang['level']='Level';

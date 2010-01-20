@@ -1,5 +1,7 @@
 <?php
-if(!defined('INLANG')){Header("Location: ../../index.php?id=start");}
+//пароль
+if(!defined('INLANG')){Header("Location: ../../index.php");}
+
 $Lang['login'] = 'Login to see your characters!';
 $Lang['unstuck'] = 'Unstuck';
 $Lang['no_clan'] = 'No Clan';

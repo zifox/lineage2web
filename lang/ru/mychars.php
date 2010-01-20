@@ -1,7 +1,9 @@
 <?php
-if(!defined('INLANG')){Header("Location: ../../index.php?id=start");}
-$Lang['login'] = 'Login to see your characters!';
-$Lang['unstuck'] = 'Unstuck';
-$Lang['no_clan'] = 'No Clan';
-$Lang['no_characters'] = 'You Don\'t have any chars!!!';
+//пароль
+if(!defined('INLANG')){Header("Location: ../../index.php");}
+
+$Lang['login'] = 'Войти, чтобы увидеть вашего персонажа!';
+$Lang['unstuck'] = 'удаваться';
+$Lang['no_clan'] = 'Нет клан';
+$Lang['no_characters'] = 'У вас нет каких-либо персонажа!!!';
 ?>

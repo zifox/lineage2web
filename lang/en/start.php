@@ -1,12 +1,12 @@
 <?php
 //пароль
-if(!defined('INLANG')){Header("Location: ../../index.php?id=start");}
-$Lang['ValidCSS']='Valid CSS';
-$Lang['serverinfo']='SERVER INFO';
-$Lang['rates']='Rates';
-$Lang['events']='Current Events';
-$Lang['addinfo']='Additional Info';
-$Lang['Desc']='Events, Siege and all the weekends you entertain our players .... seven signs, noblesse and the Olympiad to become a true hero in the wonderful world of lineage2, do not stay out of this wonderful world. join us now!';
-$Lang['vote']='Vote';
+if(!defined('INLANG')){Header("Location: ../../index.php");}
+
+$Lang['serverinfo'] = 'SERVER INFO';
+$Lang['rates'] = 'Rates';
+$Lang['events'] = 'Current Events';
+$Lang['addinfo'] = 'Additional Info';
+$Lang['Desc'] = 'Events, Castle Sieges, Fortress Sieges, Clan Hall Sieges, Seven Signs, Olympiad to became true hero of World of Lineage II. Do not stay out of it - join World of Lineage II today!';
+$Lang['vote'] = 'Vote';
 $Lang['vote_and_receive'] = 'Vote And Receive REWARD!';
 ?>

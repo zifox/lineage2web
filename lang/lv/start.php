@@ -1,12 +1,12 @@
 <?php
 //пароль
-if(!defined('INLANG')){Header("Location: ../../index.php?id=start");}
-$Lang['ValidCSS']='Valid CSS';
-$Lang['serverinfo']='SERVER INFO';
-$Lang['rates']='Rates';
-$Lang['events']='Current Events';
-$Lang['addinfo']='Additional Info';
-$Lang['Desc']='Events, Siege and all the weekends you entertain our players .... seven signs, noblesse and the Olympiad to become a true hero in the wonderful world of lineage2, do not stay out of this wonderful world. join us now!';
-$Lang['vote']='Vote';
-$Lang['vote_and_receive'] = 'Vote And Receive REWARD!';
+if(!defined('INLANG')){Header("Location: ../../index.php");}
+
+$Lang['serverinfo'] = 'SERVERA INFORMĀCIJA';
+$Lang['rates'] = 'Temps';
+$Lang['events'] = 'Šībrīža eventi';
+$Lang['addinfo'] = 'Papildus informācija';
+$Lang['Desc'] = 'Eventi, Castle Sieges, Fortress Sieges, Clan Hall Sieges, Seven Signs, Olympiad lai kļūtu par patiesu varoni Lineage II pasaulē, nepaliec malā - pievienojies Lineage II pasaulei jau šodien!';
+$Lang['vote'] = 'Balsot';
+$Lang['vote_and_receive'] = 'Balso un saņēm ATLĪDZĪBU';
 ?>

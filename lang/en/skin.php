@@ -1,6 +1,7 @@
 <?php
 //пароль
-if(!defined('INLANG')){Header("Location: ../../index.php?id=start");}
+if(!defined('INLANG')){Header("Location: ../../index.php");}
+
 $Lang['login']              =               'Login';
 $Lang['menu']               =               'Menu';
 $Lang['stats']              =               'Stats';

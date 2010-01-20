@@ -1,7 +1,7 @@
 <?php
+//пароль
+if(!defined('INLANG')){Header("Location: ../../index.php");}
 
-//Пожалуйста, введите своё имя и пароль
-if(!defined('INLANG')){Header("Location: ../../index.php?id=start");}
 $Lang['face']='Face';
 $Lang['name']='Name';
 $Lang['level']='Level';
@@ -16,8 +16,8 @@ $Lang['offline']='Offline';
 $Lang['hours']='Hours';
 $Lang['min']='min';
 $Lang['otherchars']='Other chars';
-$Lang['cp']='<font color="orange">CP</font>';
-$Lang['hp']='<font color="red">HP</font>';
-$Lang['mp']='<font color="blue">MP</font>';
-$Lang['not_found']='Not Found';
+$Lang['cp']='CP';
+$Lang['hp']='HP';
+$Lang['mp']='MP';
+$Lang['not_found']='User Not Found';
 ?>

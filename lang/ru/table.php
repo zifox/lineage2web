@@ -1,17 +1,18 @@
 <?php
-//Пожалуйста, введите своё имя и пароль
-if(!defined('INLANG')){Header("Location: ../../index.php?id=start");}
-$Lang['place']='Place';
-$Lang['face']='Face';
-$Lang['nick']='Nick';
-$Lang['level']='Level';
-$Lang['proffesion']='Proffesion';
-$Lang['clan']='Clan';
+//пароль
+if(!defined('INLANG')){Header("Location: ../../index.php");}
+
+$Lang['place']='Место';
+$Lang['face']='Лицо';
+$Lang['nick']='Ник';
+$Lang['level']='Уровень';
+$Lang['proffesion']='Профессия';
+$Lang['clan']='Клан';
 $Lang['pvp_pk']='PvP/PK';
-$Lang['time_in_game']='Time in Game';
-$Lang['status']='Status';
+$Lang['time_in_game']='Время в игре';
+$Lang['status']='Статус';
 $Lang['online']='Online';
 $Lang['offline']='Offline';
-$Lang['hours']='Hours';
-$Lang['min']='min';
+$Lang['hours']='Часов';
+$Lang['min']='Минуты';
 ?>

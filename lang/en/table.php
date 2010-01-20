@@ -1,6 +1,7 @@
 <?php
-//Пожалуйста, введите своё имя и пароль
-if(!defined('INLANG')){Header("Location: ../../index.php?id=start");}
+//пароль
+if(!defined('INLANG')){Header("Location: ../../index.php");}
+
 $Lang['place']='Place';
 $Lang['face']='Face';
 $Lang['nick']='Nick';
