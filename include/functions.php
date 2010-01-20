@@ -59,13 +59,13 @@ function logedin()
     if(isset($_SESSION['account']) && $_SESSION['IP']==$_SERVER['REMOTE_ADDR'])
     {
         if(!$_SESSION['remember'] && $_SESSION['last_act']<(time()-$Config['session_expire_time'])){
-            session_unset();
+            //session_unset();
             return false;
         }else{
             return true;
         }
     }else{
-        session_unset();
+        //session_unset();
         return false;
     }
 }

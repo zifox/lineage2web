@@ -12,6 +12,7 @@ $Lang['err'] = array(
 7=>'You already have an account',
 8=>'You have already voted',
 9=>'You already have account',
-10=>'You are already loged in'
+10=>'You are already loged in',
+11=>'Verification code incorrect!'
 );
 ?>

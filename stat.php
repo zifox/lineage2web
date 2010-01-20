@@ -14,7 +14,7 @@ includeLang('stat');
  | <a href="module/onlinemap/index.php" target="_blank"><?php echo $Lang['map'];?></a> 
  | <a href="module/castles/index.php" target="_blank"><?php echo $Lang['castles_map'];?></a> 
  | <a href="stat.php?stat=castles"><?php echo $Lang['castles'];?></a> 
- | <a href="clantop.php"><?php echo $Lang['top_clans'];?></a> |<br /><hr />
+ | <a href="stat.php?stat=clantop"><?php echo $Lang['top_clans'];?></a> |<br /><hr />
  | <a href="stat.php?stat=gm"><?php echo $Lang['gm'];?></a>
  | <a href="stat.php?stat=count"><?php echo $Lang['rich_players'];?></a> 
  | <a href="stat.php?stat=top_pvp"><?php echo $Lang['pvp'];?></a>  
@@ -101,7 +101,27 @@ echo '<a href="claninfo.php?clanid='.mysql_result($result2,0,'clan_id').'">'.mys
 <?php
     break;
     
-	Case 'clantop': //NOTDONE
+	Case 'clantop':
+    $result = mysql_query("SELECT `clan_data`.*, `char_name`, `csum`, `ccount`, `cavg`, `name` FROM `clan_data` INNER JOIN `characters` ON `clan_data`.`leader_id`=`characters`.`charId` LEFT JOIN (SELECT `clanid`, SUM(`level`) AS `csum`, count(`level`) AS `ccount`, AVG(`level`) AS `cavg` FROM `characters` WHERE `clanid` GROUP BY `clanid`) AS `levels` ON `clan_data`.`clan_id`=`levels`.`clanid` LEFT OUTER JOIN `castle` ON `clan_data`.`hasCastle`=`castle`.`id` WHERE !`accessLevel` ORDER BY `clan_level` DESC, `csum` DESC");
+
+	echo '<h1> TOP Clans </h1><hr>';
+    echo '<h2>'.$Lang["clantop_total"].': '.mysql_num_rows($result).'</h2>';
+	echo '<table border=1><thead><tr style="color: green;"><th><b>Clan Name</b></th>
+<th><b>Leader</b></th>
+<th><b>Level</b></th>
+<th><b>Castle</b></th>
+<th><b>Total Level</b></th>
+<th><b>Members</b></th>
+<th><b>Avg. of Levels</b></th>
+</tr></thead>';
+
+  $i=1;
+  while ($row=mysql_fetch_array($result))
+  {
+    if($row['hasCastle']!=0){$castle=$row['name'];}else{$castle='No castle';}
+    echo "<tr". (($i++ % 2) ? "" : " class=\"altRow\"") ."><td><a href=\"claninfo.php?clan=". $row["clan_name"]."\">". htmlspecialchars($row["clan_name"]). "</a></td><td><a href=\"user.php?cid={$row['leader_id']}\">". $row["char_name"]. "</a></td><td class=\"numeric sortedColumn\">".$row["clan_level"]. "</td><td>".$castle. "</td><td class=\"numeric\">".$row["csum"]. "</td><td class=\"numeric\">".$row["ccount"]. "</td><td class=\"numeric\">".$row["cavg"]. "</td></tr>\n";
+  }
+  echo "</tbody>\n</table>\n";
     break;
 	
 	Case 'gm':

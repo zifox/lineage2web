@@ -5,10 +5,15 @@ require_once("include/config.php");
 if(logedin())
 {
     error('9');
+    exit();
 }
 
 If($_POST)
 {
+    if(strtolower($_SESSION['captcha'])!=strtolower($_POST['captcha'])){
+        error('11');
+        exit();
+    }
     if(ereg("^([a-zA-Z0-9_-])*$", $_POST['account']) && ereg("^([a-zA-Z0-9_-])*$", $_POST['password']) && ereg("^([a-zA-Z0-9_-])*$", $_POST['password2']))
 {
 	if ($_POST['account'] && strlen($_POST['account'])<16 && strlen($_POST['account'])>3 && $_POST['password'] && $_POST['password2'] && $_POST['password']==$_POST['password2'])
@@ -17,17 +22,21 @@ If($_POST)
 		if(mysql_num_rows($check))
 		{
 			error('6');
+            exit();
 		}
 		else
 		{
 	  		mysql_query("INSERT INTO `accounts` (`login`, `password`, `accessLevel`) VALUES ('".mysql_real_escape_string($_POST['account'])."', '".encodePassword($_POST['password'])."', 0)", $link);
-
-	 		msg('Success', 'Registration successfull');
+            head('Registration');
+	 		msg('Success', 'Registration successfull<br />You can now log in');
+            foot();
+            exit();
 		}
 	}
 	else
 	{
   	error('5');
+    exit();
 	}
 }
 else
@@ -42,10 +51,12 @@ head("Registration");
 <ul>
 <li> Account and password can not be empty .</li>
 <li> Account and password can not be less than 4 and Over 15 characters .</li>
-<li>Account and password are written in English letters and numerals .</li>
+<li> Account and password are written in English letters and numerals .</li>
+<li> Verification code is case in-sensitive and contains leters and digits.</li>
 </ul>
 
 <script type="text/javascript">//<![CDATA[
+
 function isAlphaNumeric(value)
 {
   if (value.match(/^[a-zA-Z0-9]+$/))
@@ -101,6 +112,14 @@ function checkform(f)
  <tr>
   <td>Repeat Password</td>
   <td><input type="password" name="password2" maxlength="15" /></td>
+ </tr>
+ <tr>
+  <td>Verification Image</td>
+  <td><img src="img/captcha.php" alt="" /></td>
+ </tr>
+  <tr>
+  <td>Verification Code</td>
+  <td><input type="text" name="captcha" maxlength="10" /></td>
  </tr>
  <tr>
   <td colspan="2" style="text-align: center;"><br />
