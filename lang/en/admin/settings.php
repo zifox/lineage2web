@@ -1,12 +1,12 @@
 <?php
 //пароль
-if(!defined('INLANG')){Header("Location: ../../index.php?id=start");}
+if(!defined('INLANG')){Header("Location: ../../index.php");}
 $Lang['admin_settings'] = 'Admin Settings';
-$Lang['save']='Save';
-$Lang['saved']='Settings Saved';
-$Lang['nothing_here']='Nothing Here!!!';
+$Lang['save'] = 'Save';
+$Lang['saved'] = 'Settings Saved';
+$Lang['nothing_here'] = 'Nothing Here!!!';
 
-$Lang['Exp'] = 'Expierence';
+$Lang['Exp'] = 'Experience';
 $Lang['SP'] = 'Skill Points';
 $Lang['Adena'] = 'Adena';
 $Lang['Items'] = 'Item Drop';

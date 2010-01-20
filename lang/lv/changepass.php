@@ -1,10 +1,11 @@
 <?php
-//Пожалуйста, введите своё имя и пароль
-if(!defined('INLANG')){Header("Location: ../../index.php?id=start");}
-$Lang['changepass'] = 'Change Password';
-$Lang['password_desc'] = 'Password cannot be empty.<br />Password should be between 6 and 16 characters.<br />Password must contain only alphanumerical chars.<br />';
-$Lang['incorrect_chars'] = 'Incorrect chars entered in one of fields';
-$Lang['passwords_no_match'] = 'Passwords do not match';
-$Lang['old_password_incorret'] = 'Old password isn\'t correct';
-$Lang['password_changed'] = 'Password has been changed!';
+//пароль
+if(!defined('INLANG')){Header("Location: ../../index.php");}
+
+$Lang['changepass'] = 'Paroles Maiņa';
+$Lang['password_desc'] = 'Parole nevar būt tukša.<br />Parolei jābūt no 6 - 16 simboliem.<br />Parole jābūt tikai burtciparu rakstzīmēm.<br />';
+$Lang['incorrect_chars'] = 'Nederīgi simboli ierakstīti vienā no laukiem';
+$Lang['passwords_no_match'] = 'Paroles nesakrīt';
+$Lang['old_password_incorret'] = 'Vecā Parole NAV PAREIZA';
+$Lang['password_changed'] = 'Parole nomainīta!';
 ?>

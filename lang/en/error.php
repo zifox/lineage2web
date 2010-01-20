@@ -1,7 +1,7 @@
 <?php
 //пароль
-if(!defined('INLANG')){Header("Location: ../../index.php?id=start");}
-$Lang['error']='Error';
+if(!defined('INLANG')){Header("Location: ../../index.php");}
+$Lang['error'] = 'Error';
 $Lang['err'] = array( 
 1=>'Incorrect Account or Password',
 2=>'Incorrect Values entered',

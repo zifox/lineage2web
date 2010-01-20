@@ -6,7 +6,7 @@ $Lang['offline'] = 'Offline';
 $Lang['exp'] = 'Exp';
 $Lang['sp'] = 'SP';
 $Lang['adena'] = 'Adena';
-$Lang['items'] = 'Item Drop';
+$Lang['items'] = 'Item';
 $Lang['spoil'] = 'Spoil';
-$Lang['quest'] = 'Quest Drop/Reward';
+$Lang['quest'] = 'Quest Drops/Atlīdzība';
 ?>

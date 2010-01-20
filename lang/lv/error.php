@@ -1,15 +1,18 @@
 <?php
 //пароль
-if(!defined('INLANG')){Header("Location: ../../index.php?id=start");}
-$Lang['error']='Error';
+if(!defined('INLANG')){Header("Location: ../../index.php");}
+$Lang['error'] = 'Kļūda';
 $Lang['err'] = array( 
-1=>'Incorrect Account or Password',
-2=>'Incorrect Values entered',
-3=>'You need to login to see this page',
-4=>'Account or password contains illegal characters',
-5=>'Passwords do not match, or account is too short or too length',
-6=>'Account already exists',
-7=>'You already have an account',
-8=>'You have already voted'
+1=>'Nepareizs Konts vai Parole',
+2=>'Nepareizas vērtības ievadītas',
+3=>'Tev jāieiet lai redzētu šo lapu',
+4=>'Konts vai parole satur aizliegtus simbolus!',
+5=>'Paroles nesakrīt vai konts ir pārāk īss vai pārak garš',
+6=>'Konts jau pastāv',
+7=>'Tev jau ir Konts',
+8=>'Tu jau esi nobalsojis',
+9=>'Tev jau ir Konts',
+10=>'Tu jau esi ienācis',
+11=>'Aptiprinājuma kods nepareizs!'
 );
 ?>

@@ -1,15 +1,18 @@
 <?php
 //пароль
-if(!defined('INLANG')){Header("Location: ../../index.php?id=start");}
-$Lang['error']='Error';
+if(!defined('INLANG')){Header("Location: ../../index.php");}
+$Lang['error'] = 'Ошибка';
 $Lang['err'] = array( 
-1=>'Incorrect Account or Password',
-2=>'Incorrect Values entered',
-3=>'You need to login to see this page',
-4=>'Account or password contains illegal characters',
-5=>'Passwords do not match, or account is too short or too length',
-6=>'Account already exists',
-7=>'You already have an account',
-8=>'You have already voted'
+1=>'Неправильные счета или пароль',
+2=>'Неправильные значения, вводимые',
+3=>'Вы должны Войти, чтобы увидеть эту страницу',
+4=>'Счета или пароль содержит недопустимые символы',
+5=>'Пароли не совпадают, или счет, слишком короткий или слишком длиной',
+6=>'Аккаунт уже существует',
+7=>'У вас уже есть аккаунт',
+8=>'Вы уже проголосовали',
+9=>'У вас уже есть счет',
+10=>'Вы уже Войти',
+11=>'Неправильный проверочный код!'
 );
 ?>

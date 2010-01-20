@@ -1,10 +1,11 @@
 <?php
-//Пожалуйста, введите своё имя и пароль
-if(!defined('INLANG')){Header("Location: ../../index.php?id=start");}
-$Lang['changepass'] = 'Change Password';
-$Lang['password_desc'] = 'Password cannot be empty.<br />Password should be between 6 and 16 characters.<br />Password must contain only alphanumerical chars.<br />';
-$Lang['incorrect_chars'] = 'Incorrect chars entered in one of fields';
-$Lang['passwords_no_match'] = 'Passwords do not match';
-$Lang['old_password_incorret'] = 'Old password isn\'t correct';
-$Lang['password_changed'] = 'Password has been changed!';
+//пароль
+if(!defined('INLANG')){Header("Location: ../../index.php");}
+
+$Lang['changepass'] = 'Изменение пароля';
+$Lang['password_desc'] = 'Пароль не может быть пустым.<br />Пароль должен быть от 6 до 16 символов.<br />Пароль должен содержать только буквенно-цифровых символов.<br />';
+$Lang['incorrect_chars'] = 'Неправильные символы вошел в одно из полей';
+$Lang['passwords_no_match'] = 'Пароли не совпадают';
+$Lang['old_password_incorret'] = 'Старый пароль не правильный';
+$Lang['password_changed'] = 'Пароль был изменен!';
 ?>
