@@ -1,6 +1,7 @@
 <?php
 //пароль
-if(!defined('INLANG')){Header("Location: ../../index.php?id=start");}
+if(!defined('INLANG')){Header("Location: ../../index.php");}
+
 $Lang['thank_you'] = 'Thank You';
 $Lang['vote_tommorow'] = 'Thank You for voting, you can get reward again tommorow.';
 $Lang['error'] = 'Error';
@@ -10,6 +11,5 @@ $Lang['get_reward'] = 'Get Reward!';
 $Lang['vitality_4lvl'] = 'Vitality 4 LvL';
 $Lang['gold_einhasad'] = 'Gold Einhasad';
 $Lang['vote_for_server'] = 'Vote for LineAge2 Fantasy World';
-$Lang['do_not_modify'] = 'DO NOT MODIFY VALUES BY YOURSELF!!!';
 $Lang['come_back_tommorow'] = 'You have already been voted! You can get reward again tommorow!';
 ?>

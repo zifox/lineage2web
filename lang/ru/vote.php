@@ -1,15 +1,15 @@
 <?php
 //пароль
-if(!defined('INLANG')){Header("Location: ../../index.php?id=start");}
-$Lang['thank_you'] = 'Thank You';
-$Lang['vote_tommorow'] = 'Thank You for voting, you can get reward again tommorow.';
-$Lang['error'] = 'Error';
-$Lang['thank_for_voting'] = 'Thank You for supporting our server, Your reward has been added!';
-$Lang['first_login'] = 'You need to login to vote and receive reward!';
-$Lang['get_reward'] = 'Get Reward!';
+if(!defined('INLANG')){Header("Location: ../../index.php");}
+
+$Lang['thank_you'] = 'Спасибо';
+$Lang['vote_tommorow'] = 'Спасибо за голосование, вы можете получить вознаграждение завтра.';
+$Lang['error'] = 'Ошибка';
+$Lang['thank_for_voting'] = 'Спасибо Вам за поддержку нашего сервера, Ваша награда была добавлена!';
+$Lang['first_login'] = 'Вы должны Войти для голосования и получать вознаграждение!';
+$Lang['get_reward'] = 'Получить вознаграждение!';
 $Lang['vitality_4lvl'] = 'Vitality 4 LvL';
 $Lang['gold_einhasad'] = 'Gold Einhasad';
-$Lang['vote_for_server'] = 'Vote for LineAge2 Fantasy World';
-$Lang['do_not_modify'] = 'DO NOT MODIFY VALUES BY YOURSELF!!!';
-$Lang['come_back_tommorow'] = 'You have already been voted! You can get reward again tommorow!';
+$Lang['vote_for_server'] = 'Проголосуйте за LineAge2 Fantasy World';
+$Lang['come_back_tommorow'] = 'Вы уже голосовали! Вы можете получить вознаграждение завтра!';
 ?>
