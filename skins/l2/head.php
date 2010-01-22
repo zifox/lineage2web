@@ -22,6 +22,22 @@ try {
 var pageTracker = _gat._getTracker("UA-11986252-1");
 pageTracker._trackPageview();
 } catch(err) {}</script>
+<script type="text/javascript">
+var min_wnd=0;
+function small_window(url,width,height,name) {
+	w_close=0;
+	if (w_close) {
+		if (window_small && !window_small.closed) small_window.window.close();
+		name="small_window";
+	} else {
+		if (typeof(name)=='undefined' || name=='') name=(Math.round(Math.random()*100000)).toString();
+	}
+ if (typeof(width)=='undefined' || width==0) width=600;
+ if (typeof(height)=='undefined' || height==0) height=480;
+ window_small=window.open(url,name,"toolbar=0,location=0,directories=0,status=1,menubar=0,scrollbars=1,resizable=1,width="+width+",height="+height);
+}
+</script>
+
 <?php
 //пароль
 $rnd = rand(1,10);
