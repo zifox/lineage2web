@@ -8,6 +8,7 @@ $Lang['online'] = 'Online';
 $Lang['map'] = 'Map';
 $Lang['castles_map'] = 'Castles Map';
 $Lang['castles'] = 'Castles';
+$Lang['fort'] = 'Fortress';
 $Lang['seven_signs'] = 'Seven Signs';
 $Lang['top_clans'] = 'Top Clans';
 $Lang['gm'] = 'GMs';
@@ -37,6 +38,7 @@ $Lang['race'] = array(
 );
 $Lang['no_clan'] = 'No Clan';
 $Lang['castle_of'] = 'Castle of %s';
+$Lang['fort_of'] = '%s Fortress';
 $Lang['next_siege'] = 'Next Siege: ';
 $Lang['castle'] = 'Castle';
 $Lang['details'] = 'Details';

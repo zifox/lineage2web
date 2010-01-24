@@ -8,6 +8,7 @@ $Lang['online'] = 'Онлайн';
 $Lang['map'] = 'Онлайн Карта';
 $Lang['castles_map'] = 'Замок карта';
 $Lang['castles'] = 'Замок';
+$Lang['fort'] = 'Крепость';
 $Lang['seven_signs'] = 'Семь печатей';
 $Lang['top_clans'] = 'Top кланы';
 $Lang['gm'] = 'GMs';
@@ -36,6 +37,7 @@ $Lang['race'] = array(
 );
 $Lang['no_clan'] = 'Нет клан';
 $Lang['castle_of'] = 'Замок %s';
+$Lang['fort_of'] = '%s Крепость';
 $Lang['next_siege'] = 'Следующий осада: ';
 $Lang['castle'] = 'Замок';
 $Lang['details'] = 'детали';

@@ -13,7 +13,8 @@ includeLang('stat');
  | <a href="stat.php?stat=online"><?php echo $Lang['online'];?></a> 
  | <a href="onlinemap.php" target="_blank"><?php echo $Lang['map'];?></a> 
  | <a href="castlesmap.php" target="_blank"><?php echo $Lang['castles_map'];?></a> 
- | <a href="stat.php?stat=castles"><?php echo $Lang['castles'];?></a> 
+ | <a href="stat.php?stat=castles"><?php echo $Lang['castles'];?></a>
+ | <a href="stat.php?stat=fort"><?php echo $Lang['fort'];?></a> 
  | <a href="stat.php?stat=clantop"><?php echo $Lang['top_clans'];?></a> |<br /><hr />
  | <a href="stat.php?stat=gm"><?php echo $Lang['gm'];?></a>
  | <a href="stat.php?stat=count"><?php echo $Lang['rich_players'];?></a> 
@@ -99,6 +100,56 @@ echo '<a href="claninfo.php?clanid='.mysql_result($result2,0,'clan_id').'">'.mys
 ?>
 </table>
 <?php
+    break;
+    
+    Case 'fort':
+$result = mysql_query("SELECT `id`, `name`, `siegeDate`, `lastOwnedTime`, `state`, `clan_id`, `clan_name`, `char_name` FROM `fort` LEFT OUTER JOIN `clan_data` ON `clan_data`.`clan_id`=`fort`.`owner` LEFT OUTER JOIN `characters` ON `clan_data`.`leader_id`=`characters`.`charId` ORDER by `id` ASC");
+
+$r=0;
+?><table border="0" cellpadding="3" cellspacing="3">
+<?php
+while($row = mysql_fetch_assoc($result)){
+
+if ($r==0){echo '<tr>';}
+$r++;
+?>
+<td><table border="1"><tr><td class="noborder">
+<h1><?php echo sprintf($Lang['fort_of'],$row['name'],'%s');?></h1>
+<br /><img src = "img/fort/<?php echo $row['id'];?>.jpg" width = "170" alt="<?php echo $row['name'];?> Fortress" />
+<table border="0" width="170">
+<tr style="background-color: #2391ab;"><td><?php echo $Lang['fort'];?></td><td><?php echo $Lang['details'];?></td></tr>
+<tr><td><?php echo $Lang['owner_clan'];?></td><td>
+<?php
+if ($row['clan_id'])
+{echo '<a href="claninfo.php?clan='.$row['clan_id'].'">'.$row['clan_name'].'</a>';}
+else{echo $Lang['no_owner'];}
+?></td></tr>
+<tr class="altRow"><td><?php echo $Lang['lord'];?></td><td>
+<?php
+if ($row['charId'])
+{echo '<a href="user.php?cid='.$row['charId'].'">'.$row['char_name'].'</a>';}
+else{echo $Lang['no_lord'];}
+?></td></tr>
+
+<tr><td><?php echo $Lang['attackers'];?></td><td>
+<?php
+$result1 = mysql_query("SELECT clan_id, clan_name FROM fortsiege_clans INNER JOIN clan_data USING (clan_id)  WHERE fort_id='{$row['id']}'");
+while($attackers=mysql_fetch_assoc($result1))
+{
+echo '<a href="claninfo.php?clanid='.$attackers['clan_id'].'">'.$attackers['clan_name'].'</a><br />';
+}
+?>
+</td></tr></table></td></tr></table>
+</td>
+<?php if($r==3)
+{
+    echo '</tr>';
+    $r=0;
+}
+}
+?>
+</table>
+<?
     break;
     
 	Case 'clantop':
@@ -385,7 +436,7 @@ document.write("<img src='img/ss/Seals/SOS/bongin3.gif' width='85' height='86' b
 <?php
 break;
 }
-if($stat && $stat != 'castles' && $stat != 'clantop'){
+if($stat && $stat != 'castles' && $stat != 'fort' && $stat != 'clantop'){
 includeLang('user');
 echo '<hr /><table border="1"><tr><td>'.$Lang['place'].'</td><td>'.$Lang['face'].'</td><td><center>'.$Lang['name'].'</center></td><td>'.$Lang['level'].'</td><td><center>'.$Lang['class'].'</center></td><td><center>'.$Lang['clan'].'</center></td><td>'.$Lang['pvp_pk'].'</td><td><center>'.$Lang['online_time'].'</center></td><td>'.$Lang['status'].'</td>'.$addheader.'</tr>';
 

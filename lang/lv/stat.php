@@ -8,6 +8,7 @@ $Lang['online'] = 'Online';
 $Lang['map'] = 'Online Karte';
 $Lang['castles_map'] = 'Piļu Karte';
 $Lang['castles'] = 'Pilis';
+$Lang['fort'] = 'Cietokšņi';
 $Lang['seven_signs'] = 'Seven Signs';
 $Lang['top_clans'] = 'Top Klani';
 $Lang['gm'] = 'GM';
@@ -36,6 +37,7 @@ $Lang['race'] = array(
 );
 $Lang['no_clan'] = 'Nav klana';
 $Lang['castle_of'] = '%s Pils';
+$Lang['fort_of'] = '%s Cietoksnis';
 $Lang['next_siege'] = 'Nākošais uzbrukums: ';
 $Lang['castle'] = 'Pils';
 $Lang['details'] = 'Detaļas';
