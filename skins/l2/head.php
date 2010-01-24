@@ -27,7 +27,7 @@ var min_wnd=0;
 function small_window(url,width,height,name) {
 	w_close=0;
 	if (w_close) {
-		if (window_small && !window_small.closed) small_window.window.close();
+		if (window_small AND !window_small.closed) small_window.window.close();
 		name="small_window";
 	} else {
 		if (typeof(name)=='undefined' || name=='') name=(Math.round(Math.random()*100000)).toString();
@@ -40,6 +40,7 @@ function small_window(url,width,height,name) {
 
 <?php
 //пароль
+
 $rnd = rand(1,10);
 includeLang('skin');
 ?>
@@ -56,7 +57,9 @@ includeLang('skin');
 </style>
 </head>
 <body style="background-color: #191919;">
-
+<?php
+if($head){
+?>
 <table cellpadding="0" cellspacing="0" id="logo" align="center">
 <tr>
 <td height="220px"></td>
@@ -94,4 +97,6 @@ if($Config['enable_news'])
 }
 ?>
 <hr />
-
+<?php
+}
+?>

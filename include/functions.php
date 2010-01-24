@@ -91,7 +91,7 @@ function error($id){
     header('Location: error.php?error='.$id);
 }
 
-function head($title = "")
+function head($title = "", $head=1)
 {
     global $skin, $Config, $Lang;
 DEFINE('INSKIN', True);
@@ -111,9 +111,17 @@ else
 	require_once("skins/" . $skin . "/head.php");
 }
 
-function foot()
+function foot($foot=1)
 {
     global $link, $skin, $Config, $Lang, $starttime;
+    if(isset($_COOKIE['skin']))
+{
+$skin = mysql_real_escape_string($_COOKIE['skin']);
+}
+else
+{
+	$skin = $Config['DSkin'];
+}
     require_once("skins/" . $skin . "/foot.php");
     mysql_close($link);
 }

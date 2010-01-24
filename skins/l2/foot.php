@@ -1,4 +1,3 @@
-<br />
 <hr />
 <a href="http://validator.w3.org/check?uri=referer" target="_blank">
 <img style="border:0;width:88px;height:31px" src="http://www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" />
@@ -9,6 +8,9 @@
 </a>
 <br />
 <a href="http://la2.mmotop.ru/vote/20088/" target="_blank"><img src="http://la2.mmotop.ru/images/88x31w_la2.png" title="Рейтинг серверов Lineage 2" alt="Рейтинг серверов Lineage 2" border="0" /></a>
+<?php
+if($foot){
+?>
 </td>
 <td class="head_right_border"></td></tr>
 <tr>
@@ -22,7 +24,7 @@
 includeBlock('stats', $Lang['stats'], true);
 includeBlock('top10', $Lang['top10'], true);
 ?>
-</td></tr></table></td></tr>
+</td></tr></table></td></tr><?php }else{ ?></td></tr><?php } ?>
 <tr align="center" valign="top">
 <td align="center" valign="middle"><b>Lineage II</b> is a trademark of NCsoft Corporation. Copyright © <b>NCsoft Corporation</b>. All rights reserved.<br /><?php echo $Config['CopyRight']; ?></td>
 </tr>
