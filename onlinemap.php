@@ -33,9 +33,9 @@ if(isset($_GET['type']))
     $map['aden_x']=$imgsize['aden'][0] / 100;
     $map['aden_y']=$imgsize['aden'][1] / 100;
    ?>
-    <table><tr><td><h1><? echo $Config['ServerName'];?> Server Online players Map:</h1>
+    <table><tr><td align="center"><h1><? echo $Config['ServerName'];?> Server Online players Map:</h1>
     <br />
-    <a href="onlinemap.php?type=small">Small</a><a href="onlinemap.php?type=normal">Normal</a><a href="onlinemap.php?type=big">Big</a><a href="onlinemap.php?type=large">Large</a>
+    <a href="onlinemap.php?type=small">Small</a> | <a href="onlinemap.php?type=normal">Normal</a> | <a href="onlinemap.php?type=big">Big</a> | <a href="onlinemap.php?type=very_big">Large</a>
    
      <table width="100%" border="0" cellpadding="0" cellspacing="0" class="main-tables">
      <tr>
