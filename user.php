@@ -15,8 +15,8 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
     $char=mysql_fetch_assoc($sql);
     if ($char['sex']==0) { $color='#8080FF'; } else { $color='#FF8080'; }
     echo "<h1 style=\"color: $color; font-weight: bold;\">{$char['char_name']}</h1>";
-    ?>
-    <img src="img/face/<?php echo $char['race'];?>_<?php echo $char['sex'];?>.gif"  height="25" alt="" /><?
+    ?><table border="0"><tr><td>
+    <img src="img/face/<?php echo $char['race'];?>_<?php echo $char['sex'];?>.png" alt="" /></td><td><?
     $onlinetimeH=round(($char['onlinetime']/60/60)-0.5);
 	$onlinetimeM=round(((($char['onlinetime']/60/60)-$onlinetimeH)*60)-0.5);
 	if ($char['clan_id']) {$clan_link = "<a href=\"claninfo.php?clan={$char['clan_id']}\">{$char['clan_name']}</a>";}else{$clan_link = "No Clan";}
@@ -33,7 +33,7 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
     <tr><td><?php echo $Lang['clan'];?>:</td><td><?php echo $clan_link;?></td></tr>
     <tr><td><?php echo $Lang['pvp'];?>/<font color="red"><?php echo $Lang['pk'];?></font>:</td><td><b><?php echo $char['pvpkills'];?></b>/<b><font color="red"><?php echo $char['pkkills'];?></font></b></td></tr>
      <tr><td><?php echo $Lang['online_time'];?>:</td><td><?php echo $onlinetimeH.' '.$Lang['hours'].' '.$onlinetimeM.' '.$Lang['min'];?></td></tr>
-    <tr><td><?php echo $online;?>:</td><td><img src="img/status/<?php echo $onoff;?>line.png" title="<?php echo $online;?>" alt="<?php echo $online;?>" /></td></tr></table>
+    <tr><td><?php echo $online;?>:</td><td><img src="img/status/<?php echo $onoff;?>line.png" title="<?php echo $online;?>" alt="<?php echo $online;?>" /></td></tr></table></td></tr>
     <?
 
 $sql2=mysql_query("SELECT `account_name`, `charId`, `char_name`, `level`, `maxHp`, `maxCp`, `maxMp`, `sex`, `karma`, `fame`, `pvpkills`, `pkkills`, `clanid`, `race`, `characters`.`classid`, `base_class`, `title`, `rec_have`, `accesslevel`, `online`, `onlinetime`, `lastAccess`, `nobless`, `vitality_points`, `ClassName`, clan_id, clan_name FROM `characters` LEFT OUTER JOIN `char_templates` ON `characters`.`classid` = `char_templates`.`ClassId` LEFT OUTER JOIN clan_data ON characters.clanid=clan_data.clan_id WHERE `characters`.`charId` != '{$char['charId']}' AND `account_name` = '{$char['account_name']}' ORDER by characters.level ASC");
@@ -52,7 +52,7 @@ $onlinetimeH=round(($otherchar['onlinetime']/60/60)-0.5);
 	if ($otherchar['online']) {$online='<img src="img/online.png" alt="'.$Lang['online'].'" />';} 
 	else {$online='<img src="img/status/offline.png" alt="'.$Lang['offline'].'"/>';} 
 	?>
-<tr><td><img src="/img/face/<?php echo $otherchar['race'];?>_<?php echo $otherchar['sex'];?>.gif\" alt="" /></td><td><a href="user.php?cid=<?php echo $otherchar['charId'];?>"><font color="<?php echo $color;?>"><?php echo $otherchar['char_name'];?></font></a></td><td align="center"><?php echo $otherchar['level'];?></td><td align="center"><?php echo $otherchar['ClassName'];?></td><td class="maxCp" align="center"><?php echo $otherchar['maxCp'];?></td><td class="maxHp" align="center"><?php echo $otherchar['maxHp'];?></td><td class="maxMp" align="center"><?php echo $otherchar['maxMp'];?></td><td align="center"><?php echo $clan_link;?></td><td align="center"><b><?php echo $otherchar['pvpkills'];?></b>/<b><font color="red"><?php echo $otherchar['pkkills'];?></font></b></td><td align="center"><?php echo $onlinetimeH.' '.$Lang['hours'].' '.$onlinetimeM.' '.$Lang['min'];?></td><td><?php echo $online;?></td></tr>
+<tr><td><img src="/img/face/<?php echo $otherchar['race'];?>_<?php echo $otherchar['sex'];?>.gif" alt="" /></td><td><a href="user.php?cid=<?php echo $otherchar['charId'];?>"><font color="<?php echo $color;?>"><?php echo $otherchar['char_name'];?></font></a></td><td align="center"><?php echo $otherchar['level'];?></td><td align="center"><?php echo $otherchar['ClassName'];?></td><td class="maxCp" align="center"><?php echo $otherchar['maxCp'];?></td><td class="maxHp" align="center"><?php echo $otherchar['maxHp'];?></td><td class="maxMp" align="center"><?php echo $otherchar['maxMp'];?></td><td align="center"><?php echo $clan_link;?></td><td align="center"><b><?php echo $otherchar['pvpkills'];?></b>/<b><font color="red"><?php echo $otherchar['pkkills'];?></font></b></td><td align="center"><?php echo $onlinetimeH.' '.$Lang['hours'].' '.$onlinetimeM.' '.$Lang['min'];?></td><td><?php echo $online;?></td></tr>
  <?php       }
         
             echo '</table>';
