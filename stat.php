@@ -145,8 +145,10 @@ echo '<a href="claninfo.php?clanid='.$attackers['clan_id'].'">'.$attackers['clan
 ?>
 </td></tr>
 <?php
+if($row['lastOwnedTime']){
 $timeheld=time()-$row['lastOwnedTime'];
 $timehour=$timeheld/60/60;
+}else {$timehour=0;}
 ?>
 <tr class="altRow"><td></td><?php echo $Lang['time_held'];?><td><?php echo $timehour.' '.$Lang['hours'];?></td></tr>
 </table></td></tr></table>
