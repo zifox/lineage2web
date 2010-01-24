@@ -11,8 +11,8 @@ includeLang('stat');
 <h4><?php echo $Lang['server_stat'];?></h4><hr />
  | <a href="stat.php"><?php echo $Lang['home'];?></a>
  | <a href="stat.php?stat=online"><?php echo $Lang['online'];?></a> 
- | <a href="javascript:small_window('onlinemap.php')"><?php echo $Lang['map'];?></a> 
- | <a href="module/castles/index.php" target="_blank"><?php echo $Lang['castles_map'];?></a> 
+ | <a href="onlinemap.php" target="_blank"><?php echo $Lang['map'];?></a> 
+ | <a href="castlesmap.php" target="_blank"><?php echo $Lang['castles_map'];?></a> 
  | <a href="stat.php?stat=castles"><?php echo $Lang['castles'];?></a> 
  | <a href="stat.php?stat=clantop"><?php echo $Lang['top_clans'];?></a> |<br /><hr />
  | <a href="stat.php?stat=gm"><?php echo $Lang['gm'];?></a>
@@ -387,7 +387,7 @@ break;
 }
 if($stat && $stat != 'castles' && $stat != 'clantop'){
 includeLang('user');
-echo '<hr /><table border="1"><tr><td>'.$Lang['place'].'</td><td>'.$Lang['face'].'</td><td><center>'.$Lang['nick'].'</center></td><td>'.$Lang['level'].'</td><td><center>'.$Lang['proffesion'].'</center></td><td><center>'.$Lang['clan'].'</center></td><td>'.$Lang['pvp_pk'].'</td><td><center>'.$Lang['time_in_game'].'</center></td><td>'.$Lang['status'].'</td>'.$addheader.'</tr>';
+echo '<hr /><table border="1"><tr><td>'.$Lang['place'].'</td><td>'.$Lang['face'].'</td><td><center>'.$Lang['name'].'</center></td><td>'.$Lang['level'].'</td><td><center>'.$Lang['class'].'</center></td><td><center>'.$Lang['clan'].'</center></td><td>'.$Lang['pvp_pk'].'</td><td><center>'.$Lang['online_time'].'</center></td><td>'.$Lang['status'].'</td>'.$addheader.'</tr>';
 
 $n=1;
 while ($top=mysql_fetch_assoc($data))
