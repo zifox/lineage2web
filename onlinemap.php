@@ -4,7 +4,13 @@ require_once('include/config.php');
 header("Cache-Control: no-cache");
 header("Expires: -1");
 head('Online Map',0);
-$map_size="small";		      // map_size posible values are : "small" , "normal", "big" and "very_big"
+if(isset($_GET['type']))
+{
+	$map_size=mysql_real_escape_string($_GET['type']);
+}else
+{
+	$map_size="small";
+}
   switch($map_size){
   	case 'very_big':
   	$data_red=1300;
@@ -19,7 +25,7 @@ $map_size="small";		      // map_size posible values are : "small" , "normal", "
   	$data_red=642;
   	break;
   	default:
-  	$data_red=0;
+  	$data_red=642;
   	break;
   }
 
@@ -29,6 +35,7 @@ $map_size="small";		      // map_size posible values are : "small" , "normal", "
    ?>
     <table><tr><td><h1><? echo $Config['ServerName'];?> Server Online players Map:</h1>
     <br />
+    <a href="onlinemap.php?type=small">Small</a><a href="onlinemap.php?type=normal">Normal</a><a href="onlinemap.php?type=big">Big</a><a href="onlinemap.php?type=large">Large</a>
    
      <table width="100%" border="0" cellpadding="0" cellspacing="0" class="main-tables">
      <tr>
