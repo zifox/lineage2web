@@ -9,7 +9,7 @@ if(isset($_GET['cid']))
 	$query=mysql_query("SELECT `account_name`, online FROM `characters` WHERE `charId`='".$charid."'");
 	if(mysql_num_rows($query))
 	{
-		if(mysql_result($query, 0, 0)==$_SESSION['account'])
+		if(mysql_result($query, 0, 'account_name')==$_SESSION['account'])
 		{
 			if(mysql_result($query, 0, 'online')==1)
 			{
