@@ -53,4 +53,5 @@ $Lang['male'] = 'Мужчина';
 $Lang['female'] = 'Женщина';
 $Lang['players_dusk'] = 'Игроки за сумерек';
 $Lang['players_dawn'] = 'Игроки за рассвет';
+$Lang['hour'] = 'Часов';
 ?>

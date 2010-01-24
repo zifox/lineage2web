@@ -78,15 +78,19 @@ else{echo $Lang['no_lord'];}
 <tr class="altRow"><td><?php echo $Lang['attackers'];?></td><td>
 <?php
 $result1 = mysql_query("SELECT clan_id, clan_name FROM siege_clans INNER JOIN clan_data USING (clan_id)  WHERE castle_id='{$row['id']}' AND type='1'");
-if(mysql_num_rows($result1)){
-echo '<a href="claninfo.php?clanid='.mysql_result($result1,0,'clan_id').'">'.mysql_result($result1,0,'clan_name').'</a><br />';
+while($attackers=mysql_fetch_assoc($result1))
+{
+echo '<a href="claninfo.php?clanid='.$attackers['clan_id'].'">'.$attackers['clan_name'].'</a><br />';
 }
 ?>
 </td></tr><tr><td><?php echo $Lang['defenders'];?></td><td>
 <?php
 $result2 = mysql_query("SELECT clan_id, clan_name FROM siege_clans INNER JOIN clan_data USING (clan_id)  WHERE castle_id='{$row['id']}' AND type='0'");
-if(mysql_num_rows($result2)){
+if(mysql_num_rows()){
+while($defenders=mysql_fetch_assoc($result2))
+{
 echo '<a href="claninfo.php?clanid='.mysql_result($result2,0,'clan_id').'">'.mysql_result($result2,0,'clan_name').'</a><br /> ';
+}
 }else echo $Lang['npc'];
 ?>
 </td></tr></table></td></tr></table>
@@ -103,7 +107,7 @@ echo '<a href="claninfo.php?clanid='.mysql_result($result2,0,'clan_id').'">'.mys
     break;
     
     Case 'fort':
-$result = mysql_query("SELECT `id`, `name`, `siegeDate`, `lastOwnedTime`, `state`, `clan_id`, `clan_name`, `char_name` FROM `fort` LEFT OUTER JOIN `clan_data` ON `clan_data`.`clan_id`=`fort`.`owner` LEFT OUTER JOIN `characters` ON `clan_data`.`leader_id`=`characters`.`charId` ORDER by `id` ASC");
+$result = mysql_query("SELECT `id`, `name`, `lastOwnedTime`, `clan_id`, `clan_name`, `char_name` FROM `fort` LEFT OUTER JOIN `clan_data` ON `clan_data`.`clan_id`=`fort`.`owner` LEFT OUTER JOIN `characters` ON `clan_data`.`leader_id`=`characters`.`charId` ORDER by `id` ASC");
 
 $r=0;
 ?><table border="0" cellpadding="3" cellspacing="3">
@@ -139,7 +143,13 @@ while($attackers=mysql_fetch_assoc($result1))
 echo '<a href="claninfo.php?clanid='.$attackers['clan_id'].'">'.$attackers['clan_name'].'</a><br />';
 }
 ?>
-</td></tr></table></td></tr></table>
+</td></tr>
+<?php
+$timeheld=time()-$row['lastOwnedTime'];
+$timehour=$timeheld/60/60;
+?>
+<tr class="altRow"><td></td><?php echo $Lang['time_held'];?><td><?php echo $timehour.' '.$Lang['hours'];?></td></tr>
+</table></td></tr></table>
 </td>
 <?php if($r==3)
 {

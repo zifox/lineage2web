@@ -53,4 +53,5 @@ $Lang['male'] = 'Vīrietis';
 $Lang['female'] ='Sieviete';
 $Lang['players_dusk'] = 'Saulrieta Spēlētāji';
 $Lang['players_dawn'] = 'Rītausmas Spēlētāji';
+$Lang['hour'] = 'Stundas';
 ?>
