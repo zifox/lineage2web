@@ -6,13 +6,13 @@ head("UnStuck");
 if(isset($_GET['cid']))
 {
 	$charid=0+mysql_real_escape_string($_GET['cid']);
-	$query=mysql_query("SELECT `account_name`, online FROM `characters` WHERE `charId`='".$charid."'");
+	$query=mysql_query("SELECT `account_name`, `online` FROM `characters` WHERE `charId`='".$charid."'");
 	if(mysql_num_rows($query))
 	{
 		$char=mysql_fetch_assoc($query);
 		if(strtolower($char['account_name'])==strtolower($_SESSION['account']))
 		{
-			if($char['online']==1)
+			if($char['online']!=1)
 			{
 				mysql_query("UPDATE `characters` SET `x`='82698', `y`='148638', `z`='-3473' WHERE `account_name`='{$_SESSION['account']}' AND `charId`='$charid'");
 				msg('Success','Character has been unstucked');
