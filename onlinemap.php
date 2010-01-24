@@ -26,6 +26,7 @@ if(isset($_GET['type']))
   	break;
   	default:
   	$data_red=642;
+  	$map_size="small";
   	break;
   }
 
