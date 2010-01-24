@@ -10,7 +10,7 @@ if(isset($_GET['cid']))
 	if(mysql_num_rows($query))
 	{
 		$char=mysql_fetch_assoc($query);
-		if($char['account_name']==$_SESSION['account'])
+		if(strtolower($char['account_name'])==strtolower($_SESSION['account']))
 		{
 			if($char['online']==1)
 			{
