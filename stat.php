@@ -86,7 +86,7 @@ echo '<a href="claninfo.php?clanid='.$attackers['clan_id'].'">'.$attackers['clan
 </td></tr><tr><td><?php echo $Lang['defenders'];?></td><td>
 <?php
 $result2 = mysql_query("SELECT clan_id, clan_name FROM siege_clans INNER JOIN clan_data USING (clan_id)  WHERE castle_id='{$row['id']}' AND type='0'");
-if(mysql_num_rows()){
+if(mysql_num_rows($result2)){
 while($defenders=mysql_fetch_assoc($result2))
 {
 echo '<a href="claninfo.php?clanid='.mysql_result($result2,0,'clan_id').'">'.mysql_result($result2,0,'clan_name').'</a><br /> ';
