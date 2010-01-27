@@ -1,4 +1,5 @@
-.block_name  {
+div.block_name  {
+font-weight: bolder;
 color:#FFFFFF;
 }
 div {
@@ -271,12 +272,13 @@ font-weight : bold;
 border-right : 1px solid #a1967c;
 border-bottom : 5px solid #a1967c;
 }
-.male {
+a.male {
 color : #688595;
 text-decoration : none;
 }
-.female {
+a.female {
 color : #D02090;
+text-decoration : none;
 }
 .alert {
 width : 100%;

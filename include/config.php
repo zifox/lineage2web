@@ -12,7 +12,7 @@ require_once('functions.php');
 $DB = Array(
 	"host"		=>	"localhost",//MySQL Host
 	"login"		=>	"root", 	//MySQL User
-	"password"	=>	"832620i",	//MySQL Password
+	"password"	=>	"",	//MySQL Password
 	"db"		=>	"l2j",		//L2J DataBase
 	"webdb"		=>	"web"		//Webpage DataBase
 ); 

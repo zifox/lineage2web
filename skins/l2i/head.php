@@ -15,7 +15,7 @@ header("Expires: -1");
 <meta name="google-site-verification" content="OWsTYVKqBaP8O9ZFmiRR489Qj5PasFkQNwiv8-ornuM" />
 <title><?php echo $title; ?></title>
 <link rel="SHORTCUT ICON" href="favicon.ico" />
-<link href="<?php echo $skindir;?>style.css" type="text/css" rel="stylesheet" />
+<link href="skins/<?php echo $skin;?>/style.css" type="text/css" rel="stylesheet" />
 <?php //<script type="text/javascript" src="scripts/overlib.js"></script>?>
 <script type="text/javascript">
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
@@ -50,7 +50,7 @@ includeLang('skin');
 ?>
 <style type="text/css">
 body{
-	margin: 10px;
+	margin: 5px;
 	font-size: 12px;
 	font-family: Arial, Helvetica, sans-serif;
     color : #FFFFFF;
@@ -60,10 +60,7 @@ body{
 	background-repeat: no-repeat;
     cursor: url('cursors/cursor.cur'), auto;
 }
-position:absolute;{
-	top:136px;
-	z-index:1;
-}
+
 .opacidad1 {
 -moz-opacity:0.70;
 filter:alpha(opacity=70);
@@ -74,15 +71,7 @@ filter:alpha(opacity=70);
 filter:alpha(opacity=85);
  opacity: 0.85;
 }
-#logo
-{
-    width: auto;
-    border: 0;
-    background-color: #000;
-    background-image: url('<?php echo $skindir.'bg/'.$rnd;?>.jpg');
-    background-position: center top;
-    background-repeat: no-repeat;
-}
+
 </style>
 </head>
 <body>

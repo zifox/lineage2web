@@ -16,7 +16,7 @@
 <tr><td align="center"><a href="index.php?id=donate"><img src="./img/menu/<?php echo $langpath;?>/donate.png" border="0" width="120" title="<?php echo $Lang['Donate'];?>" alt="<?php echo $Lang['Donate'];?>"/></a></td></tr>
 */
 
-?><div id="lang">
+?><div id="lang2">
 <a href="server.php?lang=1"><img src="img/lang/lv.png" border="<?php echo ($_COOKIE['lang']==1)? '1':'';?>" title="Latviski" alt="Latviski"/></a>
 <a href="server.php?lang=2"><img src="img/lang/en.png" border="<?php echo ($_COOKIE['lang']==2)? '1':'';?>" title="English" alt="English"/></a>
 <a href="server.php?lang=3"><img src="img/lang/ru.png" border="<?php echo ($_COOKIE['lang']==3)? '1':'';?>" title="по-русски" alt="по-русски"/></a>
