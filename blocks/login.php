@@ -5,11 +5,14 @@ if (!logedin())
 {
 ?>
 <form action="index.php" method="post">
-<?php echo $Lang['account']; ?>: <input type="text" name="account" class="login" />
-<?php echo $Lang['password']; ?>: <input type="password" name="password" class="login" />
+<?php echo $Lang['account']; ?>: <input type="text" name="account" style="border: 0pt none; background: url(&quot;img/login_text.gif&quot;) no-repeat scroll 0% 0% transparent; color: rgb(217, 222, 218); width: 129px;" />
+<?php echo $Lang['password']; ?>: <input type="password" name="password" style="border: 0pt none; background: url(&quot;img/login_text.gif&quot;) no-repeat scroll 0% 0% transparent; color: rgb(217, 222, 218); width: 129px;" />
 <?php echo $Lang['remember_me']; ?> <input type="checkbox" name="rememberme" />
-
-<input type="submit" class="button" value="<?php echo $Lang['login']; ?>" /></form>
+<br />
+<label>
+    <input type="image" onmouseout="this.src = './login_b.php?text=   <?php echo $Lang['login'];?>&amp;style=normal';" onkeydown="this.src = './login_b.php?text=   <?php echo $Lang['login'];?>&amp;style=press';" onmousemove="this.src = './login_b.php?text=   <?php echo $Lang['login'];?>&amp;style=hover';" src="./login_b.php?text=   <?php echo $Lang['login'];?>&amp;style=normal" value=" " name="Submit" />
+</label>
+</form>
 <?php
 }
 else

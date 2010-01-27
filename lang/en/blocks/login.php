@@ -4,7 +4,7 @@ if(!defined('INLANG')){Header("Location: ../../../index.php");}
 $Lang['welcome'] = 'Welcome %s!';
 $Lang['account'] = 'Account';
 $Lang['password'] = 'Password';
-$Lang['login'] = 'Login';
+$Lang['login'] = 'Log In';
 $Lang['remember_me'] = 'Remember Me';
 $Lang['vote'] = 'Vote for Server';
 $Lang['admin'] = 'Admin';

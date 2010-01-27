@@ -27,24 +27,25 @@ function includeBlock($file, $block_name='Menu', $link=false)
 	if($link){global $link;}
 	global $langpath, $skin, $Lang, $Config, $CURUSER;
 	echo '
-<table cellpadding="0" cellspacing="0" border="0"><tr style="height:48px;">
-<td class="head_left_corner2"></td>
-<td class="head_center" align="center" width="120"><strong>'.$block_name.'</strong></td>
-<td class="head_right_corner2"></td></tr>
-<tr><td class="head_left_border"></td>
-<td class="head_background" align="center" valign="top" width="120">
+<table width="200" style="height:95;" border="0" cellpadding="0" cellspacing="0" class="opacidad2" id="member"><tr style="height:48px;">
+<td width="23"><img width="23" height="50" alt="" src="skins/'.$skin.'/img/h_l_c.gif"></td>
+<td width="159" style="background-image: url(skins/'.$skin.'/img/h_c.gif); background-repeat: no-repeat;"><div align="center" class="block_name">'.$block_name.'</div></td>
+<td width="18"><img width="18" height="50" alt="" src="skins/'.$skin.'/img/h_r_c.gif"></td></tr>
+
+<tr><td style="background-image: url(skins/'.$skin.'/img/h_l_b.gif);">&nbsp;</td>
+<td width="80%" bgcolor="#37301d" align="center">
 ';
 includeLang('blocks/'.$file);
 require_once('blocks/'.$file.'.php');
 echo '
 </td>
-<td class="head_right_border"></td>
+<td style="background-image: url(skins/'.$skin.'/img/h_r_b.gif);">&nbsp;</td>
 </tr>
 <tr>
-<td class="bottom_left_corner"></td>
-<td class="bottom_center" width="122"></td>
-<td class="bottom_right_corner"></td>
-</tr>
+        <td width="23"><img width="23" height="26" alt="" src="skins/'.$skin.'/img/b_l_c.gif"></td>
+        <td width="159"><img width="159" height="26" alt="" src="skins/'.$skin.'/img/b_c.gif"></td>
+        <td width="18"><img width="18" height="26" alt="" src="skins/'.$skin.'/img/b_r_c.gif"></td>
+      </tr>
 </table>';
 }
 
@@ -97,7 +98,7 @@ function head($title = "", $head=1)
 DEFINE('INSKIN', True);
 if(isset($_COOKIE['skin']))
 {
-$skin = mysql_real_escape_string($_COOKIE['skin']);
+$skin = trim($_COOKIE['skin']);
 }
 else
 {
@@ -116,7 +117,7 @@ function foot($foot=1)
     global $link, $skin, $Config, $Lang, $starttime;
     if(isset($_COOKIE['skin']))
 {
-$skin = mysql_real_escape_string($_COOKIE['skin']);
+$skin = trim($_COOKIE['skin']);
 }
 else
 {
