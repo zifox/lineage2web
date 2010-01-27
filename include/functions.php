@@ -27,7 +27,7 @@ function includeBlock($file, $block_name='Menu', $link=false)
 	if($link){global $link;}
 	global $langpath, $skin, $Lang, $Config, $CURUSER;
 	echo '
-<table cellpadding="0" cellspacing="0" border="0"><tr>
+<table cellpadding="0" cellspacing="0" border="0"><tr style="height:48px;">
 <td class="head_left_corner2"></td>
 <td class="head_center" align="center" width="120"><strong>'.$block_name.'</strong></td>
 <td class="head_right_corner2"></td></tr>

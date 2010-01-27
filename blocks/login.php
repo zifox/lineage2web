@@ -5,13 +5,11 @@ if (!logedin())
 {
 ?>
 <form action="index.php" method="post">
-<table border="0" cellpadding="0" width="0%">
-<tr><td><?php echo $Lang['account']; ?>:</td><td align="left"><input type="text" name="account" class="login" /></td></tr>
-<tr><td><?php echo $Lang['password']; ?>:</td><td align="left"><input type="password" name="password" class="pass" /></td></tr>
-<tr><td><?php echo $Lang['remember_me']; ?></td><td align="left"><input type="checkbox" name="rememberme"/>
-</td></tr>
-<tr><td colspan="2" align="center"><input type="submit" class="button" value="<?php echo $Lang['login']; ?>" /></td></tr>
-</table></form>
+<?php echo $Lang['account']; ?>: <input type="text" name="account" class="login" />
+<?php echo $Lang['password']; ?>: <input type="password" name="password" class="login" />
+<?php echo $Lang['remember_me']; ?> <input type="checkbox" name="rememberme" />
+
+<input type="submit" class="button" value="<?php echo $Lang['login']; ?>" /></form>
 <?php
 }
 else
