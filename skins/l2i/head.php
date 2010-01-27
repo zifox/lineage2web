@@ -56,7 +56,7 @@ body{
     color : #FFFFFF;
 	background: #191919;
     background-color: #191919;
-    background-image: url('<?php echo $skindir.'bg/'.$rnd;?>.jpg');
+    background-image: url('<?php echo 'skins/'.$skin.'/bg/'.$rnd;?>.jpg');
 	background-repeat: no-repeat;
     cursor: url('cursors/cursor.cur'), auto;
 }

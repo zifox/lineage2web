@@ -108,7 +108,6 @@ else
 			$title = $Config['Title'];
 		else
 			$title = $Config['Title']." :: ".$title;
-    require_once("skins/" . $skin . "/config.php");
 	require_once("skins/" . $skin . "/head.php");
 }
 
