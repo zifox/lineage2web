@@ -5,6 +5,7 @@ body{
     color : #FFFFFF;
 	background: #191919;
     cursor: url('cursors/cursor.cur'), auto;
+    opacity: 0.85;
 }
 a {
     font-weight: bold;
@@ -29,6 +30,7 @@ margin : -20px 40px 0 0;
 text-decoration : none;
 }
 #langlist a:hover, #langlist a:active {
+opacity: 0.85;
 text-decoration : none;
 }
 #frm {
@@ -58,21 +60,17 @@ tr,td.content{
 td.head_left_corner{
     background-image : url(img/t_h_lc.gif);
     width: 19px;
-    height:  48px;
 }
 td.head_left_corner2{
     background-image : url(img/t_h_lc2.gif);
     width: 16px;
-    height:  48px;
 }
 td.head_center_left{
     background-image : url(img/t_h_c_l.gif);
     width: 106px;
-    height:  48px;
 }
 td.head_center{
     background-image : url(img/t_h_rp.gif);
-    height:  48px;
 }
 td.head_center2{
     background-image : url(img/t_h_c.gif);
@@ -82,17 +80,14 @@ td.head_center2{
 td.head_center_right{
     background-image : url(img/t_h_c_r.gif);
     width: 106px;
-    height:  48px;
 }
 td.head_right_corner{
     background-image : url(img/t_h_rc.gif);
     width: 19px;
-    height:  48px;
 }
 td.head_right_corner2{
     background-image : url(img/t_h_rc2.gif);
     width: 16px;
-    height:  48px;
 }
 td.head_background{
     background-image : url(img/t_bg.gif);
@@ -139,18 +134,10 @@ ol,ul,li.left {
     text-align: left;
 }
 input.login {
-border : 1px solid #506479;
-font-family : Verdana, Arial, Helvetica, sans-serif;
-font-weight: bold;
-color : #4E0901;
-font-size : 11px;
-height : 20px;
-text-align : left;
-position : inherit;
-padding-bottom : 0;
-border:1px solid #aeaeae;
-margin:1px 0px 10px 0px;
-width:70px
+    border: 0pt none;
+    background: url("img/login_text.gif") no-repeat scroll 0% 0% transparent;
+    color: rgb(217, 222, 218);
+    width: 129px;
 }
 input.pass {
 border : 1px solid #506479;
