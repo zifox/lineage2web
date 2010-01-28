@@ -108,7 +108,7 @@ includeBlock('vote', $Lang['vote']);
                     <td width="1"><img width="1" height="53" alt="" src="skins/<?php echo $skin;?>/img/t_h_l_c.gif" /></td>
                     <td width="335" style="background-image: url(skins/<?php echo $skin;?>/img/t_h_cl.gif);">&nbsp;</td>
                     <td width="480" style="">
-	                   <table width="100%" style="height=53px;" cellspacing="0" cellpadding="0" border="0" align="center"><tbody><tr>
+	                   <table width="100%" style="height:53px;" cellspacing="0" cellpadding="0" border="0" align="center"><tbody><tr>
                             <td height="19" style="background-image: url(skins/<?php echo $skin;?>/img/t_h_c.gif); background-repeat: no-repeat; background-position: center center;"><div align="center">Main</div></td>
                         </tr></tbody></table></td>
                     <td width="309" style="background-image: url(skins/<?php echo $skin;?>/img/t_h_cr.gif);">&nbsp;</td>
