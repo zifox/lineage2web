@@ -29,7 +29,7 @@ if(isset($_GET['clan'])){
         {
             $i++;
             ?>
-            <tr><td><?php echo $i;?></td><td><a href="user.php?cid=<?php echo $clan_char['charId'];?>"><?php echo $clan_char['char_name'];?></a></td><td><?php ($clan_char['sex']==0)? '<img src="img/stat/sex.jpg" alt="'.$Lang['male'].'" />':'<img src="img/stat/sex1.jpg" alt="'.$Lang['female'].'" />';?></td><td><?php echo $clan_char['ClassName'];?></td><td><?php echo $clan_char['pvpkills'].' / '.$clan_char['pkkills'];?></td></tr>
+            <tr><td><?php echo $i;?></td><td><a href="user.php?cid=<?php echo $clan_char['charId'];?>"><?php echo $clan_char['char_name'];?></a></td><td><?php echo ($clan_char['sex']==0)? '<img src="img/stat/sex.jpg" alt="'.$Lang['male'].'" />':'<img src="img/stat/sex1.jpg" alt="'.$Lang['female'].'" />';?></td><td><?php echo $clan_char['ClassName'];?></td><td><?php echo $clan_char['pvpkills'].' / '.$clan_char['pkkills'];?></td></tr>
             <?php
         }
         unset($i);
