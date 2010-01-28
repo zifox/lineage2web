@@ -8,7 +8,7 @@ if(isset($_GET['clan'])){
     if(mysql_num_rows($query))
     {
         includeLang('clan_info');
-        head($Lang['clan_info'], 0);
+        head($Lang['clan_info']);
         $clan_data=mysql_fetch_assoc($query);
         ?>
         <div align="left">
@@ -23,7 +23,7 @@ if(isset($_GET['clan'])){
         <table><thead><th><?php echo $Lang['nr'];?></th><th><?php echo $Lang['name'];?></th><th><?php echo $Lang['sex'];?></th><th><?php echo $Lang['class'];?></th><th><?php echo $Lang['pvp_pk'];?></th></thead>
         <tbody>
         <?php
-        $query=mysql_query('SELECT `charId`, `char_name`, `sex`, `pvpkills`, `pkkills`, `ClassName` FROM `characters` INNER JOIN `char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId`  WHERE `clanid`='.$clan_data['clan_id'].' AND charId!='.$clan_data['charId'].'ORDER by `pvpkills` ASC');
+        $query=mysql_query('SELECT `charId`, `char_name`, `sex`, `pvpkills`, `pkkills`, `ClassName` FROM `characters` INNER JOIN `char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId`  WHERE `clanid`='.$clan_data['clan_id'].' AND charId!='.$clan_data['charId'].' ORDER BY `pvpkills` ASC');
         $i=0;
         while($clan_char=mysql_fetch_assoc($query))
         {
@@ -40,7 +40,7 @@ if(isset($_GET['clan'])){
         </table>
         </div>
         <?php
-        foot(0);
+        foot();
     }else
     {
         header('Location:index.php');
