@@ -163,7 +163,7 @@ $timehour=round($timeheld/60/60);
     break;
     
 	Case 'clantop':
-    $result = mysql_query("SELECT `clan_data`.*, `char_name`, `csum`, `ccount`, `cavg`, `name` FROM `clan_data` INNER JOIN `characters` ON `clan_data`.`leader_id`=`characters`.`charId` LEFT JOIN (SELECT `clanid`, SUM(`level`) AS `csum`, count(`level`) AS `ccount`, AVG(`level`) AS `cavg` FROM `characters` WHERE `clanid` GROUP BY `clanid`) AS `levels` ON `clan_data`.`clan_id`=`levels`.`clanid` LEFT OUTER JOIN `castle` ON `clan_data`.`hasCastle`=`castle`.`id` WHERE !`accessLevel` ORDER BY `clan_level` DESC, `csum` DESC");
+    $result = mysql_query("SELECT `clan_id`, `clan_data`.*, `char_name`, `csum`, `ccount`, `cavg`, `name` FROM `clan_data` INNER JOIN `characters` ON `clan_data`.`leader_id`=`characters`.`charId` LEFT JOIN (SELECT `clanid`, SUM(`level`) AS `csum`, count(`level`) AS `ccount`, AVG(`level`) AS `cavg` FROM `characters` WHERE `clanid` GROUP BY `clanid`) AS `levels` ON `clan_data`.`clan_id`=`levels`.`clanid` LEFT OUTER JOIN `castle` ON `clan_data`.`hasCastle`=`castle`.`id` WHERE !`accessLevel` ORDER BY `clan_level` DESC, `csum` DESC");
 
 	echo '<h1> TOP Clans </h1><hr>';
     echo '<h2>'.$Lang["clantop_total"].': '.mysql_num_rows($result).'</h2>';
@@ -180,7 +180,7 @@ $timehour=round($timeheld/60/60);
   while ($row=mysql_fetch_array($result))
   {
     if($row['hasCastle']!=0){$castle=$row['name'];}else{$castle='No castle';}
-    echo "<tr". (($i++ % 2) ? "" : " class=\"altRow\"") ."><td><a href=\"claninfo.php?clan=". $row["clan_name"]."\">". htmlspecialchars($row["clan_name"]). "</a></td><td><a href=\"user.php?cid={$row['leader_id']}\">". $row["char_name"]. "</a></td><td class=\"numeric sortedColumn\">".$row["clan_level"]. "</td><td>".$castle. "</td><td class=\"numeric\">".$row["csum"]. "</td><td class=\"numeric\">".$row["ccount"]. "</td><td class=\"numeric\">".$row["cavg"]. "</td></tr>\n";
+    echo "<tr". (($i++ % 2) ? "" : " class=\"altRow\"") ."><td><a href=\"claninfo.php?clan=". $row["clan_id"]."\">". $row["clan_name"]. "</a></td><td><a href=\"user.php?cid={$row['leader_id']}\">". $row["char_name"]. "</a></td><td class=\"numeric sortedColumn\">".$row["clan_level"]. "</td><td>".$castle. "</td><td class=\"numeric\">".$row["csum"]. "</td><td class=\"numeric\">".$row["ccount"]. "</td><td class=\"numeric\">".$row["cavg"]. "</td></tr>\n";
   }
   echo "</tbody>\n</table>\n";
     break;
