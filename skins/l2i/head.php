@@ -80,9 +80,9 @@ if($head){
 ?>
 <div id="frm"><img width="150" height="150" border="0" longdesc="/" usemap="#Map" alt="Visit forum" style="" src="img/visit_forum.png" />
 <map id="Map" name="Map">
-<area href="./forum" coords="3,119,117,3,77,3,3,77" shape="poly" />
-<area href="./" coords="145,114,10,116,88,37,146,37" shape="poly" />
-<area href="./" coords="13,62,43,37,13,37" shape="poly" />
+<area href="./forum" coords="3,119,117,3,77,3,3,77" shape="poly" alt="" />
+<area href="./" coords="145,114,10,116,88,37,146,37" shape="poly" alt="" />
+<area href="./" coords="13,62,43,37,13,37" shape="poly" alt="" />
 </map></div>
 <table width="100%" cellpadding="0" cellspacing="0" id="logo2" align="center">
 <tr>
@@ -108,7 +108,7 @@ includeBlock('vote', $Lang['vote']);
                     <td width="1"><img width="1" height="53" alt="" src="skins/<?php echo $skin;?>/img/t_h_l_c.gif" /></td>
                     <td width="335" style="background-image: url(skins/<?php echo $skin;?>/img/t_h_cl.gif);">&nbsp;</td>
                     <td width="480" style="">
-	                   <table width="100%" height="53" cellspacing="0" cellpadding="0" border="0" align="center" style=""><tbody><tr>
+	                   <table width="100%" style="height=53px;" cellspacing="0" cellpadding="0" border="0" align="center" style=""><tbody><tr>
                             <td height="19" style="background-image: url(skins/<?php echo $skin;?>/img/t_h_c.gif); background-repeat: no-repeat; background-position: center center;"><div align="center">Main</div></td>
                         </tr></tbody></table></td>
                     <td width="309" style="background-image: url(skins/<?php echo $skin;?>/img/t_h_cr.gif);">&nbsp;</td>
