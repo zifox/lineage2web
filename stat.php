@@ -4,9 +4,8 @@ require_once("include/config.php");
 //пароль
 head("{$Lang['statistic']}");
 includeLang('stat');
-
-//////////////////////////MENU
 ?>
+
 <div align="center">
 <h4><?php echo $Lang['server_stat'];?></h4><hr />
  | <a href="stat.php"><?php echo $Lang['home'];?></a>
@@ -33,26 +32,25 @@ includeLang('stat');
  | <a href="stat.php?stat=kamael"><?php echo $Lang['race'][5];?></a> |<br /><hr />
    </div>  
    <?php
-   //////////////////////////////MENU
 
-$stat = mysql_real_escape_string($_GET['stat']);
+$stat = mysql_real_escape_string(trim($_GET['stat']));
 
 switch($stat){
 	
 	Case 'online':
-	$data=mysql_query ("SELECT charId, char_name, level, sex, pvpkills, pkkills, race, online, onlinetime, ClassName, clanid, clan_name FROM characters INNER JOIN char_templates ON characters.classid=char_templates.ClassId LEFT OUTER JOIN clan_data ON characters.clanid=clan_data.clan_id WHERE online AND !accesslevel ORDER BY exp DESC");
+	$data=mysql_query ("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `ClassName`, `clanid`, `clan_name` FROM `characters` INNER JOIN `char_templates` ON `characters`.`classid`=`char_templates`.`ClassId` LEFT OUTER JOIN `clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `online` AND !`accesslevel` ORDER BY `exp` DESC");
 	echo '<h1>'.$Lang['online'].'</h1>';
 	break;
     
     Case 'castles':
-    $result = mysql_query("SELECT id, name, taxPercent, siegeDate, charId, char_name, clan_id, clan_name FROM castle LEFT OUTER JOIN clan_data ON clan_data.hasCastle=castle.id LEFT OUTER JOIN characters ON clan_data.leader_id=characters.charId ORDER by id ASC");
+    $result = mysql_query("SELECT `id`, `name`, `taxPercent`, `siegeDate`, `charId`, `char_name`, `clan_id`, `clan_name` FROM `castle` LEFT OUTER JOIN `clan_data` ON `clan_data`.`hasCastle`=`castle`.`id` LEFT OUTER JOIN `characters` ON `clan_data`.`leader_id`=`characters`.`charId` ORDER by `id` ASC");
 
 $r=0;
 ?><table border="0" cellpadding="3" cellspacing="3">
 <?php
 while($row = mysql_fetch_array($result)){
 
-if ($r==0){echo '<tr>';}
+($r==0)? '<tr>': '';
 $r++;
 ?>
 <td><table border="1"><tr><td class="noborder">
