@@ -49,28 +49,24 @@ $rnd = rand(1,10);
 includeLang('skin');
 ?>
 <style type="text/css">
-body{
-	margin: 5px;
-	font-size: 12px;
-	font-family: Arial, Helvetica, sans-serif;
-    color : #FFFFFF;
-	background: #191919;
-    background-color: #191919;
-    background-image: url('<?php echo 'skins/'.$skin.'/bg/'.$rnd;?>.jpg');
-	background-repeat: no-repeat;
-    cursor: url('cursors/cursor.cur'), auto;
+body  {
+margin : 5px;
+font-size : 12px;
+font-family : Arial, Helvetica, sans-serif;
+color : #ffffff;
+background : #191919;
+background-color : #191919;
+background-image : url('skins/l2i/bg/8.jpg');
+background-repeat : no-repeat;
+cursor : url('cursors/cursor.cur'), auto;
 }
 
-.opacidad1 {
--moz-opacity:0.70;
-filter:alpha(opacity=70);
- opacity: 0.7;
-} 
-.opacidad2 {
--moz-opacity:0.85;
-filter:alpha(opacity=85);
- opacity: 0.85;
+.opacidad1  {
+opacity : 0.7;
 }
+.opacidad2 {
+opacity : 0.85;
+} 
 
 </style>
 </head>
@@ -84,9 +80,9 @@ if($head){
 <area href="./" coords="145,114,10,116,88,37,146,37" shape="poly" alt="" />
 <area href="./" coords="13,62,43,37,13,37" shape="poly" alt="" />
 </map></div>
-<table width="100%" cellpadding="0" cellspacing="0" id="logo2" align="center">
+<table width="100%" cellpadding="0" cellspacing="0" align="center">
 <tr>
-<td height="220px"></td>
+<td height="200px"></td>
 </tr>
 <tr>
 	<td width="100%" >
