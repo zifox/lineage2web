@@ -448,8 +448,9 @@ break;
 }
 if($stat && $stat != 'castles' && $stat != 'fort' && $stat != 'clantop'){
 includeLang('user');
-echo '<hr /><table border="1"><tr><td>'.$Lang['place'].'</td><td>'.$Lang['face'].'</td><td><center>'.$Lang['name'].'</center></td><td>'.$Lang['level'].'</td><td><center>'.$Lang['class'].'</center></td><td><center>'.$Lang['clan'].'</center></td><td>'.$Lang['pvp_pk'].'</td><td><center>'.$Lang['online_time'].'</center></td><td>'.$Lang['status'].'</td>'.$addheader.'</tr>';
-
+?>
+<hr /><table border="1"><tr><td><?php echo $Lang['place'];?></td><td><?php echo $Lang['face'];?></td><td><center><?php echo $Lang['name'];?></center></td><td><?php echo $Lang['level'];?></td><td><center><?php echo $Lang['class'];?></center></td><td><center><?php echo $Lang['clan'];?></center></td><td><?php echo $Lang['pvp_pk'];?></td><td><center><?php echo $Lang['online_time'];?></center></td><td><?php echo $Lang['status'];?></td><?php echo $addheader;?></tr>
+<?php
 $n=1;
 while ($top=mysql_fetch_assoc($data))
 {
@@ -459,8 +460,9 @@ while ($top=mysql_fetch_assoc($data))
 	if ($top['sex']==0) { $color='#8080FF'; } else { $color='#FF8080'; }
 	if ($top['online']) {$online='<font color="green">'.$Lang['online'].'</font>'; } 
 	else {$online='<font color="red">'.$Lang['offline'].'</font>'; } 
-    
-	echo "<tr><td align=\"center\"><b>$n</b></td><td><img src=\"./img/face/".$top['race']."_".$top['sex'].".gif\" alt=\"\" /></td><td><a href=\"user.php?cid={$top['charId']}\"><font color=\"$color\">$top[char_name]</font></a></td><td><center> $top[level]</center></td><td><center>$top[ClassName]</center></td><td>$clan_link</td><td><center><b>$top[pvpkills]</b>/<b><font color=\"red\">$top[pkkills]</font></b></center></td><td><center>$onlinetimeH {$Lang['hours']} $onlinetimeM {$Lang['min']}.</center></td><td>$online</td>";
+    ?>
+	<tr <?php ($n%2==0)? 'class="altRow"': '';?>><td align="center"><b><?php echo $n;?></b></td><td><img src="./img/face/<?php echo $top['race'].'_'.$top['sex'];?>.gif" alt="" /></td><td><a href="user.php?cid=<?php echo $top['charId'];?>"><font color="$color"><?php echo $top['char_name'];?></font></a></td><td><center> <?php echo $top['level'];?></center></td><td><center><?php echo $top['ClassName'];?></center></td><td><?php echo $clan_link;?></td><td><center><b><?php echo $top['pvpkills'];?></b>/<b><font color="red"><?php echo $top['pkkills'];?></font></b></center></td><td><center><?php echo $onlinetimeH.' '.$Lang['hours'].' '.$onlinetimeM.' '.$Lang['min'];?></center></td><td><?php echo $online;?></td>
+    <?php
 	if($addcol && $addcolcont){echo $addcolcont;}elseif($addcol && !$addcolcont){echo('<td class="'.$stat.'">'.$top[$stat].'</td>');}else{}
 	echo('</tr>');
 	$n++;
