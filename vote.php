@@ -15,7 +15,7 @@ $action = $_GET['action'];
 $hidden = $HTTP_POST_VARS['secrethiddenfromyou'];
 
  
-$timevoted = $CURUSER['voted'];
+$timevoted = $_SESSION['vote_time'];
 $now = time();
 
 if ($timevoted >= ($now-60*60*12))
@@ -24,17 +24,16 @@ msg($Lang['thank_you'], $Lang['vote_tommorow']);
 }
 if ($action == "vote" && $timevoted <= ($now-60*60*12))
 {
-if($hidden!=1){die();}
+if($hidden!=1 || !$_SESSION['vote_rnd']<time() && !$_SESSION['vote_rnd']>=time()-60*5){die();}
 $charid=mysql_real_escape_string($_POST['char']);
 if ($_POST['reward']=='vitality'){
-    
-mysql_query("UPDATE `accounts` SET `voted`='$now' WHERE `login` = '{$CURUSER['login']}'");
+mysql_query("UPDATE `accounts` SET `voted`='$now' WHERE `login` = '{$_SESSION['account']}'");
 mysql_query("UPDATE `characters` SET `vitality_points`='20000' WHERE `charId`='$charid'");
     msg($Lang['thank_you'], $Lang['thank_for_voting']);
  }elseif ($_POST['reward']=='gold')
 {
 
-    mysql_query("UPDATE `accounts` SET `voted`='$now' WHERE `login` = '{$CURUSER['login']}'");
+    mysql_query("UPDATE `accounts` SET `voted`='$now' WHERE `login` = '{$_SESSION['account']}'");
     $query=mysql_query("SELECT `object_id` FROM `items` WHERE `owner_id`='$charid' AND `item_id` = '4356' AND `loc` = 'INVENTORY'") OR mysql_error();
     if(mysql_num_rows($query))
     {
@@ -77,6 +76,7 @@ mysql_query("UPDATE `characters` SET `vitality_points`='20000' WHERE `charId`='$
 <?php
 if(logedin())
 {
+    $_SESSION['vote_rnd']=time();
 ?>
 <table border="1" cellspacing="0" cellpadding="5">
 <tr><td><select id="reward" name="reward">
@@ -86,7 +86,7 @@ if(logedin())
 
 <select id="char" name="char">
 <?php
-$query=mysql_query("SELECT `charId`, `char_name` FROM `characters` WHERE `account_name`='{$CURUSER['login']}'");
+$query=mysql_query("SELECT `charId`, `char_name` FROM `characters` WHERE `account_name`='{$_SESSION['account']}'");
 while($row=mysql_fetch_assoc($query))
 {
     echo "<option value=\"{$row['charId']}\">{$row['char_name']}</option>";
