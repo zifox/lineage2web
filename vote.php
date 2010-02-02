@@ -26,6 +26,7 @@ if ($action == "vote" && $timevoted <= ($now-60*60*12))
 {
 if($hidden!=1 || !$_SESSION['vote_rnd']<time() && !$_SESSION['vote_rnd']>=time()-60*5){die();}
 $charid=mysql_real_escape_string($_POST['char']);
+$_SESSION['vote_time']=time();
 if ($_POST['reward']=='vitality'){
 mysql_query("UPDATE `accounts` SET `voted`='$now' WHERE `login` = '{$_SESSION['account']}'");
 mysql_query("UPDATE `characters` SET `vitality_points`='20000' WHERE `charId`='$charid'");
