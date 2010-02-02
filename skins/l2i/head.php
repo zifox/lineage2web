@@ -56,7 +56,8 @@ font-family : Arial, Helvetica, sans-serif;
 color : #ffffff;
 background : #191919;
 background-color : #191919;
-background-image : url('skins/l2i/bg/8.jpg');
+background-image : url('skins/l2i/bg/<?php echo $rnd;?>.jpg');
+background-position: top;
 background-repeat : no-repeat;
 cursor : url('cursors/cursor.cur'), auto;
 }
