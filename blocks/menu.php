@@ -4,7 +4,7 @@
 
 <tr><td align="center"><a href="connect.php"><img src="./img/menu/<?php echo $langpath;?>/connect.png" border="0" width="150" title="<?php echo $Lang['connect'];?>" alt="<?php echo $Lang['connect'];?>"/></a></td></tr>
 
-<tr><td align="center"><a href="/forum/"><img src="./img/menu/<?php echo $langpath;?>/forum.png" border="0" width="150" title="<?php echo $Lang['forum'];?>" alt="<?php echo $Lang['forum'];?>"/></a></td></tr>
+<tr><td align="center"><a href="/forum/" target="_blank"><img src="./img/menu/<?php echo $langpath;?>/forum.png" border="0" width="150" title="<?php echo $Lang['forum'];?>" alt="<?php echo $Lang['forum'];?>"/></a></td></tr>
 
 <tr><td align="center"><a href="stat.php"><img src="./img/menu/<?php echo $langpath;?>/stat.png" border="0" width="150" title="<?php echo $Lang['statistic'];?>" alt="<?php echo $Lang['statistic'];?>"/></a></td></tr>
 

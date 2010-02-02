@@ -75,9 +75,10 @@ opacity : 0.85;
 <?php
 if($head){
 ?>
+
 <div id="frm"><img width="150" height="150" border="0" longdesc="/" usemap="#Map" alt="Visit forum" style="" src="img/visit_forum.png" />
 <map id="Map" name="Map">
-<area href="./forum" coords="3,119,117,3,77,3,3,77" shape="poly" alt="" />
+<area href="./forum" target="_blank" coords="3,119,117,3,77,3,3,77" shape="poly" alt="" />
 <area href="./" coords="145,114,10,116,88,37,146,37" shape="poly" alt="" />
 <area href="./" coords="13,62,43,37,13,37" shape="poly" alt="" />
 </map></div>
