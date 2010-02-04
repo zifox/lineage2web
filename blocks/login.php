@@ -4,14 +4,14 @@
 if (!logedin())
 {
 ?>
-<form action="index.php" method="post">
+<form action="login.php" method="post">
 <?php echo $Lang['account']; ?>: <input type="text" name="account" style="border: 0pt none; background: url(&quot;img/login_text.gif&quot;) no-repeat scroll 0% 0% transparent; color: rgb(217, 222, 218); width: 129px;" />
 <?php echo $Lang['password']; ?>: <input type="password" name="password" style="border: 0pt none; background: url(&quot;img/login_text.gif&quot;) no-repeat scroll 0% 0% transparent; color: rgb(217, 222, 218); width: 129px;" />
 <?php echo $Lang['remember_me']; ?> <input type="checkbox" name="rememberme" />
 <br />
-<label>
-    <input type="image" onmouseout="this.src = './login_b.php?text=   <?php echo $Lang['login'];?>&amp;style=normal';" onkeydown="this.src = './login_b.php?text=   <?php echo $Lang['login'];?>&amp;style=press';" onmousemove="this.src = './login_b.php?text=   <?php echo $Lang['login'];?>&amp;style=hover';" src="./login_b.php?text=   <?php echo $Lang['login'];?>&amp;style=normal" value=" " name="Submit" />
-</label>
+<?php
+button($Lang['login']);
+?>
 </form>
 <?php
 }
@@ -47,7 +47,6 @@ secs = Math.floor(secs - time);
 <span id="vote">&nbsp;</span><script type="text/javascript">Clock(secs.valueOf());</script>
 </font></td></tr>
     <tr><td><center><a href="myacc.php"><?php echo $Lang['my_account'];?></a></center></td></tr>
-    <tr><td><center><a href="mychars.php"><?php echo $Lang['my_chars'];?></a></center></td></tr>
     <tr><td><center><a href="logout.php"><?php echo $Lang['logout'];?></a></center></td></tr>
     </table>
     <?php

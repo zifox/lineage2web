@@ -25,8 +25,10 @@ msg($Lang['thank_you'], $Lang['vote_tommorow']);
 if ($action == "vote" && $timevoted <= ($now-60*60*12))
 {
 if($hidden!=1 || !$_SESSION['vote_rnd']<time() && !$_SESSION['vote_rnd']>=time()-60*5){die();}
-$charid=mysql_real_escape_string($_POST['char']);
+//$charid=mysql_real_escape_string($_POST['char']);
 $_SESSION['vote_time']=$now;
+mysql_query("UPDATE `accounts` SET `voted`='$now', `webpoints`='".$Config['vote_reward']."' WHERE `login` = '{$_SESSION['account']}'");
+/*
 if ($_POST['reward']=='vitality'){
 mysql_query("UPDATE `accounts` SET `voted`='$now' WHERE `login` = '{$_SESSION['account']}'");
 mysql_query("UPDATE `characters` SET `vitality_points`='20000' WHERE `charId`='$charid'");
@@ -49,7 +51,7 @@ mysql_query("UPDATE `characters` SET `vitality_points`='20000' WHERE `charId`='$
 }else
 {
     error('2');
-}
+}*/
 }elseif($action == "vote" && $timevoted >= ($now-60*60*12))
 {
     error('8');
@@ -78,7 +80,10 @@ mysql_query("UPDATE `characters` SET `vitality_points`='20000' WHERE `charId`='$
 if(logedin())
 {
     $_SESSION['vote_rnd']=time();
-?>
+    ?>
+    <div align="center">From now for voting you will receive <?php echo $Config['vote_reward'];?> webpoints</div>
+    <?php
+/*
 <table border="1" cellspacing="0" cellpadding="5">
 <tr><td><select id="reward" name="reward">
 <option value="vitality" id="vitality"><?php echo $Lang['vitality_4lvl'];?></option>
@@ -94,9 +99,12 @@ while($row=mysql_fetch_assoc($query))
 }
 ?>
 </select></td></tr>
-<tr><td align="center"><input type="hidden" value="1" name="secrethiddenfromyou" /><input name="go" type="submit" disabled="disabled" value="<?php echo $Lang['get_reward'];?>" /></td></tr></table>
-<?php
-}
+<tr><td align="center"><input type="hidden" value="1" name="secrethiddenfromyou" />
+<input name="go" type="submit" disabled="disabled" value="<?php echo $Lang['get_reward'];?>" />
+</td></tr></table>
+*/?>
+<input name="go" type="submit" disabled="disabled" value="<?php echo $Lang['get_reward'];?>" />
+<?php }
 ?>
 </form>
 <?php

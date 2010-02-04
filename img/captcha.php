@@ -13,7 +13,7 @@ return $rndstr;
 }
 
 session_start();
-$random=RandomGenerator(rand(5,10));
+$random=RandomGenerator(rand(4,6));
 $_SESSION['captcha']=$random;
 $width=strlen($random);
 $imagecreate = imagecreate($width*10+2, 18);

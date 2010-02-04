@@ -22,7 +22,7 @@ $gameonline = $imgonline;}
 else{ $gameonline = $imgoffline; }
 
 #Players Online
-$query='SELECT count(*) FROM characters WHERE online = 1 AND !accesslevel';
+$query='SELECT count(charId) FROM `characters` WHERE `online` = \'1\' AND !`accesslevel`;';
 $result = mysql_query($query);
 $onlineplayers=mysql_result($result, 0, 0);
 if( $onlineplayers <= 80){
@@ -33,19 +33,19 @@ elseif( mysql_result($result, 0, 0) > 150){
 $playsonline = "<a href=\"stat.php?stat=online\"><font color=\"red\">" . mysql_result($result, 0, 0) . "</font></a>";}
 
 #GM Online
-$sql = mysql_query("SELECT count(*) FROM characters WHERE online ='1' AND accesslevel");
+$sql = mysql_query('SELECT count(charId) FROM `characters` WHERE `online` = \'1\' AND `accesslevel`;');
 $gmonline = mysql_result($sql, 0, 0);
 
 #Total accounts
-$sql = mysql_query("SELECT count(*) FROM accounts");
+$sql = mysql_query('SELECT count(login) FROM `accounts`;');
 $accountsnum = mysql_result($sql, 0, 0);
 
 #Total characters
-$sql = mysql_query("SELECT count(*) FROM characters");
+$sql = mysql_query("SELECT count(charId) FROM `characters`;");
 $charnum = mysql_result($sql, 0, 0);
 
 #Total clans
-$sql = mysql_query("SELECT count(*) FROM clan_data");
+$sql = mysql_query("SELECT count(clan_id) FROM `clan_data`;");
 $clannum = mysql_result($sql, 0, 0);
 ?>
 

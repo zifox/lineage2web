@@ -12,11 +12,13 @@ require_once('functions.php');
 $DB = Array(
 	"host"		=>	"localhost",//MySQL Host
 	"login"		=>	"root", 	//MySQL User
-	"password"	=>	"",	//MySQL Password
+	"password"	=>	"",	//MySQL Password //832620i
 	"db"		=>	"l2j",		//L2J DataBase
 	"webdb"		=>	"web"		//Webpage DataBase
 ); 
-
+$server="127.0.0.1";
+$port="25461";
+$l2jpass="TuSmirdiDauni\r";
 $link = @mysql_connect($DB['host'], $DB['login'], $DB['password']);
 @mysql_select_db($DB['db'], $link) OR die(mysql_error());
 $query = mysql_query("SELECT * FROM `".$DB['webdb']."`.`config`");

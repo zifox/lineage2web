@@ -126,4 +126,12 @@ else
     require_once("skins/" . $skin . "/foot.php");
     mysql_close($link);
 }
+function button($text='  ')
+{
+?>
+<label>
+    <input type="image" onmouseout="this.src = './login_b.php?text=   <?php echo $text;?>&amp;style=press';" onmousemove="this.src = './login_b.php?text=   <?php echo $text;?>&amp;style=hover';" src="./login_b.php?text=   <?php echo $text;?>&amp;style=normal" value=" " name="Submit" />
+</label>
+<?php
+}
 ?>

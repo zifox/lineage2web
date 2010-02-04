@@ -87,7 +87,7 @@ return true;
   <td><input maxlength="15" name="newpassword2" type="password" /></td>
  </tr>
  <tr>
-  <td colspan="2" style="text-align: center;"><br /><input type="submit" name="submit" value="Change" /></td>
+  <td colspan="2" style="text-align: center;"><?php button('Change');?></td>
  </tr>
 </table>
 </form>
