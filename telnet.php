@@ -5,111 +5,62 @@ require_once("include/config.php");
 
 if (logedin() && is_admin()){
 head('Telnet');
-$execs = $_GET['execs'];
-$mycommand = $_GET['mycommand'];
+$execs = $_POST['execute'];
+$mycommand = $_POST['todo'];
+$time=$_POST['time'];
+$password=mysql_real_escape_string($_POST['telnet_password']);
+$serverid=mysql_real_escape_string($_POST['server']);
 
-
-		
-		$fp=@fsockopen($server,$port,$errno,$errstr);
-		$command="$mycommand\r";
-
-
-	//Dont Touch Anything :PPP
-
-		if ($execs == "yes") {
-			fputs($fp,$l2jpass);
-			fputs($fp,$command);
-			fputs($fp,"quit\r");
-			while(!feof($fp))$output.=fread($fp,16);
-			fclose($fp);
-			$clear_r=array("Password Correct!","Password:","Please Insert Your Password!","\n","Password: Password Correct!","Welcome To The L2J Telnet Session.","[L2J]","Bye Bye!");
-			$output = str_replace($clear_r,"", $output);
-			//$output = str_replace("Incorrect Password!","\n\nIncorrect Password! Check config.php", $output);
-
-			print "&phpconsole=";
-			print "$output";
-			print "&";
-			print "&phpstatus=okman&";
-			}else{
-				print "OK";
-			}
-		}
+if ($execs == "yes") {
+    $targetserver=mysql_query('SELECT * FROM `'.$DB['webdb'].'`.`telnet` WHERE `Server`=\''.$serverid.'\' ');
+    if(mysql_num_rows($targetserver)){
+        $server_data=mysql_fetch_assoc($targetserver);
+        if($password!=$server_data['Password']){
+            echo $password;
+            echo '<br />';
+            echo $server_data['Password'];
+            die();}
+    $fp=@fsockopen($server_data['IP'],$server_data['Port'],$errno,$errstr);
+    //$command="$mycommand $time\r";
+    $command="$mycommand\r";
+    fputs($fp,$server_data['Password']."\r");
+    fputs($fp,$command);
+    fputs($fp,"quit\r");
+    while(!feof($fp)){
+        $output.=fread($fp,16);
+    }
+    fclose($fp);
+    $clear_r=array("Password Correct!","Password:","Please Insert Your Password!","\n","Password: Password Correct!","Welcome To The L2J Telnet Session.","[L2J]","Bye Bye!");
+    $output = str_replace($clear_r,"", $output);
+    echo 'Server Response = '.$output;
+    }
+}else{
+    ?>
+    <form action="telnet.php" method="post">
+    <table border="1" align="center"><tr><td>
+    <select name="server">
+    <?php
+    $servers=mysql_query('SELECT `Server` FROM `'.$DB['webdb'].'`.`telnet`');
+    while($slist=mysql_fetch_assoc($servers))
+    {
+      ?>
+      <option value="<?php echo $slist['Server'];?>"><?php echo $slist['Server'];?></option>
+      <?php  
+    }
+    ?>
+    </select>
+    <select name="todo">
+    <option value="restart">Restart</option>
+    <option value="shutdown">ShutDown</option>
+    </select>
+    <input type="text" name="time" value="5" size="5" /></td></tr>
+    <tr><td>Password: <input type="password" name="telnet_password" value="" />
+    <input type="hidden" name="execute" value="yes" /></td></tr><tr><td>
+    <?php button('Execute'); ?>
+    </td></tr></table></form>
+    <?php
+}
 foot();
-/*
- 
 
-             // Logonserver Restart
-
-                 $usetelnetlog = fsockopen($log_host, $log_port, $errno, $errstr, 5);
-
-                 if($usetelnetlog)
-
-                 {
-
-                         $give_string = 'restart' ;
-
-                         fputs($usetelnetlog, $log_password);
-
-                         fputs($usetelnetlog, "\r\n");
-
-                         fputs($usetelnetlog, $give_string);
-
-                         fputs($usetelnetlog, "\r\n");
-
-                         fclose($usetelnetlog);
-
-                         echo "Restart 1: Restart Login Server...".$t;
-
-                }
-
-                else
-
-                {
-
-                        echo "Restart 1: <b>ERROR</b> Couldn't connect to telnet to restart Loginserver".$t;
-
-                }
-
- 
-
-             //GameServer Restart
-
-                flush();
-
-                sleep (5);
-
-                $usetelnetgs = fsockopen($gs_host, $gs_port, $errno, $errstr,5);
-
-                if($usetelnetgs)
-
-                {
-
-                    $give_string = 'restart 5';
-
-                    fputs($usetelnetgs, $gs_password);
-
-                    fputs($usetelnetgs, "\r\n");
-
-                    fputs($usetelnetgs, $give_string);
-
-                    fputs($usetelnetgs, "\r\n");
-
-                    fputs($usetelnetgs, "exit\r\n");
-
-                    fclose($usetelnetgs);
-
-                    echo "Restart 2: Restart Gameserver...".$t;
-
-                 }
-
-                 else
-
-                 {
-
-                        echo "Restart 2: <b>ERROR</b> Couldn't connect to telnet to restart Gameserver".$t;
-
-                 }
-
- 
-*/
+}else{Header('Location:index.php');}
 ?>
