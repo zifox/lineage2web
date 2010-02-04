@@ -4,7 +4,7 @@ require_once("include/config.php");
 
 
 if (logedin() && is_admin()){
-
+head('Telnet');
 $execs = $_GET['execs'];
 $mycommand = $_GET['mycommand'];
 
