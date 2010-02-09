@@ -81,9 +81,13 @@ while($row=mysql_fetch_assoc($query))
 <tr><td align="center"><input type="hidden" value="1" name="secrethiddenfromyou" />
 <input name="go" type="submit" disabled="disabled" value="<?php echo $Lang['get_reward'];?>" />
 </td></tr></table>
-*/?>
+*/
+if(!$timevoted >= ($now-60*60*12)){
+?>
 <input name="go" type="submit" disabled="disabled" value="<?php echo $Lang['get_reward'];?>" />
-<?php }
+<?php 
+}
+}
 ?>
 </form>
 <?php
