@@ -12,7 +12,7 @@ if (!logedin())
 if (logedin())
 {
 $action = $_GET['action'];
-$hidden = $HTTP_POST_VARS['secrethiddenfromyou'];
+//$hidden = $HTTP_POST_VARS['secrethiddenfromyou'];
 
  
 $timevoted = $_SESSION['vote_time'];
@@ -24,10 +24,11 @@ msg($Lang['thank_you'], $Lang['vote_tommorow']);
 }
 if ($action == "vote" && $timevoted <= ($now-60*60*12))
 {
-if($hidden!=1 || !$_SESSION['vote_rnd']<time() && !$_SESSION['vote_rnd']>=time()-60*5){die();}
+if(!$_SESSION['vote_rnd']<time() && !$_SESSION['vote_rnd']>=time()-60*5){die();}
 //$charid=mysql_real_escape_string($_POST['char']);
 $_SESSION['vote_time']=$now;
-mysql_query("UPDATE `accounts` SET `voted`='$now', `webpoints`='".$Config['vote_reward']."' WHERE `login` = '{$_SESSION['account']}'");
+$_SESSION['webpoints']+=$Config['vote_reward'];
+mysql_query("UPDATE `accounts` SET `voted`='$now', `webpoints`=`webpoints`+'".$Config['vote_reward']."' WHERE `login` = '{$_SESSION['account']}'");
 msg($Lang['thank_you'], $Lang['thank_for_voting']);
 
 }elseif($action == "vote" && $timevoted >= ($now-60*60*12))
