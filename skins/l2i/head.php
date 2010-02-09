@@ -4,7 +4,8 @@ header("Cache-control: private");
 header("Expires: -1");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="description" content="<?php echo $Config['MetaD']; ?>" />
 <meta name="keywords" content="<?php echo $Config['MetaK']; ?>" />
@@ -17,16 +18,17 @@ header("Expires: -1");
 <link rel="SHORTCUT ICON" href="favicon.ico" />
 <link href="skins/<?php echo $skin;?>/style.css" type="text/css" rel="stylesheet" />
 <?php //<script type="text/javascript" src="scripts/overlib.js"></script>?>
-<script type="text/javascript">
+<script type="text/javascript" language="javascript" src="scripts/show.js"></script>
+<script type="text/javascript" language="javascript">
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
 document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
 </script>
-<script type="text/javascript">
+<script type="text/javascript" language="javascript">
 try {
 var pageTracker = _gat._getTracker("UA-11986252-1");
 pageTracker._trackPageview();
 } catch(err) {}</script>
-<script type="text/javascript">
+<script language="javascript" type="text/javascript">
 var min_wnd=0;
 function small_window(url,width,height,name) {
 	w_close=0;
@@ -41,10 +43,11 @@ function small_window(url,width,height,name) {
  window_small=window.open(url,name,"toolbar=0,location=0,directories=0,status=1,menubar=0,scrollbars=1,resizable=1,width="+width+",height="+height);
 }
 </script>
+<script language="javascript" type="text/javascript">
 
+</script>
 <?php
 //пароль
-
 $rnd = rand(1,10);
 includeLang('skin');
 ?>
@@ -68,7 +71,6 @@ opacity : 0.7;
 .opacidad2 {
 opacity : 0.85;
 } 
-
 </style>
 </head>
 <body>

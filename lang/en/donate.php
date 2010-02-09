@@ -1,6 +1,6 @@
 <?php
-//Пожалуйста, введите своё имя и пароль
-if(!defined('INLANG')){Header("Location: ../../index.php?id=start");}
+//пароль
+if(!defined('INLANG')){Header("Location: ../../index.php");}
 #DONATE (Donate.php)
 $Lang['notfound']='<font color="red">Character <font color="blue">%s</font> not found!</font><br />';
 $Lang['ty_for_donate']='Thank you %s very much for donating!!!<br />';

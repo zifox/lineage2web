@@ -28,30 +28,8 @@ if($hidden!=1 || !$_SESSION['vote_rnd']<time() && !$_SESSION['vote_rnd']>=time()
 //$charid=mysql_real_escape_string($_POST['char']);
 $_SESSION['vote_time']=$now;
 mysql_query("UPDATE `accounts` SET `voted`='$now', `webpoints`='".$Config['vote_reward']."' WHERE `login` = '{$_SESSION['account']}'");
-/*
-if ($_POST['reward']=='vitality'){
-mysql_query("UPDATE `accounts` SET `voted`='$now' WHERE `login` = '{$_SESSION['account']}'");
-mysql_query("UPDATE `characters` SET `vitality_points`='20000' WHERE `charId`='$charid'");
-    msg($Lang['thank_you'], $Lang['thank_for_voting']);
- }elseif ($_POST['reward']=='gold')
-{
+msg($Lang['thank_you'], $Lang['thank_for_voting']);
 
-    mysql_query("UPDATE `accounts` SET `voted`='$now' WHERE `login` = '{$_SESSION['account']}'");
-    $query=mysql_query("SELECT `object_id` FROM `items` WHERE `owner_id`='$charid' AND `item_id` = '4356' AND `loc` = 'INVENTORY'") OR mysql_error();
-    if(mysql_num_rows($query))
-    {
-        mysql_query("UPDATE `items` SET `count` = `count` + '4' WHERE `owner_id`='$charid' AND `item_id` = '4356' AND `loc` = 'INVENTORY'");
-    }else{
-        $maxloc=mysql_query("SELECT Max(`loc_data`) FROM `items` WHERE `items`.`owner_id` = '$charid' AND `items`.`loc` = 'INVENTORY'") OR mysql_error();
-        $itemloc=mysql_result($maxloc,0,0)+1;
-        mysql_query("INSERT INTO `items` (`owner_id`,`item_id`,`count`,`loc`,`loc_data`,`time`) VALUES ('$charid','4356','4','INVENTORY','$itemloc','-1')") OR mysql_error();
-        
-    }
-    msg($Lang['thank_you'], $Lang['thank_for_voting']);
-}else
-{
-    error('2');
-}*/
 }elseif($action == "vote" && $timevoted >= ($now-60*60*12))
 {
     error('8');

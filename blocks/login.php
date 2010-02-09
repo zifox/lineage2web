@@ -47,6 +47,8 @@ secs = Math.floor(secs - time);
 <span id="vote">&nbsp;</span><script type="text/javascript">Clock(secs.valueOf());</script>
 </font></td></tr>
     <tr><td><center><a href="myacc.php"><?php echo $Lang['my_account'];?></a></center></td></tr>
+    <tr><td><center><a href="contact.php"><?php echo $Lang['write_message'];?></a></center></td></tr>
+    <tr><td><center><?php echo sprintf($Lang['webpoints'], $_SESSION['webpoints']);?></center></td></tr>
     <tr><td><center><a href="logout.php"><?php echo $Lang['logout'];?></a></center></td></tr>
     </table>
     <?php

@@ -26,7 +26,7 @@ if($foot){
 includeBlock('stats', $Lang['stats'], true);
 includeBlock('top10', $Lang['top10'], true);
 ?>
-</td></tr></table></td></tr><?php }else{ ?></td></tr><?php } ?>
+</td></tr></table></td></tr><?php }else{ ?></tbody></table></td></tr><?php } ?>
 <tr align="center" valign="top">
 <td align="center" valign="middle"><b>Lineage II</b> is a trademark of NCsoft Corporation. Copyright © <b>NCsoft Corporation</b>. All rights reserved.<br /><?php echo $Config['CopyRight']; ?></td>
 </tr>

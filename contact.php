@@ -160,7 +160,7 @@ if(logedin() && is_admin())
 ?><br /> 
 <b>Write message to server Administration:</b><br /><br />
 <form name='form' action='contact.php?action=send' method='post'>
-Your Nick:<br /><input type="text" name="text" size="20" value="" /><br /><br />
+Your Nick:<br /><input type="text" name="text" size="20" value="<?php echo (isset($_SESSION['account']))? $_SESSION['account'] :'';?>" /><br /><br />
 Message:<br /><textarea name="textarea" rows="5" cols="20"></textarea><br /><br />
 <input type="submit" name='action' value='Send' /></form>
 <?php
