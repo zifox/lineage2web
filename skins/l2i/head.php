@@ -33,7 +33,7 @@ var min_wnd=0;
 function small_window(url,width,height,name) {
 	w_close=0;
 	if (w_close) {
-		if (window_small AND !window_small.closed) small_window.window.close();
+		if (window_small && !window_small.closed) small_window.window.close();
 		name="small_window";
 	} else {
 		if (typeof(name)=='undefined' || name=='') name=(Math.round(Math.random()*100000)).toString();
@@ -65,12 +65,16 @@ background-repeat : no-repeat;
 cursor : url('cursors/cursor.cur'), auto;
 }
 
-.opacidad1  {
-opacity : 0.7;
-}
-.opacidad2 {
-opacity : 0.85;
+.opacidad1 {
+-moz-opacity:0.7;
+filter: alpha(opacity=70);
+ opacity: 0.7;
 } 
+.opacidad2 {
+-moz-opacity:0.85;
+filter: alpha(opacity=85);
+ opacity: 0.85;
+}
 </style>
 </head>
 <body>
@@ -113,7 +117,7 @@ includeBlock('vote', $Lang['vote']);
                         </tr></tbody></table></td>
                     <td width="309" style="background-image: url(skins/<?php echo $skin;?>/img/t_h_cr.gif);">&nbsp;</td>
                     <td width="1"><img width="1" height="53" alt="" src="skins/<?php echo $skin;?>/img/t_h_r_c.gif" /></td>
-                    <td width="85"><img width="40" height="53" alt="" src="skins/<?php echo $skin;?>/img/t_h_rc.gif" /></td>
+                    <td width="40"><img width="40" height="53" alt="" src="skins/<?php echo $skin;?>/img/t_h_rc.gif" /></td>
                 </tr>
                 <tr>
                     <td style="background-image: url(skins/<?php echo $skin;?>/img/t_h_l_b.gif);">&nbsp;</td>
