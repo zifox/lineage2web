@@ -1,10 +1,9 @@
-<hr />
-
+<hr /><div align="center">
 <a href="http://games.top.org/lineage-2/" title="Lineage 2 Private Servers (Downloads) - TOP.ORG"><img style="border:none;" src="http://img1.top.org/toporg_12309.gif" alt="Lineage 2 Private Servers (Downloads) - TOP.ORG" /></a>
 <br />
 <script src="http://wos.lv/d.php?11603" type="text/javascript"></script>
 <a href="http://la2.mmotop.ru/vote/20088/" target="_blank"><img src="http://la2.mmotop.ru/images/88x31w_la2.png" title="Рейтинг серверов Lineage 2" alt="Рейтинг серверов Lineage 2" border="0" /></a>
-
+</div>
 <?php
 if($foot){
 ?>
@@ -21,7 +20,7 @@ if($foot){
 includeBlock('stats', $Lang['stats'], true);
 includeBlock('top10', $Lang['top10'], true);
 ?>
-</td></tr></table></td></tr><?php }else{ ?></tbody></table></td></tr><?php } 
+</td></tr></table></td></tr><?php }else{ ?><table align="center"><?php } 
 $timeparts = explode(" ",microtime());
 $endtime = $timeparts[1].substr($timeparts[0],1);
 ?>

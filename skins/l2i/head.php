@@ -27,25 +27,9 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
 try {
 var pageTracker = _gat._getTracker("UA-11986252-1");
 pageTracker._trackPageview();
-} catch(err) {}</script>
-<script language="javascript" type="text/javascript">
-var min_wnd=0;
-function small_window(url,width,height,name) {
-	w_close=0;
-	if (w_close) {
-		if (window_small && !window_small.closed) small_window.window.close();
-		name="small_window";
-	} else {
-		if (typeof(name)=='undefined' || name=='') name=(Math.round(Math.random()*100000)).toString();
-	}
- if (typeof(width)=='undefined' || width==0) width=600;
- if (typeof(height)=='undefined' || height==0) height=480;
- window_small=window.open(url,name,"toolbar=0,location=0,directories=0,status=1,menubar=0,scrollbars=1,resizable=1,width="+width+",height="+height);
-}
+} catch(err) {}
 </script>
-<script language="javascript" type="text/javascript">
 
-</script>
 <?php
 //пароль
 $rnd = rand(1,10);
@@ -64,7 +48,8 @@ background-position: top;
 background-repeat : no-repeat;
 cursor : url('cursors/cursor.cur'), auto;
 }
-
+<?php
+if ($head){?>
 .opacidad1 {
 -moz-opacity:0.7;
 filter: alpha(opacity=70);
@@ -74,7 +59,7 @@ filter: alpha(opacity=70);
 -moz-opacity:0.85;
 filter: alpha(opacity=85);
  opacity: 0.85;
-}
+}<?php } ?>
 </style>
 </head>
 <body>

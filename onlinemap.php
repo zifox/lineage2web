@@ -1,4 +1,4 @@
-<?
+<?php
 define('INWEB', true);
 require_once('include/config.php');
 header("Cache-Control: no-cache");
@@ -34,15 +34,15 @@ if(isset($_GET['type']))
     $map['aden_x']=$imgsize['aden'][0] / 100;
     $map['aden_y']=$imgsize['aden'][1] / 100;
    ?>
-    <table><tr><td align="center"><h1><? echo $Config['ServerName'];?> Server Online players Map:</h1>
+    <table><tr><td align="center"><h1><?php echo $Config['ServerName'];?> Server Online players Map:</h1>
     <br />
     <a href="onlinemap.php?type=small">Small</a> | <a href="onlinemap.php?type=normal">Normal</a> | <a href="onlinemap.php?type=big">Big</a> | <a href="onlinemap.php?type=very_big">Large</a>
    
      <table width="100%" border="0" cellpadding="0" cellspacing="0" class="main-tables">
      <tr>
       <td class="widelist-txt">
-       <div style="width: <? echo $imgsize['aden'][0]; ?>px; height: <? echo $imgsize['aden'][1]; ?>px; background-image: url('img/onlinemap/map_aden_<? echo $map_size;?>.jpg'); z-index: 1;">
-        <?
+       <div style="width: <?php echo $imgsize['aden'][0]; ?>px; height: <?php echo $imgsize['aden'][1]; ?>px; background-image: url('img/onlinemap/map_aden_<?php echo $map_size;?>.jpg'); z-index: 1;">
+        <?php
          $count=0;
          
          $get_char_data="SELECT `charId`, `char_name`, `x`, `y`, `z`, `race`, `level`, `sex`, `clan_id`, `clan_name` FROM characters LEFT OUTER JOIN `clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `online`";
@@ -55,8 +55,8 @@ if(isset($_GET['type']))
     $data['x']=$map['aden_x'] * $data['x'];
     $data['y']=$map['aden_y'] * $data['y'] + $data_red;
 ?>
-<div style="width: <? echo $imgsize['aden'][0]; ?>px; height: <? echo $imgsize['aden'][1]; ?>px; background-image: url('img/onlinemap/pin_<? echo $char['race']; ?>.gif'); background-repeat: no-repeat; background-position: <? echo round($data['x']); ?>px <? echo round($data['y']); ?>px; z-index: <? echo $count+2; ?>;">
-           <?
+<div style="width: <?php echo $imgsize['aden'][0]; ?>px; height: <?php echo $imgsize['aden'][1]; ?>px; background-image: url('img/onlinemap/pin_<?php echo $char['race']; ?>.gif'); background-repeat: no-repeat; background-position: <?php echo round($data['x']); ?>px <?php echo round($data['y']); ?>px; z-index: <?php echo $count+2; ?>;">
+           <?php
            $count++; 
          }
 
@@ -73,14 +73,14 @@ if(isset($_GET['type']))
     $data['loc_y']=$map['aden_y'] * $data['loc_y'] + $data_red;    
     
            ?>
-            <div style="width: <? echo $imgsize['aden'][0]; ?>px; height: <? echo $imgsize['aden'][1]; ?>px; background-image: url('img/onlinemap/bug3.png'); background-repeat: no-repeat; background-position: <? echo $data['loc_x']; ?>px <? echo $data['loc_y']; ?>px; z-index: <? echo $count+2; ?>;">
-           <?
+            <div style="width: <?php echo $imgsize['aden'][0]; ?>px; height: <?php echo $imgsize['aden'][1]; ?>px; background-image: url('img/onlinemap/bug3.png'); background-repeat: no-repeat; background-position: <?php echo $data['loc_x']; ?>px <?php echo $data['loc_y']; ?>px; z-index: <?php echo $count+2; ?>;">
+           <?php
            $count++; 
          }
          ?>
 
           <map name="Map-Aden" id="Map-Aden">
-           <?
+           <?php
            //$get_char_data="SELECT `charId`, `char_name`, `x`, `y`, `z`, `race`, `level`, `sex`, `clan_id`, `clan_name` FROM characters LEFT OUTER JOIN `clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `online`";
   $char_data=mysql_query($get_char_data);
   while($char=mysql_fetch_assoc($char_data))
@@ -97,8 +97,8 @@ $data['x']=($char['x'] + 130000) / 3600;
    if($char['clan_id']==0)
    {$char['clan_name']="No Clan";}
               ?>
-               <area shape="rect" coords="<? echo round($data['x']); ?>,<? echo round($data['y']); ?>,<? echo round($data['x']) + 20; ?>,<? echo round($data['y']) + 20; ?>,<? echo $char['CharId']; ?>" title="<? echo " Name: ".$char['char_name']." , Sex: ".$char['sex']." , lvl: ".$char['level']." , clan: ".$char['clan_name']." , Loc: [x:".$char['x']." y:".$char['y']." z:".$char['z']."]."; ?>" alt="" />
-              <?
+               <area shape="rect" coords="<?php echo round($data['x']); ?>,<?php echo round($data['y']); ?>,<?php echo round($data['x']) + 20; ?>,<?php echo round($data['y']) + 20; ?>" title="<?php echo " Name: ".$char['char_name']." , Sex: ".$char['sex']." , lvl: ".$char['level']." , clan: ".$char['clan_name']." , Loc: [x:".$char['x']." y:".$char['y']." z:".$char['z']."]."; ?>" alt="" />
+              <?php
    } 
             // $get_boss_data="SELECT `id`, `name`, `title`, `level`, `sex`, `aggro`, `isUndead`, `boss_id`, `currentHp`, `currentMp`, `loc_x`, `loc_y`, `loc_z` FROM `npc` INNER JOIN `raidboss_spawnlist` ON `npc`.`id`=`raidboss_spawnlist`.`boss_id` WHERE `npc`.`type` = 'L2RaidBoss'";
   $boss_data=mysql_query($get_boss_data);
@@ -119,8 +119,8 @@ $data['x']=($char['x'] + 130000) / 3600;
    {$rboss['isUndead']="no";}else{$rboss['isUndead']="yes";}
   
               ?>
-               <area shape="rect" coords="<? echo $data['loc_x']; ?>,<? echo $data['loc_y']; ?>,<? echo $data['loc_x'] + 20; ?>,<? echo $data['loc_y'] + 20; ?><? echo $rboss['id']; ?>" title="<? echo $rboss['title']." Name: ".$rboss['name']." , Sex: ".$rboss['sex']." , lvl: ".$rboss['level']." , undead: ".$rboss['isUndead'].", Aggro:".$rboss['aggro'].", Current_HP: ".$rboss['currentHp']." , Current_MP: ".$rboss['currentMp']." , Loc: [x:".$rboss['loc_x']."y:".$rboss['loc_y']."z:".$rboss['loc_z']."]."; ?>" alt="" />
-              <?
+               <area shape="rect" coords="<?php echo $data['loc_x']; ?>,<?php echo $data['loc_y']; ?>,<?php echo $data['loc_x'] + 20; ?>,<?php echo $data['loc_y'] + 20; ?><?php echo $rboss['id']; ?>" title="<?php echo $rboss['title']." Name: ".$rboss['name']." , Sex: ".$rboss['sex']." , lvl: ".$rboss['level']." , undead: ".$rboss['isUndead'].", Aggro:".$rboss['aggro'].", Current_HP: ".$rboss['currentHp']." , Current_MP: ".$rboss['currentMp']." , Loc: [x:".$rboss['loc_x']."y:".$rboss['loc_y']."z:".$rboss['loc_z']."]."; ?>" alt="" />
+              <?php
              } 
              
            ?>
@@ -136,7 +136,7 @@ $data['x']=($char['x'] + 130000) / 3600;
        </div>
       </td>
      </tr>
-    </table></td></tr><tr><td align="center">
+    </table></td></tr></table>
 <?php
 foot(0);
 ?>

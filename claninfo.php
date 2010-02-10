@@ -20,7 +20,7 @@ if(isset($_GET['clan'])){
         </table>
         </div>
         <div align="center"><h1><?php echo $Lang['clan_members'];?></h1>
-        <table border="1" align="center"><thead><th><?php echo $Lang['nr'];?></th><th><?php echo $Lang['name'];?></th><th><?php echo $Lang['sex'];?></th><th><?php echo $Lang['class'];?></th><th><?php echo $Lang['pvp_pk'];?></th></thead>
+        <table border="1" align="center"><thead><tr><th><?php echo $Lang['nr'];?></th><th><?php echo $Lang['name'];?></th><th><?php echo $Lang['sex'];?></th><th><?php echo $Lang['class'];?></th><th><?php echo $Lang['pvp_pk'];?></th></tr></thead>
         <tbody>
         <?php
         $query=mysql_query('SELECT `charId`, `char_name`, `sex`, `pvpkills`, `pkkills`, `ClassName` FROM `characters` INNER JOIN `char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId`  WHERE `clanid`='.$clan_data['clan_id'].' AND charId!='.$clan_data['charId'].' ORDER BY `pvpkills` DESC');

@@ -167,5 +167,4 @@ Message:<br /><textarea name="textarea" rows="5" cols="20"></textarea><br /><br 
 break;
 }
 foot();
-mysql_close($link);
 ?>

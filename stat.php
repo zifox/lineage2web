@@ -50,8 +50,9 @@ $r=0;
 <?php
 while($row = mysql_fetch_array($result)){
 
-($r==0)? '<tr>': '';
+if ($r==0){echo '<tr>';}
 $r++;
+
 ?>
 <td><table border="1"><tr><td class="noborder">
 <h1><?php echo sprintf($Lang['castle_of'],$row['name'],'%s');?></h1>
@@ -98,6 +99,7 @@ echo '<a href="claninfo.php?clanid='.mysql_result($result2,0,'clan_id').'">'.mys
     echo '</tr>';
     $r=0;
 }
+
 }
 ?>
 </table>
@@ -148,7 +150,7 @@ $timeheld=time()-$row['lastOwnedTime']/1000;
 $timehour=round($timeheld/60/60);
 }else {$timehour=0;}
 ?>
-<tr class="altRow"><td></td><?php echo $Lang['time_held'];?><td><?php echo $timehour.' '.$Lang['hours'];?></td></tr>
+<tr class="altRow"><td><?php echo $Lang['time_held'];?></td><td><?php echo $timehour.' '.$Lang['hours'];?></td></tr>
 </table></td></tr></table>
 </td>
 <?php if($r==3)
@@ -164,25 +166,26 @@ $timehour=round($timeheld/60/60);
     
 	Case 'clantop':
     $result = mysql_query("SELECT `clan_id`, `clan_data`.*, `char_name`, `csum`, `ccount`, `cavg`, `name` FROM `clan_data` INNER JOIN `characters` ON `clan_data`.`leader_id`=`characters`.`charId` LEFT JOIN (SELECT `clanid`, SUM(`level`) AS `csum`, count(`level`) AS `ccount`, AVG(`level`) AS `cavg` FROM `characters` WHERE `clanid` GROUP BY `clanid`) AS `levels` ON `clan_data`.`clan_id`=`levels`.`clanid` LEFT OUTER JOIN `castle` ON `clan_data`.`hasCastle`=`castle`.`id` WHERE !`accessLevel` ORDER BY `clan_level` DESC, `csum` DESC");
-
-	echo '<h1> TOP Clans </h1><hr>';
-    echo '<h2>'.$Lang["clantop_total"].': '.mysql_num_rows($result).'</h2>';
-	echo '<table border=1><thead><tr style="color: green;"><th><b>Clan Name</b></th>
+?>
+<h1> TOP Clans </h1><hr />
+<h2><?php echo $Lang["clantop_total"];?>: <?php echo mysql_num_rows($result);?></h2>
+<table border="1"><thead><tr style="color: green;"><th><b>Clan Name</b></th>
 <th><b>Leader</b></th>
 <th><b>Level</b></th>
 <th><b>Castle</b></th>
 <th><b>Total Level</b></th>
 <th><b>Members</b></th>
 <th><b>Avg. of Levels</b></th>
-</tr></thead>';
-
+</tr></thead>
+<tbody>
+<?php
   $i=1;
   while ($row=mysql_fetch_array($result))
   {
     if($row['hasCastle']!=0){$castle=$row['name'];}else{$castle='No castle';}
-    echo "<tr". (($i++ % 2) ? "" : " class=\"altRow\"") ."><td><a href=\"claninfo.php?clan=". $row["clan_id"]."\">". $row["clan_name"]. "</a></td><td><a href=\"user.php?cid={$row['leader_id']}\">". $row["char_name"]. "</a></td><td class=\"numeric sortedColumn\">".$row["clan_level"]. "</td><td>".$castle. "</td><td class=\"numeric\">".$row["csum"]. "</td><td class=\"numeric\">".$row["ccount"]. "</td><td class=\"numeric\">".$row["cavg"]. "</td></tr>\n";
+    echo "<tr". (($i++ % 2) ? "" : " class=\"altRow\"") ."><td><a href=\"claninfo.php?clan=". $row["clan_id"]."\">". $row["clan_name"]. "</a></td><td><a href=\"user.php?cid={$row['leader_id']}\">". $row["char_name"]. "</a></td><td class=\"numeric sortedColumn\">".$row["clan_level"]. "</td><td>".$castle. "</td><td class=\"numeric\">".$row["csum"]. "</td><td class=\"numeric\">".$row["ccount"]. "</td><td class=\"numeric\">".$row["cavg"]. "</td></tr>";
   }
-  echo "</tbody>\n</table>\n";
+  echo "</tbody></table>";
     break;
 	
 	Case 'gm':
@@ -315,6 +318,7 @@ $gnosis = $row['gnosis_dawn_score']+$row['gnosis_dusk_score'];
 $strife = $row['strife_dawn_score']+$row['strife_dusk_score'];
 ?>
 <script language="javascript" type="text/javascript">
+<!--
 var nthDay = 8;
 var currTime = 'we are at work ...';
 var ssStatus = 1;
@@ -328,6 +332,7 @@ var seal4 = 0;
 var seal5 = 0;
 var seal6 = 0;
 var seal7 = 1;
+// -->
 </script>
 
 <table style="MARGIN-TOP:0px; width:500px;" cellspacing="0" cellpadding="0" border="0" align="center"><tr valign="top"><td style="background: url(img/ss/ssqViewBg.jpg)" height="225">
@@ -336,6 +341,7 @@ var seal7 = 1;
 <tr align="center" style="height: 26px;">
 <td style="BACKGROUND: url(img/ss/ssqViewimg1.gif);">
 <script language="javascript" type="text/javascript">
+<!--
 if (0 == ssStatus) {
 document.write('Start');
 }
@@ -348,6 +354,7 @@ document.write('Result');
 else if (3 == ssStatus) {
 document.write('ss result day ' + nthDay);
 }
+// -->
 </script>
 </td></tr></table>
 <table style="MARGIN: 3px 0px 0px 10px" cellspacing="0" cellpadding="0" width="141" border="0">
@@ -357,6 +364,7 @@ document.write('ss result day ' + nthDay);
 <td valign="bottom" rowspan="2"><img height="125" src="img/ss/timeBox2.jpg" width="45" border="0" alt="" /></td>
 <td>
 <script language="javascript" type="text/javascript">
+<!--
 var timeImage;
 var tempImageNum;
 
@@ -371,6 +379,7 @@ tempImageNum = nthDay + 7;
 }
 timeImage = 'time'+tempImageNum+'.jpg';
 document.write('<img src="img/ss/time/'+ timeImage +'" width="140" height="139" border="0" alt="" />');
+// -->
 </script>
 </td>
 <td valign="bottom" rowspan="2"><img height="125" src="img/ss/timeBox3.jpg" width="66" border="0" alt="" /></td></tr><tr>
@@ -390,22 +399,27 @@ echo gmdate("Y/m/j H:i:s", time() + 3600*($timezone+date("I")));
 <td style="font-size:11px; color:#000;"><img style="MARGIN: 0px 6px 5px 0px" height="1" src="/ssq/ssq_image/dot.gif" width="1" border="0" alt="" />Dawn</td>
 <td style="COLOR: #000;">
 <script language="javascript" type="text/javascript">
+<!--
 var twilPointWidth = maxPointWidth * twilPoint / 100;
 document.write('<img src="img/ss/ssqbar2.gif" width="' + twilPointWidth + '" height="9" border="0" alt="" /> ' + twilPoint);
+// -->
 </script>
 </td></tr><tr><td colspan="2" height="7"></td>
 </tr><tr>
 <td style="font-size:11px; color:#000;"><img style="MARGIN: 0px 6px 5px 0px" height="1" src="/ssq/ssq_image/dot.gif" width="1" border="0" alt="" />Dusk</td>
 <td style="COLOR: #000; font-size:11px;">
 <script language="javascript" type="text/javascript">
+<!--
 var dawnPointWidth = maxPointWidth * dawnPoint / 100;
 document.write('<img src="img/ss/ssqbar1.gif" width="' + dawnPointWidth + '" height="9" border="0" alt="" /> ' + dawnPoint);
+// -->
 </script>
 </td></tr></table>
 <table border="0">
 <tr valign="bottom" align="center" style="height: 95px;">
 <td>
 <script language="javascript" type="text/javascript">
+<!--
 if (3 == ssStatus) {
 if (0 == seal1)
 document.write('<img src="img/ss/Seals/SOA/bongin1close.gif" width="85" height="86" border="0" alt="" />');
@@ -414,9 +428,11 @@ document.write('<img src="img/ss/Seals/SOA/bongin1open.gif" width="85" height="8
 }   else {
 document.write('<img src="img/ss/Seals/SOA/bongin1.gif" width="85" height="86" border="0" alt="" />');
 }
+// -->
 </script>
 </td><td>
 <script language="javascript" type="text/javascript">
+<!--
 if (3 == ssStatus) {
 if (0 == seal2)
 document.write('<img src="img/ss/Seals/SOG/bongin2close.gif" width="85" height="86" border="0" alt="" />');
@@ -425,9 +441,11 @@ document.write('<img src="img/ss/Seals/SOG/bongin2open.gif" width="85" height="8
 }   else {
 document.write('<img src="img/ss/Seals/SOG/bongin2.gif" width="85" height="86" border="0" alt="" />');
 }
+// -->
 </script>
 </td><td>
 <script language="javascript" type="text/javascript">
+<!--
 if (3 == ssStatus) {
 if (0 == seal3)
 document.write('<img src="img/ss/Seals/SOS/bongin3close.gif" width="85" height="86" border="0" alt="" />');
@@ -436,6 +454,7 @@ document.write('<img src="img/ss/Seals/SOS/bongin3open.gif" width="85" height="8
 }   else {
 document.write("<img src='img/ss/Seals/SOS/bongin3.gif' width='85' height='86' border='0' alt='' />");
 }
+// -->
 </script>
 </td></tr>
 <tr>

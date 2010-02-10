@@ -123,11 +123,11 @@ function checkform(f)
   <td><input type="text" name="captcha" maxlength="10" /></td>
  </tr>
  <tr>
-  <tr>
   <td>Referal</td>
   <td><input type="text" name="ref" maxlength="16" value="<?php echo $_GET['ref'];?>" /></td>
  </tr>
-  <td colspan="2" style="text-align: center;"><?php button($Lang['reg']);?></td>
+ <tr>
+  <td colspan="2" style="text-align: center;"><?php button('Reg Me');?></td>
  </tr>
 </table>
 </form>

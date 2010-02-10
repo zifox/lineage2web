@@ -19,7 +19,7 @@ if ($timevoted <= ($now-60*60*12))
     echo "<font color=\"red\">You can vote again after ". date('H:i:s', $timevoted -($now-60*60*12)-60*60*2) ."<br />";
 }?>
     <a href="changepass.php"><?php echo $Lang['changepass'];?></a><br />
-    Your Referal Url: <input type="text" name="refurl" value="http://l2.pvpland.lv/reg.php?ref=<?php echo $_SESSION['account'];?>" readonly="" size="40" onclick="select()" /><br />
+    Your Referal Url: <input type="text" name="refurl" value="http://l2.pvpland.lv/reg.php?ref=<?php echo $_SESSION['account'];?>" size="40" onclick="select()"  readonly="readonly" /><br />
     Every user who registers from your link will add you <?php echo $Config['reg_reward'];?> webpoints<br />
     <h1>Your Chars</h1>
     <?php
@@ -36,11 +36,11 @@ $i=0;
         $i++;
         $onlinetimeH=round(($char['onlinetime']/60/60)-0.5);
 	$onlinetimeM=round(((($char['onlinetime']/60/60)-$onlinetimeH)*60)-0.5);
-        if ($char['online']) {$online='<img src="img/status/online.png" />';} 
-	else {$online='<img src="img/status/offline.png" />';} 
+        if ($char['online']) {$online='<img src="img/status/online.png" alt="" />';} 
+	else {$online='<img src="img/status/offline.png" alt="" />';} 
         if ($char['clan_id']) {$clan_link = "<a href=\"claninfo.php?clan={$char['clan_id']}\">{$char['clan_name']}</a>";}else{$clan_link = "No Clan";}
  ?>
-<tr<?php echo ($i%2==0)?' style="altRow"':'';?> ><td><img src="img/face/<?php echo $char['race'].'_'.$char['sex'];?>.gif" /></td><td><a href="user.php?cid=<?php echo $char['charId'];?>"><font color="<?php echo $color;?>"><?php echo $char['char_name'];?></font></a></td><td><?php echo $char['level'];?></td><td><?php echo $char['ClassName'];?></td><td class="maxCp"><?php echo $char['maxCp'];?></td><td class="maxHp"><?php echo $char['maxHp'];?></td><td class="maxMp"><?php echo $char['maxMp'];?></td><td><?php echo $clan_link;?></td><td><b><?php echo $char['pvpkills'];?><font color="red"><?php echo $char['pkkills'];?></font></b></td><td><?php echo $onlinetimeH.' '.$Lang['hours'].' '.$onlinetimeM.' '.$Lang['min'];?></td><td><?php echo $online;?></td><td><a href="unstuck.php?cid=<?php echo $char['charId'];?>"><?php echo $Lang['unstuck'];?></a></td></tr>
+<tr<?php echo ($i%2==0)?' style="altRow"':'';?> ><td><img src="img/face/<?php echo $char['race'].'_'.$char['sex'];?>.gif" alt="" /></td><td><a href="user.php?cid=<?php echo $char['charId'];?>"><font color="<?php echo $color;?>"><?php echo $char['char_name'];?></font></a></td><td><?php echo $char['level'];?></td><td><?php echo $char['ClassName'];?></td><td class="maxCp"><?php echo $char['maxCp'];?></td><td class="maxHp"><?php echo $char['maxHp'];?></td><td class="maxMp"><?php echo $char['maxMp'];?></td><td><?php echo $clan_link;?></td><td><b><?php echo $char['pvpkills'];?><font color="red"><?php echo $char['pkkills'];?></font></b></td><td><?php echo $onlinetimeH.' '.$Lang['hours'].' '.$onlinetimeM.' '.$Lang['min'];?></td><td><?php echo $online;?></td><td><a href="unstuck.php?cid=<?php echo $char['charId'];?>"><?php echo $Lang['unstuck'];?></a></td></tr>
 <?php
     }
     echo "</table>";
