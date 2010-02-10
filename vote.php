@@ -53,7 +53,9 @@ msg($Lang['thank_you'], $Lang['thank_for_voting']);
 <tr><td>
 <center><script src="http://wos.lv/v.php?11603" type="text/javascript"></script></center></td></tr><tr><td>
 <script language="javasript" src="http://wos.lv/a.php?b=180x250&amp;c=11603" type="text/javascript"></script> 
-</td></tr></table><br />
+</td></tr>
+<tr><td><a href="http://www.lattelecom.lv/pakalpojumi/2516261615/a8269a28.html" target="_top"><img src="http://affiliate.lattelecom.lv/affiliate/accounts/default1/banners/af_optika_468x60_LV_green.gif" alt="Optiskais internets" title="Optiskais internets" width="468" height="60" /></a><img style="border:0" src="http://affiliate.lattelecom.lv/affiliate/scripts/imp.php?a_aid=2516261615&amp;a_bid=a8269a28" width="1" height="1" alt="" /></td></tr>
+</table><br />
 
 <?php
 if(logedin())
@@ -62,27 +64,7 @@ if(logedin())
     ?>
     <div align="center">From now for voting you will receive <?php echo $Config['vote_reward'];?> webpoints</div>
     <?php
-/*
-<table border="1" cellspacing="0" cellpadding="5">
-<tr><td><select id="reward" name="reward">
-<option value="vitality" id="vitality"><?php echo $Lang['vitality_4lvl'];?></option>
-<option value="gold" id="gold"><?php echo $Lang['gold_einhasad'];?></option>
-</select>
-
-<select id="char" name="char">
-<?php
-$query=mysql_query("SELECT `charId`, `char_name` FROM `characters` WHERE `account_name`='{$_SESSION['account']}'");
-while($row=mysql_fetch_assoc($query))
-{
-    echo "<option value=\"{$row['charId']}\">{$row['char_name']}</option>";
-}
-?>
-</select></td></tr>
-<tr><td align="center"><input type="hidden" value="1" name="secrethiddenfromyou" />
-<input name="go" type="submit" disabled="disabled" value="<?php echo $Lang['get_reward'];?>" />
-</td></tr></table>
-*/
-if(!$timevoted >= ($now-60*60*12)){
+if($timevoted < ($now-60*60*12)){
 ?>
 <input name="go" type="submit" disabled="disabled" value="<?php echo $Lang['get_reward'];?>" />
 <?php 
