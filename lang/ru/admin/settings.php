@@ -35,4 +35,6 @@ $Lang['Quest'] = 'Quest Drop / вознаграждение';
 $Lang['enable_news'] = 'Включить Новости (1 - включен, 0 - выключен)';
 $Lang['news'] = 'Новости ( если включить новости = 1)';
 $Lang['session_expire_time'] = 'Сессия Expire Time';
+$Lang['reg_reward']='Регистрация награда';
+$Lang['vote_reward']='Голосование награда';
 ?>

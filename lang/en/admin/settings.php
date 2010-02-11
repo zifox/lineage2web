@@ -35,4 +35,6 @@ $Lang['Quest'] = 'Quest Drop/Reward';
 $Lang['enable_news'] = 'Enable News (1 - enabled, 0 - disabled)';
 $Lang['news'] = 'News(if Enable News = 1)';
 $Lang['session_expire_time'] = 'Session Expire Time';
+$Lang['reg_reward']='Registration Reward';
+$Lang['vote_reward']='Voting Reward';
 ?>

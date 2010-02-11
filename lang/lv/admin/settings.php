@@ -35,4 +35,6 @@ $Lang['Quest'] = 'Quest Drops/Atlīdzība';
 $Lang['enable_news'] = 'Ieslēgt jaunumus (1 - ieslēgts, 0 - izslēgts)';
 $Lang['news'] = 'Jaunumi (Ja ieslēgt jaunumus = 1)';
 $Lang['session_expire_time'] = 'Sesijas derīguma laiks';
+$Lang['reg_reward']='Reģistrācijas Atlīdzība';
+$Lang['vote_reward']='Balsošanas Atlīdzība';
 ?>
