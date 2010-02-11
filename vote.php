@@ -51,8 +51,8 @@ msg($Lang['thank_you'], $Lang['thank_for_voting']);
 <br />
 <table border="1" cellspacing="0" cellpadding="5">
 <tr><td>
-<center><script src="http://wos.lv/v.php?11603" type="text/javascript"></script></center></td></tr><tr><td>
-<script language="javasript" src="http://wos.lv/a.php?b=180x250&amp;c=11603" type="text/javascript"></script> 
+<center><iframe src="http://wos.lv/d.php?11603f" name="wos_b" width="88" height="53" marginwidth="0" marginheight="0" frameborder="0" scrolling="no"></iframe></center></td></tr><tr><td>
+<iframe width="180" scrolling="no" height="250" frameborder="0" marginheight="0" marginwidth="0" name="wos_a" src="http://wos.lv/a.php?b=180x250&amp;c=11603&amp;f=1"></iframe>
 </td></tr>
 <tr><td><a href="http://www.lattelecom.lv/pakalpojumi/2516261615/a8269a28.html" target="_top"><img src="http://affiliate.lattelecom.lv/affiliate/accounts/default1/banners/af_optika_468x60_LV_green.gif" alt="Optiskais internets" title="Optiskais internets" width="468" height="60" /></a><img style="border:0" src="http://affiliate.lattelecom.lv/affiliate/scripts/imp.php?a_aid=2516261615&amp;a_bid=a8269a28" width="1" height="1" alt="" /></td></tr>
 </table><br />
