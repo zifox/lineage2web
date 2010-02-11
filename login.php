@@ -3,14 +3,13 @@
 define('INWEB', True);
 require_once("include/config.php");
 
-if (!logedin())
+if ($_POST)
 {
     if (isset($_POST['account']) && isset($_POST['password'])){
     $account=mysql_real_escape_string($_POST['account']);
     $pass=encodePassword($_POST['password']);
     $login = mysql_fetch_array(mysql_query("SELECT * FROM `accounts` WHERE `login` = '" . $account."' AND `password`='".$pass."'"));
-    unset($account);
-    unset($pass);
+
     if ($login) 
     {
         $_SESSION['account']=$login['login'];
@@ -41,7 +40,9 @@ if (!logedin())
         error('1'); 
     }
 }
+}
     head("Login");
+    if(!logedin()){
 ?>
 <form action="login.php" method="post">
 <table border="1" cellpadding="0">
@@ -53,6 +54,6 @@ if (!logedin())
 </table></form>
 <center><a href="reg.php"><?php echo $Lang['register'];?></a></center>
 <?php
-}else{error('10'); exit();}
+}else{error('10');}
 foot();
 ?>
