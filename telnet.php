@@ -21,8 +21,7 @@ if ($execs == "yes") {
             echo $server_data['Password'];
             die();}
     $fp=@fsockopen($server_data['IP'],$server_data['Port'],$errno,$errstr);
-    //$command="$mycommand $time\r";
-    $command="$mycommand\r";
+    $command="$mycommand*$time\r";
     fputs($fp,$server_data['Password']."\r");
     fputs($fp,$command);
     fputs($fp,"quit\r");

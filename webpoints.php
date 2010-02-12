@@ -23,7 +23,7 @@ if(logedin())
     {
         $char=mysql_real_escape_string($_POST['char']);
         $reward=0+$_POST['reward'];
-        if(!is_numeric($_POST['mulitplier'])){$_POST['multiplier']=1;}
+        if(!is_numeric($_POST['multiplier'])){$_POST['multiplier']=1;}
         if(!is_numeric($_POST['reward'])){$_POST['reward']=1;}
         if(!is_numeric($_POST['char'])){$_POST['char']=1;}
         if($_POST['multiplier']<0){$_POST['multiplier']=abs($_POST['multiplier']);}
@@ -35,7 +35,7 @@ if(logedin())
         {
             msg('Error', 'Not enought webpoints', 'error');
         }else{
-            $_SESSION['webpoints'] -=$multi; 
+            $_SESSION['webpoints'] -= $multi; 
         if($reward==3){
             mysql_query("UPDATE `accounts` SET `webpoints` = `webpoints`-'1' WHERE `login`='{$_SESSION['account']}';");
             mysql_query("UPDATE `characters` SET `vitality_points`='20000' WHERE `charId`='$char'");
