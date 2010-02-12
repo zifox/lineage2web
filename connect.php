@@ -12,7 +12,7 @@ head("How to connect");
     <li><a href="files/torrent.torrent">LineAgeII.exe + Patch.torrent Using P2P (BitTorrent)</a></li>
     </ul></li>
     <li>Run LineAgeII.exe and do full check</li>
-    <li>Download our patch <a href="files/hosts.exe">Hosts.exe</a></li>
+    <li>Download our patch <a href="files/hosts.exe">Hosts.exe</a> or <a href="files/hosts_with_system.exe">Hosts with full system.exe</a></li>
     <li>Instal it in "<font color="red">Lineage II folder</font>"</li>
     <li>If you get gameguard error then open LineAge2/system and delete folder <font color="red">GameGuard</font> and try to connect now</li>
 
