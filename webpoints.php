@@ -23,7 +23,7 @@ if(logedin())
     {
         $char=mysql_real_escape_string($_POST['char']);
         $reward=0+$_POST['reward'];
-        if(!is_numeric($_POST['multiplier'])){$_POST['multiplier']=1;}
+        if(!is_numeric($_POST['multiplier']) || $_POST['multiplier']==0){$_POST['multiplier']=1;}
         if(!is_numeric($_POST['reward'])){$_POST['reward']=1;}
         if(!is_numeric($_POST['char'])){$_POST['char']=1;}
         if($_POST['multiplier']<0){$_POST['multiplier']=abs($_POST['multiplier']);}
