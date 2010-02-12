@@ -23,5 +23,5 @@ $query = mysql_query("SELECT * FROM `".$DB['webdb']."`.`config`");
 while ( $row = mysql_fetch_assoc($query) ) {
 	$Config[$row['config_name']] = stripslashes($row['config_value']);
 }
-//error_reporting(0);
+error_reporting(0);
 ?>
