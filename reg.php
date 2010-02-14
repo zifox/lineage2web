@@ -17,7 +17,7 @@ If($_POST)
     if(ereg("^([a-zA-Z0-9_-])*$", $_POST['account']) && ereg("^([a-zA-Z0-9_-])*$", $_POST['password']) && ereg("^([a-zA-Z0-9_-])*$", $_POST['password2']))
 {
 	if (strlen($_POST['account'])<16 && strlen($_POST['account'])>4 && $_POST['password'] && $_POST['password2'] && $_POST['password']==$_POST['password2'])
-	{	
+	{
 		$check=mysql_query("select * from accounts where login='".mysql_real_escape_string($_POST['account'])."'");
 		if(mysql_num_rows($check))
 		{
@@ -26,7 +26,7 @@ If($_POST)
 		}
 		else
 		{
-	  		mysql_query("INSERT INTO `accounts` (`login`, `password`, `accessLevel`".(isset($_POST['ref']))?' ,refered_by':''.") VALUES ('".mysql_real_escape_string($_POST['account'])."', '".encodePassword($_POST['password'])."', 0".(isset($_POST['ref']))?", '".mysql_real_escape_string($_POST['ref']):""."')");
+	  		mysql_query("INSERT INTO `accounts` (`login`, `password`, `accessLevel`".(isset($_POST['ref']))?' ,`refered_by`':''.") VALUES ('".mysql_real_escape_string($_POST['account'])."', '".encodePassword($_POST['password'])."', '0'".(isset($_POST['ref']))?", '".mysql_real_escape_string($_POST['ref']):""."')");
             
             head('Registration');
 	 		msg('Success', 'Registration successfull<br />You can now log in');
