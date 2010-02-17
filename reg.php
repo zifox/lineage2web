@@ -10,6 +10,13 @@ if(logedin())
 
 If($_POST)
 {
+    $account = mysql_real_escape_string($_POST['account']);
+    $password = mysql_real_escape_string($_POST['password']);
+    $password2 = mysql_real_escape_string($_POST['password2']);
+    if($_POST['ref']!='')
+    {
+        $ref=mysql_real_escape_string($_POST['ref']);
+    }
     if(strtolower($_SESSION['captcha'])!=strtolower($_POST['captcha'])){
         error('11');
         exit();
@@ -26,7 +33,8 @@ If($_POST)
 		}
 		else
 		{
-	  		mysql_query("INSERT INTO `accounts` (`login`, `password`, `accessLevel`".(isset($_POST['ref']))?' ,`refered_by`':''.") VALUES ('".mysql_real_escape_string($_POST['account'])."', '".encodePassword($_POST['password'])."', '0'".(isset($_POST['ref']))?", '".mysql_real_escape_string($_POST['ref']):""."')");
+	  		//mysql_query("INSERT INTO `accounts` (`login`, `password`, `accessLevel` ".(isset($ref))?" ,`refered_by`":"".") VALUES ('$account', '".encodePassword($password)."', '0' ".(isset($ref))?", '$ref'":"".");") OR mysql_error();
+            mysql_query("INSERT INTO `accounts` (`login`, `password`, `accessLevel`) VALUES ('$account', '".encodePassword($password)."', '0');");
             
             head('Registration');
 	 		msg('Success', 'Registration successfull<br />You can now log in');
