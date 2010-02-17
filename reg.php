@@ -22,36 +22,43 @@ If($_POST)
         exit();
     }
     if(ereg("^([a-zA-Z0-9_-])*$", $_POST['account']) && ereg("^([a-zA-Z0-9_-])*$", $_POST['password']) && ereg("^([a-zA-Z0-9_-])*$", $_POST['password2']))
-{
-	if (strlen($_POST['account'])<16 && strlen($_POST['account'])>4 && $_POST['password'] && $_POST['password2'] && $_POST['password']==$_POST['password2'])
-	{
-		$check=mysql_query("select * from accounts where login='".mysql_real_escape_string($_POST['account'])."'");
-		if(mysql_num_rows($check))
-		{
-			error('6');
-            exit();
-		}
-		else
-		{
-	  		//mysql_query("INSERT INTO `accounts` (`login`, `password`, `accessLevel` ".(isset($ref))?" ,`refered_by`":"".") VALUES ('$account', '".encodePassword($password)."', '0' ".(isset($ref))?", '$ref'":"".");") OR mysql_error();
-            mysql_query("INSERT INTO `accounts` (`login`, `password`, `accessLevel`) VALUES ('$account', '".encodePassword($password)."', '0');");
+    {
+	   if (strlen($_POST['account'])<16 && strlen($_POST['account'])>4 && $_POST['password'] && $_POST['password2'] && $_POST['password']==$_POST['password2'])
+	   {
+		  $check=mysql_query("select * from accounts where login='".mysql_real_escape_string($_POST['account'])."'");
+		  if(mysql_num_rows($check))
+		  {
+		      	error('6');
+                exit();
+		  }
+		  else
+		  {
+                if(isset($_POST['ref']))
+                {
+                    $checkref=mysql_query("SELECT `login` FROM `accounts` WHERE `login` = '".mysql_real_escape_string($_POST['ref'])."'");
+                    if(mysql_num_rows($checkref))
+                    {
+                        mysql_query("UPDATE `accounts` SET `webpoints`=`webpoints`+'{$Config['reg_reward']}' WHERE `login`='".mysql_real_escape_string($_POST['ref'])."'");
+                    }
+                }
+	  	    	mysql_query("INSERT INTO `accounts` (`login`, `password`, `accessLevel`, `lastIP`) VALUES ('".mysql_real_escape_string($_POST['account'])."', '".encodePassword($_POST['password'])."', '0', '{$_SERVER['REMOTE_ADDR']}')");
             
-            head('Registration');
-	 		msg('Success', 'Registration successfull<br />You can now log in');
-            foot();
+                head('Registration');
+	 		    msg('Success', 'Registration successfull<br />You can now log in');
+                foot();
+                exit();
+		  }
+	   }
+	   else
+	   {
+  	         error('5');
             exit();
-		}
-	}
-	else
-	{
-  	error('5');
-    exit();
-	}
-}
-else
-{
-	error('4');
-}
+	   }
+    }
+    else
+    {
+    	error('4');
+    }
 }
 head("Registration");
 ?>
