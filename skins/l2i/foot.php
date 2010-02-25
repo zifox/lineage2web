@@ -26,11 +26,15 @@ $timeparts = explode(" ",microtime());
 $endtime = $timeparts[1].substr($timeparts[0],1);
 ?>
 <tr align="center" valign="bottom">
-<td align="center" valign="middle"><table border="0" align="center"><tr align="right"><td align="center"><b>Lineage II</b> is a trademark of NCsoft Corporation. Copyright © <b>NCsoft Corporation</b>. All rights reserved.<br /><?php echo $Config['CopyRight']; ?><br /><?php echo sprintf($Lang['page_generated'], bcsub($endtime,$starttime,6));?></td><td width="10%" align="right">
+<td align="center" valign="middle"><b>Lineage II</b> is a trademark of NCsoft Corporation. Copyright © <b>NCsoft Corporation</b>. All rights reserved.<br /><?php echo $Config['CopyRight']; ?><br /><?php echo sprintf($Lang['page_generated'], bcsub($endtime,$starttime,6));?></td></tr></table>
+
+</td>
+</tr>
+</table>
+<div id="valid">
 <a href="http://validator.w3.org/check?uri=referer" target="_blank">
 <img style="border:0;width:88px;height:31px" src="http://www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" />
 </a><a href="http://jigsaw.w3.org/css-validator/check/referer" target="_blank">
-<img style="border:0;width:88px;height:31px" src="http://jigsaw.w3.org/css-validator/images/vcss-blue" alt="<?php echo $Lang['ValidCSS'];?>!" /></a></td></tr></table>
-</td>
-</tr>
-</table></body></html>
+<img style="border:0;width:88px;height:31px" src="http://jigsaw.w3.org/css-validator/images/vcss-blue" alt="<?php echo $Lang['ValidCSS'];?>!" /></a>
+</div>
+</body></html>

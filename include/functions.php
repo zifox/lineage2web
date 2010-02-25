@@ -27,7 +27,7 @@ function includeBlock($file, $block_name='Menu', $link=false)
 	if($link){global $link;}
 	global $langpath, $skin, $Lang, $Config, $CURUSER;
 	?>
-<table width="200" style="height:95px;" border="0" cellpadding="0" cellspacing="0" class="opacidad2"><tr style="height:48px;">
+<table width="200" style="height:95px;" border="0" cellpadding="0" cellspacing="0" class="opacity2"><tr style="height:48px;">
 <td width="23"><img width="23" height="50" alt="" src="skins/<?php echo $skin;?>/img/h_l_c.gif" /></td>
 <td width="159" style="background-image: url(skins/<?php echo $skin;?>/img/h_c.gif); background-repeat: no-repeat;"><div align="center" class="block_name"><?php echo $block_name;?></div></td>
 <td width="18"><img width="18" height="50" alt="" src="skins/<?php echo $skin;?>/img/h_r_c.gif" /></td></tr>

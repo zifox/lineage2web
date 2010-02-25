@@ -35,10 +35,17 @@ if(logedin())
         {
             msg('Error', 'Not enought webpoints', 'error');
         }else{
+            $checkonline= mysql_query("SELECT `account_name`, `online` FROM `characters` WHERE `charId`='".$char."'");
+            if(mysql_num_rows($checkonline))
+            {
+                $chon=mysql_fetch_assoc($checkonline);
+                if($chon['online']==0 && $chon['account_name']==strtolower($_SESSION['account']))
+                {
             $_SESSION['webpoints'] -= $multi; 
         if($reward==3){
             mysql_query("UPDATE `accounts` SET `webpoints` = `webpoints`-'1' WHERE `login`='{$_SESSION['account']}';");
             mysql_query("UPDATE `characters` SET `vitality_points`='20000' WHERE `charId`='$char'");
+            mysql_query("INSERT INTO `".$DB['webdb']."`.`log` (`Account`, `CharId`, `Type`, `SubType`, `Comments`) VALUES ('{$_SESSION['account']}', '$char', 'WebPointExchange', 'Success', 'WebPoint Count=\"$multi\", Reward=\"Vitality\" ');");
         }else if($reward==2)
         {
             $indb=$multi*4;
@@ -52,6 +59,7 @@ if(logedin())
                 $itemloc=mysql_result($maxloc,0,0)+1;
                  mysql_query("INSERT INTO `items` (`owner_id`,`item_id`,`count`,`loc`,`loc_data`,`time`) VALUES ('$char','4356','$indb','INVENTORY','$itemloc','-1')") OR mysql_error();
             }
+            mysql_query("INSERT INTO `".$DB['webdb']."`.`log` (`Account`, `CharId`, `Type`, `SubType`, `Comments`) VALUES ('{$_SESSION['account']}', '$char', 'WebPointExchange', 'Success', 'WebPoint Count=\"$multi\", Reward=\"Gold Einhasad\" ');");
         }else{
             $indb=$multi*20000000;
             mysql_query("UPDATE `accounts` SET `webpoints` = `webpoints`-'$multi' WHERE `login`='{$_SESSION['account']}';");
@@ -64,8 +72,14 @@ if(logedin())
                 $itemloc=mysql_result($maxloc,0,0)+1;
                  mysql_query("INSERT INTO `items` (`owner_id`,`item_id`,`count`,`loc`,`loc_data`,`time`) VALUES ('$char','57','$indb','INVENTORY','$itemloc','-1')") OR mysql_error();
             }
+            mysql_query("INSERT INTO `".$DB['webdb']."`.`log` (`Account`, `CharId`, `Type`, `SubType`, `Comments`) VALUES ('{$_SESSION['account']}', '$char', 'WebPointExchange', 'Success', 'WebPoint Count=\"$multi\", Reward=\"Adena\" ');");
         }
         echo $Lang['webpoints_exchanged'];
+        }else{
+            mysql_query("INSERT INTO `".$DB['webdb']."`.`log` (`Account`, `CharId`, `Type`, `SubType`, `Comments`) VALUES ('{$_SESSION['account']}', '$char', 'WebPointExchange', 'Error', 'WebPoint Count=\"$multi\", Reason=\"Char is Online or Not owned by this account\" ');");
+            msg('Error', 'Character is online or this is not your character', 'error');
+        }
+        }
         }
     }else{
     ?>

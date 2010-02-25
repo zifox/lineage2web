@@ -41,24 +41,32 @@ margin : 5px;
 font-size : 12px;
 font-family : Arial, Helvetica, sans-serif;
 color : #ffffff;
-background : #191919;
-background-color : #191919;
-background-image : url('skins/l2i/bg/<?php echo $rnd;?>.jpg');
-background-position: top;
-background-repeat : no-repeat;
-cursor : url('cursors/cursor.cur'), auto;
+background : url("skins/l2i/bg/l2_forum_background.jpg") fixed top center no-repeat #191919;
+/*background-image : url('skins/l2i/bg/<?php echo $rnd;?>.jpg');*/
+cursor : url('skins/l2i/cursors/cursor.cur') auto;
+}
+#logoLink {
+margin:35px 0 50px;
+text-align:center;
+}
+#logoLink a {
+display:block;
+height:120px;
+left:-300px;
+margin-left:auto;
+margin-right:auto;
+position:relative;
+width:450px;
 }
 <?php
 if ($head){?>
-.opacidad1 {
--moz-opacity:0.7;
+.opacity1 {
 filter: alpha(opacity=70);
- opacity: 0.7;
+opacity: 0.7;
 } 
-.opacidad2 {
--moz-opacity:0.85;
+.opacity2 {
 filter: alpha(opacity=85);
- opacity: 0.85;
+opacity: 0.85;
 }<?php } ?>
 </style>
 </head>
@@ -70,13 +78,12 @@ if($head){
 <div id="frm"><img width="150" height="150" border="0" longdesc="/" usemap="#Map" alt="Visit forum" style="" src="img/visit_forum.png" />
 <map id="Map" name="Map">
 <area href="./forum" target="_blank" coords="3,119,117,3,77,3,3,77" shape="poly" alt="" />
-<area href="./" coords="145,114,10,116,88,37,146,37" shape="poly" alt="" />
-<area href="./" coords="13,62,43,37,13,37" shape="poly" alt="" />
+
 </map></div>
+<div id="logoLink">
+<a href="" title="Fantasy World Home">
+</a></div>
 <table width="100%" cellpadding="0" cellspacing="0" align="center">
-<tr>
-<td height="200px"></td>
-</tr>
 <tr>
 	<td width="100%" >
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
@@ -90,7 +97,7 @@ includeBlock('vote', $Lang['vote']);
 ?>
         </td>
         <td id="main" width="70%" align="center" valign="top">
-            <table width="99%" cellspacing="0" cellpadding="0" border="0" align="right" id="Tabla_01" class="opacidad2" style="height: 100px;">
+            <table width="99%" cellspacing="0" cellpadding="0" border="0" align="right" class="opacity2" style="height: 100px;">
                 <tbody>
                 <tr>
                     <td width="40"><img width="40" height="53" alt="" src="skins/<?php echo $skin;?>/img/t_h_lc.gif" /></td>

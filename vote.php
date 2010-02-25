@@ -29,10 +29,12 @@ if(!$_SESSION['vote_rnd']<time() && !$_SESSION['vote_rnd']>=time()-60*5){die();}
 $_SESSION['vote_time']=$now;
 $_SESSION['webpoints']+=$Config['vote_reward'];
 mysql_query("UPDATE `accounts` SET `voted`='$now', `webpoints`=`webpoints`+'".$Config['vote_reward']."' WHERE `login` = '{$_SESSION['account']}'");
+mysql_query("INSERT INTO `".$DB['webdb']."`.`log` (`Account`, `Type`, `SubType`, `Comments`) VALUES ('{$_SESSION['account']}', 'Voting', 'Success', 'WebPoint Count=\"{$Config['vote_reward']}\"');");
 msg($Lang['thank_you'], $Lang['thank_for_voting']);
 
 }elseif($action == "vote" && $timevoted >= ($now-60*60*12))
 {
+    mysql_query("INSERT INTO `".$DB['webdb']."`.`log` (`Account`, `Type`, `SubType`, `Comments`) VALUES ('{$_SESSION['account']}', 'Voting', 'Error', 'Link ByPass');");
     error('8');
 }
 }
