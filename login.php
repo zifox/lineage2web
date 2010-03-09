@@ -32,7 +32,6 @@ if ($_POST)
             {
                 $_SESSION['remember']=false;
         }
-        unset($login);
     header('Location:index.php');
     }  
     else 

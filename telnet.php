@@ -8,13 +8,13 @@ head('Telnet');
 $execs = $_POST['execute'];
 $mycommand = $_POST['todo'];
 $time=$_POST['time'];
-$password=mysql_real_escape_string($_POST['telnet_password']);
-$serverid=mysql_real_escape_string($_POST['server']);
+$password=$mysql->escape($_POST['telnet_password']);
+$serverid=$mysql->escape($_POST['server']);
 
 if ($execs == "yes") {
-    $targetserver=mysql_query('SELECT * FROM `'.$DB['webdb'].'`.`telnet` WHERE `Server`=\''.$serverid.'\' ');
-    if(mysql_num_rows($targetserver)){
-        $server_data=mysql_fetch_assoc($targetserver);
+    $targetserver=$mysql->query('SELECT * FROM `'.$DB['webdb'].'`.`telnet` WHERE `Server`=\''.$serverid.'\' ');
+    if($mysql->num_rows2($targetserver)){
+        $server_data=$mysql->fetch_array($targetserver);
         if($password!=$server_data['Password']){
             echo $password;
             echo '<br />';

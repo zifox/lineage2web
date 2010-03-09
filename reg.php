@@ -8,14 +8,15 @@ if(logedin())
     exit();
 }
 
-If($_POST)
+if($_POST)
 {
-    $account = mysql_real_escape_string($_POST['account']);
-    $password = mysql_real_escape_string($_POST['password']);
-    $password2 = mysql_real_escape_string($_POST['password2']);
+    $account = $mysql->escape($_POST['account']);
+    $password = $mysql->escape($_POST['password']);
+    $password2 = $mysql->escape($_POST['password2']);
+    $ip = $_SERVER['REMOTE_ADDR'];
     if($_POST['ref']!='')
     {
-        $ref=mysql_real_escape_string($_POST['ref']);
+        $ref=$mysql->escape($_POST['ref']);
     }
     if(strtolower($_SESSION['captcha'])!=strtolower($_POST['captcha'])){
         error('11');
@@ -25,8 +26,8 @@ If($_POST)
     {
 	   if (strlen($_POST['account'])<16 && strlen($_POST['account'])>4 && $_POST['password'] && $_POST['password2'] && $_POST['password']==$_POST['password2'])
 	   {
-		  $check=mysql_query("select * from accounts where login='".mysql_real_escape_string($_POST['account'])."'");
-		  if(mysql_num_rows($check))
+		  $check=$mysql->query("SELECT `login` FROM `accounts` WHERE `login`='".$account."'");
+		  if($mysql->num_rows2($check))
 		  {
 		      	error('6');
                 exit();
@@ -35,13 +36,13 @@ If($_POST)
 		  {
                 if(isset($_POST['ref']))
                 {
-                    $checkref=mysql_query("SELECT `login` FROM `accounts` WHERE `login` = '".mysql_real_escape_string($_POST['ref'])."'");
-                    if(mysql_num_rows($checkref))
+                    $checkref=$mysql->query("SELECT `login`, `lastIP` FROM `accounts` WHERE `login` = '".$ref."'");
+                    if($mysql->num_rows2($checkref) && $mysql->result($checkref, 0, 'lastIP') != $ip)
                     {
-                        mysql_query("UPDATE `accounts` SET `webpoints`=`webpoints`+'{$Config['reg_reward']}' WHERE `login`='".mysql_real_escape_string($_POST['ref'])."'");
+                        $mysql->query("UPDATE `accounts` SET `webpoints`=`webpoints`+'{$Config['reg_reward']}' WHERE `login`='".$ref."'");
                     }
                 }
-	  	    	mysql_query("INSERT INTO `accounts` (`login`, `password`, `accessLevel`, `lastIP`) VALUES ('".mysql_real_escape_string($_POST['account'])."', '".encodePassword($_POST['password'])."', '0', '{$_SERVER['REMOTE_ADDR']}')");
+	  	    	$mysql->query("INSERT INTO `accounts` (`login`, `password`, `accessLevel`, `lastIP`) VALUES ('".$account."', '".encodePassword($password)."', '0', '{$_SERVER['REMOTE_ADDR']}')");
             
                 head('Registration');
 	 		    msg('Success', 'Registration successfull<br />You can now log in');

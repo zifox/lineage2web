@@ -6,6 +6,5 @@ $Lang['login']              =               'Login';
 $Lang['menu']               =               'Izvēlne';
 $Lang['stats']              =               'Statistika';
 $Lang['top10']              =               'Top 10';
-//$Lang['Language']           =               'Language';
-$Lang['page_generated']     =               'Lapa ielādējās %f sekundēs';
+$Lang['page_generated']     =               'Lapa ielādējās %f sekundēs ar %u vaicājumiem';
 ?>

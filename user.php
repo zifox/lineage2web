@@ -9,10 +9,10 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
     if(is_int(0+$_GET['cid'])){
     $id=0+$_GET['cid'];}else{header('Location: index.php');}
 
-    $sql=mysql_query("SELECT `account_name`, `charId`, `char_name`, `level`, `maxHp`, `maxCp`, `maxMp`, `sex`, `karma`, `fame`, `pvpkills`, `pkkills`, `race`, `characters`.`classid`, `base_class`, `title`, `rec_have`, `accesslevel`, `online`, `onlinetime`, `lastAccess`, `nobless`, `vitality_points`, `ClassName`, `clan_id`, `clan_name` FROM `characters` INNER JOIN `char_templates` ON `characters`.`classid` = `char_templates`.`ClassId` LEFT OUTER JOIN `clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `characters`.`charId` = '$id'");
+    $sql=$mysql->query("SELECT `account_name`, `charId`, `char_name`, `level`, `maxHp`, `maxCp`, `maxMp`, `sex`, `karma`, `fame`, `pvpkills`, `pkkills`, `race`, `characters`.`classid`, `base_class`, `title`, `rec_have`, `accesslevel`, `online`, `onlinetime`, `lastAccess`, `nobless`, `vitality_points`, `ClassName`, `clan_id`, `clan_name` FROM `characters` INNER JOIN `char_templates` ON `characters`.`classid` = `char_templates`.`ClassId` LEFT OUTER JOIN `clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `characters`.`charId` = '$id'");
 
-    if(mysql_num_rows($sql)!= 0){
-    $char=mysql_fetch_assoc($sql);
+    if($mysql->num_rows2($sql)!= 0){
+    $char=$mysql->fetch_array($sql);
     if ($char['sex']==0) { $color='#8080FF'; } else { $color='#FF8080'; }
     echo "<h1 style=\"color: $color; font-weight: bold;\">{$char['char_name']}</h1>";
     ?><table border="0"><tr><td>
@@ -36,13 +36,13 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
     <tr><td><?php echo $online;?>:</td><td><img src="img/status/<?php echo $onoff;?>line.png" title="<?php echo $online;?>" alt="<?php echo $online;?>" /></td></tr></table></td></tr></table>
     <?
 
-$sql2=mysql_query("SELECT `account_name`, `charId`, `char_name`, `level`, `maxHp`, `maxCp`, `maxMp`, `sex`, `karma`, `fame`, `pvpkills`, `pkkills`, `clanid`, `race`, `characters`.`classid`, `base_class`, `title`, `rec_have`, `accesslevel`, `online`, `onlinetime`, `lastAccess`, `nobless`, `vitality_points`, `ClassName`, clan_id, clan_name FROM `characters` LEFT OUTER JOIN `char_templates` ON `characters`.`classid` = `char_templates`.`ClassId` LEFT OUTER JOIN clan_data ON characters.clanid=clan_data.clan_id WHERE `characters`.`charId` != '{$char['charId']}' AND `account_name` = '{$char['account_name']}' ORDER by characters.level ASC");
-if (mysql_num_rows($sql2)){
+$sql2=$mysql->query("SELECT `account_name`, `charId`, `char_name`, `level`, `maxHp`, `maxCp`, `maxMp`, `sex`, `karma`, `fame`, `pvpkills`, `pkkills`, `clanid`, `race`, `characters`.`classid`, `base_class`, `title`, `rec_have`, `accesslevel`, `online`, `onlinetime`, `lastAccess`, `nobless`, `vitality_points`, `ClassName`, clan_id, clan_name FROM `characters` LEFT OUTER JOIN `char_templates` ON `characters`.`classid` = `char_templates`.`ClassId` LEFT OUTER JOIN clan_data ON characters.clanid=clan_data.clan_id WHERE `characters`.`charId` != '{$char['charId']}' AND `account_name` = '{$char['account_name']}' ORDER by characters.level ASC");
+if ($mysql->num_rows2($sql2)){
 	?>
     <br /><br /><h1><?php echo $Lang['otherchars'];?></h1><table border="1">
     <tr><td><?php echo $Lang['face'];?></td><td><center><?php echo $Lang['name'];?></center></td><td><?php echo $Lang['level'];?></td><td><center><?php echo $Lang['class'];?></center></td><td class="maxCp" align="center"><?php echo $Lang['cp'];?></td><td class="maxHp" align="center"><?php echo $Lang['hp'];?></td><td class="maxMp" align="center"><?php echo $Lang['mp'];?></td><td><center><?php echo $Lang['clan'];?></center></td><td><?php echo $Lang['pvp_pk'];?></td><td><center><?php echo $Lang['online_time'];?></center></td><td><?php echo $Lang['status'];?></td></tr>
     <?php
-    while ($otherchar=mysql_fetch_assoc($sql2))
+    while ($otherchar=$mysql->fetch_array($sql2))
     {
 $onlinetimeH=round(($otherchar['onlinetime']/60/60)-0.5);
 	$onlinetimeM=round(((($otherchar['onlinetime']/60/60)-$onlinetimeH)*60)-0.5);

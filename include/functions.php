@@ -1,7 +1,8 @@
 <?php
 //пароль
 if(!defined('INCONFIG')){Header("Location: ../index.php");}
-includeLang('system');
+//includeLang('system');
+
 function includeLang($file)
 {
 	global $langpath, $Lang;
@@ -22,10 +23,9 @@ function includeLang($file)
 	}
 }
 
-function includeBlock($file, $block_name='Menu', $link=false)
+function includeBlock($file, $block_name='Menu')
 {
-	if($link){global $link;}
-	global $langpath, $skin, $Lang, $Config, $CURUSER;
+	global $langpath, $skin, $Lang, $Config, $mysql;
 	?>
 <table width="200" style="height:95px;" border="0" cellpadding="0" cellspacing="0" class="opacity2"><tr style="height:48px;">
 <td width="23"><img width="23" height="50" alt="" src="skins/<?php echo $skin;?>/img/h_l_c.gif" /></td>
@@ -95,7 +95,7 @@ function error($id){
 
 function head($title = "", $head=1)
 {
-    global $skin, $Config, $Lang;
+    global $skin, $Config, $Lang, $mysql;
 DEFINE('INSKIN', True);
 if(isset($_COOKIE['skin']))
 {
@@ -114,7 +114,7 @@ else
 
 function foot($foot=1)
 {
-    global $link, $skin, $Config, $Lang, $starttime;
+    global $mysql, $skin, $Config, $Lang, $starttime;
     if(isset($_COOKIE['skin']))
 {
 $skin = trim($_COOKIE['skin']);
@@ -124,7 +124,7 @@ else
 	$skin = $Config['DSkin'];
 }
     require_once("skins/" . $skin . "/foot.php");
-    mysql_close($link);
+    $mysql->close();
 }
 function button($text='  ')
 {

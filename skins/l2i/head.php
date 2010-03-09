@@ -71,10 +71,13 @@ opacity: 0.85;
 </style>
 </head>
 <body>
-<?php
-if($head){
-?>
-
+<div id="valid">
+<a href="http://validator.w3.org/check?uri=referer" target="_blank">
+<img style="border:0;width:88px;height:31px" src="http://www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" />
+</a><a href="http://jigsaw.w3.org/css-validator/check/referer" target="_blank">
+<img style="border:0;width:88px;height:31px" src="http://jigsaw.w3.org/css-validator/images/vcss-blue" alt="Valid CSS!" /></a>
+<a href="http://games.top.org/lineage-2/" title="Lineage 2 TOP.ORG"><img style="border:none;" src="http://img1.top.org/toporg_12309.gif" alt="Lineage 2 TOP.ORG" /></a>
+</div>
 <div id="frm"><img width="150" height="150" border="0" longdesc="/" usemap="#Map" alt="Visit forum" style="" src="img/visit_forum.png" />
 <map id="Map" name="Map">
 <area href="./forum" target="_blank" coords="3,119,117,3,77,3,3,77" shape="poly" alt="" />
@@ -83,6 +86,11 @@ if($head){
 <div id="logoLink">
 <a href="" title="Fantasy World Home">
 </a></div>
+<?php
+if($head){
+?>
+
+
 <table width="100%" cellpadding="0" cellspacing="0" align="center">
 <tr>
 	<td width="100%" >

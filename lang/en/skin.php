@@ -6,6 +6,5 @@ $Lang['login']              =               'Login';
 $Lang['menu']               =               'Menu';
 $Lang['stats']              =               'Stats';
 $Lang['top10']              =               'Top10';
-$Lang['Language']           =               'Language';
-$Lang['page_generated']     =               'Page generated in %f seconds';
+$Lang['page_generated']     =               'Page generated in %f seconds with %u queries';
 ?>

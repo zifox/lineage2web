@@ -1,9 +1,13 @@
 <hr />
 <div align="center">
 <table border="0"><tr><td><iframe src="http://wos.lv/d.php?11603f" name="wos_b" width="88" height="53" marginwidth="0" marginheight="0" frameborder="0" scrolling="no"></iframe>
-</td><td><a href="http://games.top.org/lineage-2/" title="Lineage 2 Private Servers (Downloads) - TOP.ORG"><img style="border:none;" src="http://img1.top.org/toporg_12309.gif" alt="Lineage 2 Private Servers (Downloads) - TOP.ORG" /></a>
+</td><td>
 <br /><a href="http://la2.mmotop.ru/vote/20088/" target="_blank"><img src="http://la2.mmotop.ru/images/88x31w_la2.png" title="Рейтинг серверов Lineage 2" alt="Рейтинг серверов Lineage 2" border="0" /></a>
-</td></tr></table>
+</td><td><a href="http://www.topgames.lv/?mode=in&amp;id=1044" target="_blank">
+<img src="http://www.topgames.lv/counter/?id=1044" alt="" />
+</a>
+</td></tr>
+</table>
 </div>
 <?php
 if($foot){
@@ -18,23 +22,20 @@ if($foot){
 <td width="15%" align="center" valign="top">
 <?php
 //пароль
-includeBlock('stats', $Lang['stats'], true);
-includeBlock('top10', $Lang['top10'], true);
+includeBlock('stats', $Lang['stats']);
+includeBlock('top10', $Lang['top10']);
 ?>
 </td></tr></table></td></tr><?php }else{ ?><table align="center"><?php } 
 $timeparts = explode(" ",microtime());
 $endtime = $timeparts[1].substr($timeparts[0],1);
 ?>
 <tr align="center" valign="bottom">
-<td align="center" valign="middle"><b>Lineage II</b> is a trademark of NCsoft Corporation. Copyright © <b>NCsoft Corporation</b>. All rights reserved.<br /><?php echo $Config['CopyRight']; ?><br /><?php echo sprintf($Lang['page_generated'], bcsub($endtime,$starttime,6));?></td></tr></table>
-
+<td align="center" valign="middle"><b>Lineage II</b> is a trademark of NCsoft Corporation. Copyright © <b>NCsoft Corporation</b>. All rights reserved.<br /><?php echo $Config['CopyRight']; ?><br /><?php echo sprintf($Lang['page_generated'], bcsub($endtime,$starttime,6), $mysql->mysql_info());?>
 </td>
 </tr>
 </table>
-<div id="valid">
-<a href="http://validator.w3.org/check?uri=referer" target="_blank">
-<img style="border:0;width:88px;height:31px" src="http://www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" />
-</a><a href="http://jigsaw.w3.org/css-validator/check/referer" target="_blank">
-<img style="border:0;width:88px;height:31px" src="http://jigsaw.w3.org/css-validator/images/vcss-blue" alt="<?php echo $Lang['ValidCSS'];?>!" /></a>
-</div>
+<?php
+if ($Config['debug'] || DEBUG_MODE)
+    $mysql->debug();
+?>
 </body></html>

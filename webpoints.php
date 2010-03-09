@@ -21,7 +21,7 @@ if(logedin())
 {
     if($_POST)
     {
-        $char=mysql_real_escape_string($_POST['char']);
+        $char=$mysql->escape($_POST['char']);
         $reward=0+$_POST['reward'];
         if(!is_numeric($_POST['multiplier']) || $_POST['multiplier']==0){$_POST['multiplier']=1;}
         if(!is_numeric($_POST['reward'])){$_POST['reward']=1;}
@@ -30,53 +30,53 @@ if(logedin())
         if($_POST['reward']==3){$_POST['multiplier']=1;}
         $multi=0+$_POST['multiplier'];
         
-        $check = mysql_result(mysql_query("SELECT `webpoints` FROM `accounts` WHERE `login`='{$_SESSION['account']}'"),0,0);
+        $check = $mysql->result($mysql->query("SELECT `webpoints` FROM `accounts` WHERE `login`='{$_SESSION['account']}'"));
         if($check < $_POST['multiplier'])
         {
             msg('Error', 'Not enought webpoints', 'error');
         }else{
-            $checkonline= mysql_query("SELECT `account_name`, `online` FROM `characters` WHERE `charId`='".$char."'");
-            if(mysql_num_rows($checkonline))
+            $checkonline= $mysql->query("SELECT `account_name`, `online` FROM `characters` WHERE `charId`='".$char."'");
+            if($mysql->num_rows2($checkonline))
             {
-                $chon=mysql_fetch_assoc($checkonline);
+                $chon=$mysql->fetch_array($checkonline);
                 if($chon['online']==0 && $chon['account_name']==strtolower($_SESSION['account']))
                 {
             $_SESSION['webpoints'] -= $multi; 
         if($reward==3){
-            mysql_query("UPDATE `accounts` SET `webpoints` = `webpoints`-'1' WHERE `login`='{$_SESSION['account']}';");
-            mysql_query("UPDATE `characters` SET `vitality_points`='20000' WHERE `charId`='$char'");
-            mysql_query("INSERT INTO `".$DB['webdb']."`.`log` (`Account`, `CharId`, `Type`, `SubType`, `Comments`) VALUES ('{$_SESSION['account']}', '$char', 'WebPointExchange', 'Success', 'WebPoint Count=\"$multi\", Reward=\"Vitality\" ');");
+            $mysql->query("UPDATE `accounts` SET `webpoints` = `webpoints`-'1' WHERE `login`='{$_SESSION['account']}';");
+            $mysql->query("UPDATE `characters` SET `vitality_points`='20000' WHERE `charId`='$char'");
+            $mysql->query("INSERT INTO `".$DB['webdb']."`.`log` (`Account`, `CharId`, `Type`, `SubType`, `Comments`) VALUES ('{$_SESSION['account']}', '$char', 'WebPointExchange', 'Success', 'WebPoint Count=\"$multi\", Reward=\"Vitality\" ');");
         }else if($reward==2)
         {
             $indb=$multi*4;
-            mysql_query("UPDATE `accounts` SET `webpoints` = `webpoints`-'$multi' WHERE `login`='{$_SESSION['account']}';");
-            $query=mysql_query("SELECT `object_id` FROM `items` WHERE `owner_id`='$char' AND `item_id` = '4356' AND `loc` = 'INVENTORY'") OR mysql_error();
-            if(mysql_num_rows($query))
+            $mysql->query("UPDATE `accounts` SET `webpoints` = `webpoints`-'$multi' WHERE `login`='{$_SESSION['account']}';");
+            $query=$mysql->query("SELECT `object_id` FROM `items` WHERE `owner_id`='$char' AND `item_id` = '4356' AND `loc` = 'INVENTORY'") OR mysql_error();
+            if($mysql->num_rows2($query))
             {
-                mysql_query("UPDATE `items` SET `count` = `count` + '$indb' WHERE `owner_id`='$char' AND `item_id` = '4356' AND `loc` = 'INVENTORY'");
+                $mysql->query("UPDATE `items` SET `count` = `count` + '$indb' WHERE `owner_id`='$char' AND `item_id` = '4356' AND `loc` = 'INVENTORY'");
             }else{
-                $maxloc=mysql_query("SELECT Max(`loc_data`) FROM `items` WHERE `items`.`owner_id` = '$char' AND `items`.`loc` = 'INVENTORY'") OR mysql_error();
-                $itemloc=mysql_result($maxloc,0,0)+1;
-                 mysql_query("INSERT INTO `items` (`owner_id`,`item_id`,`count`,`loc`,`loc_data`,`time`) VALUES ('$char','4356','$indb','INVENTORY','$itemloc','-1')") OR mysql_error();
+                $maxloc=$mysql->query("SELECT Max(`loc_data`) FROM `items` WHERE `items`.`owner_id` = '$char' AND `items`.`loc` = 'INVENTORY'") OR mysql_error();
+                $itemloc=$mysql->result($maxloc)+1;
+                 $mysql->query("INSERT INTO `items` (`owner_id`,`item_id`,`count`,`loc`,`loc_data`,`time`) VALUES ('$char','4356','$indb','INVENTORY','$itemloc','-1')") OR mysql_error();
             }
-            mysql_query("INSERT INTO `".$DB['webdb']."`.`log` (`Account`, `CharId`, `Type`, `SubType`, `Comments`) VALUES ('{$_SESSION['account']}', '$char', 'WebPointExchange', 'Success', 'WebPoint Count=\"$multi\", Reward=\"Gold Einhasad\" ');");
+            $mysql->query("INSERT INTO `".$DB['webdb']."`.`log` (`Account`, `CharId`, `Type`, `SubType`, `Comments`) VALUES ('{$_SESSION['account']}', '$char', 'WebPointExchange', 'Success', 'WebPoint Count=\"$multi\", Reward=\"Gold Einhasad\" ');");
         }else{
             $indb=$multi*20000000;
-            mysql_query("UPDATE `accounts` SET `webpoints` = `webpoints`-'$multi' WHERE `login`='{$_SESSION['account']}';");
-            $query=mysql_query("SELECT `object_id` FROM `items` WHERE `owner_id`='$char' AND `item_id` = '57' AND `loc` = 'INVENTORY'") OR mysql_error();
-            if(mysql_num_rows($query))
+            $mysql->query("UPDATE `accounts` SET `webpoints` = `webpoints`-'$multi' WHERE `login`='{$_SESSION['account']}';");
+            $query=$mysql->query("SELECT `object_id` FROM `items` WHERE `owner_id`='$char' AND `item_id` = '57' AND `loc` = 'INVENTORY'") OR mysql_error();
+            if($mysql->num_rows2($query))
             {
-                mysql_query("UPDATE `items` SET `count` = `count` + '$indb' WHERE `owner_id`='$char' AND `item_id` = '57' AND `loc` = 'INVENTORY'");
+                $mysql->query("UPDATE `items` SET `count` = `count` + '$indb' WHERE `owner_id`='$char' AND `item_id` = '57' AND `loc` = 'INVENTORY'");
             }else{
-                $maxloc=mysql_query("SELECT Max(`loc_data`) FROM `items` WHERE `items`.`owner_id` = '$char' AND `items`.`loc` = 'INVENTORY'") OR mysql_error();
-                $itemloc=mysql_result($maxloc,0,0)+1;
-                 mysql_query("INSERT INTO `items` (`owner_id`,`item_id`,`count`,`loc`,`loc_data`,`time`) VALUES ('$char','57','$indb','INVENTORY','$itemloc','-1')") OR mysql_error();
+                $maxloc=$mysql->query("SELECT Max(`loc_data`) FROM `items` WHERE `items`.`owner_id` = '$char' AND `items`.`loc` = 'INVENTORY'") OR mysql_error();
+                $itemloc=$mysql->result($maxloc)+1;
+                 $mysql->query("INSERT INTO `items` (`owner_id`,`item_id`,`count`,`loc`,`loc_data`,`time`) VALUES ('$char','57','$indb','INVENTORY','$itemloc','-1')") OR mysql_error();
             }
-            mysql_query("INSERT INTO `".$DB['webdb']."`.`log` (`Account`, `CharId`, `Type`, `SubType`, `Comments`) VALUES ('{$_SESSION['account']}', '$char', 'WebPointExchange', 'Success', 'WebPoint Count=\"$multi\", Reward=\"Adena\" ');");
+            $mysql->query("INSERT INTO `".$DB['webdb']."`.`log` (`Account`, `CharId`, `Type`, `SubType`, `Comments`) VALUES ('{$_SESSION['account']}', '$char', 'WebPointExchange', 'Success', 'WebPoint Count=\"$multi\", Reward=\"Adena\" ');");
         }
         echo $Lang['webpoints_exchanged'];
         }else{
-            mysql_query("INSERT INTO `".$DB['webdb']."`.`log` (`Account`, `CharId`, `Type`, `SubType`, `Comments`) VALUES ('{$_SESSION['account']}', '$char', 'WebPointExchange', 'Error', 'WebPoint Count=\"$multi\", Reason=\"Char is Online or Not owned by this account\" ');");
+            $mysql->query("INSERT INTO `".$DB['webdb']."`.`log` (`Account`, `CharId`, `Type`, `SubType`, `Comments`) VALUES ('{$_SESSION['account']}', '$char', 'WebPointExchange', 'Error', 'WebPoint Count=\"$multi\", Reason=\"Char is Online or Not owned by this account\" ');");
             msg('Error', 'Character is online or this is not your character', 'error');
         }
         }
@@ -90,8 +90,8 @@ if(logedin())
     <tbody>
     <tr><td><select id="char" name="char">
     <?php
-$query=mysql_query("SELECT `charId`, `char_name` FROM `characters` WHERE `account_name`='{$_SESSION['account']}'");
-while($row=mysql_fetch_assoc($query))
+$query=$mysql->query("SELECT `charId`, `char_name` FROM `characters` WHERE `account_name`='{$_SESSION['account']}'");
+while($row=$mysql->fetch_array($query))
 {
     echo "<option value=\"{$row['charId']}\">{$row['char_name']}</option>";
 }
