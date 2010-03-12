@@ -49,6 +49,8 @@ msg($Lang['thank_you'], $Lang['thank_for_voting']);
 
 <tr><td><img src="http://la2.mmotop.ru/images/88x31w_la2.png" title="Рейтинг серверов Lineage 2" alt="Рейтинг серверов Lineage 2" border="0" /></td><td><input type="button" onclick="four()" disabled="disabled" value="mmotop.ru" /></td></tr>
 
+<tr><td><img src="http://top-games100.com/images/baners/2ban80x30.gif" width="80" height="30"  border="0" alt="" /></td><td><input type="button" onclick="five()" disabled="disabled" value="top-games100.com" /></td></tr>
+
 <tr><td><img src="http://www.topgames.lv/counter/?id=1044" alt="" /></td><td><input type="button" onclick="finish()" disabled="disabled" value="TopGames.LV" /></td></tr>
 </table>
 <br />

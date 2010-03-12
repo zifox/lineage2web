@@ -1,17 +1,22 @@
 <?php
 //пароль
-class MySQL {
+if (!defined('INCONFIG')) {
+    Header("Location: ../index.php");
+    die();
+}
+class MySQL{
     var $DBInfo;
     var $link = 0;
     var $query = array();
     var $querycount = 0;
+    var $totalsqltime = 0;
 
     function MySQL($DBInfo){
 	   $this->DBInfo = $DBInfo;
     }
-
+    
     function connect() {
-	   $this->link=@mysql_connect($this->DBInfo['host'],$this->DBInfo['user'],$this->DBInfo['pass']);
+	   $this->link=@mysql_connect($this->DBInfo['host'],$this->DBInfo['user'],$this->DBInfo['password']);
 
         if (!$this->link)
             $this->err("Could not connect to server: <b>{$this->DBInfo['host']}</b>.");
@@ -34,36 +39,36 @@ class MySQL {
 
     function query($sql) {
         $sql = trim($sql);
-        
+
         $querytime = explode(" ", microtime());
         $querystart = $querytime[1] . substr($querytime[0], 1);
-        
+
         $result = @mysql_query($sql, $this->link) OR $this->err("<b>MySQL Query error:</b> $sql");
-        
+
         $querytime = explode(" ",microtime());
         $queryend = $querytime[1].substr($querytime[0],1);
-        
+        $time = bcsub($queryend,$querystart,6);
+        $this->totalsqltime+=$time;
         array_push($this->query, array(
             "query" => $sql,
             "result" => $result,
             "rows" => ((strncasecmp('select', $sql, 6)===0) ? @mysql_num_rows($result) : mysql_affected_rows($this->link)),
-            "time" => bcsub($queryend,$querystart,6)
+            "time" => $time
         ));
-        
+
         $this->querycount++;
         end($this->query);
         return key($this->query);
     }
-    
+
     function result($res = null, $row=0, $field=0 ){
         if ($res === null) {
             end($this->query);
             $res = key($this->query);
-            //print_r($res);
         }
         return @mysql_result($this->query[$res]['result'], $row, $field);
     }
-    
+
     function num_rows($res = null) {
         if ($res === null) {
             end($this->query);
@@ -71,16 +76,15 @@ class MySQL {
         }
         return @mysql_num_rows($this->query[$res]['result']);
     }
-    
+
     function num_rows2($res = null) {
         if ($res === null) {
             end($this->query);
             $res = key($this->query);
-            //return $res;
         }
         return $this->query[$res]['rows'];
     }
-    
+
 	function fetch_array($res = null) {
 		if ($res === null) {
 			end($this->query);
@@ -107,30 +111,35 @@ class MySQL {
 		<?php if(strlen(@$_SERVER['HTTP_REFERER'])>0) echo '<tr><td align="right">Referer:</td><td><a href="'.@$_SERVER['HTTP_REFERER'].'">'.@$_SERVER['HTTP_REFERER'].'</a></td></tr>'; ?>
 		</table>
         <?php
+        $this->close();
         die();
     }
 
-    function mysql_info() {
+    function query_count() {
         return $this->querycount;
     }
-    
-    function debug()
-    {
-        if(DEBUG_MODE)
-        {
-            //print_r($this->query);
-            ?>
-            <table border="0">
-            <?php
-            foreach ($this->query as $key => $value) {
-                ?>
-                <tr onmouseover="this.bgColor = '#505050';" onmouseout="this.bgColor = ''"><td width="20%">[<?php echo $key+1;?>]&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $value["time"] > 0.01 ? "<font color=\"red\" title=\"Query needs optimization. Execution time is unacceptable\">".$value["time"]."</font>" : "<font color=\"green\" title=\"Query doesn't need optimization. Execution time is acceptable\">".$value["time"]."</font>";?></b></td><td>[<?php echo $value['query'];?>]</td></tr>
-                <?php
+
+    function query_time() {
+        return $this->totalsqltime;
+    }
+
+    function debug() {
+        ?>
+        <table border="0">
+        <?php
+        foreach ($this->query as $key => $value) { 
+            if ($value['time'] <= 0.01) {
+                $report = '<font color="green" title="Query doesn\'t need optimization. Execution time is acceptable">';
+            } elseif ($value["time"] > 0.01 && $value["time"] < 0.1) {
+                $report = '<font color="orange" title="Perhaps this Query can execute faster. Execution time is normal but you should check it anyway">';
+            } else {
+                $report = '<font color="red" title="Query needs optimization. Execution time is unacceptable">';
             }
             ?>
-            </table>
-            <?php
-        }
+            <tr onmouseover="this.bgColor = '#505050';" onmouseout="this.bgColor = ''"><td width="20%">[<?php echo $key+1;?>]&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $report.$value['time'].'</font>';?></b></td><td>[<?php echo $value['query'];?>] Rows: <?php echo $value['rows'];?></td></tr>
+<?php   } ?>
+        </table>
+<?php
     }
 }
 ?>

@@ -6,6 +6,12 @@ header("Expires: -1");
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
+<?php
+if($url!=''){
+    ?>
+    <meta http-equiv="refresh" content="<?php echo $time;?>; URL=<?php echo $url;?>" />
+    <?php
+} ?>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="description" content="<?php echo $Config['MetaD']; ?>" />
 <meta name="keywords" content="<?php echo $Config['MetaK']; ?>" />
@@ -32,7 +38,6 @@ pageTracker._trackPageview();
 
 <?php
 //пароль
-$rnd = rand(1,10);
 includeLang('skin');
 ?>
 <style type="text/css">
@@ -42,7 +47,6 @@ font-size : 12px;
 font-family : Arial, Helvetica, sans-serif;
 color : #ffffff;
 background : url("skins/l2i/bg/l2_forum_background.jpg") fixed top center no-repeat #191919;
-/*background-image : url('skins/l2i/bg/<?php echo $rnd;?>.jpg');*/
 cursor : url('skins/l2i/cursors/cursor.cur') auto;
 }
 #logoLink {
@@ -90,14 +94,12 @@ opacity: 0.85;
 if($head){
 ?>
 
-
 <table width="100%" cellpadding="0" cellspacing="0" align="center">
 <tr>
 	<td width="100%" >
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
     <tr>
         <td width="15%" valign="top" align="center">
-        
 <?php
 includeBlock('login', $Lang['login']);
 includeBlock('menu', $Lang['menu']);
@@ -123,10 +125,7 @@ includeBlock('vote', $Lang['vote']);
                     <td style="background-image: url(skins/<?php echo $skin;?>/img/t_h_l_b.gif);">&nbsp;</td>
                     <td bgcolor="#37301d" colspan="5" align="center">
 <?php
-if($Config['enable_news'])
-{
-    echo "<h1>{$Config['news']}</h1>";
-}
+echo "<h1>{$Config['news']}</h1>";
 ?>
 <hr />
 <?php

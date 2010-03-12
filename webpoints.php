@@ -17,7 +17,7 @@ function check(){
 }
 </script>
 <?php
-if(logedin())
+if($user->logged())
 {
     if($_POST)
     {
@@ -106,6 +106,8 @@ while($row=$mysql->fetch_array($query))
     </div>
     <?php
     }
-}else msg($Lang['error'], $Lang['need_to_login'], 'error');
+}else {
+    msg($Lang['error'], $Lang['need_to_login'], 'error');
+}
 foot();
 ?>

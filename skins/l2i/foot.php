@@ -30,12 +30,19 @@ $timeparts = explode(" ",microtime());
 $endtime = $timeparts[1].substr($timeparts[0],1);
 ?>
 <tr align="center" valign="bottom">
-<td align="center" valign="middle"><b>Lineage II</b> is a trademark of NCsoft Corporation. Copyright © <b>NCsoft Corporation</b>. All rights reserved.<br /><?php echo $Config['CopyRight']; ?><br /><?php echo sprintf($Lang['page_generated'], bcsub($endtime,$starttime,6), $mysql->mysql_info());?>
+<td align="center" valign="middle"><b>Lineage II</b> is a trademark of NCsoft Corporation. Copyright © <b>NCsoft Corporation</b>. All rights reserved.<br /><?php echo $Config['CopyRight']; ?><br /><?php echo sprintf($Lang['page_generated'], bcsub($endtime,$starttime,6), $mysql->query_time(), $mysql->query_count());?>
 </td>
 </tr>
-</table>
+</table><br />
 <?php
-if ($Config['debug'] || DEBUG_MODE)
+if ($Config['sql_debug'])
+{
     $mysql->debug();
+}
+if ($Config['user_debug'])
+{
+    $user->debug();
+}
 ?>
+<br />
 </body></html>

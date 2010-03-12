@@ -50,36 +50,6 @@ require_once('blocks/'.$file.'.php');
 <?php
 }
 
-function encodePassword($password)
-{
-	return base64_encode(pack('H*', sha1(mysql_real_escape_string($password))));
-}
-
-function logedin()
-{
-    global $Config;
-    if(isset($_SESSION['account']) && $_SESSION['IP']==$_SERVER['REMOTE_ADDR'])
-    {
-        if(!$_SESSION['remember'] && $_SESSION['last_act']<(time()-$Config['session_expire_time'])){
-            //session_unset();
-            return false;
-        }else{
-            return true;
-        }
-    }else{
-        //session_unset();
-        return false;
-    }
-}
-
-function is_admin(){
-    if($_SESSION['admin']==true){
-        return true;
-    }else{
-        return false;
-    }
-}
-
 function msg($heading = '', $text = '', $div = 'success', $return=false) {
      if($return)
     {
@@ -93,28 +63,19 @@ function error($id){
     header('Location: error.php?error='.$id);
 }
 
-function head($title = "", $head=1)
+function head($title = "", $head=1, $url='', $time=0)
 {
     global $skin, $Config, $Lang, $mysql;
-DEFINE('INSKIN', True);
-if(isset($_COOKIE['skin']))
-{
-$skin = trim($_COOKIE['skin']);
-}
-else
-{
+    DEFINE('INSKIN', True);
 	$skin = $Config['DSkin'];
-}
-		if ($title == "")
-			$title = $Config['Title'];
-		else
-			$title = $Config['Title']." :: ".$title;
+
+    $title = $Config['Title']." :: ".$title;
 	require_once("skins/" . $skin . "/head.php");
 }
 
 function foot($foot=1)
 {
-    global $mysql, $skin, $Config, $Lang, $starttime;
+    global $mysql, $skin, $Config, $Lang, $starttime, $user;
     if(isset($_COOKIE['skin']))
 {
 $skin = trim($_COOKIE['skin']);

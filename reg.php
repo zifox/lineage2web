@@ -2,14 +2,23 @@
 //пароль
 define('INWEB', True);
 require_once("include/config.php");
-if(logedin())
+//head('Registration');
+if($user->logged())
 {
-    error('9');
+    head('Registration', 1, 'index.php', 5);
+    msg('Error', 'You already have account', 'error');
+    foot();
     exit();
 }
 
 if($_POST)
 {
+    if(strtolower($_SESSION['captcha'])!=strtolower($_POST['captcha'])){
+        head('Registration', 1, 'index.php', 5);
+        msg('Error', 'Verification code incorrect', 'error');
+        foot();
+        exit();
+    }
     $account = $mysql->escape($_POST['account']);
     $password = $mysql->escape($_POST['password']);
     $password2 = $mysql->escape($_POST['password2']);
@@ -18,34 +27,32 @@ if($_POST)
     {
         $ref=$mysql->escape($_POST['ref']);
     }
-    if(strtolower($_SESSION['captcha'])!=strtolower($_POST['captcha'])){
-        error('11');
-        exit();
-    }
+
     if(ereg("^([a-zA-Z0-9_-])*$", $_POST['account']) && ereg("^([a-zA-Z0-9_-])*$", $_POST['password']) && ereg("^([a-zA-Z0-9_-])*$", $_POST['password2']))
     {
+        
+        
 	   if (strlen($_POST['account'])<16 && strlen($_POST['account'])>4 && $_POST['password'] && $_POST['password2'] && $_POST['password']==$_POST['password2'])
 	   {
 		  $check=$mysql->query("SELECT `login` FROM `accounts` WHERE `login`='".$account."'");
 		  if($mysql->num_rows2($check))
 		  {
-		      	error('6');
+                head('Registration', 1, 'index.php', 5);
+                msg('Error', 'Account already exists', 'error');
+                foot();
                 exit();
 		  }
 		  else
 		  {
-                if(isset($_POST['ref']))
+                head('Registration',1, 'index.php',5);
+                if($user->reguser($account, $password, $ref))
                 {
-                    $checkref=$mysql->query("SELECT `login`, `lastIP` FROM `accounts` WHERE `login` = '".$ref."'");
-                    if($mysql->num_rows2($checkref) && $mysql->result($checkref, 0, 'lastIP') != $ip)
-                    {
-                        $mysql->query("UPDATE `accounts` SET `webpoints`=`webpoints`+'{$Config['reg_reward']}' WHERE `login`='".$ref."'");
-                    }
+                    msg('Success', 'Registration successfull<br />You have been logged in');
                 }
-	  	    	$mysql->query("INSERT INTO `accounts` (`login`, `password`, `accessLevel`, `lastIP`) VALUES ('".$account."', '".encodePassword($password)."', '0', '{$_SERVER['REMOTE_ADDR']}')");
-            
-                head('Registration');
-	 		    msg('Success', 'Registration successfull<br />You can now log in');
+                else
+                {
+                    msg('Success', 'Registration successfull<br />There was a problem with autologin');
+                }
                 foot();
                 exit();
 		  }
