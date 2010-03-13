@@ -151,7 +151,7 @@ class user {
         global $mysql, $Config;
         
         $acc = $mysql->escape($acc);
-        $pass = $mysql->escape($pass);
+        $pass = $this->encpass($mysql->escape($pass));
         $ref = $mysql->escape($ref);
         $ip = $mysql->escape($_SERVER['REMOTE_ADDR']);
         if($ref != '')
