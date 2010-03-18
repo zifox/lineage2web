@@ -1,38 +1,18 @@
 <?php
 //пароль
 if ($_SESSION['logged']){
-    ?>
-    <table border="0" cellpadding="0">
-    <tr><td><?php echo sprintf($Lang['welcome'], $_SESSION['account']);?></td></tr>
-    <?php if($_SESSION['admin']){ ?>
-        <tr><td><center><a href="admin.php"><font color="red"><?php echo $Lang['admin'];?></font></a></center></td></tr>
-        <tr><td><center><a href="contact.php?action=read"><font color="red"><?php echo $Lang['contact'];?></font></a></center></td></tr>
-    <?php }
-    $time=$_SESSION['vote_time']+60*60*12;
-    ?><tr><td align="center"><font color="red"><?php
-    if($time > time()){
-        echo $Lang['vote_after'].'<br />';
-    }
-    ?>
-    <script language="JavaScript" type="text/javascript">
-    <!--
-    TimeFormat = "%%H%% <?php echo $Lang['hours'];?>, %%M%% <?php echo $Lang['minutes'];?>, %%S%% <?php echo $Lang['seconds'];?>.";
-    endmsg = "<a href=vote.php><?php echo $Lang['vote'];?></a>";
-    secs = "<?php echo $time;?>";
-    var date = new Date();
-    var time = date.getTime()/1000;
-    secs = Math.floor(secs - time);
-    //-->
-    </script>
-    <script type="text/javascript" src="scripts/clock.js"></script>
-    <span id="vote">&nbsp;</span><script type="text/javascript">Clock(secs.valueOf());</script>
-    </font></td></tr>
-    <tr><td><center><a href="myacc.php"><?php echo $Lang['my_account'];?></a></center></td></tr>
-    <tr><td><center><a href="contact.php"><?php echo $Lang['write_message'];?></a></center></td></tr>
-    <tr><td><center><?php echo sprintf($Lang['webpoints'], $_SESSION['webpoints']);?></center></td></tr>
-    <tr><td><center><a href="logout.php"><?php echo $Lang['logout'];?></a></center></td></tr>
-    </table>
-    <?php
+	$parse = $Lang;
+	$parse['welcome_user']=sprintf($Lang['welcome'], $_SESSION['account']);
+	if($_SESSION['admin']){
+		$parse['admin_link'] = "<tr><td><center><a href=\"admin.php\"><font color=\"red\">{$Lang['admin']}</font></a></center></td></tr>";
+		$parse['admin_link2'] = "<tr><td><center><a href=\"contact.php?action=read\"><font color=\"red\">{$Lang['contact']}</font></a></center></td></tr>";
+	}
+	$parse['time'] = $_SESSION['vote_time']+60*60*12;
+ 	if($time > time()){
+		$parse['vote_after'] = $Lang['vote_after'].'<br />';
+	}
+	$parse['wp_link'] = sprintf($Lang['webpoints'], $_SESSION['webpoints']);
+	$tpl->parsetemplate('blocks/login_logged', $parse);
 }
 else{
     ?>
