@@ -37,9 +37,4 @@ $Lang['news'] = 'Jaunumi (Ja ieslēgt jaunumus = 1)';
 $Lang['session_expire_time'] = 'Sesijas derīguma laiks';
 $Lang['reg_reward']='Reģistrācijas Atlīdzība';
 $Lang['vote_reward']='Balsošanas Atlīdzība';
-$Lang['debug'] = 'Atkļūdošana';
-$Lang['show_ls'] = 'Rādīt Login Servera Statusu';
-$Lang['show_cs'] = 'Rādīt Community Servera Statusu';
-$Lang['show_gs'] = 'Rādīt Game Servera Statusu';
-$Lang['use_cracktracker'] = 'Lietot Crack Tracker';
 ?>

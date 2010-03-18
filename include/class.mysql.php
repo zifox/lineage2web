@@ -5,49 +5,55 @@ if (!defined('INCONFIG')) {
     die();
 }
 class MySQL{
-    var $DBInfo;
-    var $link = 0;
-    var $query = array();
-    var $querycount = 0;
-    var $totalsqltime = 0;
+    private $DBInfo;
+    private $link = NULL;
+    private $query = array();
+    public $querycount = 0;
+    public $totalsqltime = 0;
 
-    function MySQL($DBInfo){
-	   $this->DBInfo = $DBInfo;
-    }
-    function __destruct()
-    {
-    	
+    function __construct($DBInfo){
+        $this->DBInfo = $DBInfo;
+        unset($DBInfo);
+        $this->connect();
     }
     
-    function connect() {
-	   $this->link=@mysql_connect($this->DBInfo['host'],$this->DBInfo['user'],$this->DBInfo['password']);
-
+    function __destruct()
+    {
+        $this->close();
+        //msg('MySQL', 'MySQL Destruction Success');
+    }
+    function __wakeup()
+    {
+        $this->connect();
+    }
+    protected function connect() {
+        $this->link=@mysql_connect($this->DBInfo['host'],$this->DBInfo['user'],$this->DBInfo['password']);
         if (!$this->link)
             $this->err("Could not connect to server: <b>{$this->DBInfo['host']}</b>.");
 
         if(!@mysql_select_db($this->DBInfo['database'], $this->link))
             $this->err("Could not open database: <b>{$this->DBInfo['database']}</b>.");
-            
         unset($this->DBInfo);
     }
 
-    function close() {
+
+    public function close() {
         if(!@mysql_close($this->link))
             $this->err("Could not close MySQL.");
     }
 
-    function escape($string) {
+    public function escape($string) {
         if(get_magic_quotes_runtime()) $string = stripslashes($string);
         return @mysql_real_escape_string($string, $this->link);
     }
 
-    function query($sql) {
+    public function query($sql) {
         $sql = trim($sql);
 
         $querytime = explode(" ", microtime());
         $querystart = $querytime[1] . substr($querytime[0], 1);
 
-        $result = @mysql_query($sql, $this->link) OR $this->err("<b>MySQL Query error:</b> $sql");
+        $result = mysql_query($sql, $this->link) OR $this->err("<b>MySQL Query error: </b> $sql");
 
         $querytime = explode(" ",microtime());
         $queryend = $querytime[1].substr($querytime[0],1);
@@ -65,7 +71,7 @@ class MySQL{
         return key($this->query);
     }
 
-    function result($res = null, $row=0, $field=0 ){
+    public function result($res = null, $row=0, $field=0 ){
         if ($res === null) {
             end($this->query);
             $res = key($this->query);
@@ -73,7 +79,7 @@ class MySQL{
         return @mysql_result($this->query[$res]['result'], $row, $field);
     }
 
-    function num_rows($res = null) {
+    public function num_rows($res = null) {
         if ($res === null) {
             end($this->query);
             $res = key($this->query);
@@ -81,7 +87,7 @@ class MySQL{
         return @mysql_num_rows($this->query[$res]['result']);
     }
 
-    function num_rows2($res = null) {
+    public function num_rows2($res = null) {
         if ($res === null) {
             end($this->query);
             $res = key($this->query);
@@ -89,7 +95,7 @@ class MySQL{
         return $this->query[$res]['rows'];
     }
 
-	function fetch_array($res = null) {
+	public function fetch_array($res = null) {
 		if ($res === null) {
 			end($this->query);
 			$res = key($this->query);
@@ -97,7 +103,7 @@ class MySQL{
 		return @mysql_fetch_assoc($this->query[$res]['result']);
 	}
 
-    function err($msg='') {
+    protected function err($msg='') {
         if($this->link>0){
             $error=mysql_error($this->link);
             $errno=mysql_errno($this->link);
@@ -115,19 +121,11 @@ class MySQL{
 		<?php if(strlen(@$_SERVER['HTTP_REFERER'])>0) echo '<tr><td align="right">Referer:</td><td><a href="'.@$_SERVER['HTTP_REFERER'].'">'.@$_SERVER['HTTP_REFERER'].'</a></td></tr>'; ?>
 		</table>
         <?php
-        $this->close();
-        die();
+        //$this->close();
+        //die();
     }
 
-    function query_count() {
-        return $this->querycount;
-    }
-
-    function query_time() {
-        return $this->totalsqltime;
-    }
-
-    function debug() {
+    public function debug() {
         ?>
         <table border="0">
         <?php

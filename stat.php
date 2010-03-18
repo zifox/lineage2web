@@ -4,34 +4,15 @@ require_once("include/config.php");
 //пароль
 head("{$Lang['statistic']}");
 includeLang('stat');
-?>
-
-<div align="center">
-<h4><?php echo $Lang['server_stat'];?></h4><hr />
- | <a href="stat.php"><?php echo $Lang['home'];?></a>
- | <a href="stat.php?stat=online"><?php echo $Lang['online'];?></a> 
- | <a href="onlinemap.php" target="_blank"><?php echo $Lang['map'];?></a> 
- | <a href="castlesmap.php" target="_blank"><?php echo $Lang['castles_map'];?></a> 
- | <a href="stat.php?stat=castles"><?php echo $Lang['castles'];?></a>
- | <a href="stat.php?stat=fort"><?php echo $Lang['fort'];?></a> 
- | <a href="stat.php?stat=clantop"><?php echo $Lang['top_clans'];?></a> |<br /><hr />
- | <a href="stat.php?stat=gm"><?php echo $Lang['gm'];?></a>
- | <a href="stat.php?stat=count"><?php echo $Lang['rich_players'];?></a> 
- | <a href="stat.php?stat=top_pvp"><?php echo $Lang['pvp'];?></a>  
- | <a href="stat.php?stat=top_pk"><?php echo $Lang['pk'];?></a>
- | <a href="stat.php?stat=top_time"><?php echo $Lang['activity'];?></a> 
- | <a href="stat.php?stat=maxCp"><?php echo $Lang['cp'];?></a>
- | <a href="stat.php?stat=maxHp"><?php echo $Lang['hp'];?></a>
- | <a href="stat.php?stat=maxMp"><?php echo $Lang['mp'];?></a> |<br /><hr />
- | <a href="stat.php?stat=top"><?php echo $Lang['top'].' '.$Config['TOP'];?> <?php echo $top;?></a>
- | <a href="stat.php?stat=human"><?php echo $Lang['race'][0];?></a>
- | <a href="stat.php?stat=elf"><?php echo $Lang['race'][1];?></a>
- | <a href="stat.php?stat=dark_elf"><?php echo $Lang['race'][2];?></a>
- | <a href="stat.php?stat=orc"><?php echo $Lang['race'][3];?></a>
- | <a href="stat.php?stat=dwarf"><?php echo $Lang['race'][4];?></a>
- | <a href="stat.php?stat=kamael"><?php echo $Lang['race'][5];?></a> |<br /><hr />
-   </div>  
-   <?php
+$parse=$Lang;
+$parse['human']     = $Lang['race'][0];
+$parse['elf']       = $Lang['race'][1];
+$parse['dark_elf']  = $Lang['race'][2];
+$parse['orc']       = $Lang['race'][3];
+$parse['dwarf']     = $Lang['race'][4];
+$parse['kamael']    = $Lang['race'][5];
+$tpl->parsetemplate('stat_menu', $parse);
+unset($parse);
 
 $stat = mysql_real_escape_string(trim($_GET['stat']));
 
@@ -165,17 +146,16 @@ $timehour=round($timeheld/60/60);
     break;
     
 	Case 'clantop':
-    $result = $mysql->query("SELECT `clan_id`, `clan_data`.*, `char_name`, `csum`, `ccount`, `cavg`, `name` FROM `clan_data` INNER JOIN `characters` ON `clan_data`.`leader_id`=`characters`.`charId` LEFT JOIN (SELECT `clanid`, SUM(`level`) AS `csum`, count(`level`) AS `ccount`, AVG(`level`) AS `cavg` FROM `characters` WHERE `clanid` GROUP BY `clanid`) AS `levels` ON `clan_data`.`clan_id`=`levels`.`clanid` LEFT OUTER JOIN `castle` ON `clan_data`.`hasCastle`=`castle`.`id` WHERE !`accessLevel` ORDER BY `clan_level` DESC, `csum` DESC");
+    $result = $mysql->query("SELECT `clan_id`, `clan_name`, `clan_level`, `reputation_score`, `hasCastle`, `ally_id`, `ally_name`, `char_name`, `ccount`, `name` FROM `clan_data` INNER JOIN `characters` ON `clan_data`.`leader_id`=`characters`.`charId` LEFT JOIN (SELECT clanid, count(`level`) AS `ccount` FROM `characters` WHERE `clanid` GROUP BY `clanid`) AS `levels` ON `clan_data`.`clan_id`=`levels`.`clanid` LEFT OUTER JOIN `castle` ON `clan_data`.`hasCastle`=`castle`.`id` WHERE `characters`.`accessLevel`='0' ORDER BY `clan_level`, `reputation_score` DESC");
 ?>
 <h1> TOP Clans </h1><hr />
 <h2><?php echo $Lang["clantop_total"];?>: <?php echo $mysql->num_rows2($result);?></h2>
 <table border="1"><thead><tr style="color: green;"><th><b>Clan Name</b></th>
 <th><b>Leader</b></th>
 <th><b>Level</b></th>
+<th><b>Reutation</b></th>
 <th><b>Castle</b></th>
-<th><b>Total Level</b></th>
 <th><b>Members</b></th>
-<th><b>Avg. of Levels</b></th>
 </tr></thead>
 <tbody>
 <?php
@@ -183,7 +163,7 @@ $timehour=round($timeheld/60/60);
   while ($row=$mysql->fetch_array())
   {
     if($row['hasCastle']!=0){$castle=$row['name'];}else{$castle='No castle';}
-    echo "<tr". (($i++ % 2) ? "" : " class=\"altRow\"") ."><td><a href=\"claninfo.php?clan=". $row["clan_id"]."\">". $row["clan_name"]. "</a></td><td><a href=\"user.php?cid={$row['leader_id']}\">". $row["char_name"]. "</a></td><td class=\"numeric sortedColumn\">".$row["clan_level"]. "</td><td>".$castle. "</td><td class=\"numeric\">".$row["csum"]. "</td><td class=\"numeric\">".$row["ccount"]. "</td><td class=\"numeric\">".$row["cavg"]. "</td></tr>";
+    echo "<tr". (($i++ % 2) ? "" : " class=\"altRow\"") ." onmouseover=\"this.bgColor = '#505050';\" onmouseout=\"this.bgColor = ''\"><td><a href=\"claninfo.php?clan=". $row["clan_id"]."\">". $row["clan_name"]. "</a></td><td><a href=\"user.php?cid={$row['leader_id']}\">". $row["char_name"]. "</a></td><td class=\"numeric sortedColumn\">".$row["clan_level"]. "</td><td>{$row['reputation_score']}</td><td>".$castle. "</td><td class=\"numeric\">".$row["ccount"]. "</td></tr>";
   }
   echo "</tbody></table>";
     break;
@@ -275,24 +255,24 @@ $timehour=round($timeheld/60/60);
     echo '<h1>'.$Lang['home'].'</h1><hr />';
 
 echo '<table border="1" width="50%">';
-$tchar=$mysql->result($mysql->query("SELECT Count(*) FROM characters"));
+$tchar=$mysql->result($mysql->query("SELECT count(*) FROM `characters`"));
 for($i=0; $i<6; $i++)
 {
-	$sql = $mysql->query("SELECT Count(*) FROM characters WHERE race = ".$i);
+	$sql = $mysql->query("SELECT count(*) FROM `characters` WHERE `race` = '".$i."'");
 	$tfg = round($mysql->result($sql)/($tchar/100), 2);
 	echo('<tr><td>'.$Lang['race'][$i].'</td><td><img src="img/stat/sexline.jpg" height="10px" width="'.$tfg .'px" alt="'.$tfg.'%" title="'.$tfg.'%" /> '.$tfg .'%</td></tr>');
 
 }
-$male = $mysql->query("select count(*) from characters where sex = 0");
+$male = $mysql->query("SELECT count(*) FROM `characters` WHERE `sex` = '0'");
 $mc = round($mysql->result($male)/($tchar/100) , 2);
-$female = $mysql->query("select count(*) from characters where sex = 1");
+$female = $mysql->query("SELECT count(*) FROM `characters` WHERE `sex` = '1'");
 $fc = round($mysql->result($female)/($tchar/100) , 2);
 echo('<tr><td>'.$Lang['male'].'<img src="img/stat/sex.jpg" alt="'.$Lang['male'].'" /></td><td><img src="img/stat/sexline.jpg" height="10px" width="'.$mc .'px" alt="'.$mc.'px" /> '.$mc .'%</td></tr>');
 echo('<tr><td>'.$Lang['female'].'<img src="img/stat/sex1.jpg" alt="'.$Lang['female'].'" /></td><td><img src="img/stat/sexline.jpg" height="10px" width="'.$fc .'px" alt="'.$fc.'px" /> '.$fc .'%</td></tr>');
 echo '</table><hr />';
 
 echo '<h1>Seven Signs</h1>';
-$query1 = "SELECT count(charId) FROM seven_signs WHERE cabal like '%dusk%'";
+$query1 = "SELECT count(`charId`) FROM `seven_signs` WHERE `cabal` LIKE '%dusk%'";
 $result1 = $mysql->query($query1);
 $dawn =$mysql->result($result1);
 
@@ -306,7 +286,7 @@ $result3 = $mysql->query($query3);
 $row=$mysql->fetch_array($result3);
 
 $current_cycle = $row['current_cycle'];
-$festivall_cycle = $row['festival_cycle'];
+//$festivall_cycle = $row['festival_cycle'];
 $active_period = $row['active_period'];
 $date = $row['date'];
 $avarice = $row['avarice_dawn_score']+$row['avarice_dusk_score'];
@@ -315,19 +295,14 @@ $strife = $row['strife_dawn_score']+$row['strife_dusk_score'];
 ?>
 <script language="javascript" type="text/javascript">
 <!--
-var nthDay = 8;
-var currTime = 'we are at work ...';
-var ssStatus = 1;
+var nthDay = <?php echo $active_period;?>;
+var ssStatus = <?php echo $current_cycle;?>;
 var dawnPoint = <?php echo $dawn; ?>;
 var twilPoint = <?php echo $dusk; ?>;
 var maxPointWidth = 300;
-var seal1 = 2;
-var seal2 = 2;
-var seal3 = 0;
-var seal4 = 0;
-var seal5 = 0;
-var seal6 = 0;
-var seal7 = 1;
+var seal1 = <?php echo $avarice; ?>;
+var seal2 = <?php echo $gnosis; ?>;
+var seal3 = <?php echo $strife; ?>;
 // -->
 </script>
 

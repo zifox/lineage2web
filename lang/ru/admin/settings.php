@@ -37,9 +37,4 @@ $Lang['news'] = 'Новости ( если включить новости = 1)'
 $Lang['session_expire_time'] = 'Сессия Expire Time';
 $Lang['reg_reward']='Регистрация награда';
 $Lang['vote_reward']='Голосование награда';
-$Lang['debug'] = 'Debug';
-$Lang['show_ls'] = 'Show Login Server Status';
-$Lang['show_cs'] = 'Show Community Server Status';
-$Lang['show_gs'] = 'Show Game Server Status';
-$Lang['use_cracktracker'] = 'Use Crack Tracker';
 ?>

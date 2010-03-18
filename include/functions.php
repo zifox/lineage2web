@@ -25,7 +25,7 @@ function includeLang($file)
 
 function includeBlock($file, $block_name='Menu')
 {
-	global $langpath, $skin, $Lang, $Config, $mysql;
+	global $langpath, $skin, $Lang, $Config, $mysql, $tpl;
 	?>
 <table width="200" style="height:95px;" border="0" cellpadding="0" cellspacing="0" class="opacity2"><tr style="height:48px;">
 <td width="23"><img width="23" height="50" alt="" src="skins/<?php echo $skin;?>/img/h_l_c.gif" /></td>
@@ -75,17 +75,16 @@ function head($title = "", $head=1, $url='', $time=0)
 
 function foot($foot=1)
 {
-    global $mysql, $skin, $Config, $Lang, $starttime, $user;
+    global $mysql, $skin, $Config, $Lang, $starttime, $user, $tpl;
     if(isset($_COOKIE['skin']))
-{
-$skin = trim($_COOKIE['skin']);
-}
-else
-{
-	$skin = $Config['DSkin'];
-}
+    {
+        $skin = trim($_COOKIE['skin']);
+    }
+    else
+    {
+	   $skin = $Config['DSkin'];
+    }
     require_once("skins/" . $skin . "/foot.php");
-    $mysql->close();
 }
 function button($text='  ')
 {
@@ -94,5 +93,32 @@ function button($text='  ')
     <input type="image" onmouseout="this.src = './login_b.php?text=   <?php echo $text;?>&amp;style=press';" onmousemove="this.src = './login_b.php?text=   <?php echo $text;?>&amp;style=hover';" src="./login_b.php?text=   <?php echo $text;?>&amp;style=normal" value=" " name="Submit" />
 </label>
 <?php
+}
+function pretty_time ($seconds) {
+	$day = floor($seconds / (24 * 3600));
+	$hs = floor($seconds / 3600 % 24);
+	$ms = floor($seconds / 60 % 60);
+	$sr = floor($seconds / 1 % 60);
+
+	if ($hs < 10) { $hh = "0" . $hs; } else { $hh = $hs; }
+	if ($ms < 10) { $mm = "0" . $ms; } else { $mm = $ms; }
+	if ($sr < 10) { $ss = "0" . $sr; } else { $ss = $sr; }
+
+	$time = '';
+	if ($day != 0) { $time .= $day . 'd '; }
+	if ($hs  != 0) { $time .= $hh . 's ';  } else { $time .= '00s '; }
+	if ($ms  != 0) { $time .= $mm . 'm ';  } else { $time .= '00m '; }
+	$time .= $ss . 's';
+
+	return $time;
+}
+
+function pretty_time_hour ($seconds) {
+	$min = floor($seconds / 60 % 60);
+
+	$time = '';
+	if ($min != 0) { $time .= $min . 'min '; }
+
+	return $time;
 }
 ?>

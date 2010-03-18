@@ -1,0 +1,1 @@
+<tr onmouseover="this.bgColor = '#505050';" onmouseout="this.bgColor = ''"><td align="center" width="25%"><b>{nr}</b></td><td><a href="user.php?cid={charId}" class="{sex}">{char_name}</a></td></tr>

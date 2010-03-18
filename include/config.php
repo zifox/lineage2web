@@ -19,9 +19,9 @@ $DB = array(
     );
 require_once ('class.mysql.php');
 require_once ('class.user.php');
+require_once ('class.tplParser.php');
 $mysql = new MySQL($DB);
-$mysql->connect();
-
+//die(print_r($mysql->query));
 $query = $mysql->query("SELECT * FROM `" . $DB['webdb'] . "`.`config`;");
 while ($row = $mysql->fetch_array($query)) {
     $Config[$row['config_name']] = stripslashes($row['config_value']);
@@ -40,4 +40,5 @@ if ($Config['use_bancontrol']){
 if (!$Config['web_debug']) {
     error_reporting(0);
 }
+$tpl = new tplParser('template', $Config['DSkin']);
 ?>

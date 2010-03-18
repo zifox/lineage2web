@@ -34,12 +34,15 @@ $Lang['url'] = 'Site URL';
 $Lang['Quest'] = 'Quest Drop/Reward';
 $Lang['enable_news'] = 'Enable News (1 - enabled, 0 - disabled)';
 $Lang['news'] = 'News(if Enable News = 1)';
-$Lang['session_expire_time'] = 'Session Expire Time';
+$Lang['web_debug'] = 'Show errors';
+$Lang['use_bancontrol'] = 'Use BanControl';
+$Lang['sql_debug'] = 'MySQL Debug';
+$Lang['show_ls'] = 'Show Login Server';
+$Lang['show_cs'] = 'Show Community Server';
+$Lang['show_gs'] = 'Show GameServer';
+$Lang['use_cracktracker'] = 'Use CrackTracker';
+$Lang['user_debug'] = 'Class User Debug';
 $Lang['reg_reward']='Registration Reward';
 $Lang['vote_reward']='Voting Reward';
-$Lang['debug'] = 'Debug';
-$Lang['show_ls'] = 'Show Login Server Status';
-$Lang['show_cs'] = 'Show Community Server Status';
-$Lang['show_gs'] = 'Show Game Server Status';
-$Lang['use_cracktracker'] = 'Use Crack Tracker';
+
 ?>

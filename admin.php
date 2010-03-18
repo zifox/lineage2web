@@ -5,7 +5,7 @@ require_once("include/config.php");
 head("Admin");
 includeLang('admin/settings');
 
-if ($user->logged() && $user->admin()){
+if ($user->logged()&& $user->admin()){
     ?>
     <h2><?php echo $Lang['admin_settings']; ?></h2>
     <?php
@@ -63,7 +63,7 @@ if ($user->logged() && $user->admin()){
         Default:
 
 $sql=$mysql->query("SELECT * FROM `".$DB['webdb']."`.`config`");
-while ( $row = mysql_fetch_assoc($sql) ) {
+while ( $row = $mysql->fetch_array($sql) ) {
     $mysql->query("UPDATE `".$DB['webdb']."`.`config` SET `config_value` = '". $mysql->escape($_POST[$row['config_name']])."' WHERE `config_name` = '{$row['config_name']}'");
     }
 echo $Lang['saved'];
@@ -86,7 +86,7 @@ break;
 <?php
 $sql=$mysql->query("SELECT * FROM `".$DB['webdb']."`.`config`");
 
-while ($row = $mysql->fetch_array($sql)) {
+while ( $row = $mysql->fetch_array($sql) ) {
     ?>
     <tr>
 	<td><?php echo $Lang[$row['config_name']];?>:</td>

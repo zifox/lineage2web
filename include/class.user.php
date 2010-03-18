@@ -7,7 +7,7 @@ if (!defined('INCONFIG')) {
 class user {
 //	var $failed = false;
     
-	function user()
+	function __construct()
 	{
 		if (isset($_SESSION['logged'])&& $_SESSION['logged'] && isset($_SESSION['account'])&& $_SESSION['account']!='')
 		{
@@ -17,6 +17,8 @@ class user {
             $this->checkRemembered($_COOKIE['logincookie']);
 		}
 	}
+    
+
 
 	public function checkLogin( $username, $password, $remember )
 	{
@@ -151,7 +153,7 @@ class user {
         global $mysql, $Config;
         
         $acc = $mysql->escape($acc);
-        $pass = $this->encpass($mysql->escape($pass));
+        $pass = $mysql->escape($pass);
         $ref = $mysql->escape($ref);
         $ip = $mysql->escape($_SERVER['REMOTE_ADDR']);
         if($ref != '')
