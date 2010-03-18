@@ -14,6 +14,10 @@ class MySQL{
     function MySQL($DBInfo){
 	   $this->DBInfo = $DBInfo;
     }
+    function __destruct()
+    {
+    	
+    }
     
     function connect() {
 	   $this->link=@mysql_connect($this->DBInfo['host'],$this->DBInfo['user'],$this->DBInfo['password']);

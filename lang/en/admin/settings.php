@@ -37,4 +37,9 @@ $Lang['news'] = 'News(if Enable News = 1)';
 $Lang['session_expire_time'] = 'Session Expire Time';
 $Lang['reg_reward']='Registration Reward';
 $Lang['vote_reward']='Voting Reward';
+$Lang['debug'] = 'Debug';
+$Lang['show_ls'] = 'Show Login Server Status';
+$Lang['show_cs'] = 'Show Community Server Status';
+$Lang['show_gs'] = 'Show Game Server Status';
+$Lang['use_cracktracker'] = 'Use Crack Tracker';
 ?>
