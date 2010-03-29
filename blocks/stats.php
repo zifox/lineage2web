@@ -29,38 +29,44 @@ if ($Config['show_cs'])
     $parse['community_server_status'] = '<tr onmouseover="this.bgColor = \'#505050\';" onmouseout="this.bgColor = \'\'"><td align="left">'.$Lang['community_server'].':</td><td align="left">'.$comunityonline.'</td></tr>';
 
 }
+#Total accounts
+$acc_count = $mysql->query('SELECT count(`login`) FROM `accounts`;');
+$parse['acc_count'] = $mysql->result();
+$tpl->parsetemplate('blocks/stats', $parse);
 
-if ($Config['show_gs'])
+$serverlist = $mysql->query("SELECT * FROM `$webdb`.`gameservers`;");
+while($server = $mysql->fetch_array($serverlist))
 {
-    $fp = @fsockopen($Config['GServerIP'], $Config['GServerPort'], $errno, $errstr, 0.5);
+	$parse = $Lang;
+	#Total clans
+$clan_count = $mysql->query("SELECT count(`clan_id`) FROM `{$server['DataBase']}`.`clan_data`;");
+$parse['clan_count'] = $mysql->result();
+
+#Total characters
+$char_count = $mysql->query("SELECT count(`charId`) FROM `{$server['DataBase']}`.`characters`;");
+$parse['char_count'] = $mysql->result();
+
+#Players Online
+$online_count = $mysql->query("SELECT count(`online`) FROM `{$server['DataBase']}`.`characters` WHERE `online` = '1' AND `accesslevel`='0';");
+$parse['online_count'] = $mysql->result();
+
+#GM Online
+$gmonline = $mysql->query("SELECT count(`charId`) FROM `{$server['DataBase']}`.`characters` WHERE `online` = '1' AND `accesslevel`>'0';");
+$parse['online_gm_count'] = $mysql->result();
+
+    $fp = @fsockopen($server['IP'], $server['Port'], $errno, $errstr, 0.5);
     if($fp){
         $gameonline = $imgonline;
     }else{
         $gameonline = $imgoffline;
     }
-    $parse['game_server_status'] = '<tr onmouseover="this.bgColor = \'#505050\';" onmouseout="this.bgColor = \'\'"><td align="left">'.$Config['ServerName'].':</td><td align="left">'.$gameonline.'</td></tr>';
-
+    $parse['game_server_status'] = '<tr onmouseover="this.bgColor = \'#505050\';" onmouseout="this.bgColor = \'\'"><td align="left">'.$server['Name'].':</td><td align="left">'.$gameonline.'</td></tr>';
+    $parse['br'] = '<br />';
+    $parse['ID'] = $server['ID'];
+    $tpl->parsetemplate('blocks/stats_serverlist', $parse);
 }
 
-#Players Online
-$online_count = $mysql->query("SELECT count(`online`) FROM `characters` WHERE `online` = '1' AND `accesslevel`='0';");
-$parse['online_count'] = $mysql->result();
 
-#GM Online
-$gmonline = $mysql->query('SELECT count(`charId`) FROM `characters` WHERE `online` = \'1\' AND `accesslevel`>\'0\';');
-$parse['online_gm_count'] = $mysql->result();
 
-#Total accounts
-$acc_count = $mysql->query('SELECT count(`login`) FROM `accounts`;');
-$parse['acc_count'] = $mysql->result();
 
-#Total characters
-$char_count = $mysql->query("SELECT count(`charId`) FROM `characters`;");
-$parse['char_count'] = $mysql->result();
-
-#Total clans
-$clan_count = $mysql->query("SELECT count(`clan_id`) FROM `clan_data`;");
-$parse['clan_count'] = $mysql->result();
-
-$tpl->parsetemplate('blocks/stats', $parse);
 ?>

@@ -19,7 +19,7 @@ class MySQL{
     
     function __destruct()
     {
-        $this->close();
+        //$this->close();
         //msg('MySQL', 'MySQL Destruction Success');
     }
     function __wakeup()
@@ -33,7 +33,10 @@ class MySQL{
     private function connect() {
         $this->link=mysql_pconnect($this->DBInfo['host'],$this->DBInfo['user'],$this->DBInfo['password']);
         if (!$this->link)
+        {
             $this->err("Could not connect to server: <b>{$this->DBInfo['host']}</b>.");
+            exit();
+        }
 
         if(!mysql_select_db($this->DBInfo['database'], $this->link))
             $this->err("Could not open database: <b>{$this->DBInfo['database']}</b>.");

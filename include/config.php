@@ -13,10 +13,11 @@ define('INCONFIG', true);
 $DB = array(
     "host"      => "localhost", //MySQL Host
     "user"      => "root",      //MySQL User
-    "password"  => "",          //MySQL Password
+    "password"  => "agagag",          //MySQL Password
     "database"  => "l2j",       //L2J DataBase
     "webdb"     => "web"        //Webpage DataBase
-    );
+);
+$webdb = $DB['webdb'];
 require_once ('class.mysql.php');
 require_once ('class.user.php');
 require_once ('class.tplParser.php');

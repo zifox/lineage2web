@@ -11,20 +11,32 @@ $parse['dark_elf']  = $Lang['race'][2];
 $parse['orc']       = $Lang['race'][3];
 $parse['dwarf']     = $Lang['race'][4];
 $parse['kamael']    = $Lang['race'][5];
+if(isset($_GET['server']))
+{
+	$parse['ID'] = "&amp;server=".$_GET['server'];
+}
 $tpl->parsetemplate('stat_menu', $parse);
 unset($parse);
+if(isset($_GET['server']) && is_numeric($_GET['server']))
+{
+	$server = 0 + $_GET['server'];
+	$s_db = $mysql->result($mysql->query("SELECT `DataBase` FROM `$webdb`.`gameservers` WHERE `ID` = '$server';"));
+}else
+{
+	$s_db = $Config['DDB'];
+}
 
 $stat = $mysql->escape($_GET['stat']);
 
 switch($stat){
 	
 	Case 'online':
-	$data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `ClassName`, `clanid`, `clan_name` FROM `characters` INNER JOIN `char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `online`='1' AND `accesslevel`='0' ORDER BY `exp` DESC");
+	$data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `ClassName`, `clanid`, `clan_name` FROM `$s_db`.`characters` INNER JOIN `$s_db`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `$s_db`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `online`='1' AND `accesslevel`='0' ORDER BY `exp` DESC");
 	echo '<h1>'.$Lang['online'].'</h1>';
 	break;
     
     Case 'castles':
-    $result = $mysql->query("SELECT `id`, `name`, `taxPercent`, `siegeDate`, `charId`, `char_name`, `clan_id`, `clan_name` FROM `castle` LEFT OUTER JOIN `clan_data` ON `clan_data`.`hasCastle`=`castle`.`id` LEFT OUTER JOIN `characters` ON `clan_data`.`leader_id`=`characters`.`charId` ORDER by `id` ASC");
+    $result = $mysql->query("SELECT `id`, `name`, `taxPercent`, `siegeDate`, `charId`, `char_name`, `clan_id`, `clan_name` FROM `$s_db`.`castle` LEFT OUTER JOIN `$s_db`.`clan_data` ON `clan_data`.`hasCastle`=`castle`.`id` LEFT OUTER JOIN `$s_db`.`characters` ON `clan_data`.`leader_id`=`characters`.`charId` ORDER by `id` ASC");
 
 $r=0;
 ?><table border="0" cellpadding="3" cellspacing="3">
@@ -57,7 +69,7 @@ else{echo $Lang['no_lord'];}
 
 <tr class="altRow"><td><?php echo $Lang['attackers'];?></td><td>
 <?php
-$result1 = $mysql->query("SELECT clan_id, clan_name FROM siege_clans INNER JOIN clan_data USING (clan_id)  WHERE castle_id='{$row['id']}' AND type='1'");
+$result1 = $mysql->query("SELECT `clan_id`, `clan_name` FROM `$s_db`.`siege_clans` INNER JOIN `clan_data` USING (`clan_id`)  WHERE `castle_id`='{$row['id']}' AND `type`='1'");
 while($attackers=$mysql->fetch_array($result1))
 {
 echo '<a href="claninfo.php?clanid='.$attackers['clan_id'].'">'.$attackers['clan_name'].'</a><br />';
@@ -65,7 +77,7 @@ echo '<a href="claninfo.php?clanid='.$attackers['clan_id'].'">'.$attackers['clan
 ?>
 </td></tr><tr><td><?php echo $Lang['defenders'];?></td><td>
 <?php
-$result2 = $mysql->query("SELECT clan_id, clan_name FROM siege_clans INNER JOIN clan_data USING (clan_id)  WHERE castle_id='{$row['id']}' AND type='0'");
+$result2 = $mysql->query("SELECT `clan_id`, `clan_name` FROM `$s_db`.`siege_clans` INNER JOIN `clan_data` USING (`clan_id`)  WHERE `castle_id`='{$row['id']}' AND `type`='0'");
 if($mysql->num_rows2($result2)){
 while($defenders=$mysql->fetch_array($result2))
 {
@@ -88,7 +100,7 @@ echo '<a href="claninfo.php?clanid='.$defenders['clan_id'].'">'.$defenders['clan
     break;
     
     Case 'fort':
-$result = $mysql->query("SELECT `id`, `name`, `lastOwnedTime`, `clan_id`, `clan_name`, `char_name` FROM `fort` LEFT OUTER JOIN `clan_data` ON `clan_data`.`clan_id`=`fort`.`owner` LEFT OUTER JOIN `characters` ON `clan_data`.`leader_id`=`characters`.`charId` ORDER by `id` ASC");
+$result = $mysql->query("SELECT `id`, `name`, `lastOwnedTime`, `clan_id`, `clan_name`, `char_name` FROM `$s_db`.`fort` LEFT OUTER JOIN `$s_db`.`clan_data` ON `clan_data`.`clan_id`=`fort`.`owner` LEFT OUTER JOIN `$s_db`.`characters` ON `clan_data`.`leader_id`=`characters`.`charId` ORDER by `id` ASC");
 
 $r=0;
 ?><table border="0" cellpadding="3" cellspacing="3">
@@ -118,7 +130,7 @@ else{echo $Lang['no_lord'];}
 
 <tr><td><?php echo $Lang['attackers'];?></td><td>
 <?php
-$result1 = $mysql->query("SELECT clan_id, clan_name FROM fortsiege_clans INNER JOIN clan_data USING (clan_id)  WHERE fort_id='{$row['id']}'");
+$result1 = $mysql->query("SELECT `clan_id`, `clan_name` FROM `$s_db`.`fortsiege_clans` INNER JOIN `clan_data` USING (`clan_id`)  WHERE `fort_id`='{$row['id']}'");
 while($attackers=$mysql->fetch_array($result1))
 {
 echo '<a href="claninfo.php?clanid='.$attackers['clan_id'].'">'.$attackers['clan_name'].'</a><br />';
@@ -146,7 +158,7 @@ $timehour=round($timeheld/60/60);
     break;
     
 	Case 'clantop':
-    $result = $mysql->query("SELECT `clan_id`, `clan_name`, `clan_level`, `reputation_score`, `hasCastle`, `ally_id`, `ally_name`, `char_name`, `ccount`, `name` FROM `clan_data` INNER JOIN `characters` ON `clan_data`.`leader_id`=`characters`.`charId` LEFT JOIN (SELECT clanid, count(`level`) AS `ccount` FROM `characters` WHERE `clanid` GROUP BY `clanid`) AS `levels` ON `clan_data`.`clan_id`=`levels`.`clanid` LEFT OUTER JOIN `castle` ON `clan_data`.`hasCastle`=`castle`.`id` WHERE `characters`.`accessLevel`='0' ORDER BY `clan_level`, `reputation_score` DESC");
+    $result = $mysql->query("SELECT `clan_id`, `clan_name`, `clan_level`, `reputation_score`, `hasCastle`, `ally_id`, `ally_name`, `char_name`, `ccount`, `name` FROM `$s_db`.`clan_data` INNER JOIN `$s_db`.`characters` ON `clan_data`.`leader_id`=`characters`.`charId` LEFT JOIN (SELECT clanid, count(`level`) AS `ccount` FROM `$s_db`.`characters` WHERE `clanid` GROUP BY `clanid`) AS `levels` ON `clan_data`.`clan_id`=`levels`.`clanid` LEFT OUTER JOIN `$s_db`.`castle` ON `clan_data`.`hasCastle`=`castle`.`id` WHERE `characters`.`accessLevel`='0' ORDER BY `clan_level`, `reputation_score` DESC");
 ?>
 <h1> TOP Clans </h1><hr />
 <h2><?php echo $Lang["clantop_total"];?>: <?php echo $mysql->num_rows2($result);?></h2>
@@ -169,85 +181,85 @@ $timehour=round($timeheld/60/60);
     break;
 	
 	Case 'gm':
-        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `ClassName`, `clanid`, `clan_name` FROM `characters` INNER JOIN `char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`>'0'");
+        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `ClassName`, `clanid`, `clan_name` FROM `$s_db`.`characters` INNER JOIN `$s_db`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `$s_db`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`>'0'");
 	   echo '<h1>'.$Lang['gm'].'</h1>';
 	break;
     
 	Case 'count':
-        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `count`, `ClassName`, `clanid`, `clan_name` FROM `characters` INNER JOIN `items` ON `characters`.`charId`=`items`.`owner_id` INNER JOIN `char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `items`.`item_id`='57' AND `accesslevel`='0' ORDER BY `count` DESC LIMIT {$Config['TOP']}");
+        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `count`, `ClassName`, `clanid`, `clan_name` FROM `$s_db`.`characters` INNER JOIN `$s_db`.`items` ON `characters`.`charId`=`items`.`owner_id` INNER JOIN `$s_db`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `$s_db`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `items`.`item_id`='57' AND `accesslevel`='0' ORDER BY `count` DESC LIMIT {$Config['TOP']}");
         echo'<h1>'.$Lang['rich_players'].'</h1>';
         $addheader='<td><b>'.$Lang['adena'].'</b></td>';
         $addcol=true;
 	break;
 	
 	Case 'top_pvp';
-        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `ClassName`, `clanid`, `clan_name` FROM `characters` INNER JOIN `char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`='0' AND `pvpkills`>'0' ORDER BY `pvpkills` DESC LIMIT {$Config['TOP']}");
+        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `ClassName`, `clanid`, `clan_name` FROM `$s_db`.`characters` INNER JOIN `$s_db`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `$s_db`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`='0' AND `pvpkills`>'0' ORDER BY `pvpkills` DESC LIMIT {$Config['TOP']}");
         echo '<h1>'.$Lang['pvp'].'</h1>';
 	break;
 	
 	Case 'top_pk':
-        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `ClassName`, `clanid`, `clan_name` FROM `characters` INNER JOIN `char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`='0' AND `pkkills`>'0' ORDER BY 'pkkills' DESC LIMIT {$Config['TOP']}");
+        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `ClassName`, `clanid`, `clan_name` FROM `$s_db`.`characters` INNER JOIN `$s_db`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `$s_db`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`='0' AND `pkkills`>'0' ORDER BY 'pkkills' DESC LIMIT {$Config['TOP']}");
         echo '<h1>'.$Lang['pk'].'</h1>';
 	break;
 	
 	Case 'top_time':
-        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `ClassName`, `clanid`, `clan_name` FROM `characters` INNER JOIN `char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`='0' ORDER BY `onlinetime` DESC LIMIT {$Config['TOP']}");
+        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `ClassName`, `clanid`, `clan_name` FROM `$s_db`.`characters` INNER JOIN `$s_db`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `$s_db`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`='0' ORDER BY `onlinetime` DESC LIMIT {$Config['TOP']}");
         echo '<h1>'.$Lang['activity'].'</h1>';
 	break;
 	
 	Case 'maxCp':
-        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `maxCp`, `ClassName`, `clanid`, `clan_name` FROM `characters` INNER JOIN `char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`='0' ORDER BY `maxCp` DESC LIMIT {$Config['TOP']}");
+        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `maxCp`, `ClassName`, `clanid`, `clan_name` FROM `$s_db`.`characters` INNER JOIN `$s_db`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `$s_db`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`='0' ORDER BY `maxCp` DESC LIMIT {$Config['TOP']}");
         echo '<h1>'.$Lang['cp'].'</h1>';
         $addheader='<td class="maxCp"><b>'.$Lang['max_cp'].'</b></td>';
         $addcol=true;
 	break;
 	
 	Case 'maxHp':
-        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `maxHp`, `ClassName`, `clanid`, `clan_name` FROM `characters` INNER JOIN `char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`='0' ORDER BY `maxHp` DESC LIMIT {$Config['TOP']}");
+        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `maxHp`, `ClassName`, `clanid`, `clan_name` FROM `$s_db`.`characters` INNER JOIN `$s_db`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `$s_db`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`='0' ORDER BY `maxHp` DESC LIMIT {$Config['TOP']}");
         echo '<h1>'.$Lang['hp'].'</h1>';
         $addheader='<td class="maxHp"><b>'.$Lang['max_hp'].'</b></td>';
         $addcol=true;
 	break;
 	
 	Case 'maxMp':
-        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `maxMp`, `ClassName`, `clanid`, `clan_name` FROM `characters` INNER JOIN `char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`='0' ORDER BY `maxMp` DESC LIMIT {$Config['TOP']}");
+        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `maxMp`, `ClassName`, `clanid`, `clan_name` FROM `$s_db`.`characters` INNER JOIN `$s_db`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `$s_db`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`='0' ORDER BY `maxMp` DESC LIMIT {$Config['TOP']}");
         echo '<h1>'.$Lang['mp'].'</h1>';
         $addheader='<td class="maxMp"><b>'.$Lang['max_mp'].'</b></td>';
         $addcol=true;
 	break;
 	
 	Case 'top':
-        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `ClassName`, `clanid`, `clan_name` FROM `characters` INNER JOIN `char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`='0' ORDER BY `exp` DESC LIMIT {$Config['TOP']}");
+        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `ClassName`, `clanid`, `clan_name` FROM `$s_db`.`characters` INNER JOIN `$s_db`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `$s_db`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`='0' ORDER BY `exp` DESC LIMIT {$Config['TOP']}");
         echo '<h1>'.$Lang['top'].' '.$Config['TOP'].'</h1>';
 	break;
 	
 	Case 'human':
-        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `ClassName`, `clanid`, `clan_name` FROM `characters` INNER JOIN `char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`='0' AND `race`='0' ORDER BY `exp` DESC LIMIT {$Config['TOP']}");
+        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `ClassName`, `clanid`, `clan_name` FROM `$s_db`.`characters` INNER JOIN `char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `$s_db`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`='0' AND `race`='0' ORDER BY `exp` DESC LIMIT {$Config['TOP']}");
         echo '<h1>'.$Lang['race'][0].'</h1>';
 	break;
 	
 	Case 'elf':
-        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `ClassName`, `clanid`, `clan_name` FROM `characters` INNER JOIN `char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`='0' AND `race`='1' ORDER BY `exp` DESC LIMIT {$Config['TOP']}");
+        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `ClassName`, `clanid`, `clan_name` FROM `$s_db`.`characters` INNER JOIN `$s_db`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `$s_db`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`='0' AND `race`='1' ORDER BY `exp` DESC LIMIT {$Config['TOP']}");
         echo '<h1>'.$Lang['race'][1].'</h1>';
 	break;
     
 	Case 'dark_elf':
-        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `ClassName`, `clanid`, `clan_name` FROM `characters` INNER JOIN `char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`='0' AND `race`='2' ORDER BY `exp` DESC LIMIT {$Config['TOP']}");
+        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `ClassName`, `clanid`, `clan_name` FROM `$s_db`.`characters` INNER JOIN `$s_db`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `$s_db`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`='0' AND `race`='2' ORDER BY `exp` DESC LIMIT {$Config['TOP']}");
         echo '<h1>'.$Lang['race'][2].'</h1>';
 	break;
 	
 	Case 'orc':
-        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `ClassName`, `clanid`, `clan_name` FROM `characters` INNER JOIN `char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`='0' AND `race`='3' ORDER BY `exp` DESC LIMIT {$Config['TOP']}");
+        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `ClassName`, `clanid`, `clan_name` FROM `$s_db`.`characters` INNER JOIN `char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `$s_db`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`='0' AND `race`='3' ORDER BY `exp` DESC LIMIT {$Config['TOP']}");
         echo '<h1>'.$Lang['race'][3].'</h1>';
 	break;
 	
 	Case 'dwarf':
-        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `ClassName`, `clanid`, `clan_name` FROM `characters` INNER JOIN `char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`='0' AND `race`='4' ORDER BY `exp` DESC LIMIT {$Config['TOP']}");
+        $data = $mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `ClassName`, `clanid`, `clan_name` FROM `$s_db`.`characters` INNER JOIN `$s_db`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `$s_db`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`='0' AND `race`='4' ORDER BY `exp` DESC LIMIT {$Config['TOP']}");
         echo '<h1>'.$Lang['race'][4].'</h1>';
 	break;
 	
 	Case 'kamael':
-        $data=$mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `ClassName`, `clanid`, `clan_name` FROM `characters` INNER JOIN `char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`='0' AND `race`='5' ORDER BY `exp` DESC LIMIT {$Config['TOP']}");
+        $data=$mysql->query("SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `ClassName`, `clanid`, `clan_name` FROM `$s_db`.`characters` INNER JOIN `$s_db`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `$s_db`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`='0' AND `race`='5' ORDER BY `exp` DESC LIMIT {$Config['TOP']}");
         echo '<h1>'.$Lang['race'][5].'</h1>';
 	break;
 	
@@ -255,33 +267,33 @@ $timehour=round($timeheld/60/60);
     echo '<h1>'.$Lang['home'].'</h1><hr />';
 
 echo '<table border="1" width="50%">';
-$tchar=$mysql->result($mysql->query("SELECT count(*) FROM `characters`"));
+$tchar=$mysql->result($mysql->query("SELECT count(*) FROM `$s_db`.`characters`"));
 for($i=0; $i<6; $i++)
 {
-	$sql = $mysql->query("SELECT count(*) FROM `characters` WHERE `race` = '".$i."'");
+	$sql = $mysql->query("SELECT count(*) FROM `$s_db`.`characters` WHERE `race` = '".$i."'");
 	$tfg = round($mysql->result($sql)/($tchar/100), 2);
 	echo('<tr><td>'.$Lang['race'][$i].'</td><td><img src="img/stat/sexline.jpg" height="10px" width="'.$tfg .'px" alt="'.$tfg.'%" title="'.$tfg.'%" /> '.$tfg .'%</td></tr>');
 
 }
-$male = $mysql->query("SELECT count(*) FROM `characters` WHERE `sex` = '0'");
+$male = $mysql->query("SELECT count(*) FROM `$s_db`.`characters` WHERE `sex` = '0'");
 $mc = round($mysql->result($male)/($tchar/100) , 2);
-$female = $mysql->query("SELECT count(*) FROM `characters` WHERE `sex` = '1'");
+$female = $mysql->query("SELECT count(*) FROM `$s_db`.`characters` WHERE `sex` = '1'");
 $fc = round($mysql->result($female)/($tchar/100) , 2);
 echo('<tr><td>'.$Lang['male'].'<img src="img/stat/sex.jpg" alt="'.$Lang['male'].'" /></td><td><img src="img/stat/sexline.jpg" height="10px" width="'.$mc .'px" alt="'.$mc.'px" /> '.$mc .'%</td></tr>');
 echo('<tr><td>'.$Lang['female'].'<img src="img/stat/sex1.jpg" alt="'.$Lang['female'].'" /></td><td><img src="img/stat/sexline.jpg" height="10px" width="'.$fc .'px" alt="'.$fc.'px" /> '.$fc .'%</td></tr>');
 echo '</table><hr />';
 
 echo '<h1>Seven Signs</h1>';
-$query1 = "SELECT count(`charId`) FROM `seven_signs` WHERE `cabal` LIKE '%dusk%'";
+$query1 = "SELECT count(`charId`) FROM `$s_db`.`seven_signs` WHERE `cabal` LIKE '%dusk%'";
 $result1 = $mysql->query($query1);
 $dawn =$mysql->result($result1);
 
 
-$query2 = "SELECT count(charId) FROM seven_signs WHERE cabal like '%dawn%'";
+$query2 = "SELECT count(`charId`) FROM `$s_db`.`seven_signs` WHERE `cabal` LIKE '%dawn%'";
 $result2 = $mysql->query($query2);
 $dusk = $mysql->result($result2);
 
-$query3 = "SELECT current_cycle, festival_cycle, active_period, date, avarice_dawn_score, avarice_dusk_score, gnosis_dawn_score, gnosis_dusk_score, strife_dawn_score, strife_dusk_score FROM seven_signs_status";
+$query3 = "SELECT `current_cycle`, `festival_cycle`, `active_period`, `date`, `avarice_dawn_score`, `avarice_dusk_score`, `gnosis_dawn_score`, `gnosis_dusk_score`, `strife_dawn_score`, `strife_dusk_score` FROM `$s_db`.`seven_signs_status`";
 $result3 = $mysql->query($query3);
 $row=$mysql->fetch_array($result3);
 

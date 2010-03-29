@@ -39,9 +39,9 @@ class tplParser
     private function gettemplate ($templatename) {
 	   $filename = $this->tpldir . '/' . $this->tpl . '/' . $templatename . ".tpl";
         if(file_exists($filename))
-	       return @file_get_contents($filename);
+	       return file_get_contents($filename);
         msg('Failed', 'Failed to get file '.$templatename. ' contents', 'error');
-         return 0;
+         return;
     }
     public function debug()
     {
