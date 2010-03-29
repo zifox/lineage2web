@@ -1,5 +1,8 @@
 ﻿<?php
 //пароль
+if (!defined('IN_BLOCK')) {
+    Header("Location: ../index.php");
+}
 $parse = $Lang;
 $imgoffline = '<img src="img/status/offline.png" border="0" alt="'.$Lang['offline'].'" title="'.$Lang['offline'].'" />';
 $imgonline = '<img src="img/status/online.png" border="0" alt="'.$Lang['online'].'" title="'.$Lang['online'].'" />';

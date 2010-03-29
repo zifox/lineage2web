@@ -26,6 +26,7 @@ function includeLang($file)
 function includeBlock($file, $block_name='Menu')
 {
 	global $langpath, $skin, $Lang, $Config, $mysql, $tpl;
+    DEFINE('IN_BLOCK', True);
 	?>
 <table width="200" style="height:95px;" border="0" cellpadding="0" cellspacing="0" class="opacity2"><tr style="height:48px;">
 <td width="23"><img width="23" height="50" alt="" src="skins/<?php echo $skin;?>/img/h_l_c.gif" /></td>
@@ -86,13 +87,16 @@ function foot($foot=1)
     }
     require_once("skins/" . $skin . "/foot.php");
 }
-function button($text='  ')
+function button($text='  ', $name = 'Submit', $return = 0, $disabled=false)
 {
-?>
-<label>
-    <input type="image" onmouseout="this.src = './login_b.php?text=   <?php echo $text;?>&amp;style=press';" onmousemove="this.src = './login_b.php?text=   <?php echo $text;?>&amp;style=hover';" src="./login_b.php?text=   <?php echo $text;?>&amp;style=normal" value=" " name="Submit" />
-</label>
-<?php
+    global $tpl;
+    $parse['text'] = $text;
+    $parse['name'] = $name;
+    if ($disabled) $parse['disabled'] = 'disabled="disabled"';
+    if ($return)
+        return $tpl->parsetemplate('button', $parse, 1);
+    else
+        $tpl->parsetemplate('button', $parse);
 }
 function pretty_time ($seconds) {
 	$day = floor($seconds / (24 * 3600));

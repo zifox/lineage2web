@@ -3,7 +3,6 @@
  | <a href="stat.php">{home}</a>
  | <a href="stat.php?stat=online">{online}</a> 
  | <a href="onlinemap.php" target="_blank">{map}</a> 
- | <a href="castlesmap.php" target="_blank">{castles_map}</a> 
  | <a href="stat.php?stat=castles">{castles}</a>
  | <a href="stat.php?stat=fort">{fort}</a> 
  | <a href="stat.php?stat=clantop">{top_clans}</a> |<br /><hr />

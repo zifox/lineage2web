@@ -14,7 +14,7 @@ $parse['kamael']    = $Lang['race'][5];
 $tpl->parsetemplate('stat_menu', $parse);
 unset($parse);
 
-$stat = mysql_real_escape_string(trim($_GET['stat']));
+$stat = $mysql->escape($_GET['stat']);
 
 switch($stat){
 	

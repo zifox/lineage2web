@@ -36,14 +36,11 @@ $endtime = $timeparts[1].substr($timeparts[0],1);
 </table><br />
 <?php
 if ($Config['sql_debug'])
-{
     $mysql->debug();
-}
 if ($Config['user_debug'])
-{
     $user->debug();
-}
-$tpl->debug();
+if ($Config['tpl_debug'])
+    $tpl->debug();
 ?>
 <br />
 </body></html>

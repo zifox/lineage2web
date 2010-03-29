@@ -1,5 +1,3 @@
 <?php
-
-header("Location:http://l2.pvpland.lv");
-
+Header("Location: ../index.php");
 ?>

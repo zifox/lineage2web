@@ -26,12 +26,16 @@ class MySQL{
     {
         $this->connect();
     }
-    protected function connect() {
-        $this->link=@mysql_connect($this->DBInfo['host'],$this->DBInfo['user'],$this->DBInfo['password']);
+    public function return_result($res)
+    {
+        return $this->query[$res]['result'];
+    }
+    private function connect() {
+        $this->link=mysql_pconnect($this->DBInfo['host'],$this->DBInfo['user'],$this->DBInfo['password']);
         if (!$this->link)
             $this->err("Could not connect to server: <b>{$this->DBInfo['host']}</b>.");
 
-        if(!@mysql_select_db($this->DBInfo['database'], $this->link))
+        if(!mysql_select_db($this->DBInfo['database'], $this->link))
             $this->err("Could not open database: <b>{$this->DBInfo['database']}</b>.");
         unset($this->DBInfo);
     }
@@ -44,7 +48,7 @@ class MySQL{
 
     public function escape($string) {
         if(get_magic_quotes_runtime()) $string = stripslashes($string);
-        return @mysql_real_escape_string($string, $this->link);
+        return mysql_real_escape_string($string, $this->link);
     }
 
     public function query($sql) {
@@ -62,7 +66,6 @@ class MySQL{
         array_push($this->query, array(
             "query" => $sql,
             "result" => $result,
-            "rows" => ((strncasecmp('select', $sql, 6)===0) ? @mysql_num_rows($result) : mysql_affected_rows($this->link)),
             "time" => $time
         ));
 
@@ -76,7 +79,7 @@ class MySQL{
             end($this->query);
             $res = key($this->query);
         }
-        return @mysql_result($this->query[$res]['result'], $row, $field);
+        return mysql_result($this->query[$res]['result'], $row, $field);
     }
 
     public function num_rows($res = null) {
@@ -84,15 +87,11 @@ class MySQL{
             end($this->query);
             $res = key($this->query);
         }
-        return @mysql_num_rows($this->query[$res]['result']);
+        return mysql_num_rows($this->query[$res]['result']);
     }
 
     public function num_rows2($res = null) {
-        if ($res === null) {
-            end($this->query);
-            $res = key($this->query);
-        }
-        return $this->query[$res]['rows'];
+        return $this->num_rows($res);
     }
 
 	public function fetch_array($res = null) {
@@ -100,10 +99,19 @@ class MySQL{
 			end($this->query);
 			$res = key($this->query);
 		}
-		return @mysql_fetch_assoc($this->query[$res]['result']);
+		return mysql_fetch_assoc($this->query[$res]['result']);
 	}
-
-    protected function err($msg='') {
+    
+    public function free($res = null)
+    {
+  		if ($res === null) {
+			end($this->query);
+			$res = key($this->query);
+		}
+		return mysql_free_result($this->query[$res]['result']);
+    }
+    
+    private function err($msg='') {
         if($this->link>0){
             $error=mysql_error($this->link);
             $errno=mysql_errno($this->link);
@@ -138,7 +146,7 @@ class MySQL{
                 $report = '<font color="red" title="Query needs optimization. Execution time is unacceptable">';
             }
             ?>
-            <tr onmouseover="this.bgColor = '#505050';" onmouseout="this.bgColor = ''"><td width="20%">[<?php echo $key+1;?>]&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $report.$value['time'].'</font>';?></b></td><td>[<?php echo $value['query'];?>] Rows: <?php echo $value['rows'];?></td></tr>
+            <tr onmouseover="this.bgColor = '#505050';" onmouseout="this.bgColor = ''"><td width="20%">[<?php echo $key+1;?>]&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $report.$value['time'].'</font>';?></b></td><td>[<?php echo $value['query'];?>]<?php echo $value['result'];?></td></tr>
 <?php   } ?>
         </table>
 <?php

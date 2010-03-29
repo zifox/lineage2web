@@ -1,4 +1,7 @@
 <?php
+if (!defined('IN_BLOCK')) {
+    Header("Location: ../index.php");
+}
 $parse['server_name'] = $Config['ServerName'];
 
 $topchar=$mysql->query("SELECT `charId`, `char_name`, `sex` FROM `characters` WHERE `accesslevel`='0'  ORDER BY `exp` DESC LIMIT {$Config['TOP']};");
