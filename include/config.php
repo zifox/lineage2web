@@ -6,23 +6,22 @@ if (!defined('INWEB')) {
 $timeparts = explode(" ", microtime());
 $starttime = $timeparts[1] . substr($timeparts[0], 1);
 session_start();
-//session_id();
-//$_SESSION['last_act'] = time();
 
 define('INCONFIG', true);
 $DB = array(
     "host"      => "localhost", //MySQL Host
     "user"      => "root",      //MySQL User
-    "password"  => "agagag",          //MySQL Password
+    "password"  => "832620i",   //MySQL Password
     "database"  => "l2j",       //L2J DataBase
     "webdb"     => "web"        //Webpage DataBase
 );
 $webdb = $DB['webdb'];
+    
 require_once ('class.mysql.php');
 require_once ('class.user.php');
 require_once ('class.tplParser.php');
 $mysql = new MySQL($DB);
-//die(print_r($mysql->query));
+
 $query = $mysql->query("SELECT * FROM `" . $DB['webdb'] . "`.`config`;");
 while ($row = $mysql->fetch_array($query)) {
     $Config[$row['config_name']] = stripslashes($row['config_value']);

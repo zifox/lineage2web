@@ -153,7 +153,7 @@ class user {
         global $mysql, $Config;
         
         $acc = $mysql->escape($acc);
-        $pass = $mysql->escape($pass);
+        $pass = $this->encpass($pass);
         $ref = $mysql->escape($ref);
         $ip = $mysql->escape($_SERVER['REMOTE_ADDR']);
         if($ref != '')
@@ -165,7 +165,7 @@ class user {
             }
         }
    	    $mysql->query("INSERT INTO `accounts` (`login`, `password`, `accessLevel`, `lastIP`) VALUES ('".$acc."', '".$pass."', '0', '$ip')");
-        $this->checkLogin($acc,$pass);
+        $this->checkLogin($acc,$pass, 0);
     }
     
     public function changepass()

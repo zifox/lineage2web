@@ -6,7 +6,7 @@ if (!defined('INCONFIG')) {
 }
 class MySQL{
     private $DBInfo;
-    private $link = NULL;
+    private $link;
     private $query = array();
     public $querycount = 0;
     public $totalsqltime = 0;
@@ -115,7 +115,7 @@ class MySQL{
     }
     
     private function err($msg='') {
-        if($this->link>0){
+        if($this->link){
             $error=mysql_error($this->link);
             $errno=mysql_errno($this->link);
         }else{
@@ -132,8 +132,8 @@ class MySQL{
 		<?php if(strlen(@$_SERVER['HTTP_REFERER'])>0) echo '<tr><td align="right">Referer:</td><td><a href="'.@$_SERVER['HTTP_REFERER'].'">'.@$_SERVER['HTTP_REFERER'].'</a></td></tr>'; ?>
 		</table>
         <?php
-        //$this->close();
-        //die();
+        $this->close();
+        die();
     }
 
     public function debug() {

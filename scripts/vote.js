@@ -3,15 +3,15 @@ function one() {
 window.open("http://www.xtremetop100.com/in.php?site=1132295618");
 //var c = "vote=1";
 //c += "; path=" + path;
-document.cookie = "vote=1";
+//document.cookie = "vote=1";
 setTimeout("document.vote.elements[1].disabled=false",5000);
 }
 function two() {
-    if(document.cookie('vote') == "1")
-    {
+//    if(document.cookie('vote') == "1")
+//    {
         window.open("http://www.gamingsites100.com/lineage2/");
         setTimeout("document.vote.elements[2].disabled=false",5000);
-    }
+//    }
 }
 function three() {
 window.open("http://www.gtop100.com/in.php?site=41514");
