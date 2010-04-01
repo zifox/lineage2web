@@ -2,9 +2,12 @@
 if (!defined('IN_BLOCK')) {
     Header("Location: ../index.php");
 }
-$parse['server_name'] = $Config['ServerName'];
+$server_list=$mysql->query("SELECT `Name`, `DataBase` FROM `$webdb`.`gameservers`");
+while($slist=$mysql->fetch_array($server_list))
+{
+$parse['server_name'] = $slist['Name'];
 
-$topchar=$mysql->query("SELECT `charId`, `char_name`, `sex` FROM `characters` WHERE `accesslevel`='0'  ORDER BY `exp` DESC LIMIT {$Config['TOP']};");
+$topchar=$mysql->query("SELECT `charId`, `char_name`, `sex` FROM `{$slist['DataBase']}`.`characters` WHERE `accesslevel`='0'  ORDER BY `exp` DESC LIMIT {$Config['TOP']};");
 $n=1;
 $parse['rows'] = '';
 while($top=$mysql->fetch_array())
@@ -16,8 +19,7 @@ $row_parse['char_name'] = $top['char_name'];
 $parse['rows'] .= $tpl->parsetemplate('blocks/top10_row', $row_parse, 1);
 $n++;
 }
-unset($row_parse);
 
 $tpl->parsetemplate('blocks/top10', $parse);
-unset($parse);
+}
 ?>

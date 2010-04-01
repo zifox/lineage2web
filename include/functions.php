@@ -125,4 +125,19 @@ function pretty_time_hour ($seconds) {
 
 	return $time;
 }
+
+function getDBName($id)
+{
+	global $mysql, $webdb;
+	if(is_numeric($id))
+	{
+		$srv = $mysql->escape(0 + $id);
+		$srvqry = $mysql->query("SELECT `DataBase` FROM `$webdb`.`gameservers` WHERE `ID` = '$srv'");
+		if($mysql->num_rows($srvqry))
+		{
+			return $mysql->result($srvqry);
+ 		}
+  	}
+  	return $Config['DDB'];
+}
 ?>

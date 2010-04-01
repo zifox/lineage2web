@@ -15,6 +15,13 @@ if(isset($_GET['server']))
 {
 	$parse['ID'] = "&amp;server=".$_GET['server'];
 }
+$parse['server_list'] = NULL;
+$server_list = $mysql->query("SELECT `ID`, `Name` FROM `$webdb`.`gameservers`");
+while($slist = $mysql->fetch_array($server_list))
+{
+	$selected=($slist['ID']==$_GET['server'])?'selected':'';
+	$parse['server_list'] .= '<option onclick="GoTo(\'stat.php?stat='.$_GET['stat'].'&amp;server='.$slist['ID'].'\')" '.$selected.'>'.$slist['Name'].'</option>';
+}
 $tpl->parsetemplate('stat_menu', $parse);
 unset($parse);
 if(isset($_GET['server']) && is_numeric($_GET['server']))

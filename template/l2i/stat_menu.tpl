@@ -1,6 +1,6 @@
 <div align="center">
 <h4>{server_stat}</h4><hr />
- | <a href="stat.php">{home}</a>
+ | <a href="stat.php?stat=home{ID}">{home}</a>
  | <a href="stat.php?stat=online{ID}">{online}</a> 
  | <a href="onlinemap.php?type=normal{ID}" target="_blank">{map}</a> 
  | <a href="stat.php?stat=castles{ID}">{castles}</a>
@@ -21,4 +21,9 @@
  | <a href="stat.php?stat=orc{ID}">{orc}</a>
  | <a href="stat.php?stat=dwarf{ID}">{dwarf}</a>
  | <a href="stat.php?stat=kamael{ID}">{kamael}</a> |<br /><hr />
+   </div>
+   <div>
+   <select name="server">
+   {server_list}
+   </select>
    </div>

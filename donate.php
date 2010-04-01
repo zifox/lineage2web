@@ -5,12 +5,12 @@ require_once("include/config.php");
 head("Donate");
 includeLang('donate');
 $action = $_GET['action'];
-if($action='addtodb')
-{
+//if($action='addtodb')
+//{
     msg("NOT YET FINISHED");
-}
+//}
 ####################
-if($action='smscoin')
+/*if($action='smscoin')
 {
 ### SMS:Key v1.0.6 ###
 $old_ua = @ini_set('user_agent', 'smscoin_key_1.0.6');
@@ -168,6 +168,6 @@ function show(ele) {
     </table>
 </div>
 </td></tr></table>
-<?php
+<?php*/
 foot();
 ?>

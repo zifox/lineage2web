@@ -1,7 +1,7 @@
 <?php
 if (isset($_GET['error']))
 {
-//пароль
+//РїР°СЂРѕР»СЊ
 define('INWEB', True);
 require_once("include/config.php");
 includeLang('error');

@@ -11,7 +11,7 @@ define('INCONFIG', true);
 $DB = array(
     "host"      => "localhost", //MySQL Host
     "user"      => "root",      //MySQL User
-    "password"  => "832620i",   //MySQL Password
+    "password"  => "agagag",   //MySQL Password
     "database"  => "l2j",       //L2J DataBase
     "webdb"     => "web"        //Webpage DataBase
 );

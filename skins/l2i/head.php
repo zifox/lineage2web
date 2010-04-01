@@ -34,8 +34,37 @@ try {
 var pageTracker = _gat._getTracker("UA-11986252-1");
 pageTracker._trackPageview();
 } catch(err) {}
-</script>
 
+function GoTo(url)
+{
+	window.location.href = url;
+}
+
+</script>
+<script type="text/javascript" src="scripts/ajax.js"></script>
+<script type="text/javascript">
+var ajax = new Array();
+
+function getCharList(sel)
+{
+	var server = sel.options[sel.selectedIndex].value;
+	document.getElementById('char').options.length = 0;	
+	if(server.length>0){
+		var index = ajax.length;
+		ajax[index] = new sack();
+		
+		ajax[index].requestFile = 'getchar.php?server='+server;	
+		ajax[index].onCompletion = function(){ createChars(index) };
+		ajax[index].runAJAX();
+	}
+}
+
+function createChars(index)
+{
+	var obj = document.getElementById('char');
+	eval(ajax[index].response);
+}	
+</script>
 <?php
 //пароль
 includeLang('skin');

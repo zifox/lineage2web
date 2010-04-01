@@ -4,7 +4,21 @@ require_once('include/config.php');
 header("Cache-Control: no-cache");
 header("Expires: -1");
 head('Online Map',0);
-
+if(isset($_GET['server']) && is_numeric($_GET['server']))
+{
+	$server = 0 + $_GET['server'];
+	$s_db = $mysql->result($mysql->query("SELECT `DataBase` FROM `$webdb`.`gameservers` WHERE `ID` = '$server';"));
+}else
+{
+	$s_db = $Config['DDB'];
+}
+$parse['server_list'] = NULL;
+$server_list = $mysql->query("SELECT `ID`, `Name` FROM `$webdb`.`gameservers`");
+while($slist = $mysql->fetch_array($server_list))
+{
+	$selected=($slist['ID']==$_GET['server'])?'selected':'';
+	$parse['server_list'] .= '<option onclick="GoTo(\'onlinemap.php?server='.$slist['ID'].'\')" '.$selected.'>'.$slist['Name'].'</option>';
+}
 if(isset($_GET['type']) AND ($_GET['type'] == 'normal' OR $_GET['type'] == 'big' OR $_GET['type'] == 'very_big'))
 {
 	$map_size=$mysql->escape($_GET['type']);
@@ -30,14 +44,15 @@ switch($map_size){
 $imgsize['aden']=getimagesize("img/onlinemap/map_aden_".$map_size.".jpg");
 $map['aden_x']=$imgsize['aden'][0] / 100;
 $map['aden_y']=$imgsize['aden'][1] / 100;
-$totalonline = $mysql->result($mysql->query("SELECT count(`charId`) FROM `characters` WHERE `online`"));
-$hiddenonline = $mysql->result($mysql->query("SELECT count(`charId`) FROM `characters` WHERE `online` AND `onlinemap`='false'"));
+$totalonline = $mysql->result($mysql->query("SELECT count(`charId`) FROM `$s_db`.`characters` WHERE `online`"));
+$hiddenonline = $mysql->result($mysql->query("SELECT count(`charId`) FROM `$s_db`.`characters` WHERE `online` AND `onlinemap`='false'"));
 $showusers = $user->admin() ? $totalonline : $totalonline-$hiddenusers;
 ?>
 <table align="center">
     <tr align="center"><td align="center"><h1><?php echo $Config['ServerName'];?> Server Online players Map:</h1></td></tr>
     <tr align="center"><td><a href="onlinemap.php">Small</a> | <a href="onlinemap.php?type=normal">Normal</a> | <a href="onlinemap.php?type=big">Big</a> | <a href="onlinemap.php?type=very_big">Large</a></td></tr>
     <tr align="center"><td>Online Users: <?php echo $totalonline;?>&nbsp;&nbsp;&nbsp;&nbsp;Hidden Online Users: <?php echo $hiddenonline;?>&nbsp;&nbsp;&nbsp;&nbsp;Users listed: <?php echo $showusers;?></td></tr>
+    <tr><td><select><?php echo $parse['server_list'];?></select></tr>
     <tr align="center"><td>
     <table width="100%" border="0" cellpadding="0" cellspacing="0" class="main-tables">
         <tr><td class="widelist-txt">
@@ -46,13 +61,13 @@ $showusers = $user->admin() ? $totalonline : $totalonline-$hiddenusers;
             $count=0;
             if($user->admin())
             {
-                $char_query = "SELECT `char_name`, `characters`.`x`, `characters`.`y`, `characters`.`z`, `race`, `level`, `ClassName` FROM `characters` INNER JOIN `char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` WHERE `online`";
+                $char_query = "SELECT `char_name`, `characters`.`x`, `characters`.`y`, `characters`.`z`, `race`, `level`, `ClassName` FROM `$s_db`.`characters` INNER JOIN `$s_db`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` WHERE `online`";
             }
             else
             {
-                $char_query = "SELECT `char_name`, `characters`.`x`, `characters`.`y`, `characters`.`z`, `race`, `level`, `ClassName` FROM `characters` INNER JOIN `char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` WHERE `online` AND `onlinemap`='true'";
+                $char_query = "SELECT `char_name`, `characters`.`x`, `characters`.`y`, `characters`.`z`, `race`, `level`, `ClassName` FROM `$s_db`.`characters` INNER JOIN `$s_db`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` WHERE `online` AND `onlinemap`='true'";
             }
-            $boss_query = "SELECT `id`, `name`, `title`, `level`, `aggro`, `isUndead`, `boss_id`, `currentHp`, `currentMp`, `loc_x`, `loc_y`, `loc_z` FROM `npc` INNER JOIN `raidboss_spawnlist` ON `npc`.`id`=`raidboss_spawnlist`.`boss_id` WHERE `npc`.`type` = 'L2RaidBoss' AND `raidboss_spawnlist`.`respawn_time`='0'";
+            $boss_query = "SELECT `id`, `name`, `title`, `level`, `aggro`, `isUndead`, `boss_id`, `currentHp`, `currentMp`, `loc_x`, `loc_y`, `loc_z` FROM `$s_db`.`npc` INNER JOIN `$s_db`.`raidboss_spawnlist` ON `npc`.`id`=`raidboss_spawnlist`.`boss_id` WHERE `npc`.`type` = 'L2RaidBoss' AND `raidboss_spawnlist`.`respawn_time`='0'";
             $char_result=$mysql->query($char_query);
             while($char=$mysql->fetch_array($char_result))
             {
