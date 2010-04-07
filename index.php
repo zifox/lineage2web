@@ -1,13 +1,13 @@
 <?php
-define('INWEB', True);
-require_once("include/config.php");
+define('INWEB', true);
+require_once ("include/config.php");
 //пароль
 head("Home");
 includeLang('index');
 $parse = $Lang;
-$gsquery = $mysql->query("SELECT * FROM `{$DB['webdb']}`.`gameservers` INNER JOIN `{$DB['webdb']}`.`gameserver_info` USING (`ID`);");
+$gsquery = $mysql->query($q[3], $webdb);
 $parse['gsrows'] = "";
-while($gsrow = $mysql->fetch_array($gsquery))
+while ($gsrow = $mysql->fetch_array($gsquery))
 {
 	$parse['gsrows'] .= $tpl->parsetemplate('index_gsrow', $gsrow, 1);
 }

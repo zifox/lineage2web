@@ -11,18 +11,18 @@ define('INCONFIG', true);
 $DB = array(
     "host"      => "localhost", //MySQL Host
     "user"      => "root",      //MySQL User
-    "password"  => "832620i",   //MySQL Password
-    "database"  => "l2j",       //L2J DataBase
-    "webdb"     => "web"        //Webpage DataBase
+    "password"  => "",      //MySQL Password
+    "database"  => "l2j"        //L2J Main (account)DataBase
 );
-$webdb = $DB['webdb'];
+$webdb = "web";                 //Webpage DataBase
     
 require_once ('class.mysql.php');
 require_once ('class.user.php');
 require_once ('class.tplParser.php');
+require_once ('queries.php');
 $mysql = new MySQL($DB);
 
-$query = $mysql->query("SELECT * FROM `" . $DB['webdb'] . "`.`config`;");
+$query = $mysql->query($q['0'], $webdb);
 while ($row = $mysql->fetch_array($query)) {
     $Config[$row['config_name']] = stripslashes($row['config_value']);
 }

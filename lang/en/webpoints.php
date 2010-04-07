@@ -4,6 +4,8 @@ if(!defined('INLANG')){Header("Location: ../../index.php");}
 
 $Lang['webpoint_exchange']= 'WebPoint Exchange';
 $Lang['webpoints_exchanged'] = 'WebPoints Exchanged';
+$Lang['server'] = 'Server';
+$Lang['select_server'] = 'SELECT SERVER';
 $Lang['char'] = 'Char';
 $Lang['exchange_for'] = 'Exchange For';
 $Lang['count'] = 'Count';

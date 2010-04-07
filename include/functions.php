@@ -25,7 +25,7 @@ function includeLang($file)
 
 function includeBlock($file, $block_name='Menu')
 {
-	global $langpath, $skin, $Lang, $Config, $mysql, $tpl, $webdb;
+	global $langpath, $skin, $Lang, $Config, $mysql, $tpl, $webdb, $q;
     DEFINE('IN_BLOCK', True);
 	?>
 <table width="200" style="height:95px;" border="0" cellpadding="0" cellspacing="0" class="opacity2"><tr style="height:48px;">

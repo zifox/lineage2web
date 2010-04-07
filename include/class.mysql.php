@@ -11,7 +11,7 @@ class MySQL{
     public $querycount = 0;
     public $totalsqltime = 0;
 
-    function __construct($DBInfo){
+    function __construct(&$DBInfo){
         $this->DBInfo = $DBInfo;
         unset($DBInfo);
         $this->connect();
@@ -19,8 +19,7 @@ class MySQL{
     
     function __destruct()
     {
-        //$this->close();
-        //msg('MySQL', 'MySQL Destruction Success');
+        if($this->link) $this->close();
     }
     function __wakeup()
     {
@@ -54,11 +53,18 @@ class MySQL{
         return mysql_real_escape_string($string, $this->link);
     }
 
-    public function query($sql) {
-        $sql = trim($sql);
-
+    public function query($sql, $db = NULL, $limit = NULL) {
         $querytime = explode(" ", microtime());
         $querystart = $querytime[1] . substr($querytime[0], 1);
+        if($db)
+        {
+            $sql = str_replace('{{table}}', $db, $sql);
+        }
+        if($limit)
+        {
+            $sql = str_replace('{{limit}}', $limit, $sql);
+        }
+        $sql = trim($sql);
 
         $result = mysql_query($sql, $this->link) OR $this->err("<b>MySQL Query error: </b> $sql");
 
@@ -77,7 +83,7 @@ class MySQL{
         return key($this->query);
     }
 
-    public function result($res = null, $row=0, $field=0 ){
+    public function result($res = NULL, $row = 0, $field = 0 ){
         if ($res === null) {
             end($this->query);
             $res = key($this->query);
@@ -132,7 +138,7 @@ class MySQL{
 		<?php if(strlen(@$_SERVER['HTTP_REFERER'])>0) echo '<tr><td align="right">Referer:</td><td><a href="'.@$_SERVER['HTTP_REFERER'].'">'.@$_SERVER['HTTP_REFERER'].'</a></td></tr>'; ?>
 		</table>
         <?php
-        $this->close();
+        //$this->close();
         die();
     }
 
