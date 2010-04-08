@@ -1,13 +1,13 @@
 <table border="0" cellpadding="0" cellspacing="0" width="569">
 <tbody>
   <tr valign="top">
-    <td style="background: url(img/ss/ssqViewBg.jpg)" height="225"><table>
+    <td style="background: url(img/ss/ssqViewBg.jpg) no-repeat" height="225"><table>
         <tbody>
           <tr valign="top">
             <td><table style="margin: 18px 0px 0px 54px" cellspacing="0" cellpadding="0" border="0" width="141">
                 <tbody>
                   <tr align="center" style="height:26px;">
-                    <td style="background: url(img/ss/ssqViewimg1.gif); COLOR:#FFF; font-size:11px;">
+                    <td style="background: url(img/ss/ssqViewimg1.gif) no-repeat; COLOR:#FFF; font-size:11px;">
 						<script language="JavaScript" type="text/javascript">
                         <!--
 						if (0 == ssStatus) {
@@ -89,8 +89,8 @@
                     <td style="color: #000; font-size:11px;">
 						<script language="JavaScript" type="text/javascript">
                         <!--
-						var twilPointWidth = maxPointWidth * twilPoint / 1000;
-						document.write('<img src="img/ss/ssqbar2.gif" width="' + twilPointWidth + '" height="9" border="0" alt="" /> ' + twilPoint);
+						var dawnPointWidth = maxPointWidth * dawnPoint / 1000;
+						document.write('<img src="img/ss/ssqbar2.gif" width="' + dawnPointWidth + '" height="9" border="0" alt="" /> ' + dawnPoint);
 						// -->
                         </script>
 					</td>
@@ -103,8 +103,8 @@
                     <td style="color: #000; font-size:11px;">
 						<script language="JavaScript" type="text/javascript">
                         <!--
-						var dawnPointWidth = maxPointWidth * dawnPoint / 1000;
-						document.write('<img src="img/ss/ssqbar1.gif" width="' + dawnPointWidth + '" height="9" border="0" alt="" /> ' + dawnPoint);
+						var twilPointWidth = maxPointWidth * twilPoint / 1000;
+						document.write('<img src="img/ss/ssqbar1.gif" width="' + twilPointWidth + '" height="9" border="0" alt="" /> ' + twilPoint);
 						// -->
                         </script>
 					</td>

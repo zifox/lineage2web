@@ -301,9 +301,9 @@ $dusk = $mysql->result($result2);
 $result3 = $mysql->query($q[207], $s_db);
 $row=$mysql->fetch_array($result3);
 
-$twilScore = $row['dawn_stone_score'] + $row['dawn_festival_score'];
-$dawnScore = $row['dusk_stone_score'] + $row['dusk_festival_score'];
-$totalScore = $row['dawn_stone_score'] + $row['dusk_stone_score'] + $row['dawn_festival_score'] + $row['dusk_festival_score'];
+$twilScore = $row['avarice_dusk_score'] + $row['gnosis_dusk_score'] + $row['strife_dusk_score'];
+$dawnScore = $row['avarice_dawn_score'] + $row['gnosis_dawn_score'] + $row['strife_dawn_score'];
+$totalScore = $twilScore + $dawnScore;
 
 $dawnPoint = ($totalScore == 0) ? 0 : round(($dawnScore / $totalScore) * 1000);
 $twilPoint = ($totalScore == 0) ? 0 : round(($twilScore / $totalScore) * 1000);
@@ -315,8 +315,8 @@ $twilPoint = ($totalScore == 0) ? 0 : round(($twilScore / $totalScore) * 1000);
 var nthDay = <?php echo date("d", $query['date']) - 1;?>;
 var currTime = "<?php echo date('m/d/Y H:i'); ?>";
 var ssStatus = <?php echo $row['active_period'];?>;
-var dawnPoint = <?php echo $dawnPoint; ?>;
-var twilPoint = <?php echo $twilPoint; ?>;
+var dawnPoint = <?php echo $dawnScore; ?>;
+var twilPoint = <?php echo $twilScore; ?>;
 var maxPointWidth = 300;
 var seal1 = <?php echo $row['avarice_owner']; ?>;
 var seal2 = <?php echo $row['gnosis_owner']; ?>;
