@@ -312,7 +312,7 @@ $twilPoint = ($totalScore == 0) ? 0 : round(($twilScore / $totalScore) * 1000);
 
 <script language="javascript" type="text/javascript">
 <!--
-var nthDay = <?php echo date("d", $query['date']) - 1;?>;
+var nthDay = <?php echo $row['current_cycle'];?>;
 var currTime = "<?php echo date('m/d/Y H:i'); ?>";
 var ssStatus = <?php echo $row['active_period'];?>;
 var dawnPoint = <?php echo $dawnScore; ?>;

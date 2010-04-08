@@ -31,7 +31,7 @@ $q = array(
     204 => 'SELECT count(`charId`) FROM `{{table}}`.`characters` WHERE `online` = \'1\' AND `accesslevel`>\'0\';',
     205 => '',
     206 => 'SELECT count(`charId`) FROM `{{table}}`.`seven_signs` WHERE `cabal` LIKE \'{{limit}}\'',
-    207 => 'SELECT `active_period`, `date`, `avarice_dawn_score`, `gnosis_dawn_score`, `strife_dawn_score`, `avarice_dusk_score`, `gnosis_dusk_score`, `strife_dusk_score`, `avarice_owner`, `gnosis_owner`, `strife_owner` FROM `{{table}}`.`seven_signs_status`',
+    207 => 'SELECT `current_cycle`, `active_period`, `avarice_dawn_score`, `gnosis_dawn_score`, `strife_dawn_score`, `avarice_dusk_score`, `gnosis_dusk_score`, `strife_dusk_score`, `avarice_owner`, `gnosis_owner`, `strife_owner` FROM `{{table}}`.`seven_signs_status`',
     208 => '',
     209 => ''
 );
