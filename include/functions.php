@@ -92,6 +92,7 @@ function button($text='  ', $name = 'Submit', $return = 0, $disabled=false)
     global $tpl;
     $parse['text'] = $text;
     $parse['name'] = $name;
+    $parse['id'] = "bt_".rand(20,99);
     if ($disabled) $parse['disabled'] = 'disabled="disabled"';
     if ($return)
         return $tpl->parsetemplate('button', $parse, 1);

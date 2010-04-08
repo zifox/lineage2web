@@ -4,7 +4,7 @@
 <tr onmouseover="this.bgColor = '#505050';" onmouseout="this.bgColor = ''"><td align="center"><a href="connect.php"><img src="./img/menu/{langpath}/connect.png" border="0" width="150" title="{connect}" alt="{connect}"/></a></td></tr>
 <tr onmouseover="this.bgColor = '#505050';" onmouseout="this.bgColor = ''"><td align="center"><a href="/forum/" target="_blank"><img src="./img/menu/{langpath}/forum.png" border="0" width="150" title="{forum}" alt="{forum}"/></a></td></tr>
 <tr onmouseover="this.bgColor = '#505050';" onmouseout="this.bgColor = ''"><td align="center"><a href="stat.php"><img src="./img/menu/{langpath}/stat.png" border="0" width="150" title="{statistic}" alt="{statistic}"/></a></td></tr>
-<tr onmouseover="this.bgColor = '#505050';" onmouseout="this.bgColor = ''"><td align="center"><a href="rules.php"><img src="./img/menu/{langpath}/rules.png" border="0" width="150" title="<?php echo $Lang['Rules'];?>" alt="{Rules}"/></a></td></tr>
+<tr onmouseover="this.bgColor = '#505050';" onmouseout="this.bgColor = ''"><td align="center"><a href="rules.php"><img src="./img/menu/{langpath}/rules.png" border="0" width="150" title="{Rules}" alt="{Rules}"/></a></td></tr>
 <tr onmouseover="this.bgColor = '#505050';" onmouseout="this.bgColor = ''"><td align="center"><a href="donate.php"><img src="./img/menu/{langpath}/donate.png" border="0" width="150" title="{Donate}" alt="{Donate}"/></a></td></tr>
 </table>
 

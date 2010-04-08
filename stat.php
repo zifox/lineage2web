@@ -291,168 +291,43 @@ echo('<tr><td>'.$Lang['female'].'<img src="img/stat/sex1.jpg" alt="'.$Lang['fema
 echo '</table><hr />';
 
 echo '<h1>Seven Signs</h1>';
-$query1 = "SELECT count(`charId`) FROM `$s_db`.`seven_signs` WHERE `cabal` LIKE '%dusk%'";
-$result1 = $mysql->query($query1);
+
+$result1 = $mysql->query($q[206], $s_db, '%dusk%');
 $dawn =$mysql->result($result1);
 
-
-$query2 = "SELECT count(`charId`) FROM `$s_db`.`seven_signs` WHERE `cabal` LIKE '%dawn%'";
-$result2 = $mysql->query($query2);
+$result2 = $mysql->query($q[206], $s_db, '%dawn%');
 $dusk = $mysql->result($result2);
 
-$query3 = "SELECT `current_cycle`, `festival_cycle`, `active_period`, `date`, `avarice_dawn_score`, `avarice_dusk_score`, `gnosis_dawn_score`, `gnosis_dusk_score`, `strife_dawn_score`, `strife_dusk_score` FROM `$s_db`.`seven_signs_status`";
-$result3 = $mysql->query($query3);
+$result3 = $mysql->query($q[207], $s_db);
 $row=$mysql->fetch_array($result3);
 
-$current_cycle = $row['current_cycle'];
-//$festivall_cycle = $row['festival_cycle'];
-$active_period = $row['active_period'];
-$date = $row['date'];
-$avarice = $row['avarice_dawn_score']+$row['avarice_dusk_score'];
-$gnosis = $row['gnosis_dawn_score']+$row['gnosis_dusk_score'];
-$strife = $row['strife_dawn_score']+$row['strife_dusk_score'];
+$twilScore = $row['dawn_stone_score'] + $row['dawn_festival_score'];
+$dawnScore = $row['dusk_stone_score'] + $row['dusk_festival_score'];
+$totalScore = $row['dawn_stone_score'] + $row['dusk_stone_score'] + $row['dawn_festival_score'] + $row['dusk_festival_score'];
+
+$dawnPoint = ($totalScore == 0) ? 0 : round(($dawnScore / $totalScore) * 1000);
+$twilPoint = ($totalScore == 0) ? 0 : round(($twilScore / $totalScore) * 1000);
+
 ?>
+
 <script language="javascript" type="text/javascript">
 <!--
-var nthDay = <?php echo $active_period;?>;
-var ssStatus = <?php echo $current_cycle;?>;
-var dawnPoint = <?php echo $dawn; ?>;
-var twilPoint = <?php echo $dusk; ?>;
+var nthDay = <?php echo date("d", $query['date']) - 1;?>;
+var currTime = "<?php echo date('m/d/Y H:i'); ?>";
+var ssStatus = <?php echo $row['active_period'];?>;
+var dawnPoint = <?php echo $dawnPoint; ?>;
+var twilPoint = <?php echo $twilPoint; ?>;
 var maxPointWidth = 300;
-var seal1 = <?php echo $avarice; ?>;
-var seal2 = <?php echo $gnosis; ?>;
-var seal3 = <?php echo $strife; ?>;
+var seal1 = <?php echo $row['avarice_owner']; ?>;
+var seal2 = <?php echo $row['gnosis_owner']; ?>;
+var seal3 = <?php echo $row['strife_owner']; ?>;
+
 // -->
 </script>
 
-<table style="MARGIN-TOP:0px; width:500px;" cellspacing="0" cellpadding="0" border="0" align="center"><tr valign="top"><td style="background: url(img/ss/ssqViewBg.jpg)" height="225">
-<table><tr valign="top"><td>
-<table style="MARGIN: 18px 0px 0px 54px" cellspacing="0" cellpadding="0" border="0" width="141">
-<tr align="center" style="height: 26px;">
-<td style="BACKGROUND: url(img/ss/ssqViewimg1.gif);">
-<script language="javascript" type="text/javascript">
-<!--
-if (0 == ssStatus) {
-document.write('Start');
-}
-else if (1 == ssStatus) {
-document.write("Competition day <b> " + nthDay + " </b>");
-}
-else if (2 == ssStatus) {
-document.write('Result');
-}
-else if (3 == ssStatus) {
-document.write('ss result day ' + nthDay);
-}
-// -->
-</script>
-</td></tr></table>
-<table style="MARGIN: 3px 0px 0px 10px" cellspacing="0" cellpadding="0" width="141" border="0">
-<tr><td></td><td><img height="16" src="img/ss/timeBox1.jpg" width="140" border="0" alt="" /></td>
-<td></td></tr>
-<tr>
-<td valign="bottom" rowspan="2"><img height="125" src="img/ss/timeBox2.jpg" width="45" border="0" alt="" /></td>
-<td>
-<script language="javascript" type="text/javascript">
-<!--
-var timeImage;
-var tempImageNum;
+<?php
 
-if (1 == ssStatus) {
-tempImageNum = nthDay;
-}
-else if (0 == ssStatus) {
-tempImageNum = 0;
-}
-else if (3 == ssStatus || 2 == ssStatus) {
-tempImageNum = nthDay + 7;
-}
-timeImage = 'time'+tempImageNum+'.jpg';
-document.write('<img src="img/ss/time/'+ timeImage +'" width="140" height="139" border="0" alt="" />');
-// -->
-</script>
-</td>
-<td valign="bottom" rowspan="2"><img height="125" src="img/ss/timeBox3.jpg" width="66" border="0" alt="" /></td></tr><tr>
-<td><img height="12" src="img/ss/timeBox4.jpg" width="140" border="0" alt="" /></td>
-</tr></table></td>
-<td><table style="MARGIN: 27px 0px 0px 22px" cellspacing="0" cellpadding="0" width="200" border="0">
-<tr align="center" bgcolor="#606d6f" style="height: 17px;">
-<td>
-<?php
-$timezone  = 2;
-echo gmdate("Y/m/j H:i:s", time() + 3600*($timezone+date("I")));
-?>
-</td></tr></table>
-<table style="MARGIN: 21px 0px 0px 22px" cellspacing="0" cellpadding="0" border="0">
-<colgroup><col width="74" /><col width="*" /></colgroup>
-<tr>
-<td style="font-size:11px; color:#000;"><img style="MARGIN: 0px 6px 5px 0px" height="1" src="/ssq/ssq_image/dot.gif" width="1" border="0" alt="" />Dawn</td>
-<td style="COLOR: #000;">
-<script language="javascript" type="text/javascript">
-<!--
-var twilPointWidth = maxPointWidth * twilPoint / 100;
-document.write('<img src="img/ss/ssqbar2.gif" width="' + twilPointWidth + '" height="9" border="0" alt="" /> ' + twilPoint);
-// -->
-</script>
-</td></tr><tr><td colspan="2" height="7"></td>
-</tr><tr>
-<td style="font-size:11px; color:#000;"><img style="MARGIN: 0px 6px 5px 0px" height="1" src="/ssq/ssq_image/dot.gif" width="1" border="0" alt="" />Dusk</td>
-<td style="COLOR: #000; font-size:11px;">
-<script language="javascript" type="text/javascript">
-<!--
-var dawnPointWidth = maxPointWidth * dawnPoint / 100;
-document.write('<img src="img/ss/ssqbar1.gif" width="' + dawnPointWidth + '" height="9" border="0" alt="" /> ' + dawnPoint);
-// -->
-</script>
-</td></tr></table>
-<table border="0">
-<tr valign="bottom" align="center" style="height: 95px;">
-<td>
-<script language="javascript" type="text/javascript">
-<!--
-if (3 == ssStatus) {
-if (0 == seal1)
-document.write('<img src="img/ss/Seals/SOA/bongin1close.gif" width="85" height="86" border="0" alt="" />');
-else
-document.write('<img src="img/ss/Seals/SOA/bongin1open.gif" width="85" height="86" border="0" alt="" />');
-}   else {
-document.write('<img src="img/ss/Seals/SOA/bongin1.gif" width="85" height="86" border="0" alt="" />');
-}
-// -->
-</script>
-</td><td>
-<script language="javascript" type="text/javascript">
-<!--
-if (3 == ssStatus) {
-if (0 == seal2)
-document.write('<img src="img/ss/Seals/SOG/bongin2close.gif" width="85" height="86" border="0" alt="" />');
-else
-document.write('<img src="img/ss/Seals/SOG/bongin2open.gif" width="85" height="86" border="0" alt="" />');
-}   else {
-document.write('<img src="img/ss/Seals/SOG/bongin2.gif" width="85" height="86" border="0" alt="" />');
-}
-// -->
-</script>
-</td><td>
-<script language="javascript" type="text/javascript">
-<!--
-if (3 == ssStatus) {
-if (0 == seal3)
-document.write('<img src="img/ss/Seals/SOS/bongin3close.gif" width="85" height="86" border="0" alt="" />');
-else
-document.write('<img src="img/ss/Seals/SOS/bongin3open.gif" width="85" height="86" border="0" alt="" />');
-}   else {
-document.write("<img src='img/ss/Seals/SOS/bongin3.gif' width='85' height='86' border='0' alt='' />");
-}
-// -->
-</script>
-</td></tr>
-<tr>
-<td colspan="3"><div align="center" style="margin-left:10px;"><img height="16" src="img/ss/bonginName.gif" width="258" border="0" alt="" /> </div></td>
-</tr>
-</table></td></tr>
-</table></td></tr></table>
-<?php
+$tpl->parsetemplate('seven_signs', NULL);
 break;
 }
 if($stat && $stat != 'castles' && $stat != 'fort' && $stat != 'clantop'){

@@ -30,8 +30,8 @@ $q = array(
     203 => 'SELECT count(`online`) FROM `{{table}}`.`characters` WHERE `online` = \'1\' AND `accesslevel`=\'0\';',
     204 => 'SELECT count(`charId`) FROM `{{table}}`.`characters` WHERE `online` = \'1\' AND `accesslevel`>\'0\';',
     205 => '',
-    206 => '',
-    207 => '',
+    206 => 'SELECT count(`charId`) FROM `{{table}}`.`seven_signs` WHERE `cabal` LIKE \'{{limit}}\'',
+    207 => 'SELECT `active_period`, `date`, `dawn_stone_score`, `dusk_stone_score`, `dawn_festival_score`, `dusk_festival_score`, `avarice_owner`, `gnosis_owner`, `strife_owner` FROM `{{table}}`.`seven_signs_status`',
     208 => '',
     209 => ''
 );
