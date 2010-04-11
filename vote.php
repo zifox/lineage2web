@@ -40,7 +40,7 @@ $parse['vote_reward'] = $Config['vote_reward'];
 if($user->logged())
 {
     $_SESSION['vote_rnd']=time();
-    if($timevoted < ($now-60*60*12)) $parse['button'] = button($Lang['get_reward'], 'go', 1, true);
+    if($timevoted < ($now-60*60*12)) $parse['button'] = button($Lang['get_reward'], 'go', 1, true, 'go');
 }
 $tpl->parsetemplate('vote', $parse);
 foot();
