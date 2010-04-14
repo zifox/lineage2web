@@ -25,30 +25,14 @@ function includeLang($file)
 
 function includeBlock($file, $block_name='Menu')
 {
-	global $langpath, $skin, $Lang, $Config, $mysql, $tpl, $webdb, $q;
+	global $langpath, $skin, $Lang, $Config, $mysql, $tpl, $webdb, $q, $staticurl;
     DEFINE('IN_BLOCK', True);
-	?>
-<table width="200" style="height:95px;" border="0" cellpadding="0" cellspacing="0" class="opacity2"><tr style="height:48px;">
-<td width="23"><img width="23" height="50" alt="" src="skins/<?php echo $skin;?>/img/h_l_c.gif" /></td>
-<td width="159" style="background-image: url(skins/<?php echo $skin;?>/img/h_c.gif); background-repeat: no-repeat;"><div align="center" class="block_name"><?php echo $block_name;?></div></td>
-<td width="18"><img width="18" height="50" alt="" src="skins/<?php echo $skin;?>/img/h_r_c.gif" /></td></tr>
-
-<tr><td style="background-image: url(skins/<?php echo $skin;?>/img/h_l_b.gif);">&nbsp;</td>
-<td width="80%" bgcolor="#37301d" align="center">
-<?php
-includeLang('blocks/'.$file);
-require_once('blocks/'.$file.'.php');
-?>
-</td>
-<td style="background-image: url(skins/<?php echo $skin;?>/img/h_r_b.gif);">&nbsp;</td>
-</tr>
-<tr>
-        <td width="23"><img width="23" height="26" alt="" src="skins/<?php echo $skin;?>/img/b_l_c.gif" /></td>
-        <td width="159"><img width="159" height="26" alt="" src="skins/<?php echo $skin;?>/img/b_c.gif" /></td>
-        <td width="18"><img width="18" height="26" alt="" src="skins/<?php echo $skin;?>/img/b_r_c.gif" /></td>
-      </tr>
-</table>
-<?php
+    $parse['img_url'] = $staticurl.'/skins/'.$skin;
+    $parse['block_name'] = $block_name;
+	$tpl->parsetemplate('blocks/block_head', $parse);
+    includeLang('blocks/'.$file);
+    require_once('blocks/'.$file.'.php');
+    $tpl->parsetemplate('blocks/block_foot', $parse);
 }
 
 function msg($heading = '', $text = '', $div = 'success', $return=false) {
@@ -66,7 +50,7 @@ function error($id){
 
 function head($title = "", $head=1, $url='', $time=0)
 {
-    global $skin, $Config, $Lang, $mysql;
+    global $skin, $Config, $Lang, $mysql, $staticurl, $tpl;
     DEFINE('INSKIN', True);
 	$skin = $Config['DSkin'];
 
@@ -76,7 +60,7 @@ function head($title = "", $head=1, $url='', $time=0)
 
 function foot($foot=1)
 {
-    global $mysql, $skin, $Config, $Lang, $starttime, $user, $tpl;
+    global $mysql, $skin, $Config, $Lang, $starttime, $user, $tpl, $staticurl;
     if(isset($_COOKIE['skin']))
     {
         $skin = trim($_COOKIE['skin']);

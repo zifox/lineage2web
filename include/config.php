@@ -15,7 +15,17 @@ $DB = array(
     "database"  => "l2j"        //L2J Main (account)DataBase
 );
 $webdb = "web";                 //Webpage DataBase
-    
+
+$static = array(
+0 => 'http://static1.sytes.net/l2/static',
+1 => 'http://static2.sytes.net/l2/static',
+);
+do
+{
+    $staticurl = $static[rand(0, count($static))];
+}
+while($staticurl == NULL);
+
 require_once ('class.mysql.php');
 require_once ('class.user.php');
 require_once ('class.tplParser.php');
