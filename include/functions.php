@@ -27,7 +27,7 @@ function includeBlock($file, $block_name='Menu')
 {
 	global $langpath, $skin, $Lang, $Config, $mysql, $tpl, $webdb, $q, $staticurl;
     DEFINE('IN_BLOCK', True);
-    $parse['img_url'] = $staticurl.'/skins/'.$skin;
+    $parse['img_link'] = $staticurl.'/skins/'.$skin;
     $parse['block_name'] = $block_name;
 	$tpl->parsetemplate('blocks/block_head', $parse);
     includeLang('blocks/'.$file);

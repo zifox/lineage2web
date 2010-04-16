@@ -17,15 +17,15 @@ $DB = array(
 $webdb = "web";                 //Webpage DataBase
 
 $static = array(
-0 => 'http://static1.sytes.net/l2/static',
-1 => 'http://static2.sytes.net/l2/static',
+0 => 'http://static1.sytes.net',
+1 => 'http://static2.sytes.net',
 );
-do
-{
-    $staticurl = $static[rand(0, count($static))];
-}
-while($staticurl == NULL);
-
+//do
+//{
+//    $staticurl = $static[rand(0, count($static))];
+//}
+//while($staticurl == NULL);
+$staticurl = $static[0];
 require_once ('class.mysql.php');
 require_once ('class.user.php');
 require_once ('class.tplParser.php');

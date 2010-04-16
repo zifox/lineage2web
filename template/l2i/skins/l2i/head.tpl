@@ -17,20 +17,20 @@
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
 document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
 </script>
+<script type="text/javascript" src="{static}/scripts/ajax.js"></script>
 <script type="text/javascript" language="javascript">
-try {
-var pageTracker = _gat._getTracker("UA-11986252-1");
-pageTracker._trackPageview();
-} catch(err) {}
-
 function GoTo(url)
 {
 	window.location.href = url;
 }
 
-</script>
-<script type="text/javascript" src="{static}/scripts/ajax.js"></script>
-<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-11986252-1");
+pageTracker._trackPageview();
+} catch(err) {
+    
+}
+
 var ajax = new Array();
 
 function getCharList(sel)
@@ -59,7 +59,7 @@ margin : 5px;
 font-size : 12px;
 font-family : Arial, Helvetica, sans-serif;
 color : #ffffff;
-background : url('{skinurl}/header.jpg') fixed top center no-repeat #191919;
+background : url('{skinurl}/img/header.jpg') fixed top center no-repeat #191919;
 cursor : url('{skinurl}/cursors/cursor.cur'), auto;
 }
 #logoLink {
