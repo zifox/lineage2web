@@ -11,7 +11,7 @@ define('INCONFIG', true);
 $DB = array(
     "host"      => "localhost", //MySQL Host
     "user"      => "root",      //MySQL User
-    "password"  => "agagag",      //MySQL Password
+    "password"  => "",      //MySQL Password
     "database"  => "l2j"        //L2J Main (account)DataBase
 );
 $webdb = "web";                 //Webpage DataBase
@@ -19,13 +19,14 @@ $webdb = "web";                 //Webpage DataBase
 $static = array(
 0 => 'http://static1.sytes.net',
 1 => 'http://static2.sytes.net',
+2 => 'http://localhost/l2/static'
 );
 //do
 //{
 //    $staticurl = $static[rand(0, count($static))];
 //}
 //while($staticurl == NULL);
-$staticurl = $static[0];
+$staticurl = $static[2];
 require_once ('class.mysql.php');
 require_once ('class.user.php');
 require_once ('class.tplParser.php');

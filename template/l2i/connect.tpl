@@ -4,14 +4,14 @@
     <li><a href="http://www.fileplanet.com/promotions/lineage2/gracia-epilogue/">FilePlanet.com</a></li>
     </ul></li>
     <li>Now you have to redirect your connection to our servers.<br /> To do that you have to edit "hosts" file which you can find under "C:\WINDOWS\system32\drivers\etc" </li>
-    <li>Copy this two lines with server address and put them on the end of your "hosts" file <a rel="{static}/img/howto.jpg" class="imgTxtPrevLink imgTxtTipCenterTop">example</a></li>
-    <li><strong>87.110.204.53 l2authd.lineage2.com<br />
+    <li>Copy this two lines with server address and put them on the end of your "hosts" file<br />
+    <strong>87.110.204.53 l2authd.lineage2.com<br />
 87.110.204.53 l2testauthd.lineage2.com </strong></li>
 </ol>
 <p>
 To play you need make autoupdate and run game by l2.exe executable<br />
 which you can find under system catalog of your Lineage 2 folder - example: C:\Program Files\Lineage2\System\L2.exe<br />
-If you cant find l2.exe in your system folder, you must find l2.bin and change it to l2.exe. Then you can use it to starts game. </p>
+If you cant find l2.exe in your system folder, you must find l2.bin and change it to l2.exe. Then you can use it to start game. </p>
 
 <p>
 To avoid Game Guard errors or Hacking tool problems download this patch (Wildcard) and replace original files in game system folder whith these in patch <a href="{static}/files/wildcard.rar">Download Wildcard</a>
@@ -35,8 +35,6 @@ Patch Features:
 <li>Color Patch(Some system messages have different colors)</li>
 <li>Unlimited zoom</li>
 <li>Camera pass through walls</li>
-<li>Different enchant color on each enchant(only if u download and put this file on fantasy_system folder.</li>
-<li>Special Loading Screen.</li>
 </ol>
 Installation quick guide
 <ol>

@@ -27,18 +27,33 @@ function includeBlock($file, $block_name='Menu')
 {
 	global $langpath, $skin, $Lang, $Config, $mysql, $tpl, $webdb, $q, $staticurl;
     DEFINE('IN_BLOCK', True);
-    $parse['img_link'] = $staticurl.'/skins/'.$skin;
-    $parse['block_name'] = $block_name;
-	$tpl->parsetemplate('blocks/block_head', $parse);
+    $img_link = $staticurl.'/skins/'.$skin;
+	?>
+    <table width="200" style="height:95px;" border="0" cellpadding="0" cellspacing="0" class="opacity2">
+    <tr style="height:48px;">
+    <td width="23"><img width="23" height="50" alt="" src="<?php echo $img_link;?>/img/h_l_c.gif" /></td>
+    <td width="159" style="background-image: url(<?php echo $img_link;?>/img/h_c.gif); background-repeat: no-repeat;">
+    <div align="center" class="block_name"><?php echo $block_name;?></div></td>
+    <td width="18"><img width="18" height="50" alt="" src="<?php echo $img_link;?>/img/h_r_c.gif" /></td></tr>
+
+    <tr><td style="background-image: url(<?php echo $img_link;?>/img/h_l_b.gif);">&nbsp;</td>
+    <td width="80%" bgcolor="#37301d" align="center">
+    <?php
     includeLang('blocks/'.$file);
     require_once('blocks/'.$file.'.php');
-    $tpl->parsetemplate('blocks/block_foot', $parse);
+    ?>
+    </td><td style="background-image: url(<?php echo $img_link;?>/img/h_r_b.gif);">&nbsp;</td></tr>
+    <tr><td width="23"><img width="23" height="26" alt="" src="<?php echo $img_link;?>/img/b_l_c.gif" /></td>
+    <td width="159"><img width="159" height="26" alt="" src="<?php echo $img_link;?>/img/b_c.gif" /></td>
+    <td width="18"><img width="18" height="26" alt="" src="<?php echo $img_link;?>/img/b_r_c.gif" /></td>
+    </tr></table>
+    <?php
 }
 
 function msg($heading = '', $text = '', $div = 'success', $return=false) {
      if($return)
     {
-        $back='<meta http-equiv="refresh" content="3;url='.$Config['url'].'/l2/index.php" />';
+        $back='<meta http-equiv="refresh" content="3;url='.$Config['url'].'/index.php" />';
     }
     echo '<table width="90%" border="0"><tr><td>';
     echo '<div align="center" class="'.$div.'">'.($heading ? '<b>'.$heading.'</b><br />' : '').$text.$back.'</div></td></tr></table>';

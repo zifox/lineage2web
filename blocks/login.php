@@ -25,6 +25,7 @@ if ( $_SESSION['logged'] )
 }
 else
 {
+    $parse['static'] = $staticurl;
 	$parse['button'] = button( $Lang['login'], '', 1 );
 	$tpl->parsetemplate( 'blocks/login', $parse );
 }
