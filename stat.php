@@ -16,7 +16,7 @@ if(isset($_GET['server']))
 	$parse['ID'] = "&amp;server=".$_GET['server'];
 }
 $parse['server_list'] = NULL;
-$server_list = $mysql->query("SELECT `ID`, `Name` FROM `$webdb`.`gameservers`");
+$server_list = $mysql->query("SELECT `ID`, `Name` FROM `$webdb`.`gameservers` WHERE `active`=true");
 while($slist = $mysql->fetch_array($server_list))
 {
 	$selected=($slist['ID']==$_GET['server'])?'selected':'';
@@ -27,7 +27,13 @@ unset($parse);
 if(isset($_GET['server']) && is_numeric($_GET['server']))
 {
 	$server = 0 + $_GET['server'];
-	$s_db = $mysql->result($mysql->query("SELECT `DataBase` FROM `$webdb`.`gameservers` WHERE `ID` = '$server';"));
+    $serv = $mysql->query("SELECT `DataBase` FROM `$webdb`.`gameservers` WHERE `ID` = '$server';");
+    if($mysql->num_rows($serv))
+    {
+	   $s_db = $mysql->result();
+    }else{
+        $s_db = $Config['DDB'];        
+    }
 }else
 {
 	$s_db = $Config['DDB'];

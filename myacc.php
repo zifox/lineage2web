@@ -22,8 +22,9 @@ if ($timevoted <= ($now-60*60*12))
     Your Referal Url: <input type="text" name="refurl" value="http://l2.pvpland.lv/reg.php?ref=<?php echo $_SESSION['account'];?>" size="40" onclick="select()"  readonly="readonly" /><br />
     Every user who registers from your link will add you <?php echo $Config['reg_reward'];?> webpoints<br />
     <h1>Your Chars</h1>
+    1 Webpoint = 2500 (12.5%) Vitality points, max = 20000 (4 LvL 100%)
     <?php
-    $dbq = $mysql->query("SELECT `ID`, `Name`, `DataBase` FROM `$webdb`.`gameservers`");
+    $dbq = $mysql->query("SELECT `ID`, `Name`, `DataBase` FROM `$webdb`.`gameservers` WHERE `active` = true");
     while($dbs = $mysql->fetch_array($dbq))
     {
     	$dbn = $dbs['DataBase'];
@@ -38,7 +39,7 @@ if ($timevoted <= ($now-60*60*12))
     {
     	?>
         <table border="1">
-        <tr><td><?php echo $Lang['face'];?></td><td><?php echo $Lang['name'];?></td><td><?php echo $Lang['level'];?></td><td><?php echo $Lang['class'];?></td><td class="maxCp"><?php echo $Lang['cp'];?></td><td class="maxHp"><?php echo $Lang['hp'];?></td><td class="maxMp"><?php echo $Lang['mp'];?></td><td><?php echo $Lang['clan'];?></td><td><?php echo $Lang['pvp_pk'];?></td><td><?php echo $Lang['online_time'];?></td><td><?php echo $Lang['online'];?></td><td><?php echo $Lang['unstuck'];?></td><td>OnlineMap</td><td>FullVitality</td></tr>
+        <tr><td><?php echo $Lang['face'];?></td><td><?php echo $Lang['name'];?></td><td><?php echo $Lang['level'];?></td><td><?php echo $Lang['class'];?></td><td class="maxCp"><?php echo $Lang['cp'];?></td><td class="maxHp"><?php echo $Lang['hp'];?></td><td class="maxMp"><?php echo $Lang['mp'];?></td><td><?php echo $Lang['clan'];?></td><td><?php echo $Lang['pvp_pk'];?></td><td><?php echo $Lang['online_time'];?></td><td><?php echo $Lang['online'];?></td><td><?php echo $Lang['unstuck'];?></td><td>OnlineMap</td><td>Vitality</td></tr>
 <?php
 $i=0;
     while($char=$mysql->fetch_array($sql))
@@ -48,10 +49,10 @@ $i=0;
 	$onlinetimeM=round(((($char['onlinetime']/60/60)-$onlinetimeH)*60)-0.5);
         if ($char['online']) {$online='<img src="img/status/online.png" alt="" />';} 
 	else {$online='<img src="img/status/offline.png" alt="" />';}
-	$map = ($char['onlinemap'] == 1) ? 'checked="checked"':'';
+	$map = ($char['onlinemap'] == 'true') ? 'checked="checked"':'';
         if ($char['clan_id']) {$clan_link = "<a href=\"claninfo.php?clan={$char['clan_id']}\">{$char['clan_name']}</a>";}else{$clan_link = "No Clan";}
  ?>
-<tr<?php echo ($i%2==0)?' style="altRow"':'';?> ><td><img src="img/face/<?php echo $char['race'].'_'.$char['sex'];?>.gif" alt="" /></td><td><a href="user.php?cid=<?php echo $char['charId'];?>"><font color="<?php echo $color;?>"><?php echo $char['char_name'];?></font></a></td><td><?php echo $char['level'];?></td><td><?php echo $char['ClassName'];?></td><td class="maxCp"><?php echo $char['maxCp'];?></td><td class="maxHp"><?php echo $char['maxHp'];?></td><td class="maxMp"><?php echo $char['maxMp'];?></td><td><?php echo $clan_link;?></td><td><b><?php echo $char['pvpkills'];?><font color="red"><?php echo $char['pkkills'];?></font></b></td><td><?php echo $onlinetimeH.' '.$Lang['hours'].' '.$onlinetimeM.' '.$Lang['min'];?></td><td><?php echo $online;?></td><td><a href="unstuck.php?cid=<?php echo $char['charId'];?>"><?php echo $Lang['unstuck'];?></a></td><td><input type="checkbox" name="onlinemap" onchange="GoTo('map.php?server=<?php echo $dbs['ID'];?>&amp;char=<?php echo $char['charId'];?>')" <?php echo $map;?> /></td><td></td></tr>
+<tr<?php echo ($i%2==0)?' style="altRow"':'';?> ><td><img src="img/face/<?php echo $char['race'].'_'.$char['sex'];?>.gif" alt="" /></td><td><a href="user.php?cid=<?php echo $char['charId'];?>"><font color="<?php echo $color;?>"><?php echo $char['char_name'];?></font></a></td><td><?php echo $char['level'];?></td><td><?php echo $char['ClassName'];?></td><td class="maxCp"><?php echo $char['maxCp'];?></td><td class="maxHp"><?php echo $char['maxHp'];?></td><td class="maxMp"><?php echo $char['maxMp'];?></td><td><?php echo $clan_link;?></td><td><b><?php echo $char['pvpkills'];?><font color="red"><?php echo $char['pkkills'];?></font></b></td><td><?php echo $onlinetimeH.' '.$Lang['hours'].' '.$onlinetimeM.' '.$Lang['min'];?></td><td><?php echo $online;?></td><td><a href="unstuck.php?cid=<?php echo $char['charId'];?>"><?php echo $Lang['unstuck'];?></a></td><td><input type="checkbox" id="onlinemap" name="onlinemap" onchange="map(<?php echo $dbs['ID'];?>,<?php echo $char['charId'];?>);" <?php echo $map;?> /></td><td onclick="raiseVitality(<?php echo $dbs['ID'];?>,<?php echo $char['charId'];?>);"><img id="vitality" src="img/ss/ssqbar2.gif" width="<?php echo $char['vitality_points']/20000*100;?>%" height="9" border="0" alt="<?php echo $char['vitality_points'];?>/20000 = <?php echo $char['vitality_points']/2000*100;?>%" title="<?php echo $char['vitality_points'];?>/20000 = <?php echo $char['vitality_points']/20000*100;?>%" onclick=""/></td></tr>
 <?php
     }
     echo "</table>";

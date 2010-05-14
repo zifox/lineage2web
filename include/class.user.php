@@ -137,6 +137,7 @@ class user {
 		$_SESSION['webpoints'] = 0;
         $_SESSION['admin'] = false;
         $_SESSION['logged'] = false;
+        unset($_SESSION);
         setcookie('logincookie', '', 0, '', '');
 	}
     public function debug()

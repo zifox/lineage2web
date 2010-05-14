@@ -11,7 +11,7 @@ $Lang['admin'] = 'Admin';
 $Lang['contact'] = 'Read Messages';
 $Lang['my_account'] = 'My Account';
 $Lang['write_message'] = 'Write Message';
-$Lang['webpoints'] = 'Webpoints: <a href="webpoints.php">%s</a>';
+$Lang['webpoints'] = 'Webpoints: <a id="wp" href="webpoints.php">%s</a>';
 $Lang['logout'] = 'Logout';
 $Lang['vote_after'] = 'Next vote after';
 $Lang['hours'] = 'Hours';

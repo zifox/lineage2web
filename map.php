@@ -15,18 +15,19 @@ if(isset($_GET['char']) && is_numeric($_GET['char']))
 		$char = $mysql->fetch_array($checkchar);
 		if(strtolower($char['account_name'])!=strtolower($_SESSION['account']))
 		{
-			echo "nav tavs chars";
-			die();
+			die("nav tavs chars");
 		}
-		if($char['onlinemap'])
+		if($char['onlinemap']=='true')
 		{
-			$mysql->query("UPDATE `$dbname`.`characters` SET `onlinemap`='0' WHERE `charId` = '{$char['charId']}'");
+			$mysql->query("UPDATE `$dbname`.`characters` SET `onlinemap`='false' WHERE `charId` = '{$char['charId']}'");
+            echo "obj.value=false;\n";
 		}
 		else
 		{
-			$mysql->query("UPDATE `$dbname`.`characters` SET `onlinemap`='1' WHERE `charId` = '{$char['charId']}'");
+			$mysql->query("UPDATE `$dbname`.`characters` SET `onlinemap`='true' WHERE `charId` = '{$char['charId']}'");
+            echo "obj.value=true;\n";
 		}
 	}
 }
-header("Location: myacc.php");
+//header("Location: myacc.php");
 ?>

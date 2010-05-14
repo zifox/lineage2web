@@ -25,9 +25,9 @@ function includeLang($file)
 
 function includeBlock($file, $block_name='Menu')
 {
-	global $langpath, $skin, $Lang, $Config, $mysql, $tpl, $webdb, $q, $staticurl;
+	global $langpath, $skin, $Lang, $Config, $mysql, $tpl, $webdb, $q, $user;
     DEFINE('IN_BLOCK', True);
-    $img_link = $staticurl.'/skins/'.$skin;
+    $img_link = 'skins/'.$skin;
 	?>
     <table width="200" style="height:95px;" border="0" cellpadding="0" cellspacing="0" class="opacity2">
     <tr style="height:48px;">
@@ -50,13 +50,9 @@ function includeBlock($file, $block_name='Menu')
     <?php
 }
 
-function msg($heading = '', $text = '', $div = 'success', $return=false) {
-     if($return)
-    {
-        $back='<meta http-equiv="refresh" content="3;url='.$Config['url'].'/index.php" />';
-    }
+function msg($heading = '', $text = '', $div = 'success') {
     echo '<table width="90%" border="0"><tr><td>';
-    echo '<div align="center" class="'.$div.'">'.($heading ? '<b>'.$heading.'</b><br />' : '').$text.$back.'</div></td></tr></table>';
+    echo '<div align="center" class="'.$div.'">'.($heading ? '<b>'.$heading.'</b><br />' : '').$text.'</div></td></tr></table>';
 }
 
 function error($id){
@@ -65,7 +61,7 @@ function error($id){
 
 function head($title = "", $head=1, $url='', $time=0)
 {
-    global $skin, $Config, $Lang, $mysql, $staticurl, $tpl;
+    global $skin, $Config, $Lang, $mysql, $tpl;
     DEFINE('INSKIN', True);
 	$skin = $Config['DSkin'];
 
@@ -75,7 +71,7 @@ function head($title = "", $head=1, $url='', $time=0)
 
 function foot($foot=1)
 {
-    global $mysql, $skin, $Config, $Lang, $starttime, $user, $tpl, $staticurl;
+    global $mysql, $skin, $Config, $Lang, $starttime, $user, $tpl;
     if(isset($_COOKIE['skin']))
     {
         $skin = trim($_COOKIE['skin']);

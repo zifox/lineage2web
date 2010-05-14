@@ -11,7 +11,7 @@ $Lang['admin'] = 'Admin';
 $Lang['contact'] = 'Lasīt ziņas';
 $Lang['my_account'] = 'Mans Konts';
 $Lang['write_message'] = 'Rakstīt ziņu';
-$Lang['webpoints'] = 'WebPunkti: <a href="webpoints.php">%s</a>';
+$Lang['webpoints'] = 'WebPunkti: <a id="wp" href="webpoints.php">%s</a>';
 $Lang['logout'] = 'Iziet';
 $Lang['vote_after'] = 'Nākošā balsošana pēc';
 $Lang['hours'] = 'Stundām';

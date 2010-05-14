@@ -10,14 +10,15 @@
 </table>
 </div>
 <?php
+$skinurl = 'skins/l2i';
 if($foot){
 ?>
 </td>
-<td style="background-image: url(<?php echo $staticurl;?>/skins/l2i/img/t_h_r_b.gif); background-repeat: repeat-y;">&nbsp;</td></tr>
+<td style="background-image: url(<?php echo $skinurl;?>/img/t_h_r_b.gif); background-repeat: repeat-y;">&nbsp;</td></tr>
 <tr>
-<td><img width="40" height="28" alt="" src="<?php echo $staticurl;?>/skins/l2i/img/t_b_lc.gif" /></td>
-<td style="background-image: url(<?php echo $staticurl;?>/skins/l2i/img/t_b_c.gif);" colspan="5">&nbsp;</td>
-<td><img width="40" height="28" alt="" src="<?php echo $staticurl;?>/skins/l2i/img/t_b_rc.gif" /></td>
+<td><img width="40" height="28" alt="" src="<?php echo $skinurl;?>/img/t_b_lc.gif" /></td>
+<td style="background-image: url(<?php echo $skinurl;?>/img/t_b_c.gif);" colspan="5">&nbsp;</td>
+<td><img width="40" height="28" alt="" src="<?php echo $skinurl;?>/img/t_b_rc.gif" /></td>
 </tr></tbody></table></td>
 <td width="15%" align="center" valign="top">
 <?php

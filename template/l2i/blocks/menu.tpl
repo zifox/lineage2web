@@ -9,7 +9,7 @@
 </table>
 
 <div id="lang2">
-<a href="server.php?lang=1"><img src="{static}/img/lang/lv.png" border="{lv_border}" title="Latviski" alt="Latviski"/></a>
-<a href="server.php?lang=2"><img src="{static}/img/lang/en.png" border="{en_border}" title="English" alt="English"/></a>
-<a href="server.php?lang=3"><img src="{static}/img/lang/ru.png" border="{ru_border}" title="по-русски" alt="по-русски"/></a>
+<a href="server.php?lang=1"><img src="img/lang/lv.png" border="{lv_border}" title="Latviski" alt="Latviski"/></a>
+<a href="server.php?lang=2"><img src="img/lang/en.png" border="{en_border}" title="English" alt="English"/></a>
+<a href="server.php?lang=3"><img src="img/lang/ru.png" border="{ru_border}" title="по-русски" alt="по-русски"/></a>
 </div>
