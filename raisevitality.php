@@ -7,7 +7,7 @@ if(isset($_GET['char']) && is_numeric($_GET['char']))
 {
 	$srv = $mysql->escape(0 + $_GET['server']);
 	$char = $mysql->escape(0 + $_GET['char']);
-	
+	$id = $mysql->escape(0 + $_GET['id']);
     if($_SESSION['webpoints']<=0)
     {
         echo "alert('You don\'t have enought webpoints');";
@@ -40,10 +40,12 @@ if(isset($_GET['char']) && is_numeric($_GET['char']))
                     echo "alert('Vitality Points successfully exchanged');\n";
             }
             $mysql->query("UPDATE `accounts` SET `webpoints`=`webpoints`-'1' WHERE `login`='{$_SESSION['account']}'");
-           // echo "document.getElementById('vitality').width='";
-            //echo ($char['vitality_points']+2500)/20000*100;
-            //echo "%';\n";
-            //echo "document.getElementById('wp').value=document.getElementById('wp').value-1;\n";
+            echo "document.getElementById('vitality$id').width='";
+            echo ($char['vitality_points']+2500)/250;
+            echo "';\n";
+            echo "document.getElementById('wp').firstChild.nodeValue='";
+			echo $_SESSION['webpoints']-1;
+			echo "';\n";
 		}
 	}
 }

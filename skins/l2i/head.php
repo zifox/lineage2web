@@ -56,7 +56,7 @@ pageTracker._trackPageview();
 
 var ajax = new Array();
 
-function raiseVitality(server, charac)
+function raiseVitality(server, charac, id)
 {
 
     if(confirm('Are you sure you want to raise your vitality points? It will cost you 1 WebPoint'))
@@ -64,7 +64,7 @@ function raiseVitality(server, charac)
     	var index = ajax.length;
     	ajax[index] = new sack();
 		
-    	ajax[index].requestFile = 'raisevitality.php?server='+server+'&char='+charac;	
+    	ajax[index].requestFile = 'raisevitality.php?server='+server+'&char='+charac+'&id='+id;	
         ajax[index].onCompletion = function(){ evaluateresponse(index) };
     	ajax[index].runAJAX();
     }
