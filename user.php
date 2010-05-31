@@ -45,7 +45,7 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
     {
     	$dbn = $dbs['DataBase'];
         
-$sql2=$mysql->query("SELECT `account_name`, `charId`, `char_name`, `level`, `maxHp`, `maxCp`, `maxMp`, `sex`, `pvpkills`, `pkkills`, `clanid`, `race`, `characters`.`classid`, `base_class`, `online`, `ClassName`, clan_id, clan_name FROM `characters` LEFT OUTER JOIN `char_templates` ON `characters`.`classid` = `char_templates`.`ClassId` LEFT OUTER JOIN clan_data ON characters.clanid=clan_data.clan_id WHERE `characters`.`charId` != '{$char['charId']}' AND `account_name` = '{$char['account_name']}' ORDER by characters.level ASC");
+$sql2=$mysql->query("SELECT `account_name`, `charId`, `char_name`, `level`, `maxHp`, `maxCp`, `maxMp`, `sex`, `pvpkills`, `pkkills`, `clanid`, `race`, `characters`.`classid`, `base_class`, `online`, `ClassName`, clan_id, clan_name FROM `$dbn`.`characters` LEFT OUTER JOIN `$dbn`.`char_templates` ON `characters`.`classid` = `char_templates`.`ClassId` LEFT OUTER JOIN `$dbn`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `characters`.`charId` != '{$char['charId']}' AND `account_name` = '{$char['account_name']}' ORDER by `characters`.`level` ASC");
 if ($mysql->num_rows2($sql2)){
 	?>
     <hr/><h1><?php echo $dbs['Name'];?></h1><br /><table border="1">

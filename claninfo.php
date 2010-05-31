@@ -16,7 +16,7 @@ if(isset($_GET['clan'])){
         <div align="left">
         <table border="0">
         <tr><td><?php echo $Lang['clan'];?>: </td><td><?php echo $clan_data['clan_name'];?></td></tr>
-        <tr><td><?php echo $Lang['leader'];?>: </td><td><a href="user.php?cid=<?php echo $clan_data['charId'];?>"><?php echo $clan_data['char_name'];?></a></td></tr>
+        <tr><td><?php echo $Lang['leader'];?>: </td><td><a href="user.php?cid=<?php echo $clan_data['charId'];?>&amp;server=<?php echo $srv;?>"><?php echo $clan_data['char_name'];?></a></td></tr>
         <tr><td><?php echo $Lang['lvl'];?>: </td><td><?php echo $clan_data['clan_level'];?></td></tr>
         <tr><td><?php echo $Lang['rep'];?>: </td><td><?php echo $clan_data['reputation_score'];?></td></tr>
         </table>
@@ -31,7 +31,7 @@ if(isset($_GET['clan'])){
         {
             $i++;
             ?>
-            <tr><td><?php echo $i;?></td><td><a href="user.php?cid=<?php echo $clan_char['charId'];?>"><?php echo $clan_char['char_name'];?></a></td><td><?php echo ($clan_char['sex']==0)? '<img src="img/stat/sex.jpg" alt="'.$Lang['male'].'" />':'<img src="img/stat/sex1.jpg" alt="'.$Lang['female'].'" />';?></td><td><?php echo $clan_char['ClassName'];?></td><td><?php echo $clan_char['pvpkills'].' / '.$clan_char['pkkills'];?></td></tr>
+            <tr><td><?php echo $i;?></td><td><a href="user.php?cid=<?php echo $clan_char['charId'];?>&amp;server=<?php echo $srv;?>"><?php echo $clan_char['char_name'];?></a></td><td><?php echo ($clan_char['sex']==0)? '<img src="img/stat/sex.jpg" alt="'.$Lang['male'].'" />':'<img src="img/stat/sex1.jpg" alt="'.$Lang['female'].'" />';?></td><td><?php echo $clan_char['ClassName'];?></td><td><?php echo $clan_char['pvpkills'].' / '.$clan_char['pkkills'];?></td></tr>
             <?php
         }
         ?>
