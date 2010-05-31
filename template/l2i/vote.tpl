@@ -13,7 +13,9 @@
 
 <tr><td><img src="http://top-games100.com/images/baners/2ban80x30.gif" width="80" height="30"  border="0" alt="" /></td><td><input type="button" onclick="five()" disabled="disabled" value="top-games100.com" /></td></tr>
 
-<tr><td><img src="http://www.topgames.lv/counter/?id=1044" alt="" /></td><td><input type="button" onclick="finish()" disabled="disabled" value="TopGames.LV" /></td></tr>
+<tr><td><img src="http://www.topgames.lv/counter/?id=1044" alt="" /></td><td><input type="button" onclick="six()" disabled="disabled" value="TopGames.LV" /></td></tr>
+
+<tr><td><img src="http://images.hopzone.net/lineage2/votebanners/lineage2-88x30-2.gif" alt="" /></td><td><input type="button" onclick="finish()" disabled="disabled" value="HopZone.Net" /></td></tr>
 </table>
 <br />
 <table border="1" cellspacing="0" cellpadding="5">
