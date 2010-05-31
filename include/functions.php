@@ -125,7 +125,7 @@ function pretty_time_hour ($seconds) {
 
 function getDBName($id)
 {
-	global $mysql, $webdb;
+	global $mysql, $webdb, $Config;
 	if(is_numeric($id))
 	{
 		$srv = $mysql->escape(0 + $id);

@@ -15,17 +15,24 @@ if(isset($_GET['char']) && is_numeric($_GET['char']))
     }
     
 	$dbname = getDBName($srv);
-	$checkchar = $mysql->query("SELECT `account_name`, `charId`, `vitality_points` FROM `$dbname`.`characters` WHERE `charId` = '$char'");
+	$checkchar = $mysql->query("SELECT `account_name`, `charId`, `vitality_points`, `online` FROM `$dbname`.`characters` WHERE `charId` = '$char'");
 	if($mysql->num_rows($checkchar))
 	{
 		$char = $mysql->fetch_array($checkchar);
 		if(strtolower($char['account_name'])!=strtolower($_SESSION['account']))
 		{
+            echo "alert('This is not your character');\n";
 			die();
+		}
+		if($char['online'])
+		{
+            echo "alert('Please log off character first');\n";
+            die();
 		}
 		if($char['vitality_points']=='20000')
 		{
             echo "alert('You have already max vitality points');\n";
+            die();
 		}
 		else
 		{

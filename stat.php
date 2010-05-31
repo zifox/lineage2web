@@ -27,13 +27,7 @@ unset($parse);
 if(isset($_GET['server']) && is_numeric($_GET['server']))
 {
 	$server = 0 + $_GET['server'];
-    $serv = $mysql->query("SELECT `DataBase` FROM `$webdb`.`gameservers` WHERE `ID` = '$server';");
-    if($mysql->num_rows($serv))
-    {
-	   $s_db = $mysql->result();
-    }else{
-        $s_db = $Config['DDB'];        
-    }
+    $s_db = getDBName($srv);
 }else
 {
 	$s_db = $Config['DDB'];

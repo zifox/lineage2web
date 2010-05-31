@@ -17,6 +17,7 @@ while ($slist = $mysql->fetch_array($server_list))
 		$row_parse['charId'] = $top['charId'];
 		$row_parse['sex'] = ($top['sex'] == 0) ? 'male' : 'female';
 		$row_parse['char_name'] = $top['char_name'];
+        $row_parse['serv_id'] = $slist['ID'];
 		$parse['rows'] .= $tpl->parsetemplate('blocks/top10_row', $row_parse, 1);
 		$n++;
 	}
