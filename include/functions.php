@@ -5,7 +5,7 @@ if(!defined('INCONFIG')){Header("Location: ../index.php");}
 
 function includeLang($file)
 {
-	global $langpath, $Lang;
+	global $langpath, $Lang, $Config;
 	
 	if($_COOKIE['lang']==1){
 	$langpath='lv';
@@ -61,7 +61,7 @@ function error($id){
 
 function head($title = "", $head=1, $url='', $time=0)
 {
-    global $skin, $Config, $Lang, $mysql, $tpl;
+    global $skin, $Config, $Lang, $mysql, $tpl, $user;
     DEFINE('INSKIN', True);
 	$skin = $Config['DSkin'];
 
@@ -136,5 +136,53 @@ function getDBName($id)
  		}
   	}
   	return $Config['DDB'];
+}
+
+function pagechoose($page, $count=0, $stat, $server)
+{
+    global $Config;
+    
+    $totalpages = round($count/$Config['TOP']);
+    if($totalpages==0)
+    {
+        $totalpages++;
+    }
+    $pagesdone=0;
+    $previous=$page-1;
+    
+    if($page>0)
+    {
+        echo "<a href=\"stat.php?stat=$stat&amp;server=$server&amp;page=$previous\"><<< Previous</a> ";
+    }
+    while($pagesdone<$totalpages)
+    {
+
+        if($pagesdone==$page)
+        {
+            echo ' [';
+            echo $pagesdone*10+1;
+            echo ' - ';
+            echo ($pagesdone*10+$Config['TOP']>$count)? $count: $pagesdone*10+$Config['TOP'];
+            echo '] ';
+        }
+        else
+        {
+            echo ' <a href="stat.php?stat='.$stat;
+            echo '&amp;server='.$server;
+            echo '&amp;page='.$pagesdone;
+            echo '">[';
+            echo $pagesdone*10+1;
+            echo ' - ';
+            echo ($pagesdone*10+$Config['TOP']>$count)? $count: $pagesdone*10+$Config['TOP'];
+            echo ']</a> ';
+        }
+
+        $pagesdone++;
+    }
+    if($totalpages!=$page+1 && $totalpages > $page)
+    {
+        $next=$page+1;
+        echo " <a href=\"stat.php?stat=$stat&amp;server=$server&amp;page=$next\">Next >>></a> ";
+    }
 }
 ?>

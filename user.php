@@ -2,7 +2,7 @@
 define('INWEB', True);
 require_once("include/config.php");
 //пароль
-head("UserInfo");
+
 includeLang('user');
 if ($_GET['cid'] && is_numeric($_GET['cid']))
 {
@@ -18,6 +18,7 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
 
     if($mysql->num_rows($sql)!= 0){
     $char=$mysql->fetch_array($sql);
+    head("User {$char['char_name']} Info");
     if ($char['sex']==0) { $color='#8080FF'; } else { $color='#FF8080'; }
     echo "<h1 style=\"color: $color; font-weight: bold;\">{$char['char_name']}</h1>";
     ?><table border="0"><tr><td>
@@ -46,7 +47,7 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
     	$dbn = $dbs['DataBase'];
         
 $sql2=$mysql->query("SELECT `account_name`, `charId`, `char_name`, `level`, `maxHp`, `maxCp`, `maxMp`, `sex`, `pvpkills`, `pkkills`, `clanid`, `race`, `characters`.`classid`, `base_class`, `online`, `ClassName`, clan_id, clan_name FROM `$dbn`.`characters` LEFT OUTER JOIN `$dbn`.`char_templates` ON `characters`.`classid` = `char_templates`.`ClassId` LEFT OUTER JOIN `$dbn`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `characters`.`charId` != '{$char['charId']}' AND `account_name` = '{$char['account_name']}' ORDER by `characters`.`level` ASC");
-if ($mysql->num_rows2($sql2)){
+if ($mysql->num_rows($sql2)){
 	?>
     <hr/><h1><?php echo $dbs['Name'];?></h1><br /><table border="1">
     <tr><td><?php echo $Lang['face'];?></td><td><center><?php echo $Lang['name'];?></center></td><td><?php echo $Lang['level'];?></td><td><center><?php echo $Lang['class'];?></center></td><td class="maxCp" align="center"><?php echo $Lang['cp'];?></td><td class="maxHp" align="center"><?php echo $Lang['hp'];?></td><td class="maxMp" align="center"><?php echo $Lang['mp'];?></td><td><center><?php echo $Lang['clan'];?></center></td><td><?php echo $Lang['pvp_pk'];?></td><td><?php echo $Lang['status'];?></td></tr>
@@ -64,9 +65,19 @@ if ($mysql->num_rows2($sql2)){
  <?php       }
         
             echo '</table>';
-            }
+            }//$mysql->num_rows(other chars)
+    }//while
+    }//$mysql->num_rows(main user)
+    else
+    {
+        head($Lang['not_found']);
+        echo msg('Error',$Lang['not_found'], 'error', false);
     }
-    }else{echo msg('Error',$Lang['not_found'], 'error', false);}
-}else{echo msg('Error',$Lang['not_found'], 'error', false);}
+}
+else
+{
+    head($Lang['not_found']);
+    echo msg('Error',$Lang['not_found'], 'error', false);
+}
 foot();
 ?>

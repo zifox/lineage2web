@@ -1,5 +1,4 @@
 <table border="0" cellpadding="0">
-<tr align="center"><td>{welcome_acc}</td></tr>
 {admin_link}
 {admin_link2}
 <tr><td align="center"><font color="red">{vote_after_msg}

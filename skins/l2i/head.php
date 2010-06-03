@@ -154,7 +154,7 @@ opacity: 0.85;
 
 </map></div>
 <div id="logoLink">
-<a href="" title="Fantasy World Home">
+<a href="./" title="Fantasy World Home">
 </a></div>
 <?
 if($head){
@@ -167,7 +167,7 @@ if($head){
     <tr>
         <td width="15%" valign="top" align="center">
 <?php
-includeBlock('login', $Lang['login']);
+includeBlock('login', (!$user->logged()) ? $Lang['login']: $_SESSION['account'] );
 includeBlock('menu', $Lang['menu']);
 includeBlock('vote', $Lang['vote']);
 ?>
