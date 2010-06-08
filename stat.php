@@ -4,10 +4,17 @@ require_once("include/config.php");
 //пароль
 includeLang('stat');
 $stat = $mysql->escape($_GET['stat']);
-$start = $mysql->escape(0 + $_GET['page']);
-if(!is_numeric($start)) {$start = 0;}
-$start=abs($start);
-$startlimit = $start*10;
+if(isset($_GET['page']))
+{
+    $start = $mysql->escape(0 + $_GET['page']);
+}
+else
+{
+    $start = 1;
+}
+if(!is_numeric($start) || $start==0) {$start = 1;}
+$start=abs($start)-1;
+$startlimit = $start*$Config['TOP'];
 
 $head = $Lang['head_'.$stat];
 if($head == '') {$head = $Lang['home'];}
@@ -28,7 +35,7 @@ $parse['server_list'] = NULL;
 $server_list = $mysql->query("SELECT `ID`, `Name` FROM `$webdb`.`gameservers` WHERE `active`=true");
 while($slist = $mysql->fetch_array($server_list))
 {
-	$selected=($slist['ID']==$_GET['server'])?'selected':'';
+	$selected=($slist['ID']==$_GET['server'])?'selected="selected"':'';
 	$parse['server_list'] .= '<option onclick="GoTo(\'stat.php?stat='.$_GET['stat'].'&amp;server='.$slist['ID'].'\')" '.$selected.'>'.$slist['Name'].'</option>';
 }
 $tpl->parsetemplate('stat_menu', $parse);
@@ -383,7 +390,7 @@ while ($top=$mysql->fetch_array($data))
 echo '<br />';
 if($stat && $stat != 'castles' && $stat != 'fort'){
     $page_foot=$mysql->result($page_foot);
-    pagechoose($start, $page_foot, $stat, $server);
+    pagechoose($start+1, $page_foot, $stat, $server);
 }
 echo '<br />';
 foot();

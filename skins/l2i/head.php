@@ -36,12 +36,14 @@ if ($url != '')
 <title><?php echo $title;?></title>
 <link rel="SHORTCUT ICON" href="favicon.ico" />
 <link href="skins/l2i/style.css" type="text/css" rel="stylesheet" />
+
 <script type="text/javascript" language="javascript" src="scripts/show.js"></script>
 <script type="text/javascript" language="javascript">
 document.write(unescape("%3Cscript src='scripts/ga.js' type='text/javascript'%3E%3C/script%3E"));
 </script>
 <script type="text/javascript" src="scripts/ajax.js"></script>
 <script type="text/javascript" language="javascript">
+<!--
 function GoTo(url)
 {
 	window.location.href = url;
@@ -106,7 +108,8 @@ function createChars(index)
 {
 	var obj = document.getElementById('char');
 	eval(ajax[index].response);
-}	
+}
+// -->
 </script>
 <style type="text/css">
 body  {

@@ -1,7 +1,7 @@
 <?php
 //пароль
 if(!defined('INCONFIG')){Header("Location: ../index.php");}
-//includeLang('system');
+includeLang('functions');
 
 function includeLang($file)
 {
@@ -140,49 +140,78 @@ function getDBName($id)
 
 function pagechoose($page, $count=0, $stat, $server)
 {
-    global $Config;
+    global $Config, $Lang;
     
-    $totalpages = round($count/$Config['TOP']);
+    ?>
+    <div class="page-choose" align="center"><br /><table align="center"><tr>
+    <?php
+    $totalpages = ceil($count/$Config['TOP']);
     if($totalpages==0)
     {
         $totalpages++;
     }
-    $pagesdone=0;
-    $previous=$page-1;
-    
-    if($page>0)
+    if($page>3)
     {
-        echo "<a href=\"stat.php?stat=$stat&amp;server=$server&amp;page=$previous\"><<< Previous</a> ";
+        ?>
+        <td><a href="stat.php?stat=<?php echo $stat;?>&amp;server=<?php echo $server;?>&amp;page=1" title="<?php echo $Lang['first'];?>"  class="btn"> &laquo; </a></td>
+        <?php
     }
-    while($pagesdone<$totalpages)
+    if($page>1)
+    {
+        ?>
+        <td><a href="stat.php?stat=<?php echo $stat;?>&amp;server=<?php echo $server;?>&amp;page=<?php
+        echo $page-1;
+        ?>" title="<?php echo $Lang['prev'];?>" class="btn"> &lt; </a></td>
+        <?php
+    }
+    if($page-2>0){$start=$page-2;}else{$start=1;}
+    for($i=$start; $i<=$totalpages && $i<=$page+2; $i++)
     {
 
-        if($pagesdone==$page)
+        if($i==$page)
         {
+            echo '<td>&nbsp;&nbsp;<a href="#" class="btn brown" title="';
             echo ' [';
-            echo $pagesdone*10+1;
+            echo ($count!=0) ? $i*$Config['TOP']+1-$Config['TOP'] : 0;
             echo ' - ';
-            echo ($pagesdone*10+$Config['TOP']>$count)? $count: $pagesdone*10+$Config['TOP'];
-            echo '] ';
+            echo ($i*$Config['TOP']>$count)? $count: $i*$Config['TOP'];
+            echo ']"> ';
+            echo $i;
+            echo ' </a>&nbsp;&nbsp;</td>';
         }
         else
         {
-            echo ' <a href="stat.php?stat='.$stat;
+            echo '<td>&nbsp;&nbsp;<a href="stat.php?stat='.$stat;
             echo '&amp;server='.$server;
-            echo '&amp;page='.$pagesdone;
-            echo '">[';
-            echo $pagesdone*10+1;
+            echo '&amp;page='.$i;
+            echo '" title="[';
+            echo ($count!=0) ? $i*$Config['TOP']+1-$Config['TOP'] : 0;
             echo ' - ';
-            echo ($pagesdone*10+$Config['TOP']>$count)? $count: $pagesdone*10+$Config['TOP'];
-            echo ']</a> ';
+            echo ($i*$Config['TOP']>$count)? $count: $i*$Config['TOP'];
+            echo ']" class="btn"> ';
+            echo $i;
+            echo ' </a>&nbsp;&nbsp;</td>';
         }
 
-        $pagesdone++;
     }
-    if($totalpages!=$page+1 && $totalpages > $page)
+    if($totalpages > $page)
     {
-        $next=$page+1;
-        echo " <a href=\"stat.php?stat=$stat&amp;server=$server&amp;page=$next\">Next >>></a> ";
+        ?>
+        <td><a href="stat.php?stat=<?php echo $stat;?>&amp;server=<?php echo $server;?>&amp;page=<?php
+        echo $page+1;
+        ?>" title="<?php echo $Lang['next'];?>" class="btn"> &gt; </a></td>
+        <?php
     }
+    if($totalpages > $page+2)
+    {
+        ?>
+        <td><a href="stat.php?stat=<?php echo $stat;?>&amp;server=<?php echo $server;?>&amp;page=<?php
+        echo $totalpages;
+         ?>" title="<?php echo $Lang['last'];?>" class="btn"> &raquo; </a></td>
+         <?php
+    }
+    ?>
+    </tr></table>&nbsp;</div>
+    <?php
 }
 ?>

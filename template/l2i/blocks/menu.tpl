@@ -1,11 +1,11 @@
 <table width="100%" align="center">
-<tr onmouseover="this.bgColor = '#505050';" onmouseout="this.bgColor = ''"><td align="center" width="100%"><a href="index.php"><img src="{img_link}/menu/{langpath}/home.png" border="0" width="150" title="{Home}" alt="{Home}" /></a></td></tr>
-<tr onmouseover="this.bgColor = '#505050';" onmouseout="this.bgColor = ''"><td align="center"><a href="reg.php"><img src="{img_link}/menu/{langpath}/reg.png" border="0" width="150" title="{Reg}" alt="{Reg}"/></a></td></tr>
-<tr onmouseover="this.bgColor = '#505050';" onmouseout="this.bgColor = ''"><td align="center"><a href="connect.php"><img src="{img_link}/menu/{langpath}/connect.png" border="0" width="150" title="{connect}" alt="{connect}"/></a></td></tr>
-<tr onmouseover="this.bgColor = '#505050';" onmouseout="this.bgColor = ''"><td align="center"><a href="/forum/" target="_blank"><img src="{img_link}/menu/{langpath}/forum.png" border="0" width="150" title="{forum}" alt="{forum}"/></a></td></tr>
-<tr onmouseover="this.bgColor = '#505050';" onmouseout="this.bgColor = ''"><td align="center"><a href="stat.php"><img src="{img_link}/menu/{langpath}/stat.png" border="0" width="150" title="{statistic}" alt="{statistic}"/></a></td></tr>
-<tr onmouseover="this.bgColor = '#505050';" onmouseout="this.bgColor = ''"><td align="center"><a href="rules.php"><img src="{img_link}/menu/{langpath}/rules.png" border="0" width="150" title="{Rules}" alt="{Rules}"/></a></td></tr>
-<!-- <tr onmouseover="this.bgColor = '#505050';" onmouseout="this.bgColor = ''"><td align="center"><a href="donate.php"><img src="{img_link}/menu/{langpath}/donate.png" border="0" width="150" title="{Donate}" alt="{Donate}"/></a></td></tr> --->
+<tr class="row"><td align="center" width="100%"><a href="index.php"><img src="{img_link}/menu/{langpath}/home.png" border="0" width="150" title="{Home}" alt="{Home}" /></a></td></tr>
+<tr class="row"><td align="center"><a href="reg.php"><img src="{img_link}/menu/{langpath}/reg.png" border="0" width="150" title="{Reg}" alt="{Reg}"/></a></td></tr>
+<tr class="row"><td align="center"><a href="connect.php"><img src="{img_link}/menu/{langpath}/connect.png" border="0" width="150" title="{connect}" alt="{connect}"/></a></td></tr>
+<tr class="row"><td align="center"><a href="/forum/" target="_blank"><img src="{img_link}/menu/{langpath}/forum.png" border="0" width="150" title="{forum}" alt="{forum}"/></a></td></tr>
+<tr class="row"><td align="center"><a href="stat.php"><img src="{img_link}/menu/{langpath}/stat.png" border="0" width="150" title="{statistic}" alt="{statistic}"/></a></td></tr>
+<tr class="row"><td align="center"><a href="rules.php"><img src="{img_link}/menu/{langpath}/rules.png" border="0" width="150" title="{Rules}" alt="{Rules}"/></a></td></tr>
+<!-- <tr class="row"><td align="center"><a href="donate.php"><img src="{img_link}/menu/{langpath}/donate.png" border="0" width="150" title="{Donate}" alt="{Donate}"/></a></td></tr> -->
 </table>
 
 <div id="lang2">

@@ -6,7 +6,7 @@
 </td><td><a href="http://www.topgames.lv/?mode=in&amp;id=1044" target="_blank">
 <img src="http://www.topgames.lv/counter/?id=1044" alt="" border="0"/>
 </a><br/>
-<a href="http://www.topgames.lv/?mode=in&id=1157" target="_blank">
+<a href="http://www.topgames.lv/?mode=in&amp;id=1157" target="_blank">
 <img src="http://www.topgames.lv/counter/?id=1157" alt="" border="0" />
 </a>
 

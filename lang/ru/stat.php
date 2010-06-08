@@ -2,31 +2,46 @@
 //пароль
 if(!defined('INLANG')){Header("Location: ../../index.php");}
 
-$Lang['server_stat'] = 'Статистика сервера';
-$Lang['home'] = 'Главная';
-$Lang['online'] = 'Онлайн';
-$Lang['map'] = 'Онлайн Карта';
-$Lang['castles_map'] = 'Замок карта';
-$Lang['castles'] = 'Замок';
-$Lang['fort'] = 'Крепость';
-$Lang['seven_signs'] = 'Семь печатей';
-$Lang['top_clans'] = 'Top кланы';
+#Titles
+$Lang['statistic'] = 'Statistic';
+$Lang['head_online'] = 'Online Users';
+$Lang['head_castles'] = 'Castles';
+$Lang['head_fort'] = 'Fortress';
+$Lang['head_clantop'] = 'Top Clans';
+$Lang['head_gm'] = 'Server GMs';
+$Lang['head_count'] = 'Richest Players';
+$Lang['head_top_pvp'] = 'Top PvP';
+$Lang['head_top_pk'] = 'Top Player Killers';
+$Lang['head_maxCp'] = 'Highest Combat Points';
+$Lang['head_maxHp'] = 'Highest Hit Points';
+$Lang['head_maxMp'] = 'Highest Mana Points';
+$Lang['head_top'] = 'Top '. $Config['TOP'];
+$Lang['head_human'] = 'Top Humans';
+$Lang['head_elf'] = 'Top Elves';
+$Lang['head_dark_elf'] = 'Top Dark Elves';
+$Lang['head_orc'] = 'Top Orcs';
+$Lang['head_dwarf'] = 'Top Dwarves';
+$Lang['head_kamael'] = 'Top Kamaels';
+
+#Menu
+$Lang['server_stat'] = 'Server Statistics';
+$Lang['home'] = 'Home';
+$Lang['seven_signs'] = 'Seven Signs';
+$Lang['online'] = 'Online';
+$Lang['map'] = 'Map';
+$Lang['castles_map'] = 'Castles Map';
+$Lang['castles'] = 'Castles';
+$Lang['fort'] = 'Fortress';
+$Lang['top_clans'] = 'Top Clans';
 $Lang['gm'] = 'GMs';
-$Lang['rich_players'] = 'Богатый игроков';
+$Lang['rich_players'] = 'Rich Players';
 $Lang['adena'] = 'Adena';
 $Lang['pvp'] = 'PvP';
 $Lang['pk'] = 'PK';
 $Lang['cp'] = 'CP';
-$Lang['max_cp'] = 'Max CP';
 $Lang['hp'] = 'HP';
-$Lang['max_hp'] = 'Max HP';
 $Lang['mp'] = 'MP';
-$Lang['max_mp'] = 'Max MP';
 $Lang['top'] = 'TOP';
-$Lang['activity'] = 'Aктивность';
-$Lang['statistic'] = 'Статистика';
-$Lang['send_message'] = 'Отправить сообщение';
-$Lang["clantop_total"] = 'Всего кланов';
 $Lang['race'] = array(
 	0 => "Human",
 	1 => "Elf",
@@ -35,24 +50,30 @@ $Lang['race'] = array(
 	4 => "Dwarf",
 	5 => "Kamael"
 );
-$Lang['no_clan'] = 'Нет клан';
-$Lang['castle_of'] = 'Замок %s';
-$Lang['fort_of'] = '%s Крепость';
-$Lang['next_siege'] = 'Следующий осада: ';
-$Lang['castle'] = 'Замок';
-$Lang['details'] = 'детали';
-$Lang['owner_clan'] = 'Владелец Клана:';
-$Lang['no_owner'] = 'Нет хозяина';
-$Lang['lord'] = 'Лорд:';
-$Lang['no_lord'] = 'Нет Лорд';
-$Lang['tax'] = 'Налоговые:';
-$Lang['attackers'] = 'Злоумышленники:';
-$Lang['defenders'] = 'Защитникам:';
+
+#Table
+$Lang['max_cp'] = 'Max CP';
+$Lang['max_hp'] = 'Max HP';
+$Lang['max_mp'] = 'Max MP';
+$Lang["clantop_total"] = 'Total Clans';
+$Lang['no_clan'] = 'No Clan';
+$Lang['castle_of'] = 'Castle of %s';
+$Lang['fort_of'] = '%s Fortress';
+$Lang['next_siege'] = 'Next Siege: ';
+$Lang['castle'] = 'Castle';
+$Lang['details'] = 'Details';
+$Lang['owner_clan'] = 'Owner Clan:';
+$Lang['no_owner'] = 'No Owner';
+$Lang['lord'] = 'Lord:';
+$Lang['no_lord'] = 'No Lord';
+$Lang['tax'] = 'Tax:';
+$Lang['attackers'] = 'Attackers:';
+$Lang['defenders'] = 'Defenders:';
 $Lang['npc'] = 'NPC';
-$Lang['male'] = 'Мужчина';
-$Lang['female'] = 'Женщина';
-$Lang['players_dusk'] = 'Игроки за сумерек';
-$Lang['players_dawn'] = 'Игроки за рассвет';
-$Lang['time_held'] = 'Удерживается';
-$Lang['hour'] = 'Часов';
+$Lang['male'] = 'Male';
+$Lang['female'] ='Female';
+$Lang['players_dusk'] = 'Players for Dusk';
+$Lang['players_dawn'] = 'Players for Dawn';
+$Lang['time_held'] = 'Maintained';
+$Lang['hour'] = 'Hours';
 ?>
