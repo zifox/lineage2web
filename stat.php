@@ -32,7 +32,7 @@ if(isset($_GET['server']))
 	$parse['ID'] = "&amp;server=".$_GET['server'];
 }
 $parse['server_list'] = NULL;
-$server_list = $mysql->query("SELECT `ID`, `Name` FROM `$webdb`.`gameservers` WHERE `active`=true");
+$server_list = $mysql->query("SELECT `ID`, `Name` FROM `$webdb`.`gameservers` WHERE `active`='true'");
 while($slist = $mysql->fetch_array($server_list))
 {
 	$selected=($slist['ID']==$_GET['server'])?'selected="selected"':'';
@@ -46,6 +46,7 @@ if(isset($_GET['server']) && is_numeric($_GET['server']))
     $s_db = getDBName($server);
 }else
 {
+	$server = 1;
 	$s_db = $Config['DDB'];
 }
 
@@ -72,7 +73,23 @@ $r++;
 
 ?>
 <td><table border="1"><tr><td class="noborder">
-<h1><?php echo sprintf($Lang['castle_of'],$row['name'],'%s');?></h1>
+<h1><?php echo sprintf($Lang['castle_of'],$row['name'],'%s');?></h1><center>
+<?php 
+$ter = $mysql->query("SELECT `ownedWardIds` FROM `$s_db`.`territories` WHERE `castleId`='{$row['id']}'");
+$ter_res = $mysql->result($ter);
+if($ter_res!='')
+{
+	$wards=explode(';', $ter_res);
+	foreach($wards as $key=>$value)
+	{
+		echo ' <img src="img/territories/'.$value.'.png" alt="'.$Lang['ward_info'][$value].'" title="'.$Lang['ward_info'][$value].'" /> ';
+	}
+}
+else
+{
+	echo '<br />';
+}
+?></center><br />
 <?php echo $Lang['next_siege'].date('D j M Y H:i',$row['siegeDate']/1000); ?>
 <br /><img src = "img/castle/<?php echo $row['name'];?>.png" width = "170" alt="<?php echo $row['name'];?>" />
 <table border="0" width="170">
@@ -136,6 +153,24 @@ $r++;
 ?>
 <td><table border="1"><tr><td class="noborder">
 <h1><?php echo sprintf($Lang['fort_of'],$row['name'],'%s');?></h1>
+<center>
+<?php 
+$ter = $mysql->query("SELECT `ownedWardIds` FROM `$s_db`.`territories` WHERE `fortId`='{$row['id']}'");
+
+($mysql->num_rows($ter))?$ter_res = $mysql->result($ter):$ter_res = '';
+if($ter_res!='')
+{
+	$wards=explode(';', $ter_res);
+	foreach($wards as $key=>$value)
+	{
+		echo ' <img src="img/territories/'.$value.'.png" alt="'.$Lang['ward_info'][$value].'" title="'.$Lang['ward_info'][$value].'" /> ';
+	}
+}
+else
+{
+	echo '<br />';
+}
+?></center><br />
 <br /><img src = "img/fort/<?php echo $row['id'];?>.jpg" width = "170" alt="<?php echo $row['name'];?> Fortress" />
 <table border="0" width="170">
 <tr style="background-color: #2391ab;"><td><?php echo $Lang['fort'];?></td><td><?php echo $Lang['details'];?></td></tr>
@@ -372,12 +407,12 @@ else
 }
 while ($top=$mysql->fetch_array($data))
 {
-	if ($top['clan_name']) { $clan_link='<a href="claninfo.php?clan='.$top['clanid'].'">'.$top['clan_name'].'</a>'; }else{$clan_link='No Clan';}
+	if ($top['clan_name']) { $clan_link='<a href="claninfo.php?clan='.$top['clanid'].'&amp;server='.$server.'">'.$top['clan_name'].'</a>'; }else{$clan_link='No Clan';}
 	if ($top['sex']==0) { $color='#8080FF'; } else { $color='#FF8080'; }
 	if ($top['online']) {$online='<font color="green">'.$Lang['online'].'</font>'; } 
 	else {$online='<font color="red">'.$Lang['offline'].'</font>'; } 
     ?>
-	<tr<?php echo ($n%2==0)? ' class="altRow"': '';?> onmouseover="this.bgColor = '#505050';" onmouseout="this.bgColor = ''"><td align="center"><b><?php echo $n;?></b></td><td><img src="./img/face/<?php echo $top['race'].'_'.$top['sex'];?>.gif" alt="" /></td><td><a href="user.php?cid=<?php echo $top['charId'];?>"><font color="$color"><?php echo $top['char_name'];?></font></a></td><td><center> <?php echo $top['level'];?></center></td><td><center><?php echo $top['ClassName'];?></center></td><td><?php echo $clan_link;?></td><td><center><b><?php echo $top['pvpkills'];?></b>/<b><font color="red"><?php echo $top['pkkills'];?></font></b></center></td><td><?php echo $online;?></td>
+	<tr<?php echo ($n%2==0)? ' class="altRow"': '';?> onmouseover="this.bgColor = '#505050';" onmouseout="this.bgColor = ''"><td align="center"><b><?php echo $n;?></b></td><td><img src="./img/face/<?php echo $top['race'].'_'.$top['sex'];?>.gif" alt="" /></td><td><a href="user.php?cid=<?php echo $top['charId'];?>&amp;server=<?php echo $server;?>"><font color="<?php echo $color;?>"><?php echo $top['char_name'];?></font></a></td><td><center> <?php echo $top['level'];?></center></td><td><center><?php echo $top['ClassName'];?></center></td><td><?php echo $clan_link;?></td><td><center><b><?php echo $top['pvpkills'];?></b>/<b><font color="red"><?php echo $top['pkkills'];?></font></b></center></td><td><?php echo $online;?></td>
     <?php
 	if($addcol && $addcolcont){echo $addcolcont;}elseif($addcol && !$addcolcont){echo('<td class="'.$stat.'">'.$top[$stat].'</td>');}else{}
 	echo('</tr>');

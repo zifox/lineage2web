@@ -25,7 +25,7 @@ class MySQL{
     {
         $this->connect();
     }
-    public function return_result($res)
+    function return_result($res)
     {
         return $this->query[$res]['result'];
     }
@@ -43,17 +43,17 @@ class MySQL{
     }
 
 
-    public function close() {
+    function close() {
         if(!@mysql_close($this->link))
             $this->err("Could not close MySQL.");
     }
 
-    public function escape($string) {
+    function escape($string) {
         if(get_magic_quotes_runtime()) $string = stripslashes($string);
         return mysql_real_escape_string($string, $this->link);
     }
 
-    public function query($sql, $db = NULL, $limit = NULL) {
+    function query($sql, $db = NULL, $limit = NULL) {
         $querytime = explode(" ", microtime());
         $querystart = $querytime[1] . substr($querytime[0], 1);
         if($db)
@@ -83,7 +83,7 @@ class MySQL{
         return key($this->query);
     }
 
-    public function result($res = NULL, $row = 0, $field = 0 ){
+    function result($res = NULL, $row = 0, $field = 0 ){
         if ($res === null) {
             end($this->query);
             $res = key($this->query);
@@ -91,7 +91,7 @@ class MySQL{
         return mysql_result($this->query[$res]['result'], $row, $field);
     }
 
-    public function num_rows($res = null) {
+    function num_rows($res = null) {
         if ($res === null) {
             end($this->query);
             $res = key($this->query);
@@ -99,11 +99,11 @@ class MySQL{
         return mysql_num_rows($this->query[$res]['result']);
     }
 
-    public function num_rows2($res = null) {
+    function num_rows2($res = null) {
         return $this->num_rows($res);
     }
 
-	public function fetch_array($res = null) {
+	function fetch_array($res = null) {
 		if ($res === null) {
 			end($this->query);
 			$res = key($this->query);
@@ -111,7 +111,7 @@ class MySQL{
 		return mysql_fetch_assoc($this->query[$res]['result']);
 	}
     
-    public function free($res = null)
+    function free($res = null)
     {
   		if ($res === null) {
 			end($this->query);
@@ -142,7 +142,7 @@ class MySQL{
         die();
     }
 
-    public function debug() {
+    function debug() {
         ?>
         <table border="0">
         <?php
