@@ -22,7 +22,7 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
     if ($char['sex']==0) { $color='#8080FF'; } else { $color='#FF8080'; }
     echo "<h1 style=\"color: $color; font-weight: bold;\">{$char['char_name']}</h1>";
     ?><table border="0"><tr><td>
-    <img src="img/face/<?php echo $char['race'];?>_<?php echo $char['sex'];?>.png" alt="" /></td><td><?
+    <img src="img/face/<?php echo $char['race'];?>_<?php echo $char['sex'];?>.png" alt="" /></td><td><?php
     $onlinetimeH=round(($char['onlinetime']/60/60)-0.5);
 	$onlinetimeM=round(((($char['onlinetime']/60/60)-$onlinetimeH)*60)-0.5);
 	if ($char['clan_id']) {$clan_link = "<a href=\"claninfo.php?clan={$char['clan_id']}&amp;server=$srv\">{$char['clan_name']}</a>";}else{$clan_link = "No Clan";}
@@ -38,9 +38,31 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
     <tr><td><?php echo $Lang['class'];?>:</td><td><?php echo $char['ClassName'];?></td></tr>
     <tr><td><?php echo $Lang['clan'];?>:</td><td><?php echo $clan_link;?></td></tr>
     <tr><td><?php echo $Lang['pvp'];?>/<font color="red"><?php echo $Lang['pk'];?></font>:</td><td><b><?php echo $char['pvpkills'];?></b>/<b><font color="red"><?php echo $char['pkkills'];?></font></b></td></tr>
-    <tr><td><?php echo $online;?>:</td><td><img src="img/status/<?php echo $onoff;?>line.png" title="<?php echo $online;?>" alt="<?php echo $online;?>" /></td></tr></table></td></tr></table>
+    <tr><td><?php echo $online;?>:</td><td><img src="img/status/<?php echo $onoff;?>line.png" title="<?php echo $online;?>" alt="<?php echo $online;?>" /></td></tr></table></td><td>
+    <table>
+    <?php
+    $skill_list = $mysql->query("SELECT * FROM `$dbname`.`character_skills` WHERE `charId`='$id' AND `class_index`='0'");
+    $i=0;
+    while($skill=$mysql->fetch_array($skill_list))
+    {
+        echo ($i==0)? '<tr>':'';
+        $skill_id=($skill[skill_id]<1000)? '0'.$skill[skill_id]:$skill[skill_id];
+        echo '<td><img src="img/skills/skill'.$skill_id .'.png" /></td>';
+        if($i==4)
+        {
+            echo '</tr>';
+            $i=0;
+        }
+        else
+        {
+            $i++;
+        }
+    }
+    ?>
+    </table>
+    </td></tr></table>
     <h1><?php echo $Lang['otherchars'];?></h1>
-    <?
+    <?php
     $dbq = $mysql->query("SELECT `ID`, `Name`, `DataBase` FROM `$webdb`.`gameservers` WHERE `active` = 'true'");
     while($dbs = $mysql->fetch_array($dbq))
     {

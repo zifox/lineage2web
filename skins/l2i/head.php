@@ -1,5 +1,5 @@
 <?php
-if(!defined('INSKIN')){Header("Location: ../../index.php");}
+if(!defined('INSKIN'))header("Location: ../../index.php");
 //$expires = 60*60*24*14;
 $expires = 0;
 header("Pragma: public");
@@ -7,10 +7,8 @@ header("Cache-control: public");
 header("Cache-Control: maxage=".$expires);
 header('Expires: ' . gmdate('D, d M Y H:i:s', time()+$expires) . ' GMT');
 header('Content-Type: gzip');
-
 //пароль
 includeLang('skin');
-
 
 $parse['title'] = $title;
 $parse['skinurl'] = '/skins/l2i';
@@ -20,12 +18,7 @@ $skinurl = 'skins/l2i';
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<?php
-if ($url != '')
-{
-    ?>
-<meta http-equiv="refresh" content="<?php echo $time;?> URL=<?php echo $url;?>" />
-<? } ?>
+<?php if ($url != ''){ ?><meta http-equiv="refresh" content="<?php echo $time;?> URL=<?php echo $url;?>" /> <?php } ?>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="description" content="<?php echo $Config['MetaD'];?>" />
 <meta name="keywords" content="<?php echo $Config['MetaK'];?>" />
@@ -159,7 +152,7 @@ opacity: 0.85;
 <div id="logoLink">
 <a href="./" title="Fantasy World Home">
 </a></div>
-<?
+<?php
 if($head){
 ?>
 
@@ -199,4 +192,5 @@ echo "<h1>{$Config['news']}</h1>";
 <hr />
 <?php
 }
+
 ?>

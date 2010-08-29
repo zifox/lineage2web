@@ -1,7 +1,8 @@
 <div id="downl" align="left"><ol class="left">
-	<li>First download <b>Lineage II Gracia Epilogue</b> client from:
-    <ul><li><a href="http://www.gamershell.com/download_53076.shtml">GamersHell.com</a></li>
-    <li><a href="http://www.fileplanet.com/promotions/lineage2/gracia-epilogue/">FilePlanet.com</a></li>
+	<li>First download <b>Lineage II Gracia Freya</b> client from:
+    <ul><li><a href="http://www.gamershell.com/download_62436.shtml" target="_blank">GamersHell.com</a></li>
+    <li><a href="http://www.fileplanet.com/215661/210000/fileinfo/Lineage-2---Freya-Game-Client" target="_blank">FilePlanet.com</a></li>
+    <li><a href="http://www.gamerslifeline.com/download-lineage-2-game-client/" target="_blank">GamersLifeLine.com</a></li>
     </ul></li>
     <li>Now you have to redirect your connection to our servers.<br /> To do that you have to edit "hosts" file which you can find under "C:\WINDOWS\system32\drivers\etc" </li>
     <li>Copy this two lines with server address and put them on the end of your "hosts" file<br />

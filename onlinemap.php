@@ -1,8 +1,8 @@
 <?php
 define('INWEB', true);
 require_once('include/config.php');
-header("Cache-Control: no-cache");
-header("Expires: -1");
+//header("Cache-Control: no-cache");
+//header("Expires: -1");
 head('Online Map',0);
 if(isset($_GET['server']) && is_numeric($_GET['server']))
 {
@@ -19,29 +19,30 @@ while($slist = $mysql->fetch_array($server_list))
 	$selected=($slist['ID']==$_GET['server'])?'selected':'';
 	$parse['server_list'] .= '<option onclick="GoTo(\'onlinemap.php?server='.$slist['ID'].'\')" '.$selected.'>'.$slist['Name'].'</option>';
 }
-if(isset($_GET['type']) AND ($_GET['type'] == 'normal' OR $_GET['type'] == 'big' OR $_GET['type'] == 'very_big'))
-{
-	$map_size=$mysql->escape($_GET['type']);
-}else
-{
-	$map_size="small";
-}
-switch($map_size){
-    case 'very_big':
-        $data_red=1300;
-    break;
-    case 'big':
-        $data_red=970;
-    break;
-    case 'normal':
-        $data_red=770;
-    break;
-    default:
-        $data_red=642;
-    break;
-}
-
-$imgsize['aden']=getimagesize("img/onlinemap/map_aden_".$map_size.".jpg");
+//if(isset($_GET['type']) AND ($_GET['type'] == 'normal' OR $_GET['type'] == 'big' OR $_GET['type'] == 'very_big'))
+//{
+//	$map_size=$mysql->escape($_GET['type']);
+//}else
+//{
+//	$map_size="small";
+//}
+//switch($map_size){
+//    case 'very_big':
+//       $data_red=1300;
+//    break;
+//    case 'big':
+//       $data_red=970;
+//    break;
+ //   case 'normal':
+ //       $data_red=770;
+ //   break;
+//    default:
+//        $data_red=642;
+ //   break;
+//}
+        $data_red=650;
+$imgsize['aden']=getimagesize("img/onlinemap/map.jpg");
+//$imgsize['aden']=getimagesize("img/onlinemap/map_aden_".$map_size.".jpg");
 $map['aden_x']=$imgsize['aden'][0] / 100;
 $map['aden_y']=$imgsize['aden'][1] / 100;
 $totalonline = $mysql->result($mysql->query("SELECT count(`charId`) FROM `$s_db`.`characters` WHERE `online`"));
@@ -56,7 +57,7 @@ $showusers = $user->admin() ? $totalonline : $totalonline-$hiddenusers;
     <tr align="center"><td>
     <table width="100%" border="0" cellpadding="0" cellspacing="0" class="main-tables">
         <tr><td class="widelist-txt">
-            <div style="width: <?php echo $imgsize['aden'][0]; ?>px; height: <?php echo $imgsize['aden'][1]; ?>px; background-image: url('img/onlinemap/map_aden_<?php echo $map_size;?>.jpg'); z-index: 1;">
+            <div style="width: <?php echo $imgsize['aden'][0]; ?>px; height: <?php echo $imgsize['aden'][1]; ?>px; background-image: url('img/onlinemap/map.jpg'); z-index: 1;">
             <?php
             $count=0;
             if($user->admin())
@@ -71,10 +72,12 @@ $showusers = $user->admin() ? $totalonline : $totalonline-$hiddenusers;
             $char_result=$mysql->query($char_query);
             while($char=$mysql->fetch_array($char_result))
             {
-                $data['x']=($char['x'] + 130000) / 3600;
-                $data['y']=($char['y'] + 0) / 5250;
-                $data['x']=$map['aden_x'] * $data['x'];
-                $data['y']=$map['aden_y'] * $data['y'] + $data_red;
+                //$data['x']=($char['x'] + 130000) / 3600;
+                //$data['y']=($char['y'] + 0) / 5250;
+                //$data['x']=$map['aden_x'] * $data['x'];
+                //$data['y']=$map['aden_y'] * $data['y'] + $data_red;
+                $data['x'] = $char['x']+330000;
+                $data['y'] = $char['y'];
                 ?>
                 <div style="width: <?php echo $imgsize['aden'][0]; ?>px; height: <?php echo $imgsize['aden'][1]; ?>px; background-image: url('img/onlinemap/pin_<?php echo $char['race']; ?>.gif'); background-repeat: no-repeat; background-position: <?php echo round($data['x']); ?>px <?php echo round($data['y']); ?>px; z-index: <?php echo $count+2; ?>;">
                 <?php

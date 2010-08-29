@@ -66,6 +66,7 @@ function head($title = "", $head=1, $url='', $time=0)
 	$skin = $Config['DSkin'];
 
     $title = $Config['Title']." :: ".$title;
+    //echo $skin;
 	require_once("skins/" . $skin . "/head.php");
 }
 
