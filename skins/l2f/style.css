@@ -90,3 +90,175 @@ td.menu{
 .btn:hover { background-color: #553E3D; }
 .btn:active { background-color: #444; }
 .btn[class] {  background-image: url(./img/shade.png); background-position: bottom; }
+
+#inventory { 
+	width: 310px; 
+	height: 408px; 
+	margin: 5px;
+	background: url('../../img/inventory/inventory.png'); 
+	vertical-align: top;
+	background-position: left top;
+	background-repeat: no-repeat;
+	padding: 0px;
+	/*padding: 67px 0px 0px 0px;*/
+	border: 1px solid transparent;
+}
+#inventory_items {
+	margin: 67px 0px 0px 20px;
+	width: 268px;
+	height: 288px;
+	overflow: auto;
+	position: relative;
+	padding: 1px 0px 0px 2px;
+	background: url(../../img/inventory/line.gif);
+	background-repeat: repeat-y;
+	background-attachment: scroll;
+}
+img.floated {
+	float: left;
+	position: relative;
+	padding: 0px 4px 4px 0px;
+	width: 32px;
+	height: 32px;}
+.clearfloat {
+	clear:both; height:0px;
+	line-height:0px; visibility: hidden;}
+#inventory_items .scrollgeneric {
+	line-height: 1px;
+	font-size: 1px;
+	position: absolute;
+	top: 0; 
+	left: 0;}
+#inventory_items .vscrollerbase {
+	width: 15px;
+	background-color: white;}
+#inventory_items .vscrollerbar {
+	width: 15px;
+	background-color: black;}
+#inventory_items .vscrollerbar {
+	background: #99CBCB url(../../img/inventory/basebarcaps.png) -15px 0px repeat-y;}
+#inventory_items .vscrollerbar {
+	padding: 15px;
+	z-index: 2;}
+#inventory_items .vscrollerbarbeg {
+	background: url(../../img/inventory/basebarcaps.png) -45px 0px no-repeat;
+	width: 15px;
+	height: 15px !important;}
+#inventory_items .vscrollerbarend {
+	background: url(../../img/inventory/basebarcaps.png) -45px -30px no-repeat;
+	width: 15px;
+	height: 15px;}
+#inventory_items .vscrollerbase {
+	background: #D7EBDF url(../../img/inventory/basebarcaps.png) 0px 0px repeat-y;}
+#inventory_items .vscrollerbasebeg {
+	background: url(../../img/inventory/basebarcaps.png) -30px 0px no-repeat;
+	width: 15px;
+	height: 15px !important;}
+#inventory_items .vscrollerbaseend {
+	background: url(../../img/inventory/basebarcaps.png) -30px -30px no-repeat;
+	height: 15px;
+	width: 15px;}
+#inventory_items .scrollerjogbox:hover {
+	background: #5E828C url(../../img/inventory/basebarcaps.png) -45px -15px;}
+
+#paperdoll {
+	width: 310px; 
+	height: 291px; 
+	margin: 5px;
+	background: url(../../img/inventory/paperdoll.png); 
+	vertical-align: top;
+	background-position: left top;
+	background-repeat: no-repeat;
+	padding: 0px;
+	border: 1px solid transparent;
+}
+#paperdoll_items {
+	margin: 75px 0px 0px 30px;
+	width: 245px;
+	height: 149px;
+	position: relative;
+}
+#paperdoll #item {
+	position: absolute;
+	width: 32px;
+	height: 32px;
+	padding: 0px;
+}
+#paperdoll .hidden{ 
+	display:none;
+}
+
+#paperdoll .lefthair{ 
+	margin-left: 0px;
+	margin-top: 0px;
+}
+#paperdoll .helmet{ 
+	margin-left: 39px;
+	margin-top: 0px;
+}
+#paperdoll .righthair{ 
+	margin-left: 78px;
+	margin-top: 0px;
+}
+#paperdoll .dress{ 
+	margin-left: 0px;
+	margin-top: 38px;
+}
+#paperdoll .top{ 
+	margin-left: 39px;
+	margin-top: 38px;
+}
+#paperdoll .cloak{ 
+	margin-left: 78px;
+	margin-top: 38px;
+}
+#paperdoll .gloves{ 
+	margin-left: 0px;
+	margin-top: 76px;
+}
+#paperdoll .lower{ 
+	margin-left: 39px;
+	margin-top: 76px;
+}
+#paperdoll .bots{ 
+	margin-left: 78px;
+	margin-top: 76px;
+}
+#paperdoll .weapon{ 
+	margin-left: 0px;
+	margin-top: 114px;
+}
+#paperdoll .shield{ 
+	margin-left: 78px;
+	margin-top: 114px;
+}
+
+#paperdoll .leftearring{ 
+	margin-left: 132px;
+	margin-top: 0px;
+}
+#paperdoll .necklace{ 
+	margin-left: 171px;
+	margin-top: 0px;
+}
+#paperdoll .rightearring{ 
+	margin-left: 210px;
+	margin-top: 0px;
+}
+#paperdoll .leftring{ 
+	margin-left: 132px;
+	margin-top: 38px;
+}
+#paperdoll .ring{ 
+	margin-left: 171px;
+	margin-top: 38px;
+}
+#paperdoll .rightring{ 
+	margin-left: 210px;
+	margin-top: 38px;
+}
+#paperdoll .braslet{
+	margin-left: 132px;
+	margin-top: 90px;
+}
+/*body, table, tr, td, img, div, a, input { behavior: url(../../img/iepngfix.htc) }*/

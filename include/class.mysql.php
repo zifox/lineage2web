@@ -83,6 +83,29 @@ class MySQL{
         return key($this->query);
     }
 
+    function query2($sql, $array=array()) {
+        $querytime = explode(" ", microtime());
+        $querystart = $querytime[1] . substr($querytime[0], 1);
+        $sql = preg_replace('#\{([a-z0-9\-_]*?)\}#Ssie', '( ( isset($array[\'\1\']) ) ? $array[\'\1\'] : \'\' );', $sql);
+        //$sql = trim($sql);
+
+        $result = mysql_query($sql, $this->link) OR $this->err("<b>MySQL Query error: </b> $sql");
+
+        $querytime = explode(" ",microtime());
+        $queryend = $querytime[1].substr($querytime[0],1);
+        $time = bcsub($queryend,$querystart,6);
+        $this->totalsqltime+=$time;
+        array_push($this->query, array(
+            "query" => $sql,
+            "result" => $result,
+            "time" => $time
+        ));
+
+        $this->querycount++;
+        end($this->query);
+        return key($this->query);
+    }
+
     function result($res = NULL, $row = 0, $field = 0 ){
         if ($res === null) {
             end($this->query);

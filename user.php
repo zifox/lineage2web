@@ -2,7 +2,14 @@
 define('INWEB', True);
 require_once("include/config.php");
 //пароль
-
+function CountFormat($num)
+{
+    if ($num > 1)
+    {
+        return " (" . number_format($num, 0, ".", ",") . ")";
+    }
+    return "";
+}
 includeLang('user');
 if ($_GET['cid'] && is_numeric($_GET['cid']))
 {
@@ -39,9 +46,9 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
     <tr><td><?php echo $Lang['clan'];?>:</td><td><?php echo $clan_link;?></td></tr>
     <tr><td><?php echo $Lang['pvp'];?>/<font color="red"><?php echo $Lang['pk'];?></font>:</td><td><b><?php echo $char['pvpkills'];?></b>/<b><font color="red"><?php echo $char['pkkills'];?></font></b></td></tr>
     <tr><td><?php echo $online;?>:</td><td><img src="img/status/<?php echo $onoff;?>line.png" title="<?php echo $online;?>" alt="<?php echo $online;?>" /></td></tr></table></td><td>
-    <table>
+
     <?php
-    $skill_list = $mysql->query("SELECT * FROM `$dbname`.`character_skills` WHERE `charId`='$id' AND `class_index`='0'");
+    /*$skill_list = $mysql->query("SELECT * FROM `$dbname`.`character_skills` WHERE `charId`='$id' AND `class_index`='0'");
     $i=0;
     while($skill=$mysql->fetch_array($skill_list))
     {
@@ -57,9 +64,48 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
         {
             $i++;
         }
-    }
+    }*/
     ?>
-    </table>
+    <div id='paperdoll' align="left">
+	<div id='paperdoll_items' align="left">
+<?php
+                    $query_paperdoll = $mysql->query2($q[301], array("database" => $dbname, "charID" => $id, "loc" => "PAPERDOLL"));
+                    while ($paperdoll_data = $mysql->fetch_array($query_paperdoll))
+                    {
+                        $name = ($paperdoll_data["armorName"] != "") ? $paperdoll_data["armorName"] : (($paperdoll_data["weaponName"] != "") ? $paperdoll_data["weaponName"] : $paperdoll_data["etcName"]);
+                        $name = str_replace("'", "\\'", $name);
+                        $grade = ($paperdoll_data["armorType"] != "") ? ((strtolower($paperdoll_data["armorType"]) == "none") ? "ng" : $paperdoll_data["armorType"]) : (($paperdoll_data["weaponType"] != "") ? ((strtolower($paperdoll_data["weaponType"]) == "none") ? "ng" : $paperdoll_data["weaponType"]) : "");
+                        $grade = (!empty($grade) || $grade!="ng") ? "<img border=\\'0\\' src=\\'img/grade/" . $grade . "-grade.png\\'>" : "";
+                        $enchant = $paperdoll_data["enchant_level"] > 0 ? " +" . $paperdoll_data["enchant_level"] : "";
+                        $img = (is_file('img/items/'.$paperdoll_data["item_id"].'.gif')) ? $paperdoll_data["item_id"] : "blank";
+                        $type = $q[666][$paperdoll_data["loc_data"]];
+                        
+						echo "<div id='item' class='{$type}'><img border='0' src='img/items/$img.gif' onmouseover=\"Tip('{$name} {$enchant} {$grade}', FONTCOLOR, '#333333',BGCOLOR, '#FFFFFF', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold')\"></div>";
+                        
+                    }
+?>
+	</div>
+</div>
+<div id='inventory' align="left">
+	<div id='inventory_items' class='flexcroll'>
+<?php
+$query = $mysql->query2($q[301], array("database" => $dbname, "charID" => $id, "loc" => "INVENTORY"));
+                    $inv = "";
+                    while ($inv_data = $mysql->fetch_array($query))
+                    {
+                        $name = ($inv_data["armorName"] != "") ? $inv_data["armorName"] : (($inv_data["weaponName"] != "") ? $inv_data["weaponName"] : $inv_data["etcName"]);
+                        $name = str_replace("'", "\\'", $name);
+                        $grade = ($inv_data["armorType"] != "") ? ((strtolower($inv_data["armorType"]) == "none") ? "ng" : $inv_data["armorType"]) : (($inv_data["weaponType"] != "") ? ((strtolower($inv_data["weaponType"]) == "none") ? "ng" : $inv_data["weaponType"]) : "");
+                        $grade = (!empty($grade)) ? "<img border=\\'0\\' src=\\'images/grade/" . $grade . "-grade.png\\'>" : "";
+                        $enchant = $inv_data["enchant_level"] > 0 ? " +" . $inv_data["enchant_level"] : "";
+                        $count = CountFormat($inv_data["count"]);
+                        $img = (is_file('img/items/'.$inv_data["item_id"].'.gif')) ? $inv_data["item_id"] : "blank";
+                        echo "<img class='floated' border='0' src=\"img/items/{$img}.gif\" onmouseover=\"Tip('{$name} {$count} {$enchant} {$grade}', FONTCOLOR, '#333333',BGCOLOR, '#FFFFFF', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold')\">\n";
+                    }
+?>
+		<div class='clearfloat'></div>
+	</div>
+</div>
     </td></tr></table>
     <h1><?php echo $Lang['otherchars'];?></h1>
     <?php

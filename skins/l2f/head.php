@@ -36,6 +36,10 @@ $skinurl = 'skins/l2f';
 document.write(unescape("%3Cscript src='scripts/ga.js' type='text/javascript'%3E%3C/script%3E"));
 </script>
 <script type="text/javascript" src="scripts/ajax.js"></script>
+<!--[if lt IE 7.]>
+<script defer type="text/javascript" src="scripts/pngfix.js"></script>
+<![endif]-->
+
 <script type="text/javascript" language="javascript">
 <!--
 function GoTo(url)
@@ -158,6 +162,7 @@ opacity: 0.85;
 </style>
 </head>
 <body>
+<script type="text/javascript" src="scripts/wz_tooltip.js"></script>
 <div id="valid">
 <a href="http://validator.w3.org/check?uri=referer" target="_blank">
 <img style="border:0;width:88px;height:31px" src="img/valid-xhtml.png" alt="Valid XHTML 1.0 Transitional" />
