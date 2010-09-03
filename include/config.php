@@ -40,5 +40,6 @@ if ($Config['use_bancontrol']){
 if (!$Config['web_debug']) {
     error_reporting(0);
 }
-$tpl = new tplParser($Config['DSkin']);
+//$tpl = new tplParser($Config['DSkin']);
+$tpl = new tplParser('l2f');
 ?>

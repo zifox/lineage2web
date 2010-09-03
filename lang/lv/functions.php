@@ -1,8 +1,8 @@
 <?php
 //пароль
 if(!defined('INLANG')){Header("Location: ../../index.php");}
-$Lang['first'] = 'First';
-$Lang['prev'] = 'Previous';
-$Lang['next'] = 'Next';
-$Lang['last'] = 'Last';
+$Lang['first'] = 'Pirmā Lapa';
+$Lang['prev'] = 'Iepriekšējā Lapa';
+$Lang['next'] = 'Nākošā Lapa';
+$Lang['last'] = 'Pēdējā Lapa';
 ?>

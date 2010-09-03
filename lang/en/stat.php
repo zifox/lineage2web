@@ -17,10 +17,10 @@ $Lang['head_maxHp'] = 'Highest Hit Points';
 $Lang['head_maxMp'] = 'Highest Mana Points';
 $Lang['head_top'] = 'Top '. $Config['TOP'];
 $Lang['head_human'] = 'Top Humans';
-$Lang['head_elf'] = 'Top Elves';
-$Lang['head_dark_elf'] = 'Top Dark Elves';
+$Lang['head_elf'] = 'Top Elfs';
+$Lang['head_dark_elf'] = 'Top Dark Elfs';
 $Lang['head_orc'] = 'Top Orcs';
-$Lang['head_dwarf'] = 'Top Dwarves';
+$Lang['head_dwarf'] = 'Top Dwarfs';
 $Lang['head_kamael'] = 'Top Kamaels';
 
 #Menu

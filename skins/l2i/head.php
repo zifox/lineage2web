@@ -54,7 +54,7 @@ var ajax = new Array();
 function raiseVitality(server, charac, id)
 {
 
-    if(confirm('Are you sure you want to raise your vitality points? It will cost you 1 WebPoint'))
+    if(confirm('<?php echo sprintf($Lang['confirm_vitality'], $Config['vitality_cost']);?>'))
     {
     	var index = ajax.length;
     	ajax[index] = new sack();

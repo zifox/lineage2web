@@ -63,8 +63,8 @@ function head($title = "", $head=1, $url='', $time=0)
 {
     global $skin, $Config, $Lang, $mysql, $tpl, $user;
     DEFINE('INSKIN', True);
-	$skin = $Config['DSkin'];
-
+	//$skin = $Config['DSkin'];
+    $skin = 'l2f';
     $title = $Config['Title']." :: ".$title;
     //echo $skin;
 	require_once("skins/" . $skin . "/head.php");
@@ -79,7 +79,8 @@ function foot($foot=1)
     }
     else
     {
-	   $skin = $Config['DSkin'];
+	   //$skin = $Config['DSkin'];
+       $skin = 'l2f';
     }
     require_once("skins/" . $skin . "/foot.php");
 }
@@ -95,6 +96,10 @@ function button($text='  ', $name = 'Submit', $return = 0, $disabled=false, $id 
         return $tpl->parsetemplate('button', $parse, 1);
     else
         $tpl->parsetemplate('button', $parse);
+}
+function menubutton($text)
+{
+    return '<img src="./button.php?text='.$text.'" title="'.$text.'" alt="'.$text.'" border="0" width="138" height="34" />';
 }
 function pretty_time ($seconds) {
 	$day = floor($seconds / (24 * 3600));
@@ -215,4 +220,5 @@ function pagechoose($page, $count=0, $stat, $server)
     </tr></table>&nbsp;</div>
     <?php
 }
+
 ?>
