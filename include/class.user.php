@@ -55,8 +55,13 @@ class user {
 		}
         if($values['accessLevel'] == 127){
             $_SESSION['admin'] = true;
-        }else{
+        }elseif($values['accessLevel'] < 127 && $values['accessLevel'] > 0)
+        {
+            $_SESSION['moderator'] = true;
+        }
+        else{
             $_SESSION['admin'] = false;
+            $_SESSION['moderator'] = false;
         }
 		if ($init){
 			$session = $mysql->escape(session_id());
@@ -122,6 +127,14 @@ class user {
 	public function admin()
 	{
 		if ($_SESSION['admin'] == true)
+		{
+			return true;
+		}
+		return false;
+	}
+	public function mod()
+	{
+		if ($_SESSION['moderator'] == true || $_SESSION['admin'] == true)
 		{
 			return true;
 		}

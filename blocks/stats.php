@@ -45,8 +45,43 @@ while ($server = $mysql->fetch_array($serverlist))
 	#Total characters
 	$parse['char_count'] = $mysql->result($mysql->query($q[202], $server['DataBase']));
 
-	#Players Online
+    #Players Online
 	$parse['online_count'] = $mysql->result($mysql->query($q[203], $server['DataBase']));
+    
+if($user->logged() && $user->mod())
+{
+     $telnet_q=$mysql->query('SELECT `IP`, `Port`, `Password` FROM `'.$webdb.'`.`telnet` WHERE `Server`=\''.$server['Name'].'\' ');
+     $telnet = $mysql->fetch_array($telnet_q);
+    $usetelnet = @fsockopen($telnet['IP'], $telnet['Port'], $errno, $errstr, 0.5);
+if($usetelnet) {
+   fputs($usetelnet, $telnet['Password']);
+   fputs($usetelnet, "\r\n");
+   fputs($usetelnet, "status");
+   fputs($usetelnet, "\r\n");
+   fputs($usetelnet, "exit\r\n");
+   while (!feof($usetelnet)) {
+      $line = fgets($usetelnet, 2000);
+      if( preg_match('/Player Count: (.*)\/([0-9]{1,9})/i', $line, $matches)) {
+         $online = $matches[1];
+      }
+      if( preg_match('/Offline Count: (.*)\/([0-9]{1,9})/i', $line, $matches)) {
+         $offline = $matches[1];
+      }
+   }
+   $real = ($online-$offline);
+   fclose($usetelnet);
+}
+else 
+{
+   $real = "-";
+   $offline = "-";
+}
+$parse['online_count'] .= "($real)";
+//echo "Online players: {$real}";
+//echo "Offline stores: {$offline}";
+
+}
+
 
 	#GM Online
 	$parse['online_gm_count'] = $mysql->result($mysql->query($q[204], $server['DataBase']));
