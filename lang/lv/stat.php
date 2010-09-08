@@ -76,4 +76,27 @@ $Lang['players_dusk'] = 'Krēslas Spēlētāji';
 $Lang['players_dawn'] = 'Rītausmas Spēlētāji';
 $Lang['time_held'] = 'Tur';
 $Lang['hour'] = 'Stundas';
+
+$Lang['ward'] = array(
+	81 => 'Ward1',
+	82 => 'Ward2',
+	83 => 'Ward3',
+	84 => 'Ward4',
+	85 => 'Ward5',
+	86 => 'Ward6',
+	87 => 'Ward7',
+	88 => 'Ward8',
+	89 => 'Ward9'
+);
+$Lang['ward_info'] = array(
+	81 => 'Gludio Ward   |   STR +1 / INT +1',
+	82 => 'Dion Ward   |   DEX +1 / WIT +1',
+	83 => 'Giran Ward   |   STR +1 / MEN +1',
+	84 => 'Oren Ward   |   CON +1 / MEN +1',
+	85 => 'Aden Ward   |   DEX +1 / MEN +1',
+	86 => 'Innadril Ward   |   CON +1 / INT +1',
+	87 => 'Goddard Ward   |   DEX +1 / INT +1',
+	88 => 'Rune Ward   |   STR +1 / WIT +1',
+	89 => 'Schuttgart Ward   |   CON +1 / WIT +1'
+);
 ?>

@@ -14,5 +14,4 @@ $Lang['community_server'] = 'Community Server';
 $Lang['accounts'] = 'Accounts';
 $Lang['chars'] = 'Chars';
 $Lang['clans'] = 'Clans';
-$Lang['online'] = 'Online';
 ?>

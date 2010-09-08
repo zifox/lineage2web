@@ -34,7 +34,14 @@ $Lang['url'] = 'Lapas links';
 $Lang['Quest'] = 'Quest Drops/Atlīdzība';
 $Lang['enable_news'] = 'Ieslēgt jaunumus (1 - ieslēgts, 0 - izslēgts)';
 $Lang['news'] = 'Jaunumi (Ja ieslēgt jaunumus = 1)';
-$Lang['session_expire_time'] = 'Sesijas derīguma laiks';
-$Lang['reg_reward']='Reģistrācijas Atlīdzība';
-$Lang['vote_reward']='Balsošanas Atlīdzība';
+$Lang['web_debug'] = 'Rādīt kļūdas';
+$Lang['use_bancontrol'] = 'Lietot BanControl';
+$Lang['sql_debug'] = 'MySQL Atkļūdošana';
+$Lang['show_ls'] = 'Rādīt Login Server';
+$Lang['show_cs'] = 'Rādīt Community Server';
+$Lang['show_gs'] = 'Rādīt GameServer';
+$Lang['use_cracktracker'] = 'Lietot CrackTracker';
+$Lang['user_debug'] = 'Klases Lietotājs atkļūdošana';
+$Lang['reg_reward']='Reģistrēšanās atlīdzība';
+$Lang['vote_reward']='Balsošanas atlīdzība';
 ?>

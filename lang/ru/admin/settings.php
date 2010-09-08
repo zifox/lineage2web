@@ -34,7 +34,14 @@ $Lang['url'] = 'URL сайта';
 $Lang['Quest'] = 'Quest Drop / вознаграждение';
 $Lang['enable_news'] = 'Включить Новости (1 - включен, 0 - выключен)';
 $Lang['news'] = 'Новости ( если включить новости = 1)';
-$Lang['session_expire_time'] = 'Сессия Expire Time';
+$Lang['web_debug'] = 'Показать ошибки';
+$Lang['use_bancontrol'] = 'Использование BanControl';
+$Lang['sql_debug'] = 'MySQL Отлаживать';
+$Lang['show_ls'] = 'Показ Login Server';
+$Lang['show_cs'] = 'Показ Community Server';
+$Lang['show_gs'] = 'Показ GameServer';
+$Lang['use_cracktracker'] = 'Использование CrackTracker';
+$Lang['user_debug'] = 'Пользователь класса Debug';
 $Lang['reg_reward']='Регистрация награда';
 $Lang['vote_reward']='Голосование награда';
 ?>

@@ -4,6 +4,8 @@ if(!defined('INLANG')){Header("Location: ../../index.php");}
 
 $Lang['webpoint_exchange']= 'WebPunktu Apmaiņa';
 $Lang['webpoints_exchanged'] = 'WebPunkti Apmainīti';
+$Lang['server'] = 'Serveris';
+$Lang['select_server'] = 'IZVĒLIES SERVERI';
 $Lang['char'] = 'Personāžs';
 $Lang['exchange_for'] = 'Apmainīt Pret';
 $Lang['count'] = 'Skaits';
