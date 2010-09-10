@@ -1,20 +1,7 @@
 <hr />
-<div align="center">
-<table border="0"><tr><td><iframe src="http://wos.lv/d.php?11603f" name="wos_b" width="88" height="53" marginwidth="0" marginheight="0" frameborder="0" scrolling="no"></iframe>
-</td><td><a href="http://l2.hopzone.net/vote.php?site=79484" target="_blank"><img width="88" height="30" border="0" alt="Vote for HopZone.Net" src="http://images.hopzone.net/lineage2/votebanners/lineage2-88x30-2.gif" /></a><br/>
-<a href="http://la2.mmotop.ru/vote/20088/" target="_blank"><img src="http://la2.mmotop.ru/images/88x31w_la2.png" title="Рейтинг серверов Lineage 2" alt="Рейтинг серверов Lineage 2" border="0" /></a>
-</td><td><a href="http://www.topgames.lv/?mode=in&amp;id=1044" target="_blank">
-<img src="http://www.topgames.lv/counter/?id=1044" alt="" border="0"/>
-</a><br/>
-<a href="http://www.topgames.lv/?mode=in&amp;id=1157" target="_blank">
-<img src="http://www.topgames.lv/counter/?id=1157" alt="" border="0" />
-</a>
 
-</td></tr>
-</table>
-</div>
 <?php
-$skinurl = 'skins/l2i';
+$skinurl = 'skins/l2f';
 if($foot){
 ?>
 </td>

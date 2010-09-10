@@ -13,7 +13,7 @@ while ($gsrow = $mysql->fetch_array($gsquery))
 }
 $parse['Events'] = $Config['Events'];
 $parse['Features'] = $Config['Features'];
-$tpl->parsetemplate('index', $parse);
+$tpl->parsetemplate('index2', $parse);
 
 foot();
 ?>

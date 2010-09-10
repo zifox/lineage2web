@@ -65,6 +65,16 @@ $q = array(
 			) AS ee ON ee.item_id = items.item_id
 		WHERE items.owner_id='{charID}' AND items.loc='{loc}' 
 		ORDER BY items.loc_data",
+        
+        
+        
+            302 => "SELECT `items`.`object_id`, `items`.`item_id`, `items`.`count`, `items`.`enchant_level`, `items`.`loc`, `items`.`loc_data`, `all`.`name`, `all`.`addname`, `all`.`grade`, `all`.`desc`, `all`.`spec_desc`, `all`.`set_bonus`, `all`.`set_extra_desc`, `all`.`icon`
+		FROM `{database}`.`items` 
+		LEFT JOIN (
+			SELECT `all_items`.`id`, `all_items`.`name`, `all_items`.`addname`, `all_items`.`grade`,`all_items`.`icon`, `all_items`.`desc`, `all_items`.`spec_desc`, `all_items`.`set_bonus`, `all_items`.`set_extra_desc` FROM `{webdb}`.`all_items`
+			) AS `all` ON `all`.`id` = `items`.`item_id`  
+		WHERE `items`.`owner_id`='{charID}' AND `items`.`loc`='{loc}' 
+		ORDER BY `items`.`loc_data`",
     666 => Array(
         0	=> "dress",
         1	=> "leftearring",
@@ -79,7 +89,9 @@ $q = array(
 		12	=> "top",
 		13	=> "lower",
 		14	=> "bots",
+        15  => "cloak", //cloak
 		16	=> "weapon", //two handed
+        18  => "",
 		21	=> "righthair",
 		22	=> "braslet",
 		23	=> "ring",

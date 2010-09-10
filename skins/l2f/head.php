@@ -111,18 +111,18 @@ function createChars(index)
 </script>
 <style type="text/css">
 body  {
-margin : 0;
+margin : 0px;
 font-size : 14px;
 font-family : Arial;
 color : #ffffff;
-background : url('<?php echo $skinurl;?>/bg/bg.jpg') no-repeat scroll left top #406072;
+background : url('<?php echo $skinurl;?>/bg/bg.jpg')  no-repeat scroll left top #406072;
 cursor : url('<?php echo $skinurl;?>/cursors/cursor.cur'), auto;
-text-align:center;
+
 }
 
 #logo {
 display:block;
-z-index: 0;
+z-index: -1;
 left:125px;
 top:0px;
 position: absolute;
@@ -130,7 +130,7 @@ text-align: center;
 }
 #freya {
 display:block;
-z-index: -1;
+z-index: -2;
 right:0px;
 top:50px;
 position: absolute;
@@ -163,13 +163,13 @@ opacity: 0.85;
 </head>
 <body>
 <script type="text/javascript" src="scripts/wz_tooltip.js"></script>
-<div id="valid">
+<!--<div id="valid">
 <a href="http://validator.w3.org/check?uri=referer" target="_blank">
 <img style="border:0;width:88px;height:31px" src="img/valid-xhtml.png" alt="Valid XHTML 1.0 Transitional" />
 </a><a href="http://jigsaw.w3.org/css-validator/check/referer" target="_blank">
 <img style="border:0;width:88px;height:31px" src="img/valid-css.png" alt="Valid CSS!" /></a>
 <a href="http://games.top.org/lineage-2/" title="Lineage 2 TOP.ORG"><img style="border:none;" src="http://img1.top.org/toporg_12309.gif" alt="Lineage 2 TOP.ORG" /></a>
-</div>
+</div>-->
 <div id="frm"><img width="150" height="150" border="0" longdesc="/" usemap="#Map" alt="Visit forum" style="" src="img/visit_forum.png" />
 <map id="Map" name="Map">
 <area href="./forum" target="_blank" coords="3,119,117,3,77,3,3,77,3,119" shape="poly" alt="" />
@@ -183,11 +183,11 @@ opacity: 0.85;
 </div>
 <!-- <div id="snow"></div> -->
  <div id="header" align="riht">
-<object type="application/x-shockwave-flash" width="17" height="17"
+<!--<object type="application/x-shockwave-flash" width="17" height="17"
 data="img/swf/player.swf?playlist_url=img/swf/playlist.xspf&autoplay=false">
 <param name="movie" 
 value="img/swf/player.swf?playlist_url=img/swf/playlist.xspf&autoplay=false" />
-</object>
+</object>-->
 
  </div>
 <?php
@@ -196,7 +196,7 @@ if($head){
 
 <table width="100%" cellpadding="0" cellspacing="0" align="center">
 <tr>
-	<td width="100%" >
+	<td width="100%">
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
     <tr>
         <td width="15%" valign="top" align="center">
@@ -207,7 +207,7 @@ includeBlock('vote', $Lang['vote']);
 ?>
         </td>
         <td id="main" width="70%" align="center" valign="top">
-            <table width="99%" cellspacing="0" cellpadding="0" border="0" align="right" class="opacity2" style="height: 100px;">
+            <table width="100%" cellspacing="0" cellpadding="0" border="0" align="right" class="opacity2" style="height: 100px;">
                 <tbody>
                 <tr>
                     <td width="40"><img width="40" height="53" alt="" src="<?php echo $skinurl;?>/img/t_h_lc.gif" /></td>
@@ -230,5 +230,4 @@ echo "<h1>{$Config['news']}</h1>";
 <hr />
 <?php
 }
-
 ?>
