@@ -3,12 +3,12 @@ if (! defined('IN_BLOCK'))
 {
 	Header("Location: ../index.php");
 }
-$server_list = $mysql->query($q[1], $webdb);
+$server_list = $mysql->query($q[1], array('db' => $webdb));
 while ($slist = $mysql->fetch_array($server_list))
 {
 	$parse['server_name'] = $slist['Name'];
 
-	$topchar = $mysql->query($q[200], $slist['DataBase'], $Config['TOP']);
+	$topchar = $mysql->query($q[200], array("db" => $slist['DataBase'], "limit" => $Config['TOP']));
 	$n = 1;
 	$parse['rows'] = '';
 	while ($top = $mysql->fetch_array())

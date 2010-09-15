@@ -53,7 +53,7 @@ class MySQL{
         return mysql_real_escape_string($string, $this->link);
     }
 
-    function query($sql, $db = NULL, $limit = NULL) {
+/*    function query($sql, $db = NULL, $limit = NULL) {
         $querytime = explode(" ", microtime());
         $querystart = $querytime[1] . substr($querytime[0], 1);
         if($db)
@@ -82,8 +82,8 @@ class MySQL{
         end($this->query);
         return key($this->query);
     }
-
-    function query2($sql, $array=array()) {
+*/
+    function query($sql, $array=array()) {
         $querytime = explode(" ", microtime());
         $querystart = $querytime[1] . substr($querytime[0], 1);
         $sql = preg_replace('#\{([a-z0-9\-_]*?)\}#Ssie', '( ( isset($array[\'\1\']) ) ? $array[\'\1\'] : \'\' );', $sql);

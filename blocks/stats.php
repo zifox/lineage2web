@@ -32,25 +32,25 @@ if ($Config['show_cs'])
 
 }
 #Total accounts
-$parse['acc_count'] = $mysql->result($mysql->query($q[100]));
+$parse['acc_count'] = $mysql->result($mysql->query($q[100], array('db' => $Config['DDB'])));
 $tpl->parsetemplate('blocks/stats', $parse);
 
-$serverlist = $mysql->query($q[2], $webdb);
+$serverlist = $mysql->query($q[2], array('db' => $webdb));
 while ($server = $mysql->fetch_array($serverlist))
 {
 	$parse = $Lang;
 	#Total clans
-	$parse['clan_count'] = $mysql->result($mysql->query($q[201], $server['DataBase']));
+	$parse['clan_count'] = $mysql->result($mysql->query($q[201], array('db' => $server['DataBase'])));
 
 	#Total characters
-	$parse['char_count'] = $mysql->result($mysql->query($q[202], $server['DataBase']));
+	$parse['char_count'] = $mysql->result($mysql->query($q[202], array('db' => $server['DataBase'])));
 
     #Players Online
-	$parse['online_count'] = $mysql->result($mysql->query($q[203], $server['DataBase']));
+	$parse['online_count'] = $mysql->result($mysql->query($q[203], array('db' => $server['DataBase'])));
     
 if($user->logged() && $user->mod())
 {
-     $telnet_q=$mysql->query('SELECT `IP`, `Port`, `Password` FROM `'.$webdb.'`.`telnet` WHERE `Server`=\''.$server['Name'].'\' ');
+     $telnet_q=$mysql->query($q[4], array('db' => $webdb, 'server' => $server['Name']));
      $telnet = $mysql->fetch_array($telnet_q);
     $usetelnet = @fsockopen($telnet['IP'], $telnet['Port'], $errno, $errstr, 0.5);
 if($usetelnet) {
@@ -76,15 +76,13 @@ else
    $real = "-";
    $offline = "-";
 }
-$parse['online_count'] .= "($real)";
-//echo "Online players: {$real}";
-//echo "Offline stores: {$offline}";
+$parse['online_count'] .= "($real <font color=\"white\">/</font> <font color=\"red\>$offline</font>)";
 
 }
 
 
 	#GM Online
-	$parse['online_gm_count'] = $mysql->result($mysql->query($q[204], $server['DataBase']));
+	$parse['online_gm_count'] = $mysql->result($mysql->query($q[204], array('db' => $server['DataBase'])));
 
 	$fp = @fsockopen($server['IP'], $server['Port'], $errno, $errstr, 0.5);
 	if ($fp)

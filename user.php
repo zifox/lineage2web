@@ -70,14 +70,15 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
     <div id='paperdoll' align="left">
 	<div id='paperdoll_items' align="left">
 <?php
-                    $query_paperdoll = $mysql->query2($q[302], array("database" => $dbname, "webdb" => $webdb, "charID" => $id, "loc" => "PAPERDOLL"));
+                    $query_paperdoll = $mysql->query($q[302], array("db" => $dbname, "webdb" => $webdb, "charID" => $id, "loc" => "PAPERDOLL"));
                     while ($paperdoll_data = $mysql->fetch_array($query_paperdoll))
                     {
                         //$name = ($paperdoll_data["armorName"] != "") ? $paperdoll_data["armorName"] : (($paperdoll_data["weaponName"] != "") ? $paperdoll_data["weaponName"] : $paperdoll_data["etcName"]);
                         $name = $paperdoll_data["name"];
                         $name = str_replace("'", "\\'", $name);
                         $addname = $paperdoll_data["addname"];
-                        $addname = str_replace("'", "\\'", $addname);
+                        $addname = $addname!=''?' - <font color=#333333>'. str_replace("'", "\\'", $addname).'</font>':'';
+                        
                         $desc = $paperdoll_data["desc"];
                         $specdesc = $paperdoll_data["specdesc"];
                         $set = $paperdoll_data["set_bonus"];
@@ -90,7 +91,7 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
                         $img = (is_file('img/iconsall/'.$paperdoll_data["icon"].'.png')) ? $paperdoll_data["icon"] : "blank";
                         $type = $q[666][$paperdoll_data["loc_data"]];
                         
-                        echo "<div id='item' class='{$type}'><img border='0' src='img/iconsall/$img.png' onmouseover=\"Tip('{$name} - <font color=red>{$addname}</font> {$grade} {$enchant}<br /> {$desc}<br /> {$specdesc}<br /> {$set}<br /> {$set_extra}', FONTCOLOR, '#333333',BGCOLOR, '#FFFFFF', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold')\"></div>";
+                        echo "<div id='item' class='{$type}'><img border='0' src='img/iconsall/$img.png' onmouseover=\"Tip('{$name} {$addname} {$grade} {$enchant}<br /> {$desc}<br /> {$specdesc}<br /> {$set}<br /> {$set_extra}', FONTCOLOR, '#FFFFFF',BGCOLOR, '#406072', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold')\"></div>";
                         
                     }
 ?>
@@ -99,13 +100,14 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
 <div id='inventory' align="left">
 	<div id='inventory_items' class='flexcroll'>
 <?php
-$query = $mysql->query2($q[302], array("database" => $dbname, "webdb" => $webdb, "charID" => $id, "loc" => "INVENTORY"));
+$query = $mysql->query($q[302], array("db" => $dbname, "webdb" => $webdb, "charID" => $id, "loc" => "INVENTORY"));
+                    $inv = "";
                     while ($inv_data = $mysql->fetch_array($query))
                     {
                         $name = $inv_data["name"];
                         $name = str_replace("'", "\\'", $name);
                         $addname = $inv_data["addname"];
-                        $addname = str_replace("'", "\\'", $addname);
+                        $addname = ' - <font color="#333333">'. str_replace("'", "\\'", $addname).'</font>';
                         $desc = $inv_data["desc"];
                         $specdesc = $inv_data["specdesc"];
                         $set = $inv_data["set_bonus"];

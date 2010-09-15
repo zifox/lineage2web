@@ -14,7 +14,7 @@ $DB = array(
     "password"  => "",    //MySQL Password
     "database"  => "l2j"        //L2J Main (account)DataBase
 );
-$webdb = "web";                 //Webpage DataBase
+$webdb = "l2web";                 //Webpage DataBase
 
 require_once ('class.mysql.php');
 require_once ('class.user.php');
@@ -22,9 +22,9 @@ require_once ('class.tplParser.php');
 require_once ('queries.php');
 $mysql = new MySQL($DB);
 
-$query = $mysql->query($q['0'], $webdb);
+$query = $mysql->query($q[0], array("db" => $webdb));
 while ($row = $mysql->fetch_array($query)) {
-    $Config[$row['config_name']] = stripslashes($row['config_value']);
+    $Config[$row['name']] = stripslashes($row['value']);
 }
 
 $user = new user();

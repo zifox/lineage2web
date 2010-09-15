@@ -8,9 +8,19 @@ $DB = array(
     "database"  => "l2j"        //L2J Main (account)DataBase
 );
 $db = $DB['database'];
-$webdb='web';
+$webdb='l2web';
 mysql_connect($DB['host'],$DB['user'],$DB['password']);
 mysql_select_db($db);
+function str_replace_once($search, $replace, $subject) {
+    $firstChar = strpos($subject, $search);
+    if($firstChar !== false) {
+        $beforeStr = substr($subject,0,$firstChar);
+        $afterStr = substr($subject, $firstChar + strlen($search));
+        return $beforeStr.$replace.$afterStr;
+    } else {
+        return $subject;
+    }
+}
 ###query1
 /*$query = mysql_query("SELECT item_id, name, additionalname, bodypart, crystal_type FROM $db.weapon") OR mysql_error();
 $i=0;
@@ -32,12 +42,12 @@ while($r=mysql_fetch_assoc($query))
     $i++;
 }*/
 ####query3
-/*$query = mysql_query("SELECT id, icon FROM $webdb.all_items") OR mysql_error();
+$query = mysql_query("SELECT `id`, `desc` FROM `$webdb`.`all_items`") OR mysql_error();
 $i=0;
 
 while($r=mysql_fetch_assoc($query))
 {
-    $icon = $r['icon'];
+    //$icon = $r['icon'];
     //$icon = str_replace('BranchSys.icon.', '', $icon);
     //$icon = str_replace('BranchSys2.icon.', '', $icon);
     //$icon = str_replace('br_cashtex.item.', '', $icon);
@@ -45,9 +55,17 @@ while($r=mysql_fetch_assoc($query))
     //$icon = str_replace('item.', '', $icon);
     //$icon = str_replace('BranchSys.', '', $icon);
     //$icon = str_replace('BranchSys2.', '', $icon);
-    mysql_query("UPDATE `$webdb`.`all_items` SET `icon`= '$icon' WHERE `id`='{$r['id']}';") OR mysql_error();
-    $i++;
-}*/
+    $desc = $r['desc'];
+    $desc = str_replace(' \\0', '', $desc);
+    $desc = str_replace('\\0', '', $desc);
+    $desc = str_replace('\\\n', '', $desc);
+    $desc = str_replace('a,', '', $desc);
+    mysql_query("UPDATE `$webdb`.`all_items` SET `desc`= '$desc' WHERE `id`='{$r['id']}';") OR mysql_error();
+
+        $i++;
+}
+#missing incons from sql
+/*
 $query = mysql_query("SELECT id, name, icon FROM $webdb.all_items") OR mysql_error();
 $i=0;
 $err=0;
@@ -61,9 +79,34 @@ while($r=mysql_fetch_assoc($query))
     }
 $i++;
 }
+
+*/
+#useless icons
+/*
+if ($handle = opendir('img/iconsall/')) {
+    while (false !== ($file = readdir($handle))) {
+        if ($file != "." && $file != ".." && $file != ".svn") {
+            $file = str_replace('.png', '', $file);
+            $file = addslashes($file);
+            $query = mysql_query("SELECT id FROM $webdb.all_items WHERE icon='$file'") OR mysql_error();
+            if(!mysql_num_rows($query))
+            {
+            echo "$file<br />";
+            $file=stripslashes($file);
+            unlink("img/iconsall/$file.png");
+            }
+            //else
+            //echo $file;
+        }
+    }
+    closedir($handle);
+}
+*/
 echo $err.' missing icons<br />';
 echo $i.' items updated';
 mysql_close();
 ?>
+
+
 </body>
 </html>

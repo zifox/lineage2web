@@ -4,17 +4,17 @@ if (!defined('INCONFIG')) {
     die();
 }
 $q = array(
-    0 => 'SELECT * FROM `{{table}}`.`config`;',
-    1 => 'SELECT `ID`, `Name`, `DataBase` FROM `{{table}}`.`gameservers` WHERE `active` = \'true\'',
-    2 => 'SELECT * FROM `{{table}}`.`gameservers` WHERE `active` = \'true\';',
-    3 => 'SELECT * FROM `{{table}}`.`gameservers` INNER JOIN `{{table}}`.`gameserver_info` USING (`ID`) WHERE `active` = \'true\';',
-    4 => '',
+    0 => 'SELECT * FROM `{db}`.`config`;',
+    1 => 'SELECT `ID`, `Name`, `DataBase` FROM `{db}`.`gameservers` WHERE `active` = \'true\'',
+    2 => 'SELECT * FROM `{db}`.`gameservers` WHERE `active` = \'true\';',
+    3 => 'SELECT * FROM `{db}`.`gameservers` INNER JOIN `{db}`.`gameserver_info` USING (`ID`) WHERE `active` = \'true\';',
+    4 => 'SELECT `IP`, `Port`, `Password` FROM `{db}`.`telnet` WHERE `Server`=\'{server}\'',
     5 => '',
     6 => '',
     7 => '',
     8 => '',
     9 => '',
-    100 => 'SELECT count(0) FROM `accounts`;',
+    100 => 'SELECT count(0) FROM `{db}`.`accounts`;',
     101 => '',
     102 => '',
     103 => '',
@@ -24,14 +24,14 @@ $q = array(
     107 => '',
     108 => '',
     109 => '',
-    200 => 'SELECT `charId`, `char_name`, `sex` FROM `{{table}}`.`characters` WHERE `accesslevel`=\'0\'  ORDER BY `exp` DESC LIMIT {{limit}};',
-    201 => 'SELECT count(0) FROM `{{table}}`.`clan_data`;',
-    202 => 'SELECT count(0) FROM `{{table}}`.`characters`;',
-    203 => 'SELECT count(0) FROM `{{table}}`.`characters` WHERE `online` = \'1\' AND `accesslevel`=\'0\';',
-    204 => 'SELECT count(0) FROM `{{table}}`.`characters` WHERE `online` = \'1\' AND `accesslevel`>\'0\';',
+    200 => 'SELECT `charId`, `char_name`, `sex` FROM `{db}`.`characters` WHERE `accesslevel`=\'0\'  ORDER BY `exp` DESC LIMIT {limit};',
+    201 => 'SELECT count(0) FROM `{db}`.`clan_data`;',
+    202 => 'SELECT count(0) FROM `{db}`.`characters`;',
+    203 => 'SELECT count(0) FROM `{db}`.`characters` WHERE `online` = \'1\' AND `accesslevel`=\'0\';',
+    204 => 'SELECT count(0) FROM `{db}`.`characters` WHERE `online` = \'1\' AND `accesslevel`>\'0\';',
     205 => '',
-    206 => 'SELECT count(0) FROM `{{table}}`.`seven_signs` WHERE `cabal` LIKE \'{{limit}}\'',
-    207 => 'SELECT `current_cycle`, `active_period`, `avarice_dawn_score`, `gnosis_dawn_score`, `strife_dawn_score`, `avarice_dusk_score`, `gnosis_dusk_score`, `strife_dusk_score`, `avarice_owner`, `gnosis_owner`, `strife_owner` FROM `{{table}}`.`seven_signs_status`',
+    206 => 'SELECT count(0) FROM `{db}`.`seven_signs` WHERE `cabal` LIKE \'{{limit}}\'',
+    207 => 'SELECT `current_cycle`, `active_period`, `avarice_dawn_score`, `gnosis_dawn_score`, `strife_dawn_score`, `avarice_dusk_score`, `gnosis_dusk_score`, `strife_dusk_score`, `avarice_owner`, `gnosis_owner`, `strife_owner` FROM `{db}`.`seven_signs_status`',
     208 => '',
     209 => '',
     300 => "SELECT items.object_id,items.item_id,items.count,items.enchant_level,items.loc, 
@@ -43,14 +43,14 @@ $q = array(
 			WHEN weapon.crystal_type != '' THEN 'weapon' 
 			WHEN etcitem.crystal_type != '' THEN 'etc' 
 			END AS `type` 
-		FROM `{database}`.`items` 
+		FROM `{db}`.`items` 
 		LEFT JOIN `armor` ON armor.item_id = items.item_id 
 		LEFT JOIN weapon ON weapon.item_id = items .item_id 
 		LEFT JOIN etcitem ON etcitem.item_id = items.item_id 
 		WHERE items.owner_id='{charID}' 
 		ORDER BY {order}",
     301 => "SELECT items.object_id,items.item_id,items.count,items.enchant_level,items.loc,items.loc_data,armorName,weaponName,etcName,armorType,weaponType,etcType
-		FROM `{database}`.`items` 
+		FROM `{db}`.`items` 
 		LEFT JOIN (
 			SELECT item_id, name AS armorName, crystal_type AS armorType 
 			FROM `armor`
@@ -68,10 +68,10 @@ $q = array(
         
         
         
-            302 => "SELECT `items`.`object_id`, `items`.`item_id`, `items`.`count`, `items`.`enchant_level`, `items`.`loc`, `items`.`loc_data`, `all`.`name`, `all`.`addname`, `all`.`grade`, `all`.`desc`, `all`.`spec_desc`, `all`.`set_bonus`, `all`.`set_extra_desc`, `all`.`icon`
-		FROM `{database}`.`items` 
+            302 => "SELECT `items`.`object_id`, `items`.`item_id`, `items`.`count`, `items`.`enchant_level`, `items`.`loc`, `items`.`loc_data`, `all`.`name`, `all`.`addname`, `all`.`grade`, `all`.`desc`, `all`.`set_bonus`, `all`.`set_extra_desc`, `all`.`icon`
+		FROM `{db}`.`items` 
 		LEFT JOIN (
-			SELECT `all_items`.`id`, `all_items`.`name`, `all_items`.`addname`, `all_items`.`grade`,`all_items`.`icon`, `all_items`.`desc`, `all_items`.`spec_desc`, `all_items`.`set_bonus`, `all_items`.`set_extra_desc` FROM `{webdb}`.`all_items`
+			SELECT `all_items`.`id`, `all_items`.`name`, `all_items`.`addname`, `all_items`.`grade`,`all_items`.`icon`, `all_items`.`desc`, `all_items`.`set_bonus`, `all_items`.`set_extra_desc` FROM `{webdb}`.`all_items`
 			) AS `all` ON `all`.`id` = `items`.`item_id`  
 		WHERE `items`.`owner_id`='{charID}' AND `items`.`loc`='{loc}' 
 		ORDER BY `items`.`loc_data`",

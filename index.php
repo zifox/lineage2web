@@ -5,7 +5,7 @@ require_once ("include/config.php");
 head("Home");
 includeLang('index');
 $parse = $Lang;
-$gsquery = $mysql->query($q[3], $webdb);
+$gsquery = $mysql->query($q[3], array("db" => $webdb));
 $parse['gsrows'] = "";
 while ($gsrow = $mysql->fetch_array($gsquery))
 {
