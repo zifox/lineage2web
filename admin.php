@@ -64,7 +64,7 @@ if ($user->logged()&& $user->admin()){
 
 $sql=$mysql->query("SELECT * FROM `".$webdb."`.`config`");
 while ( $row = $mysql->fetch_array($sql) ) {
-    $mysql->query("UPDATE `".$webdb."`.`config` SET `config_value` = '". $mysql->escape($_POST[$row['config_name']])."' WHERE `config_name` = '{$row['config_name']}'");
+    $mysql->query("UPDATE `".$webdb."`.`config` SET `value` = '". $mysql->escape($_POST[$row['name']])."' WHERE `name` = '{$row['name']}'");
     }
 echo $Lang['saved'];
 ?> <meta http-equiv="refresh" content="1; URL=admin.php" />
@@ -89,8 +89,8 @@ $sql=$mysql->query("SELECT * FROM `".$webdb."`.`config`");
 while ( $row = $mysql->fetch_array($sql) ) {
     ?>
     <tr>
-	<td><?php echo $Lang[$row['config_name']];?>:</td>
-	<td><input name="<?php echo $row['config_name'];?>" size="50" value="<?php echo htmlspecialchars(stripslashes($row['config_value']));?>" type="text" /></td>
+	<td><?php echo $Lang[$row['name']];?>:</td>
+	<td><input name="<?php echo $row['name'];?>" size="50" value="<?php echo htmlspecialchars(stripslashes($row['value']));?>" type="text" /></td>
     </tr>
     <?php
     }

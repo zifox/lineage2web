@@ -11,6 +11,7 @@ $db = $DB['database'];
 $webdb='l2web';
 mysql_connect($DB['host'],$DB['user'],$DB['password']);
 mysql_select_db($db);
+/*
 function str_replace_once($search, $replace, $subject) {
     $firstChar = strpos($subject, $search);
     if($firstChar !== false) {
@@ -21,6 +22,7 @@ function str_replace_once($search, $replace, $subject) {
         return $subject;
     }
 }
+*/
 ###query1
 /*$query = mysql_query("SELECT item_id, name, additionalname, bodypart, crystal_type FROM $db.weapon") OR mysql_error();
 $i=0;
@@ -42,7 +44,7 @@ while($r=mysql_fetch_assoc($query))
     $i++;
 }*/
 ####query3
-$query = mysql_query("SELECT `id`, `desc` FROM `$webdb`.`all_items`") OR mysql_error();
+/*$query = mysql_query("SELECT `id`, `desc` FROM `$webdb`.`all_items`") OR mysql_error();
 $i=0;
 
 while($r=mysql_fetch_assoc($query))
@@ -63,7 +65,7 @@ while($r=mysql_fetch_assoc($query))
     mysql_query("UPDATE `$webdb`.`all_items` SET `desc`= '$desc' WHERE `id`='{$r['id']}';") OR mysql_error();
 
         $i++;
-}
+}*/
 #missing incons from sql
 /*
 $query = mysql_query("SELECT id, name, icon FROM $webdb.all_items") OR mysql_error();
@@ -79,8 +81,8 @@ while($r=mysql_fetch_assoc($query))
     }
 $i++;
 }
-
 */
+
 #useless icons
 /*
 if ($handle = opendir('img/iconsall/')) {
@@ -102,8 +104,8 @@ if ($handle = opendir('img/iconsall/')) {
     closedir($handle);
 }
 */
-echo $err.' missing icons<br />';
-echo $i.' items updated';
+//echo $err.' missing icons<br />';
+//echo $i.' items updated';
 mysql_close();
 ?>
 

@@ -142,15 +142,7 @@ right: 50px;
 top: 50px;
 text-align: right;
 }
-#snow {
-background:url("<?php echo $skinurl;?>/bg/snow.png") no-repeat scroll left top transparent;
-height:301px;
-left:50%;
-margin-left:-624px;
-position:absolute;
-top:0;
-width:1259px;
-}
+
 .opacity1 {
 filter: alpha(opacity=70);
 opacity: 0.7;
@@ -181,13 +173,8 @@ opacity: 0.85;
 <div id="freya" align="right">
 <img border="0" alt="" style="" src="img/freya.gif" />
 </div>
-<!-- <div id="snow"></div> -->
+
  <div id="header" align="riht">
-<!--<object type="application/x-shockwave-flash" width="17" height="17"
-data="img/swf/player.swf?playlist_url=img/swf/playlist.xspf&autoplay=false">
-<param name="movie" 
-value="img/swf/player.swf?playlist_url=img/swf/playlist.xspf&autoplay=false" />
-</object>-->
 
  </div>
 <?php

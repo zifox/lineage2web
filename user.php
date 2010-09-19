@@ -96,7 +96,7 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
                     }
 ?>
 	</div>
-</div></td><td>
+</div></td></tr><tr><td>
 <div id='inventory' align="left">
 	<div id='inventory_items' class='flexcroll'>
 <?php
