@@ -70,28 +70,36 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
     <div id='paperdoll' align="left">
 	<div id='paperdoll_items' align="left">
 <?php
-                    $query_paperdoll = $mysql->query($q[302], array("db" => $dbname, "webdb" => $webdb, "charID" => $id, "loc" => "PAPERDOLL"));
+//                    $query_paperdoll = $mysql->query($q[302], array("db" => $dbname, "webdb" => $webdb, "charID" => $id, "loc" => "PAPERDOLL"));
+                    $query_paperdoll = $mysql->query($q[667], array("db" => $dbname, "charID" => $id, "loc" => "PAPERDOLL"));
                     while ($paperdoll_data = $mysql->fetch_array($query_paperdoll))
                     {
-                        //$name = ($paperdoll_data["armorName"] != "") ? $paperdoll_data["armorName"] : (($paperdoll_data["weaponName"] != "") ? $paperdoll_data["weaponName"] : $paperdoll_data["etcName"]);
-                        $name = $paperdoll_data["name"];
+                        $qry=$mysql->query($q[668], array("webdb" => $webdb, "itemid" => $paperdoll_data['item_id']));
+                        $item=$mysql->fetch_array($qry);
+                        $name = $item["name"];
+                        //$name = $paperdoll_data["name"];
                         $name = str_replace("'", "\\'", $name);
-                        $addname = $paperdoll_data["addname"];
-                        $addname = $addname!=''?' - <font color=#333333>'. str_replace("'", "\\'", $addname).'</font>':'';
-                        
-                        $desc = $paperdoll_data["desc"];
-                        $specdesc = $paperdoll_data["specdesc"];
-                        $set = $paperdoll_data["set_bonus"];
-                        $set_extra = $paperdoll_data["set_extra_desc"];
+                        $addname = $item["addname"];
+                        //$addname = $paperdoll_data["addname"];
+                        $addname = $addname!=''?' - &lt;font color=#333333>'. str_replace("'", "\\'", $addname).'&lt;/font>':'';
+                        $desc = htmlentities($item["desc"]);
+                        //$desc = htmlentities($paperdoll_data["desc"]);
+                        $specdesc = $item["specdesc"];
+                        //$specdesc = $paperdoll_data["specdesc"];
+                        $set = $item["set_bonus"];
+                        //$set = $paperdoll_data["set_bonus"];
+                        $set_extra = $item["set_extra_desc"];
+                        //$set_extra = $paperdoll_data["set_extra_desc"];
                         $desc = str_replace("'", "\\'", $desc);
                         //$grade = ($paperdoll_data["armorType"] != "") ? ((strtolower($paperdoll_data["armorType"]) == "none") ? "ng" : $paperdoll_data["armorType"]) : (($paperdoll_data["weaponType"] != "") ? ((strtolower($paperdoll_data["weaponType"]) == "none") ? "ng" : $paperdoll_data["weaponType"]) : "");
-                        $grade = $paperdoll_data["grade"];
-                        $grade = (!empty($grade) || $grade!="none") ? "<img border=\\'0\\' src=\\'img/grade/" . $grade . "-grade.png\\'>" : "";
-                        $enchant = $paperdoll_data["enchant_level"] > 0 ? " +" . $paperdoll_data["enchant_level"] : "";
-                        $img = (is_file('img/iconsall/'.$paperdoll_data["icon"].'.png')) ? $paperdoll_data["icon"] : "blank";
+                        $grade = $item["grade"];
+                        //$grade = $paperdoll_data["grade"];
+                        $grade = (!empty($grade) || $grade!="none") ? "&lt;img border=\\'0\\' src=\\'img/grade/" . $grade . "-grade.png\\' />" : "";
+                        $enchant = $item["enchant_level"] > 0 ? " +" . $item["enchant_level"] : "";
+                        $img = (is_file('img/iconsall/'.$item["icon"].'.png')) ? $item["icon"] : "blank";
                         $type = $q[666][$paperdoll_data["loc_data"]];
                         
-                        echo "<div id='item' class='{$type}'><img border='0' src='img/iconsall/$img.png' onmouseover=\"Tip('{$name} {$addname} {$grade} {$enchant}<br /> {$desc}<br /> {$specdesc}<br /> {$set}<br /> {$set_extra}', FONTCOLOR, '#FFFFFF',BGCOLOR, '#406072', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold')\"></div>";
+                        echo "<div style='position: absolute; width: 32px; height: 32px; padding: 0px;' class='{$type}'><img border='0' src='img/iconsall/$img.png' onmouseover=\"Tip('{$name} {$addname} {$grade} {$enchant}&lt;br /> {$desc}&lt;br /> {$specdesc}&lt;br /> {$set}&lt;br /> {$set_extra}', FONTCOLOR, '#FFFFFF',BGCOLOR, '#406072', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold')\" alt=\"\" /></div>";
                         
                     }
 ?>
@@ -100,26 +108,35 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
 <div id='inventory' align="left">
 	<div id='inventory_items' class='flexcroll'>
 <?php
-$query = $mysql->query($q[302], array("db" => $dbname, "webdb" => $webdb, "charID" => $id, "loc" => "INVENTORY"));
+//$query = $mysql->query($q[302], array("db" => $dbname, "webdb" => $webdb, "charID" => $id, "loc" => "INVENTORY"));
+$query = $mysql->query($q[667], array("db" => $dbname, "charID" => $id, "loc" => "INVENTORY"));
                     $inv = "";
                     while ($inv_data = $mysql->fetch_array($query))
                     {
-                        $name = $inv_data["name"];
+                        $qry=$mysql->query($q[668], array("webdb" => $webdb, "itemid" => $inv_data['item_id']));
+                        $item=$mysql->fetch_array($qry);
+                        $name = $item["name"];
+                        //$name = $inv_data["name"];
                         $name = str_replace("'", "\\'", $name);
-                        $addname = $inv_data["addname"];
-                        $addname = ' - <font color="#333333">'. str_replace("'", "\\'", $addname).'</font>';
-                        $desc = $inv_data["desc"];
-                        $specdesc = $inv_data["specdesc"];
-                        $set = $inv_data["set_bonus"];
-                        $set_extra = $inv_data["set_extra_desc"];
+                        $addname = $item["addname"];
+                        //$addname = $inv_data["addname"];
+                        $addname = ' - &lt;font color="#333333">'. str_replace("'", "\\'", $addname).'&lt;/font>';
+                        $desc = htmlentities($item["desc"]);
+                        //$desc = htmlentities($inv_data["desc"]);
+                        $specdesc = $item["specdesc"];
+                        //$specdesc = $inv_data["specdesc"];
+                        $set = $item["set_bonus"];
+                        //$set = $inv_data["set_bonus"];
+                        $set_extra = $item["set_extra_desc"];
+                        //$set_extra = $inv_data["set_extra_desc"];
                         $desc = str_replace("'", "\\'", $desc);
 
-                        $grade = $inv_data["grade"];
-                        $grade = (!empty($grade) || $grade!="none") ? "<img border=\\'0\\' src=\\'img/grade/" . $grade . "-grade.png\\'>" : "";
-                        $enchant = $inv_data["enchant_level"] > 0 ? " +" . $inv_data["enchant_level"] : "";
-                        $count = CountFormat($inv_data["count"]);
-                        $img = (is_file('img/iconsall/'.$inv_data["icon"].'.png')) ? $inv_data["icon"] : "blank";
-                        echo "<img class='floated' border='0' src=\"img/iconsall/{$img}.png\" onmouseover=\"Tip('{$name} {$count} {$grade} {$enchant}<br /> {$desc}', FONTCOLOR, '#333333',BGCOLOR, '#FFFFFF', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold')\">";
+                        $grade = $item["grade"];
+                        $grade = (!empty($grade) || $grade!="none") ? "&lt;img border=\\'0\\' src=\\'img/grade/" . $grade . "-grade.png\\' />" : "";
+                        $enchant = $item["enchant_level"] > 0 ? " +" . $item["enchant_level"] : "";
+                        $count = CountFormat($item["count"]);
+                        $img = (is_file('img/iconsall/'.$item["icon"].'.png')) ? $item["icon"] : "blank";
+                        echo "<img class='floated' border='0' src=\"img/iconsall/{$img}.png\" onmouseover=\"Tip('{$name} {$count} {$grade} {$enchant}&lt;br /> {$desc}', FONTCOLOR, '#333333',BGCOLOR, '#FFFFFF', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold')\" alt=\"\" />";
                     }
 ?>
 		<div class='clearfloat'></div>

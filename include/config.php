@@ -19,6 +19,7 @@ $webdb = "l2web";                 //Webpage DataBase
 require_once ('class.mysql.php');
 require_once ('class.user.php');
 require_once ('class.tplParser.php');
+require_once ('class.cache.php');
 require_once ('queries.php');
 $mysql = new MySQL($DB);
 
@@ -36,7 +37,7 @@ require_once ('include/functions.php');
 if ($Config['use_bancontrol']){
     require_once ('include/bancontrol.php');
 }
-
+$cache = new Cache($Config['cache_enabled']);
 if (!$Config['web_debug']) {
     error_reporting(0);
 }

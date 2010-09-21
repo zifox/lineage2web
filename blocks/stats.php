@@ -76,7 +76,7 @@ else
    $real = "-";
    $offline = "-";
 }
-$parse['online_count'] .= "($real <font color=\"white\">/</font> <font color=\"red\>$offline</font>)";
+$parse['on_off'] = "(&lt;font color=\'green\'>$real&lt;/font> / &lt;font color=\'red\'>$offline&lt;/font>)";
 
 }
 

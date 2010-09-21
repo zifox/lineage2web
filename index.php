@@ -3,6 +3,13 @@ define('INWEB', true);
 require_once ("include/config.php");
 //пароль
 head("Home");
+$page='index';
+$par['lang']=getLang();
+$par['mod']=$user->mod()==true?'true':'false';
+$sec=120;
+$params = implode(';', $par);
+if($cache->needUpdate($page, $params, $sec))
+{
 includeLang('index');
 $parse = $Lang;
 $gsquery = $mysql->query($q[3], array("db" => $webdb));
@@ -35,7 +42,13 @@ while($news=$mysql->fetch_array($newsq))
 }
 $parse['Events'] = $Config['Events'];
 $parse['Features'] = $Config['Features'];
-$tpl->parsetemplate('index2', $parse);
-
+$content=$tpl->parsetemplate('index2', $parse,1);
+$cache->updateCache($page, $params, $content);
+echo $content;
+}
+else
+{
+    echo $cache->getCache($page, $params);
+}
 foot();
 ?>

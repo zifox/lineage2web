@@ -6,23 +6,31 @@ includeLang('functions');
 function includeLang($file)
 {
 	global $langpath, $Lang, $Config;
-	
-	if($_COOKIE['lang']==1){
-	$langpath='lv';
-	}elseif($_COOKIE['lang']==2){
-	$langpath='en';
-	}elseif($_COOKIE['lang']==3){
-	$langpath='ru';
-	}else{
-	$langpath='en';		
-	}
+	$langpath=getLang();
 	define('INLANG', True);
 	if(file_exists('lang/'.$langpath.'/'.$file.'.php'))
 	{
 	require_once("lang/{$langpath}/{$file}.php");	
 	}
 }
-
+function getLang()
+{
+    switch ($_COOKIE['lang'])
+    {
+        case 1:
+            return 'lv';
+        break;
+        case 2:
+            return 'en';
+        break;
+        case 3:
+            return 'ru';
+        break;
+        default:
+            return 'en';
+        break;
+    }
+}
 function includeBlock($file, $block_name='Menu')
 {
 	global $langpath, $skin, $Lang, $Config, $mysql, $tpl, $webdb, $q, $user;
@@ -72,7 +80,7 @@ function head($title = "", $head=1, $url='', $time=0)
 
 function foot($foot=1)
 {
-    global $mysql, $skin, $Config, $Lang, $starttime, $user, $tpl;
+    global $mysql, $skin, $Config, $Lang, $starttime, $user, $tpl, $cache;
     if(isset($_COOKIE['skin']))
     {
         $skin = trim($_COOKIE['skin']);

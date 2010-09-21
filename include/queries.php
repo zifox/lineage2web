@@ -9,11 +9,11 @@ $q = array(
     2 => 'SELECT * FROM `{db}`.`gameservers` WHERE `active` = \'true\';',
     3 => 'SELECT * FROM `{db}`.`gameservers` INNER JOIN `{db}`.`gameserver_info` USING (`ID`) WHERE `active` = \'true\';',
     4 => 'SELECT `IP`, `Port`, `Password` FROM `{db}`.`telnet` WHERE `Server`=\'{server}\'',
-    5 => 'SELECT * FROM `{db}`.`news`;',
+    5 => 'SELECT * FROM `{db}`.`news` ORDER BY `date` DESC;',
     6 => 'SELECT * FROM `{db}`.`news` WHERE `news_id`={news_id};',
     7 => 'DELETE FROM `{db}`.`news` WHERE `news_id`={news_id};',
     8 => 'UPDATE `{db}`.`news` SET `name`=\'{name}\', `desc`=\'{desc}\', `edited`=\'{date}\', `edited_by`=\'{editor}\' WHERE `news_id`=\'{news_id}\';',
-    9 => '',
+    9 => 'INSERT INTO `{db}`.`news` (`name`, `date`, `author`, `desc`) VALUES (\'{name}\', \'{date}\', \'{author}\', \'{desc}\')',
     100 => 'SELECT count(0) FROM `{db}`.`accounts`;',
     101 => '',
     200 => 'SELECT `charId`, `char_name`, `sex` FROM `{db}`.`characters` WHERE `accesslevel`=\'0\'  ORDER BY `exp` DESC LIMIT {limit};',
@@ -60,7 +60,7 @@ $q = array(
         
         
         
-            302 => "SELECT `items`.`object_id`, `items`.`item_id`, `items`.`count`, `items`.`enchant_level`, `items`.`loc`, `items`.`loc_data`, `all`.`name`, `all`.`addname`, `all`.`grade`, `all`.`desc`, `all`.`set_bonus`, `all`.`set_extra_desc`, `all`.`icon`
+            302 => "SELECT `items`.`item_id`, `items`.`count`, `items`.`enchant_level`, `items`.`loc`, `items`.`loc_data`, `all`.`name`, `all`.`addname`, `all`.`grade`, `all`.`desc`, `all`.`set_bonus`, `all`.`set_extra_desc`, `all`.`icon`
 		FROM `{db}`.`items` 
 		LEFT JOIN (
 			SELECT `all_items`.`id`, `all_items`.`name`, `all_items`.`addname`, `all_items`.`grade`,`all_items`.`icon`, `all_items`.`desc`, `all_items`.`set_bonus`, `all_items`.`set_extra_desc` FROM `{webdb}`.`all_items`
@@ -88,6 +88,12 @@ $q = array(
 		22	=> "braslet",
 		23	=> "ring",
 		30	=> "cloak"
-    )
+    ),
+    667 => "SELECT `items`.`item_id`, `items`.`count`, `items`.`enchant_level`, `items`.`loc`, `items`.`loc_data`
+		FROM `{db}`.`items` 
+		WHERE `items`.`owner_id`='{charID}' AND `items`.`loc`='{loc}' 
+		ORDER BY `items`.`loc_data`",
+    668 => "SELECT `name`, `addname`, `grade`, `icon`, `desc`, `set_bonus`, `set_extra_desc` FROM `{webdb}`.`all_items` 
+		WHERE `id`='{itemid}'"
 );
 ?>

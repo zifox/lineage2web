@@ -33,6 +33,7 @@ if ($Config['user_debug'])
     $user->debug();
 if ($Config['tpl_debug'])
     $tpl->debug();
+echo '<font color="blue">Cache updated: '.$cache->getCacheStatus().'</font>';
 ?>
 <br />
 </body></html>

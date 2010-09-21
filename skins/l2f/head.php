@@ -174,7 +174,7 @@ opacity: 0.85;
 <img border="0" alt="" style="" src="img/freya.gif" />
 </div>
 
- <div id="header" align="riht">
+ <div id="header" align="right">
 
  </div>
 <?php
