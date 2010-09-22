@@ -184,7 +184,7 @@ switch ($action)
                     file_put_contents('news/'.$id.'.html', $desc);
                 }
                 $desc = substr($desc, 0, 500);
-                    $mysql->query($q[8], array("db" => $webdb, "news_id" => $id, "desc" => $desc, "name" => $name, "edited" => date('Y-m-d H:i:s') , "editor" => $_SESSION['account']));
+                    $mysql->query($q[8], array("db" => $webdb, "news_id" => $id, "desc" => $desc, "name" => $name, "date" => date('Y-m-d H:i:s') , "editor" => $_SESSION['account']));
                     if($_FILES['file']['name'] != '')
                     {
                         if(file_exists('news/'.$id.'.jpg'))

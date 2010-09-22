@@ -8,7 +8,7 @@
 <tr><td align="center"><a href="http://l2.hopzone.net/vote.php?site=79484" target="_blank"><img width="88" height="30" border="0" alt="Vote for HopZone.Net" src="http://images.hopzone.net/lineage2/votebanners/lineage2-88x30-2.gif" /></a><br/>
 <a href="http://la2.mmotop.ru/vote/20088/" target="_blank"><img src="http://la2.mmotop.ru/images/88x31w_la2.png" title="??????? ???????? Lineage 2" alt="??????? ???????? Lineage 2" border="0" /></a>
 </td></tr>
-<tr><td><a href="http://www.topgames.lv/?mode=in&amp;id=1044" target="_blank">
+<tr><td align="center"><a href="http://www.topgames.lv/?mode=in&amp;id=1044" target="_blank">
 <img src="http://www.topgames.lv/counter/?id=1044" alt="" border="0"/>
 </a>
 </td></tr>

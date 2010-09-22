@@ -7,10 +7,10 @@ $DB = array(
     "password"  => "",    //MySQL Password
     "database"  => "l2j"        //L2J Main (account)DataBase
 );
-$db = $DB['database'];
-$webdb='l2web';
-mysql_connect($DB['host'],$DB['user'],$DB['password']);
-mysql_select_db($db);
+//$db = $DB['database'];
+//$webdb='l2web';
+//mysql_connect($DB['host'],$DB['user'],$DB['password']);
+//mysql_select_db($db);
 /*
 function str_replace_once($search, $replace, $subject) {
     $firstChar = strpos($subject, $search);
@@ -106,7 +106,11 @@ if ($handle = opendir('img/iconsall/')) {
 */
 //echo $err.' missing icons<br />';
 //echo $i.' items updated';
-mysql_close();
+//mysql_close();
+$file = file_get_contents('sql.sql');
+$file=str_replace('\\\\0', '', $file);
+file_put_contents('sql.sql', $file);
+echo 'done';
 ?>
 
 

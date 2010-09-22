@@ -33,7 +33,7 @@ function getLang()
 }
 function includeBlock($file, $block_name='Menu')
 {
-	global $langpath, $skin, $Lang, $Config, $mysql, $tpl, $webdb, $q, $user;
+	global $langpath, $skin, $Lang, $Config, $mysql, $tpl, $webdb, $q, $user, $cache;
     DEFINE('IN_BLOCK', True);
     $img_link = 'skins/'.$skin;
 	?>

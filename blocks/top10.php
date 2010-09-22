@@ -3,6 +3,10 @@ if (! defined('IN_BLOCK'))
 {
 	Header("Location: ../index.php");
 }
+$page='blocks/top10';
+$sec=7200;
+if($cache->needUpdate($page, NULL, $sec))
+{
 $server_list = $mysql->query($q[1], array('db' => $webdb));
 while ($slist = $mysql->fetch_array($server_list))
 {
@@ -22,6 +26,14 @@ while ($slist = $mysql->fetch_array($server_list))
 		$n++;
 	}
 
-	$tpl->parsetemplate('blocks/top10', $parse);
+	$content = $tpl->parsetemplate('blocks/top10', $parse, 1);
+    $cache->updateCache($page, $params, $content);
+    echo $content;
 }
+}
+else
+{
+    echo $cache->getCache($page, NULL);
+}
+
 ?>

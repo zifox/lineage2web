@@ -6,7 +6,7 @@ head("Home");
 $page='index';
 $par['lang']=getLang();
 $par['mod']=$user->mod()==true?'true':'false';
-$sec=120;
+$sec=1800;
 $params = implode(';', $par);
 if($cache->needUpdate($page, $params, $sec))
 {
