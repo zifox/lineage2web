@@ -155,10 +155,9 @@ function getDBName($id)
 function pagechoose($page, $count=0, $stat, $server)
 {
     global $Config, $Lang;
+    $content=NULL;
+    $content.='<div class="page-choose" align="center"><br /><table align="center"><tr>';
     
-    ?>
-    <div class="page-choose" align="center"><br /><table align="center"><tr>
-    <?php
     $totalpages = ceil($count/$Config['TOP']);
     if($totalpages==0)
     {
@@ -166,17 +165,13 @@ function pagechoose($page, $count=0, $stat, $server)
     }
     if($page>3)
     {
-        ?>
-        <td><a href="stat.php?stat=<?php echo $stat;?>&amp;server=<?php echo $server;?>&amp;page=1" title="<?php echo $Lang['first'];?>"  class="btn"> &laquo; </a></td>
-        <?php
+        $content.="<td><a href=\"stat.php?stat=$stat&amp;server=$server&amp;page=1\" title=\"{$Lang['first']}\"  class=\"btn\"> &laquo; </a></td>";
     }
     if($page>1)
     {
-        ?>
-        <td><a href="stat.php?stat=<?php echo $stat;?>&amp;server=<?php echo $server;?>&amp;page=<?php
-        echo $page-1;
-        ?>" title="<?php echo $Lang['prev'];?>" class="btn"> &lt; </a></td>
-        <?php
+        $content.="<td><a href=\"stat.php?stat=$stat&amp;server=$server&amp;page=\"";
+        $content.="".$page-1;
+        $content.="\" title=\"{$Lang['prev']}\" class=\"btn\"> &lt; </a></td>";
     }
     if($page-2>0){$start=$page-2;}else{$start=1;}
     for($i=$start; $i<=$totalpages && $i<=$page+2; $i++)
@@ -184,49 +179,50 @@ function pagechoose($page, $count=0, $stat, $server)
 
         if($i==$page)
         {
-            echo '<td>&nbsp;&nbsp;<a href="#" class="btn brown" title="';
-            echo ' [';
-            echo ($count!=0) ? $i*$Config['TOP']+1-$Config['TOP'] : 0;
-            echo ' - ';
-            echo ($i*$Config['TOP']>$count)? $count: $i*$Config['TOP'];
-            echo ']"> ';
-            echo $i;
-            echo ' </a>&nbsp;&nbsp;</td>';
+            $content.= '<td>&nbsp;&nbsp;<a href="#" class="btn brown" title="';
+            $content.= ' [';
+            $content.= ($count!=0) ? $i*$Config['TOP']+1-$Config['TOP'] : 0;
+            $content.= ' - ';
+            $content.= ($i*$Config['TOP']>$count)? $count: $i*$Config['TOP'];
+            $content.= ']"> ';
+            $content.= $i;
+            $content.= ' </a>&nbsp;&nbsp;</td>';
         }
         else
         {
-            echo '<td>&nbsp;&nbsp;<a href="stat.php?stat='.$stat;
-            echo '&amp;server='.$server;
-            echo '&amp;page='.$i;
-            echo '" title="[';
-            echo ($count!=0) ? $i*$Config['TOP']+1-$Config['TOP'] : 0;
-            echo ' - ';
-            echo ($i*$Config['TOP']>$count)? $count: $i*$Config['TOP'];
-            echo ']" class="btn"> ';
-            echo $i;
-            echo ' </a>&nbsp;&nbsp;</td>';
+            $content.= '<td>&nbsp;&nbsp;<a href="stat.php?stat='.$stat;
+            $content.= '&amp;server='.$server;
+            $content.= '&amp;page='.$i;
+            $content.= '" title="[';
+            $content.= ($count!=0) ? $i*$Config['TOP']+1-$Config['TOP'] : 0;
+            $content.= ' - ';
+            $content.= ($i*$Config['TOP']>$count)? $count: $i*$Config['TOP'];
+            $content.= ']" class="btn"> ';
+            $content.= $i;
+            $content.= ' </a>&nbsp;&nbsp;</td>';
         }
 
     }
     if($totalpages > $page)
     {
-        ?>
-        <td><a href="stat.php?stat=<?php echo $stat;?>&amp;server=<?php echo $server;?>&amp;page=<?php
-        echo $page+1;
-        ?>" title="<?php echo $Lang['next'];?>" class="btn"> &gt; </a></td>
-        <?php
+        
+        $content.="<td><a href=\"stat.php?stat=$stat&amp;server=$server&amp;page=";
+        $content.= $page+1;
+        $content.="\" title=\"{$Lang['next']}\" class=\"btn\"> &gt; </a></td>";
+        
     }
     if($totalpages > $page+2)
     {
-        ?>
-        <td><a href="stat.php?stat=<?php echo $stat;?>&amp;server=<?php echo $server;?>&amp;page=<?php
-        echo $totalpages;
-         ?>" title="<?php echo $Lang['last'];?>" class="btn"> &raquo; </a></td>
-         <?php
+        
+        $content.="<td><a href=\"stat.php?stat=$stat&amp;server=$server&amp;page=";
+        $content.= $totalpages;
+         $content.="\" title=\"{$Lang['last']}\" class=\"btn\"> &raquo; </a></td>";
+         
     }
-    ?>
-    </tr></table>&nbsp;</div>
-    <?php
+
+    $content.='</tr></table>&nbsp;</div>';
+    return $content;
+
 }
 
 ?>

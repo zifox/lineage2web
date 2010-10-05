@@ -76,7 +76,7 @@ $Lang['players_dusk'] = 'Players for Dusk';
 $Lang['players_dawn'] = 'Players for Dawn';
 $Lang['time_held'] = 'Maintained';
 $Lang['hour'] = 'Hours';
-
+$Lang['seven_signs'] = 'Seven Signs';
 $Lang['ward'] = array(
 	81 => 'Ward1',
 	82 => 'Ward2',

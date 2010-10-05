@@ -8,7 +8,6 @@ if (!defined('INCONFIG')) {
 class Cache{
     private $folder = "cache";
     var $use_cache=NULL;
-    public $cache_updated=NULL;
     function __construct($use_cache){
         $this->use_cache=$use_cache;
     }
@@ -31,7 +30,7 @@ class Cache{
             if($mysql->num_rows($qry))
             {
                 $cch=$mysql->fetch_array($qry);
-                if($cch['time']>$time)
+                if($cch['time']>$time && $cch['recache']=='0')
                 {
                     return false;
                 }
@@ -54,7 +53,7 @@ class Cache{
     {
         global $mysql, $webdb;
         //$filename=md5($page.$params);
-        $mysql->query("UPDATE `{webdb}`.`cache` SET `time`='{time}' WHERE `page`='{page}' AND `params`='{params}';", array('webdb'=> $webdb, 'page'=> $page, 'params'=>$params, 'time'=>time()));
+        $mysql->query("UPDATE `{webdb}`.`cache` SET `time`='{time}', `recache`='0' WHERE `page`='{page}' AND `params`='{params}';", array('webdb'=> $webdb, 'page'=> $page, 'params'=>$params, 'time'=>time()));
         if(file_exists($this->folder.'/'.$this->getCacheID($page, $params).'.html'))
             unlink($this->folder.'/'.$this->getCacheID($page, $params).'.html');
         file_put_contents($this->folder.'/'.$this->getCacheID($page, $params).'.html', $content);
@@ -72,11 +71,6 @@ class Cache{
         global $mysql, $webdb;
         return $mysql->result($qry=$mysql->query("SELECT `id` FROM `{webdb}`.`cache` WHERE `page`='{page}' AND `params`='{params}';", array('webdb'=> $webdb, 'page'=> $page, 'params'=>$params)));
         
-    }
-    
-    function getCacheStatus()
-    {
-        return $this->cache_updated?'true':'false';
     }
 }
 ?>

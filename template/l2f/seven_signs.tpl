@@ -1,3 +1,27 @@
+<h1>{home}</h1><hr />
+<table border="1" width="50%">
+{race_rows}
+<tr><td>{male}<img src="img/stat/sex.jpg" alt="{male}" /></td><td><img src="img/stat/sexline.jpg" height="10px" width="{mc}px" alt="" /> {mc}%</td></tr>
+<tr><td>{female}<img src="img/stat/sex1.jpg" alt="{female}" /></td><td><img src="img/stat/sexline.jpg" height="10px" width="{fc}px" alt="" /> {fc}%</td></tr>
+</table><hr />
+
+<h1>{seven_signs}</h1>
+
+<script language="javascript" type="text/javascript">
+<!--
+var nthDay = {current_cycle};
+var currTime = "{date}";
+var ssStatus = {active_period};
+var dawnPoint = {dawnScore};
+var twilPoint = {twilScore};
+var maxPointWidth = 300;
+var seal1 = {aowner};
+var seal2 = {gowner};
+var seal3 = {sowner};
+
+// -->
+</script>
+
 <table border="0" cellpadding="0" cellspacing="0" width="569">
 <tbody>
   <tr valign="top">
