@@ -1,7 +1,7 @@
 <?php
 define('INWEB', true);
 require_once ("include/config.php");
-//??????
+//пароль
 head("Home");
 function convertPic($id, $width, $height)
 {
@@ -182,8 +182,8 @@ switch ($action)
                 if(file_exists('news/'.$id.'.html'))
                 {
                     unlink('news/'.$id.'.html');
-                    file_put_contents('news/'.$id.'.html', $desc);
                 }
+                file_put_contents('news/'.$id.'.html', $desc);
                 $desc = substr($desc, 0, 500);
                     $mysql->query($q[10], array('db' => $webdb, 'page'=>'index'));
                     $mysql->query($q[8], array("db" => $webdb, "news_id" => $id, "desc" => $desc, "name" => $name, "date" => date('Y-m-d H:i:s') , "editor" => $_SESSION['account']));
@@ -210,7 +210,7 @@ switch ($action)
                 if($mysql->num_rows($newsq))
                 {
                     $news=$mysql->fetch_array($newsq);
-                    $desc=file_get_contents('news/'.$id.'.html');
+                    $desc=file_exists('news/'.$id.'.html')?file_get_contents('news/'.$id.'.html'):$news['desc'];
                 ?>
                 <form action="news.php?action=edit&amp;id=<?php echo $id;?>" method="post"  enctype="multipart/form-data">
                 <table>
