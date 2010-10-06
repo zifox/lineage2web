@@ -10,7 +10,7 @@
 <div align="left">{date}</div></td><td align="left">
 <div align="left">{name}</div></td><td align="right"><div align="right">{by} <strong>{author}</strong></div></td></tr>
 </table>
-<a href="#"><img src="news/{news_id}{thumb}.jpg" alt="{name}" style="float: left; margin-right:15px;" border="0" /></a>
+<a href="javascript:ViewPic('{news_id}');"><img src="news/{news_id}{thumb}.jpg" alt="{name}" title="Click to view full size image" style="float: left; margin-right:15px;" class="img_resize" border="0" /></a>
 <p align="left" style="font-weight: normal">
 {desc}...
 </p>

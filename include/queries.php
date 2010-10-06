@@ -14,6 +14,7 @@ $q = array(
     7 => 'DELETE FROM `{db}`.`news` WHERE `news_id`={news_id};',
     8 => 'UPDATE `{db}`.`news` SET `name`=\'{name}\', `desc`=\'{desc}\', `edited`=\'{date}\', `edited_by`=\'{editor}\' WHERE `news_id`=\'{news_id}\';',
     9 => 'INSERT INTO `{db}`.`news` (`name`, `date`, `author`, `desc`) VALUES (\'{name}\', \'{date}\', \'{author}\', \'{desc}\')',
+    10 => 'UPDATE `{db}`.`cache` SET `recache`=\'1\' WHERE `page`=\'{page}\';',
     100 => 'SELECT count(0) FROM `{db}`.`accounts`;',
     101 => '',
     200 => 'SELECT `charId`, `char_name`, `sex` FROM `{db}`.`characters` WHERE `accesslevel`=\'0\'  ORDER BY `exp` DESC LIMIT {limit};',

@@ -419,7 +419,7 @@ while ($top=$mysql->fetch_array($data))
 	if ($top['online']) {$online='<font color="green">'.$Lang['online'].'</font>'; } 
 	else {$online='<font color="red">'.$Lang['offline'].'</font>'; }
     $altrow=($n%2==0)? ' class="altRow"': '';
-    $parse['char_rows'].='<tr'.$altrow.' onmouseover="this.bgColor = \'#505050\';" onmouseout="this.bgColor = \'\'"><td align="center"><b>'.$n.'</b></td><td><img src="./img/face/'.$top['race'].'_'.$top['sex'].'.gif" alt="" /></td><td><a href="user.php?cid='.$top['charId'].'&amp;server='.$server.'"><font color="'.$color.'"'.$top['char_name'].'</font></a></td><td><center> '.$top['level'].'</center></td><td><center>'.$top['ClassName'].'</center></td><td>'.$clan_link.'</td><td><center><b>'.$top['pvpkills'].'</b>/<b><font color="red">'.$top['pkkills'].'</font></b></center></td><td>'.$online.'</td>';
+    $parse['char_rows'].='<tr'.$altrow.' onmouseover="this.bgColor = \'#505050\';" onmouseout="this.bgColor = \'\'"><td align="center"><b>'.$n.'</b></td><td><img src="./img/face/'.$top['race'].'_'.$top['sex'].'.gif" alt="" /></td><td><a href="user.php?cid='.$top['charId'].'&amp;server='.$server.'"><font color="'.$color.'">'.$top['char_name'].'</font></a></td><td><center> '.$top['level'].'</center></td><td><center>'.$top['ClassName'].'</center></td><td>'.$clan_link.'</td><td><center><b>'.$top['pvpkills'].'</b>/<b><font color="red">'.$top['pkkills'].'</font></b></center></td><td>'.$online.'</td>';
 
 	if($addcol && $addcolcont){$parse['char_rows'].=$addcolcont;}elseif($addcol && !$addcolcont){$parse['char_rows'].='<td class="'.$stat.'">'.$top[$stat].'</td>';}else{}
 	$parse['char_rows'].='</tr>';

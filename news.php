@@ -95,6 +95,7 @@ switch ($action)
 
 
                 $descdb = substr($desc, 0, 500);
+                $mysql->query($q[10], array('db' => $webdb, 'page'=>'index'));
                 $mysql->query($q[9], array("db" => $webdb, "desc" => $descdb, "name" => $name, "author" => $_SESSION['account'], "date" => date('Y-m-d H:i:s')));
                 $id=$mysql->result($mysql->query("SELECT LAST_INSERT_ID()"));
                 if(file_exists('news/'.$id.'.html'))
@@ -129,7 +130,7 @@ switch ($action)
                 <tr><td>
                 <label for="desc">Text:
                 
-                      <textarea rows="10" cols="50" title="News Content" accesskey="c" style="width: 100%;" id="desc" name="desc" ></textarea>
+                      <textarea rows="10" cols="20" title="News Content" accesskey="c" style="width: 100%;" id="desc" name="desc" ></textarea>
                 </label></td></tr>
                 <tr><td>
                 <label for="file">Image: 
@@ -184,6 +185,7 @@ switch ($action)
                     file_put_contents('news/'.$id.'.html', $desc);
                 }
                 $desc = substr($desc, 0, 500);
+                    $mysql->query($q[10], array('db' => $webdb, 'page'=>'index'));
                     $mysql->query($q[8], array("db" => $webdb, "news_id" => $id, "desc" => $desc, "name" => $name, "date" => date('Y-m-d H:i:s') , "editor" => $_SESSION['account']));
                     if($_FILES['file']['name'] != '')
                     {
@@ -219,7 +221,7 @@ switch ($action)
                 <tr><td>
                 <label for="desc">Text:
                 
-                      <textarea rows="10" cols="50" title="News Content" accesskey="c" style="width: 100%;" id="desc" name="desc" ><?php echo htmlspecialchars($desc);?></textarea>
+                      <textarea rows="10" cols="20" title="News Content" accesskey="c" style="width: 100%;" id="desc" name="desc" ><?php echo htmlspecialchars($desc);?></textarea>
                 </label></td></tr>
                 <tr><td>
                 <label for="file">Image: 

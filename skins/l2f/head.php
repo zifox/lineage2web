@@ -30,7 +30,18 @@ $skinurl = 'skins/l2f';
 <title><?php echo $title;?></title>
 <link rel="SHORTCUT ICON" href="favicon.ico" />
 <link href="skins/l2f/style.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="scripts/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript">
+tinyMCE.init({
+	// General options
+	mode : "textareas",
+	theme : "simple",
+    skin : "o2k7",
+    language : "lv"
+	// Example content CSS (should be your site CSS)
 
+});
+</script>
 <script type="text/javascript" language="javascript" src="scripts/show.js"></script>
 <script type="text/javascript" language="javascript">
 document.write(unescape("%3Cscript src='scripts/ga.js' type='text/javascript'%3E%3C/script%3E"));
@@ -42,6 +53,9 @@ document.write(unescape("%3Cscript src='scripts/ga.js' type='text/javascript'%3E
 
 <script type="text/javascript" language="javascript">
 <!--
+function ViewPic(img) {
+    window.open( "viewimg.php?"+img, "", "resizable=1,HEIGHT=200,WIDTH=200");
+} 
 function GoTo(url)
 {
 	window.location.href = url;
@@ -109,6 +123,7 @@ function createChars(index)
 }
 // -->
 </script>
+
 <style type="text/css">
 body  {
 margin : 0px;
