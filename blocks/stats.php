@@ -16,7 +16,7 @@ if($cache->needUpdate($page, $params, $sec))
     $imgoffline = '<img src="img/status/offline.png" border="0" alt="' . $Lang['offline'] . '" title="' . $Lang['offline'] . '" />';
     $imgonline = '<img src="img/status/online.png" border="0" alt="' . $Lang['online'] . '" title="' . $Lang['online'] . '" />';
 
-	$fp = @fsockopen($LS['ip'], $LS['port'], $errno, $errstr, 2);
+	$fp = @fsockopen($Config['LS']['ip'], $Config['LS']['port'], $errno, $errstr, 2);
 	if ($fp) $loginonline = $imgonline;
 	else  $loginonline = $imgoffline;
 
