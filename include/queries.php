@@ -13,7 +13,7 @@ $q = array(
     6 => 'SELECT * FROM `{db}`.`news` WHERE `news_id`={news_id};',
     7 => 'DELETE FROM `{db}`.`news` WHERE `news_id`={news_id};',
     8 => 'UPDATE `{db}`.`news` SET `name`=\'{name}\', `desc`=\'{desc}\', `edited`=\'{date}\', `edited_by`=\'{editor}\' WHERE `news_id`=\'{news_id}\';',
-    9 => 'INSERT INTO `{db}`.`news` (`name`, `date`, `author`, `desc`) VALUES (\'{name}\', \'{date}\', \'{author}\', \'{desc}\')',
+    9 => 'INSERT INTO `{db}`.`news` (`name`, `date`, `author`, `desc`, `image`) VALUES (\'{name}\', \'{date}\', \'{author}\', \'{desc}\', \'{image}\')',
     10 => 'UPDATE `{db}`.`cache` SET `recache`=\'1\' WHERE `page`=\'{page}\';',
     100 => 'SELECT count(0) FROM `{db}`.`accounts`;',
     101 => '',
@@ -28,13 +28,14 @@ $q = array(
     208 => 'SELECT count(0) FROM `{db}`.`characters` WHERE `race` = \'{race}\'',
     209 => 'SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `ClassName`, `clanid`, `clan_name` FROM `{db}`.`characters` INNER JOIN `{db}`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `{db}`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`=\'0\' AND `race`=\'{race}\' ORDER BY `exp` DESC LIMIT {limit}, {rows}',
     210 => 'SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `{order}`, `ClassName`, `clanid`, `clan_name` FROM `{db}`.`characters` INNER JOIN `{db}`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `{db}`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`=\'0\' ORDER BY `{order}` DESC LIMIT {limit}, {rows}',
-    211 => 'SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`,  `ClassName`, `clanid`, `clan_name` FROM `{db}`.`characters` INNER JOIN `{db}`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `{db}`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`=\'0\' AND `{order}`>\'0\' ORDER BY \'{order}\' DESC LIMIT {limit}, {rows}',
+    211 => 'SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`,  `ClassName`, `clanid`, `clan_name` FROM `{db}`.`characters` INNER JOIN `{db}`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `{db}`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`=\'0\' AND `{order}`>\'0\' ORDER BY `{order}` DESC LIMIT {limit}, {rows}',
     212 => 'SELECT count(0) FROM `{db}`.`characters` WHERE `accesslevel`>\'0\';',
     213 => 'SELECT count(0) FROM `{db}`.`characters` WHERE `accesslevel`=\'0\' AND `{order}`>\'0\'',
     214 => 'SELECT count(0) FROM `{db}`.`characters`, `{db}`.`items`  WHERE `accesslevel`=\'0\' AND `characters`.`charId`=`items`.`owner_id` AND `items`.`item_id`=\'{item}\'',
     215 => 'SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`,  `count`, `ClassName`, `clanid`, `clan_name` FROM `{db}`.`characters` INNER JOIN `{db}`.`items` ON `characters`.`charId`=`items`.`owner_id` INNER JOIN `{db}`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `{db}`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `items`.`item_id`=\'{item}\' AND `accesslevel`=\'0\' ORDER BY `count` DESC LIMIT {limit}, {rows}',
     216 => 'SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `ClassName`, `clanid`, `clan_name` FROM `{db}`.`characters` INNER JOIN `{db}`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `{db}`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`>\'0\' LIMIT {limit}, {rows}',
     217 => 'SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `ClassName`, `clanid`, `clan_name` FROM `{db}`.`characters` INNER JOIN `{db}`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `{db}`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `online`=\'1\' AND `accesslevel`=\'0\' ORDER BY `exp` DESC LIMIT {limit}, {rows}',
+    218 => 'SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `ClassName`, `clanid`, `clan_name` FROM `{db}`.`characters` INNER JOIN `{db}`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `{db}`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`=\'0\' ORDER BY `exp` DESC LIMIT {limit}, {rows}',
     300 => "SELECT items.object_id,items.item_id,items.count,items.enchant_level,items.loc, 
 			CASE WHEN armor.name != '' THEN armor.name 
 			WHEN weapon.name != '' THEN weapon.name 
@@ -98,11 +99,7 @@ $q = array(
 		23	=> "ring",
 		30	=> "cloak"
     ),
-    667 => "SELECT `items`.`item_id`, `items`.`count`, `items`.`enchant_level`, `items`.`loc`, `items`.`loc_data`
-		FROM `{db}`.`items` 
-		WHERE `items`.`owner_id`='{charID}' AND `items`.`loc`='{loc}' 
-		ORDER BY `items`.`loc_data`",
-    668 => "SELECT `name`, `addname`, `grade`, `icon`, `desc`, `set_bonus`, `set_extra_desc` FROM `{webdb}`.`all_items` 
-		WHERE `id`='{itemid}'"
+    667 => "SELECT `items`.`item_id`, `items`.`count`, `items`.`enchant_level`, `items`.`loc`, `items`.`loc_data` FROM `{db}`.`items` WHERE `items`.`owner_id`='{charID}' AND `items`.`loc`='{loc}' ORDER BY `items`.`loc_data`",
+    668 => "SELECT `name`, `addname`, `grade`, `icon1`, `icon2`, `icon3`, `desc` FROM `{webdb}`.`all_items` WHERE `id`='{itemid}'"
 );
 ?>

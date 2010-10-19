@@ -23,7 +23,7 @@ $page='stat';
 $par['lang']=getLang();
 $par['stat']=$stat!=''?$stat:'home';
 $par['page']=$start+1;
-$sec=1800;
+$sec=0;
 $params = implode(';', $par);
 if($cache->needUpdate($page, $params, $sec))
 {
@@ -225,27 +225,26 @@ $timehour=round($timeheld/60/60);
     break;
     
 	case 'clantop':
-    $result = $mysql->query("SELECT `clan_id`, `clan_name`, `clan_level`, `reputation_score`, `hasCastle`, `ally_id`, `ally_name`, `char_name`, `ccount`, `name` FROM `$s_db`.`clan_data` INNER JOIN `$s_db`.`characters` ON `clan_data`.`leader_id`=`characters`.`charId` LEFT JOIN (SELECT clanid, count(`level`) AS `ccount` FROM `$s_db`.`characters` WHERE `clanid` GROUP BY `clanid`) AS `levels` ON `clan_data`.`clan_id`=`levels`.`clanid` LEFT OUTER JOIN `$s_db`.`castle` ON `clan_data`.`hasCastle`=`castle`.`id` WHERE `characters`.`accessLevel`='0' ORDER BY `clan_level`, `reputation_score` DESC LIMIT $startlimit, {$Config['TOP']}");
+    $result = $mysql->query("SELECT `clan_id`, `clan_name`, `clan_level`, `reputation_score`, `hasCastle`, `ally_id`, `ally_name`, `char_name`, `ccount`, `name` FROM `$s_db`.`clan_data` INNER JOIN `$s_db`.`characters` ON `clan_data`.`leader_id`=`characters`.`charId` LEFT JOIN (SELECT clanid, count(`level`) AS `ccount` FROM `$s_db`.`characters` WHERE `clanid` GROUP BY `clanid`) AS `levels` ON `clan_data`.`clan_id`=`levels`.`clanid` LEFT OUTER JOIN `$s_db`.`castle` ON `clan_data`.`hasCastle`=`castle`.`id` WHERE `characters`.`accessLevel`='0' ORDER BY `clan_level` DESC, `reputation_score` DESC LIMIT $startlimit, {$Config['TOP']}");
     $page_foot = $mysql->query("SELECT count(`clan_id`) FROM `$s_db`.`clan_data`, `$s_db`.`characters` WHERE `clan_data`.`leader_id`=`characters`.`charId` AND `characters`.`accessLevel`='0'");
-?>
-<h1> TOP Clans </h1><hr />
-<h2><?php echo $Lang["clantop_total"];?>: <?php echo $mysql->num_rows($result);?></h2>
-<table border="1"><thead><tr style="color: green;"><th><b>Clan Name</b></th>
-<th><b>Leader</b></th>
-<th><b>Level</b></th>
-<th><b>Reutation</b></th>
-<th><b>Castle</b></th>
-<th><b>Members</b></th>
-</tr></thead>
-<tbody>
-<?php
+    $content .= "<h1> TOP Clans </h1><hr />";
+$content .= "<h2>{$Lang["clantop_total"]}: ". $mysql->result($page_foot)."</h2>";
+$content .= "<table border=\"1\"><thead><tr style=\"color: green;\"><th><b>Clan Name</b></th>";
+$content .= "<th><b>Leader</b></th>";
+$content .= "<th><b>Level</b></th>";
+$content .= "<th><b>Reutation</b></th>";
+$content .= "<th><b>Castle</b></th>";
+$content .= "<th><b>Members</b></th>";
+$content .= "</tr></thead>";
+$content .= "<tbody>";
+
   $i=1;
   while ($row=$mysql->fetch_array($result))
   {
     if($row['hasCastle']!=0){$castle=$row['name'];}else{$castle='No castle';}
-    echo "<tr". (($i++ % 2) ? "" : " class=\"altRow\"") ." onmouseover=\"this.bgColor = '#505050';\" onmouseout=\"this.bgColor = ''\"><td><a href=\"claninfo.php?clan=". $row["clan_id"]."\">". $row["clan_name"]. "</a></td><td><a href=\"user.php?cid={$row['leader_id']}\">". $row["char_name"]. "</a></td><td class=\"numeric sortedColumn\">".$row["clan_level"]. "</td><td>{$row['reputation_score']}</td><td>".$castle. "</td><td class=\"numeric\">".$row["ccount"]. "</td></tr>";
+    $content.="<tr". (($i++ % 2) ? "" : " class=\"altRow\"") ." onmouseover=\"this.bgColor = '#505050';\" onmouseout=\"this.bgColor = ''\"><td><a href=\"claninfo.php?clan=". $row["clan_id"]."\">". $row["clan_name"]. "</a></td><td><a href=\"user.php?cid={$row['leader_id']}\">". $row["char_name"]. "</a></td><td class=\"numeric sortedColumn\">".$row["clan_level"]. "</td><td>{$row['reputation_score']}</td><td>".$castle. "</td><td class=\"numeric\">".$row["ccount"]. "</td></tr>";
   }
-  echo "</tbody></table>";
+  $content.="</tbody></table>";
     break;
 	
 	case 'gm':
@@ -299,7 +298,7 @@ $timehour=round($timeheld/60/60);
 	break;
 	
 	case 'top':
-        $data = $mysql->query($q[209], array('db'=>$s_db, 'race'=>'*', 'limit'=>$startlimit, 'rows'=>$Config['TOP']));
+        $data = $mysql->query($q[218], array('db'=>$s_db, 'race'=>'*', 'limit'=>$startlimit, 'rows'=>$Config['TOP']));
         $page_foot = $mysql->query($q[202], array('db'=>$s_db));
         $content.= '<h1>'.$Lang['top'].' '.$Config['TOP'].'</h1>';
 	break;
@@ -404,7 +403,7 @@ includeLang('user');
     $parse['addheader']=isset($addheader)?$addheader:'';
     $parse['char_rows']='';
 
-if($startlimi!=0 || $startlimit!=null)
+if($startlimit!=0 || $startlimit!=null)
 {
     $n=$startlimit+1;
 }

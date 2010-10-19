@@ -52,7 +52,7 @@ var  TagsToTip	= true		// false or true - if true, the script is capable of conv
 // configuration. Order of commands is arbitrary.
 // Example: onmouseover="Tip('Tooltip text', LEFT, true, BGCOLOR, '#FF9900', FADEIN, 400)"
 
-config. Above			= false 	// false or true - tooltip above mousepointer?
+config. Above			= true 	// false or true - tooltip above mousepointer?
 config. BgColor 		= '#E4E7FF' // Background color
 config. BgImg			= ''		// Path to background image, none if empty string ''
 config. BorderColor 	= '#002299'

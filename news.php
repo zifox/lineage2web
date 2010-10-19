@@ -3,38 +3,7 @@ define('INWEB', true);
 require_once ("include/config.php");
 //пароль
 head("Home");
-function convertPic($id, $width, $height)
-{
-    ini_set('memory_limit', '100M');   //  handle large images
-    if(file_exists('news/'.$id.'_thumb.jpg'))
-    unlink('news/'.$id.'_thumb.jpg');         //  remove old images if present
-    $new_img = 'news/'.$id.'_thumb.jpg';
 
-    $file_src = "news/$id.jpg";  //  temporary safe image storage
-
-    list($w_src, $h_src, $type) = getimagesize($file_src);     // create new dimensions, keeping aspect ratio
-    $ratio = $w_src/$h_src;
-    if ($width/$height > $ratio) {$width = floor($height*$ratio);} else {$height = floor($width/$ratio);}
-
-    switch ($type)
-    {
-        case 1:   //   gif -> jpg
-            $img_src = imagecreatefromgif($file_src);
-        break;
-        case 2:   //   jpeg -> jpg
-            $img_src = imagecreatefromjpeg($file_src);
-        break;
-        case 3:  //   png -> jpg
-            $img_src = imagecreatefrompng($file_src);
-        break;
-    }
-    $img_dst = imagecreatetruecolor($width, $height);  //  resample
-
-    imagecopyresampled($img_dst, $img_src, 0, 0, 0, 0, $width, $height, $w_src, $h_src);
-    imagejpeg($img_dst, $new_img);    //  save new image
-    imagedestroy($img_src);       
-    imagedestroy($img_dst);
-}
 $maxfilesize = 1024*1024*1024*5; // 5Mb
 
 $allowed_types = array(
@@ -94,24 +63,23 @@ switch ($action)
                 $desc=str_replace(array('\r'), '<br />', $desc);
 
 
-                $descdb = substr($desc, 0, 500);
+                $descdb = substr($desc, 0, 250);
+                $md5=substr(md5($name.$id.time()),0,12);
+                $ext=$allowed_types[$_FILES['file']['type']];
                 $mysql->query($q[10], array('db' => $webdb, 'page'=>'index'));
-                $mysql->query($q[9], array("db" => $webdb, "desc" => $descdb, "name" => $name, "author" => $_SESSION['account'], "date" => date('Y-m-d H:i:s')));
+                $mysql->query($q[9], array("db" => $webdb, "desc" => $descdb, "name" => $name, "author" => $_SESSION['account'], "date" => date('Y-m-d H:i:s'), "image"=> $md5.'.'.$ext));
                 $id=$mysql->result($mysql->query("SELECT LAST_INSERT_ID()"));
-                if(file_exists('news/'.$id.'.html'))
-                    unlink('news/'.$id.'.html');
-                file_put_contents('news/'.$id.'.html', $desc);
                 
-                if(file_exists('news/'.$id.'.jpg'))
-                    unlink('news/'.$id.'.jpg');
-                move_uploaded_file($_FILES['file']['tmp_name'], 'news/'.$id.'.jpg');
+                if(file_exists('news/'.$md5.'.html'))
+                    unlink('news/'.$md5.'.html');
+                file_put_contents('news/'.$md5.'.html', $desc);
                 
-                convertPic($id, 150, 150);
-                    
-                    
-                    echo 'News added!';
+                if(file_exists('news/'.$md5.'.'.$ext))
+                    unlink('news/'.$md5.'.'.$ext);
                 
-
+                move_uploaded_file($_FILES['file']['tmp_name'], 'news/'.$md5.'.'.$ext);
+                convertPic($md5, $ext, 150, 150);
+                echo 'News added!';
             }
             else
             {
@@ -179,25 +147,28 @@ switch ($action)
                 $newsq = $mysql->query($q[6], array("db" => $webdb, "news_id" => $id));
                 if($mysql->num_rows($newsq))
                 {
-                if(file_exists('news/'.$id.'.html'))
-                {
-                    unlink('news/'.$id.'.html');
-                }
-                file_put_contents('news/'.$id.'.html', $desc);
-                $desc = substr($desc, 0, 500);
+                    $news=$mysql->fetch_array($newsq);
+                    $md5=explode(".",$news['image']);
+                    $md5=$md5[0];
+                    $ext=$allowed_types[$_FILES['file']['type']];
+                    if(file_exists('news/'.$md5.'.html'))
+                    {
+                        unlink('news/'.$md5.'.html');
+                    }
+                    file_put_contents('news/'.$md5.'.html', $desc);
+                    $desc = substr($desc, 0, 500);
                     $mysql->query($q[10], array('db' => $webdb, 'page'=>'index'));
                     $mysql->query($q[8], array("db" => $webdb, "news_id" => $id, "desc" => $desc, "name" => $name, "date" => date('Y-m-d H:i:s') , "editor" => $_SESSION['account']));
                     if($_FILES['file']['name'] != '')
                     {
-                        if(file_exists('news/'.$id.'.jpg'))
-                            unlink('news/'.$id.'.jpg');
-                    move_uploaded_file($_FILES['file']['tmp_name'], 'news/'.$id.'.jpg');
-                    convertPic($id, 150, 150);
+                        if(file_exists('news/'.$md5.'.'.$ext))
+                            unlink('news/'.$md5.'.'.$ext);
+                        move_uploaded_file($_FILES['file']['tmp_name'], 'news/'.$md5.'.'.$ext);
+                        convertPic($md5, $ext, 150, 150);
                     
                     }
                     echo 'News updated!';
                 }
-
             }
             else
             {
@@ -238,29 +209,42 @@ switch ($action)
 
         if(isset($id) && isset($_GET['confirm']) && $id!=NULL && $user->mod())
         {
-            $mysql->query($q[7], array("db" => $webdb, "news_id" => $id));
-            if(file_exists('news/'.$id.'.html'))
+            $news=$mysql->query($q[6], array("db" => $webdb, "news_id" => $id));
+            if($mysql->num_rows($news))
             {
-                if(unlink('news/'.$id.'.html'))
+                $new=$mysql->fetch_array($news);
+                $mysql->query($q[7], array("db" => $webdb, "news_id" => $id));
+                $md5=explode(".",$news['image']);
+                $md5=$md5[0];
+                $ext=$md5[1];
+                if(file_exists('news/'.$md5.'.html'))
                 {
-                    echo 'File <b>news/'.$id.'.html</b> deleted!<br />';
+                    if(unlink('news/'.$md5.'.html'))
+                    {
+                        echo 'File <b>news/'.$md5.'.html</b> deleted!<br />';
+                    }
                 }
+                if(file_exists('news/'.$md5.'.'.$ext))
+                {
+                    if(unlink('news/'.$md5.'.'.$ext))
+                    {
+                        echo 'File <b>news/'.$md5.'.'.$ext.'</b> deleted!<br />';
+                    }
+                }
+                if(file_exists('news/'.$md5.'_thumb.'.$ext))
+                {
+                    if(unlink('news/'.$md5.'_thumb.'.$ext))
+                    {
+                        echo 'File <b>news/'.$md5.'_thumb.'.$ext.'</b> deleted!<br />';
+                    }
+                }
+                $mysql->query($q[10], array('db' => $webdb, 'page'=>'index'));
+                echo 'Deleted from DataBase!';
             }
-            if(file_exists('news/'.$id.'.jpg'))
+            else
             {
-                if(unlink('news/'.$id.'.jpg'))
-                {
-                    echo 'File <b>news/'.$id.'.jpg</b> deleted!<br />';
-                }
+                echo 'Not Found!';
             }
-            if(file_exists('news/'.$id.'_thumb.jpg'))
-            {
-                if(unlink('news/'.$id.'_thumb.jpg'))
-                {
-                    echo 'File <b>news/'.$id.'_thumb.jpg</b> deleted!<br />';
-                }
-            }
-            echo 'Deleted from DataBase!';
         }
         else
         {
@@ -275,43 +259,56 @@ switch ($action)
     default:
     if(isset($id) && $id!=NULL)
     {
-        $mysql->query($q[6], array("db" => $webdb, "news_id" => $id));
-        if($mysql->num_rows())
+        $new=$mysql->query($q[6], array("db" => $webdb, "news_id" => $id));
+        if($mysql->num_rows($new))
         {
-            if(file_exists('news/'.$id.'.html'))
-            {
-                $news = $mysql->fetch_array();
-                $parse+=$news;
-                $parse['desc'] = file_get_contents('news/'.$id.'.html');
-            $parse['read_more']='';
-            $nparse['thumb']='';
-            if($user->mod())
-            {
-                $parse['add'] = '<a href="news.php?action=add"><img src="img/add.png" alt="'.$Lang['add'].'" title="'.$Lang['add'].'" border="0" /></a>';
-                $parse['edit'] = '<a href="news.php?action=edit&amp;id='.$news['news_id'].'"><img src="img/edit.png" alt="'.$Lang['edit'].'" title="'.$Lang['edit'].'" border="0" /></a>';
-                $parse['delete'] = '<a href="news.php?action=delete&amp;id='.$news['news_id'].'"><img src="img/delete.png" alt="'.$Lang['delete'].'" title="'.$Lang['delete'].'" border="0" /></a>';
-            }
-            else
-            {
-                $parse['add'] = '';
-                $parse['edit'] = '';
-                $parse['delete'] = '';
-            }
-            $tpl->parsetemplate('news_row', $parse);
-                
-            }
-        }
+            $newid=$mysql->fetch_array($new);
+            
+            $md5=explode(".",$newid['image']);
+            $md5=$md5[0];
 
-        
+            if(file_exists('news/'.$md5.'.html'))
+            {
+                //$news = $mysql->fetch_array();
+                $parse+=$newid;
+                $parse['desc'] = file_get_contents('news/'.$md5.'.html');
+                $parse['read_more']='';
+                $parse['thumb']=$newid['image'];
+                if($newid['edited_by']!='')
+                {
+                    $parse['edited']='Last edited <strong>'.$newid['edited'].'</strong> by <strong>'.$newid['edited_by'].'</strong>';
+                }
+                if($user->mod())
+                {
+                    $parse['add'] = '<a href="news.php?action=add"><img src="img/add.png" alt="'.$Lang['add'].'" title="'.$Lang['add'].'" border="0" /></a>';
+                    $parse['edit'] = '<a href="news.php?action=edit&amp;id='.$newid['news_id'].'"><img src="img/edit.png" alt="'.$Lang['edit'].'" title="'.$Lang['edit'].'" border="0" /></a>';
+                    $parse['delete'] = '<a href="news.php?action=delete&amp;id='.$newid['news_id'].'"><img src="img/delete.png" alt="'.$Lang['delete'].'" title="'.$Lang['delete'].'" border="0" /></a>';
+                }
+                else
+                {
+                    $parse['add'] = '';
+                    $parse['edit'] = '';
+                    $parse['delete'] = '';
+                }
+                $tpl->parsetemplate('news_row', $parse);
+            }
+        } 
     }
     else
     {
         $newsq=$mysql->query($q[5],  array("db" => $webdb, "limit" => $Config['news_limit']));
         while($news=$mysql->fetch_array($newsq))
         {
+            $parse=$Lang;
             $parse+=$news;
+            
             $parse['read_more']='<a href="news.php?id='. $news['news_id'].'">'.$Lang['read_more'].'</a>';
-            $nparse['thumb']='_thumb';
+            $md5=explode(".",$news['image']);
+            $parse['thumb']=$md5[0].'_thumb.'.$md5[1];
+            if($news['edited_by']!='')
+            {
+                $parse['edited']='Last edited <strong>'.$news['edited'].'</strong> by <strong>'.$news['edited_by'].'</strong>';
+            }
             if($user->mod())
             {
                 $parse['add'] = '<a href="news.php?action=add"><img src="img/add.png" alt="'.$Lang['add'].'" title="'.$Lang['add'].'" border="0" /></a>';

@@ -33,12 +33,10 @@ $skinurl = 'skins/l2f';
 <script type="text/javascript" src="scripts/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript">
 tinyMCE.init({
-	// General options
 	mode : "textareas",
 	theme : "simple",
     skin : "o2k7",
     language : "lv"
-	// Example content CSS (should be your site CSS)
 
 });
 </script>
@@ -47,14 +45,10 @@ tinyMCE.init({
 document.write(unescape("%3Cscript src='scripts/ga.js' type='text/javascript'%3E%3C/script%3E"));
 </script>
 <script type="text/javascript" src="scripts/ajax.js"></script>
-<!--[if lt IE 7.]>
-<script defer type="text/javascript" src="scripts/pngfix.js"></script>
-<![endif]-->
-
 <script type="text/javascript" language="javascript">
 <!--
 function ViewPic(img) {
-    window.open( "viewimg.php?"+img, "", "resizable=1,HEIGHT=200,WIDTH=200");
+    window.open( "viewimg.php?"+img, "", "resizable=0,HEIGHT=200,WIDTH=200");
 } 
 function GoTo(url)
 {

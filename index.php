@@ -6,7 +6,7 @@ head("Home");
 $page='index';
 $par['lang']=getLang();
 $par['mod']=$user->mod()==true?'true':'false';
-$sec=1800;
+$sec=3600;
 $params = implode(';', $par);
 if($cache->needUpdate($page, $params, $sec))
 {
@@ -23,7 +23,11 @@ $parse['news'] = '';
 while($news=$mysql->fetch_array($newsq))
 {
     $nparse=$news;
-    $nparse['desc']=trim($nparse['desc']);
+    //$nparse['desc']=trim($nparse['desc']);
+    if($news['edited_by']!='')
+    {
+        $nparse['edited']='Last edited <strong>'.$news['edited'].'</strong> by <strong>'.$news['edited_by'].'</strong>';
+    }
     if($user->mod())
     {
         $nparse['add'] = '<a href="news.php?action=add"><img src="img/add.png" alt="'.$Lang['add'].'" title="'.$Lang['add'].'" border="0" /></a>';
@@ -36,12 +40,12 @@ while($news=$mysql->fetch_array($newsq))
         $nparse['edit'] = '';
         $nparse['delete'] = '';
     }
-    $nparse['thumb']='_thumb';
+    $md5=explode(".",$news['image']);
+    $nparse['thumb']=$md5[0].'_thumb.'.$md5[1];
     $nparse['read_more']='<a href="news.php?id='. $news['news_id'].'">'.$Lang['read_more'].'</a>';
     $parse['news'].=$tpl->parsetemplate('news_row', $nparse, 1);
 }
-$parse['Events'] = $Config['Events'];
-$parse['Features'] = $Config['Features'];
+
 $content=$tpl->parsetemplate('index2', $parse,1);
 $cache->updateCache($page, $params, $content);
 echo $content;

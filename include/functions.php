@@ -224,5 +224,48 @@ function pagechoose($page, $count=0, $stat, $server)
     return $content;
 
 }
+function convertPic($id, $ext, $width, $height)
+{
+    ini_set('memory_limit', '100M');
+    if(file_exists('news/'.$id.'_thumb.'.$ext))
+    unlink('news/'.$id.'_thumb.'.$ext);
+    $new_img = 'news/'.$id.'_thumb.'.$ext;
 
+    $file_src = "news/$id.$ext";
+
+    list($w_src, $h_src, $type) = getimagesize($file_src);
+    $ratio = $w_src/$h_src;
+    if ($width/$height > $ratio) {$width = floor($height*$ratio);} else {$height = floor($width/$ratio);}
+
+    switch ($type)
+    {
+        case 1:   //   gif -> jpg
+            $img_src = imagecreatefromgif($file_src);
+        break;
+        case 2:   //   jpeg -> jpg
+            $img_src = imagecreatefromjpeg($file_src);
+        break;
+        case 3:  //   png -> jpg
+            $img_src = imagecreatefrompng($file_src);
+        break;
+    }
+    $img_dst = imagecreatetruecolor($width, $height);  //  resample
+    //$img_dst = imagecreate($width, $height);  //  resample
+    imageantialias($img_dst, true);
+    imagecopyresampled($img_dst, $img_src, 0, 0, 0, 0, $width, $height, $w_src, $h_src);
+    switch ($type)
+    {
+        case 1:
+            imagegif($img_dst, $new_img);
+        break;
+        case 2:
+            imagejpeg($img_dst, $new_img);
+        break;
+        case 3:
+            imagepng($img_dst, $new_img);
+        break;
+    }
+    imagedestroy($img_src);       
+    imagedestroy($img_dst);
+}
 ?>

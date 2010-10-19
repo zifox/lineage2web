@@ -5,7 +5,7 @@ require_once("include/config.php");
 
 function CountFormat($num)
 {
-    return $num>1?" (" . number_format($num, 0, ".", ",") . ")":"";
+    return $num>1?'('.number_format($num, 0, ".", ",").')':'';
 }
 includeLang('user');
 if ($_GET['cid'] && is_numeric($_GET['cid']))
@@ -26,7 +26,8 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
         $page='user';
         $par['lang']=getLang();
         $par['id']=$char['charId'];
-        $sec=86400;
+        //$sec=86400;
+        $sec=0;
         $params = implode(';', $par);
         if($cache->needUpdate($page, $params, $sec))
         {
@@ -77,20 +78,17 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
                 $item=$mysql->fetch_array($qry);
                 $name = $item["name"];
                 $name = str_replace("'", "\\'", $name);
-                $addname = $item["addname"];
-                $addname = $addname!=''?' - &lt;font color=#333333>'. str_replace("'", "\\'", $addname).'&lt;/font>':'';
+                $addname = str_replace("'", "\\'", $item["addname"]);
+                $addname = $addname!=''?' - &lt;font color=#333333>'. $addname .'&lt;/font>':'';
                 $desc = htmlentities($item["desc"]);
-                $specdesc = $item["specdesc"];
-                $set = $item["set_bonus"];
-                $set_extra = $item["set_extra_desc"];
                 $desc = str_replace("'", "\\'", $desc);
                 $grade = $item["grade"];
                 $grade = (!empty($grade) || $grade!="none") ? "&lt;img border=\\'0\\' src=\\'img/grade/" . $grade . "-grade.png\\' />" : "";
-                $enchant = $item["enchant_level"] > 0 ? " +" . $item["enchant_level"] : "";
-                $img = (is_file('img/iconsall/'.$item["icon"].'.png')) ? $item["icon"] : "blank";
+                $enchant = $paperdoll_data["enchant_level"] > 0 ? " +" . $paperdoll_data["enchant_level"] : "";
+                //$img = (is_file('img/icons/'.$item["icon"].'.png')) ? $item["icon"] : "blank";
                 $type = $q[666][$paperdoll_data["loc_data"]];
         
-                $parse['eq_items'] .= "<div style='position: absolute; width: 32px; height: 32px; padding: 0px;' class='{$type}'><img border='0' src='img/iconsall/$img.png' onmouseover=\"Tip('{$name} {$addname} {$grade} {$enchant}&lt;br /> {$desc}&lt;br /> {$specdesc}&lt;br /> {$set}&lt;br /> {$set_extra}', FONTCOLOR, '#FFFFFF',BGCOLOR, '#406072', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold')\" alt=\"\" /></div>";
+                $parse['eq_items'] .= "<div style='position: absolute; width: 32px; height: 32px; padding: 0px;' class='{$type}'><img border='0' src='img/icons/{$item["icon1"]}.png' onmouseover=\"Tip('{$name} {$addname} {$grade} {$enchant}&lt;br /> {$desc}', FONTCOLOR, '#FFFFFF',BGCOLOR, '#406072', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold')\" alt=\"\" /></div>";
                         
             }
     
@@ -102,20 +100,17 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
                 $item=$mysql->fetch_array($qry);
                 $name = $item["name"];
                 $name = str_replace("'", "\\'", $name);
-                $addname = $item["addname"];
-                $addname = ' - &lt;font color="#333333">'. str_replace("'", "\\'", $addname).'&lt;/font>';
+                $addname = str_replace("'", "\\'", $item["addname"]);
+                $addname = $addname!=''?' - &lt;font color=#333333>'. $addname .'&lt;/font>':'';
                 $desc = htmlentities($item["desc"]);
-                $specdesc = $item["specdesc"];
-                $set = $item["set_bonus"];
-                $set_extra = $item["set_extra_desc"];
                 $desc = str_replace("'", "\\'", $desc);
 
                 $grade = $item["grade"];
-                $grade = (!empty($grade) || $grade!="none") ? "&lt;img border=\\'0\\' src=\\'img/grade/" . $grade . "-grade.png\\' />" : "";
-                $enchant = $item["enchant_level"] > 0 ? " +" . $item["enchant_level"] : "";
-                $count = CountFormat($item["count"]);
-                $img = (is_file('img/iconsall/'.$item["icon"].'.png')) ? $item["icon"] : "blank";
-                $parse['inv_items'] .= "<img class='floated' border='0' src=\"img/iconsall/{$img}.png\" onmouseover=\"Tip('{$name} {$count} {$grade} {$enchant}&lt;br /> {$desc}', FONTCOLOR, '#333333',BGCOLOR, '#FFFFFF', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold')\" alt=\"\" />";
+                $grade = (!empty($grade) || $grade!="none" || $grade!="---") ? "&lt;img border=\\'0\\' src=\\'img/grade/" . $grade . "-grade.png\\' />" : "";
+                $enchant = $inv_data["enchant_level"] > 0 ? " +" . $inv_data["enchant_level"] : "";
+                $count = CountFormat($inv_data["count"]);
+                //$img = (is_file('img/icons/'.$item["icon"].'.png')) ? $item["icon"] : "blank";
+                $parse['inv_items'] .= "<img class='floated' border='0' src=\"img/icons/{$item["icon1"]}.png\" onmouseover=\"Tip('{$name} {$addname} {$grade} {$count} {$enchant}&lt;br /> {$desc}', FONTCOLOR, '#FFFFFF',BGCOLOR, '#406072', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold')\" alt=\"\" />";
             }
 
             $dbq = $mysql->query("SELECT `ID`, `Name`, `DataBase` FROM `$webdb`.`gameservers` WHERE `active` = 'true'");

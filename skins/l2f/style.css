@@ -315,4 +315,9 @@ max-width: 360px;
 height: auto !important;
 width: expression(this.width > 360 ? 360: true);
 }
+p {
+    text-align: justify;
+    font-size: 12px;
+    font-weight: normal;
+}
 /*body, table, tr, td, img, div, a, input { behavior: url(../../img/iepngfix.htc) }*/

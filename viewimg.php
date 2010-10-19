@@ -24,10 +24,10 @@
      };
  </script>
 </head>
-<body bgcolor="#000000" onload="FitPic();" style="margin-top: 0; margin-bottom: 0; margin-left: 0; margin-right: 0;">
+<body bgcolor="#406072" onload="FitPic();" style="margin-top: 0; margin-bottom: 0; margin-left: 0; margin-right: 0;">
  <script language="javascript" type="text/javascript">
  <!--
- document.write( "<img src='news/" + picUrl + ".jpg' border=0 alt='' />" );
+ document.write( "<img src='news/" + picUrl + "' border=0 alt='' />" );
  // -->
  </script>
 </body>

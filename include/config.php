@@ -12,7 +12,7 @@ $DB = array(
     "host"      => "localhost", //MySQL Host
     "user"      => "root",      //MySQL User
     "password"  => "",    //MySQL Password
-    "database"  => "l2j"        //L2J Main (account)DataBase
+    "database"  => "l2jdb"        //L2J Main (account)DataBase
 );
 $webdb = "l2web";                 //Webpage DataBase
 
@@ -27,7 +27,8 @@ $query = $mysql->query($q[0], array("db" => $webdb));
 while ($row = $mysql->fetch_array($query)) {
     $Config[$row['name']] = stripslashes($row['value']);
 }
-
+$Config['LS']['ip']='127.0.0.1';
+$Config['LS']['port']='7779';
 $user = new user();
 if ($Config['use_cracktracker']){
     require_once ('include/cracktracker.php');
