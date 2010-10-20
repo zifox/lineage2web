@@ -25,13 +25,16 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
         head("User {$char['char_name']} Info");
         $page='user';
         $par['lang']=getLang();
+        $par['mod']=$user->mod()==true?'true':'false';
         $par['id']=$char['charId'];
         //$sec=86400;
-        $sec=0;
+        $sec=900;
         $params = implode(';', $par);
         if($cache->needUpdate($page, $params, $sec))
         {
             $parse=$Lang;
+            $parse['time']=date('d.m.Y H:i:s');
+            $parse['update_time']= date('d.m.Y H:i:s', time()+$sec);
             $char['sex']==0?$parse['color']='#8080FF':$parse['color']='#FF8080';
             $parse['c_race'] = $char['race'];
             $parse['c_sex'] = $char['sex'];
@@ -91,9 +94,11 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
                 $parse['eq_items'] .= "<div style='position: absolute; width: 32px; height: 32px; padding: 0px;' class='{$type}'><img border='0' src='img/icons/{$item["icon1"]}.png' onmouseover=\"Tip('{$name} {$addname} {$grade} {$enchant}&lt;br /> {$desc}', FONTCOLOR, '#FFFFFF',BGCOLOR, '#406072', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold')\" alt=\"\" /></div>";
                         
             }
-    
+            if($user->mod() && $user->logged())
+            {
             $query = $mysql->query($q[667], array("db" => $dbname, "charID" => $id, "loc" => "INVENTORY"));
-            $parse['inv_items'] = '';
+            $parse['inv_items'] = '<div id="inventory" align="left">
+	<div id="inventory_items" class="flexcroll">';
             while ($inv_data = $mysql->fetch_array($query))
             {
                 $qry=$mysql->query($q[668], array("webdb" => $webdb, "itemid" => $inv_data['item_id']));
@@ -112,9 +117,9 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
                 //$img = (is_file('img/icons/'.$item["icon"].'.png')) ? $item["icon"] : "blank";
                 $parse['inv_items'] .= "<img class='floated' border='0' src=\"img/icons/{$item["icon1"]}.png\" onmouseover=\"Tip('{$name} {$addname} {$grade} {$count} {$enchant}&lt;br /> {$desc}', FONTCOLOR, '#FFFFFF',BGCOLOR, '#406072', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold')\" alt=\"\" />";
             }
-
+            $parse['inv_items'] .= '<div class="clearfloat"></div></div></div>';
             $dbq = $mysql->query("SELECT `ID`, `Name`, `DataBase` FROM `$webdb`.`gameservers` WHERE `active` = 'true'");
-            $parse['charlist'] = '';
+            /*$parse['charlist'] = '';
             while($dbs = $mysql->fetch_array($dbq))
             {
                 $dbn = $dbs['DataBase'];
@@ -135,7 +140,53 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
                         $parse['charlist'].=$tpl->parsetemplate('user_other', $oparse, 1);
                     }
                 }//$mysql->num_rows(other chars)
+            }//while*/
+            $query = $mysql->query($q[667], array("db" => $dbname, "charID" => $id, "loc" => "WAREHOUSE"));
+            $parse['ware_items'] = '<div id="inventory" align="left">
+	<div id="inventory_items" class="flexcroll">';
+            while ($ware_data = $mysql->fetch_array($query))
+            {
+                $qry=$mysql->query($q[668], array("webdb" => $webdb, "itemid" => $ware_data['item_id']));
+                $item=$mysql->fetch_array($qry);
+                $name = $item["name"];
+                $name = str_replace("'", "\\'", $name);
+                $addname = str_replace("'", "\\'", $item["addname"]);
+                $addname = $addname!=''?' - &lt;font color=#333333>'. $addname .'&lt;/font>':'';
+                $desc = htmlentities($item["desc"]);
+                $desc = str_replace("'", "\\'", $desc);
+
+                $grade = $item["grade"];
+                $grade = (!empty($grade) || $grade!="none" || $grade!="---") ? "&lt;img border=\\'0\\' src=\\'img/grade/" . $grade . "-grade.png\\' />" : "";
+                $enchant = $ware_data["enchant_level"] > 0 ? " +" . $ware_data["enchant_level"] : "";
+                $count = CountFormat($ware_data["count"]);
+                //$img = (is_file('img/icons/'.$item["icon"].'.png')) ? $item["icon"] : "blank";
+                $parse['ware_items'] .= "<img class='floated' border='0' src=\"img/icons/{$item["icon1"]}.png\" onmouseover=\"Tip('{$name} {$addname} {$grade} {$count} {$enchant}&lt;br /> {$desc}', FONTCOLOR, '#FFFFFF',BGCOLOR, '#406072', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold')\" alt=\"\" />";
+            }
+            $parse['ware_items'] .= '<div class="clearfloat"></div></div></div>';
+            $dbq = $mysql->query("SELECT `ID`, `Name`, `DataBase` FROM `$webdb`.`gameservers` WHERE `active` = 'true'");
+            $parse['charlist'] = '';
+            while($dbs = $mysql->fetch_array($dbq))
+            {
+                $dbn = $dbs['DataBase'];
+        
+                $sql2=$mysql->query("SELECT `account_name`, `charId`, `char_name`, `level`, `maxHp`, `maxCp`, `maxMp`, `sex`, `pvpkills`, `pkkills`, `clanid`, `race`, `characters`.`classid`, `base_class`, `online`, `ClassName`, clan_id, clan_name FROM `$dbn`.`characters` LEFT OUTER JOIN `$dbn`.`char_templates` ON `characters`.`classid` = `char_templates`.`ClassId` LEFT OUTER JOIN `$dbn`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `characters`.`charId` != '{$char['charId']}' AND `account_name` = '{$char['account_name']}' ORDER by `characters`.`level` ASC");
+                if ($mysql->num_rows($sql2)){
+                    $oparse=$Lang;
+                    $oparse['Name'] = $dbs['Name'];
+                    $oparse['char_rows'] = '';
+                    while ($otherchar=$mysql->fetch_array($sql2))
+                    {
+
+                        if ($otherchar['clan_id']) {$clan_link = "<a href=\"claninfo.php?clan={$otherchar['clan_id']}&amp;server={$dbs['ID']}\">{$otherchar['clan_name']}</a>";}else{$clan_link = $Lang['no_clan'];}
+                        $otherchar['sex']==0?$color='#8080FF':$color='#FF8080';
+
+                        $otherchar['online']?$online='<img src="img/online.png" alt="'.$Lang['online'].'" />':$online='<img src="img/status/offline.png" alt="'.$Lang['offline'].'"/>';
+                        $oparse['char_rows'].="<tr><td><img src=\"img/face/{$otherchar['race']}_{$otherchar['sex']}.gif\" alt=\"\" /></td><td><a href=\"user.php?cid={$otherchar['charId']}&amp;server={$dbs['ID']}\"><font color=\"$color\">{$otherchar['char_name']}</font></a></td><td align=\"center\">{$otherchar['level']}</td><td align=\"center\">{$otherchar['ClassName']}</td><td class=\"maxCp\" align=\"center\">{$otherchar['maxCp']}</td><td class=\"maxHp\" align=\"center\">{$otherchar['maxHp']}</td><td class=\"maxMp\" align=\"center\">{$otherchar['maxMp']}</td><td align=\"center\">{$clan_link}</td><td align=\"center\"><b>{$otherchar['pvpkills']}</b>/<b><font color=\"red\">{$otherchar['pkkills']}</font></b></td><td>{$online}</td></tr>";
+                    }
+                    $parse['charlist'].=$tpl->parsetemplate('user_other', $oparse, 1);
+                }//$mysql->num_rows(other chars)
             }//while
+            }
             $content = $tpl->parsetemplate('user', $parse, 1);
             $cache->updateCache($page, $params, $content);
             echo $content;

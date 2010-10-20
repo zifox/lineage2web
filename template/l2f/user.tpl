@@ -1,3 +1,5 @@
+Last updated: {time}<br />
+Next update: {update_time}<br />
 <table border="0">
     <tr><td><img src="img/face/{c_race}_{c_sex}.png" alt="" /></td><td>
     <table border="1">
@@ -16,12 +18,9 @@
     {eq_items}
    	</div>
 </div></td></tr><tr><td>
-<div id='inventory' align="left">
-	<div id='inventory_items' class='flexcroll'>
-    {inv_items}
-    		<div class='clearfloat'></div>
-	</div>
-</div>
+{inv_items}
+</td></tr><tr><td>
+{ware_items}
 </td></tr></table>
-    <h1>{otherchars}</h1>
+<h1>{otherchars}</h1>
 {charlist}
