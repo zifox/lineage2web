@@ -1,5 +1,5 @@
 <?php
-//??????
+//пароль
 if(!defined('INCONFIG')){Header("Location: ../index.php");}
 $user_ip = $_SERVER['REMOTE_ADDR'];
 $data = file("include/bancontrol.txt");

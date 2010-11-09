@@ -10,7 +10,7 @@
 	</select></td>
 	<td><select id="char" name="char">
     <option>{select_server}</option>
-    </select></td><td><select disabled=""><option selected="">Gold Einhasad x4</option></select></td>
+    </select></td><td><select name="item"><option value="1" selected="">Gold Einhasad x4</option><option value="2">Festival Adena x1</option></select></td>
     <td>x<input name="multiplier" id="multiplier" type="text" value="1" size="3" maxlength="3" /></td>
     </tr>
     </tbody>

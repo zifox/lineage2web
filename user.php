@@ -30,7 +30,7 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
         //$sec=86400;
         $sec=900;
         $params = implode(';', $par);
-        if($cache->needUpdate($page, $params, $sec))
+        if($cache->needUpdate(__FILE__, $params))
         {
             $parse=$Lang;
             $parse['time']=date('d.m.Y H:i:s');
@@ -188,12 +188,12 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
             }//while
             }
             $content = $tpl->parsetemplate('user', $parse, 1);
-            $cache->updateCache($page, $params, $content);
+            $cache->updateCache(__FILE__, $content, $params);
             echo $content;
         }
         else
         {
-            echo $cache->getCache($page, $params);
+            echo $cache->getCache(__FILE__, $params);
         } //cache  
     }//$mysql->num_rows(main user)
     else

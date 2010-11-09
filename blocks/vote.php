@@ -2,17 +2,16 @@
 if (!defined('IN_BLOCK')) {
     Header("Location: ../index.php");
 }
-$page='blocks/vote';
-$params = null;
-$sec=172800; //2 days
-if($cache->needUpdate($page, $params, $sec))
+
+if($cache->needUpdate(__FILE__))
 {
-$content = $tpl->parsetemplate('blocks/vote', NULL, 1);
-$cache->updateCache($page, $params, $content);
-echo $content;
+    $content = $tpl->parsetemplate('blocks/vote', NULL, 1);
+    $cache->updateCache(__FILE__, $content);
+    
+    echo $content;
 }
 else
 {
-    echo $cache->getCache($page, $params);
+    echo $cache->getCache(__FILE__);
 }
 ?>

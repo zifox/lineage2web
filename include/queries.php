@@ -17,7 +17,7 @@ $q = array(
     10 => 'UPDATE `{db}`.`cache` SET `recache`=\'1\' WHERE `page`=\'{page}\';',
     100 => 'SELECT count(0) FROM `{db}`.`accounts`;',
     101 => '',
-    200 => 'SELECT `charId`, `char_name`, `sex` FROM `{db}`.`characters` WHERE `accesslevel`=\'0\'  ORDER BY `exp` DESC LIMIT {limit};',
+    200 => 'SELECT `charId`, `char_name`, `sex` FROM `{db}`.`characters` WHERE `accesslevel`=\'0\'  ORDER BY `level` DESC, `pvpkills` DESC, `fame` DESC LIMIT {limit};',
     201 => 'SELECT count(0) FROM `{db}`.`clan_data`;',
     202 => 'SELECT count(0) FROM `{db}`.`characters` WHERE `accessLevel`=\'0\';',
     203 => 'SELECT count(0) FROM `{db}`.`characters` WHERE `online` = \'1\' AND `accesslevel`=\'0\';',

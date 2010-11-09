@@ -22,26 +22,24 @@ require_once ('class.tplParser.php');
 require_once ('class.cache.php');
 require_once ('queries.php');
 $mysql = new MySQL($DB);
-
 $query = $mysql->query($q[0], array("db" => $webdb));
 while ($row = $mysql->fetch_array($query)) {
-    $Config[$row['name']] = stripslashes($row['value']);
+    $CONFIG[$row['type']][$row['name']] = stripslashes($row['value']);
 }
-$Config['LS']['ip']='127.0.0.1';
-$Config['LS']['port']='7779';
+$CONFIG['settings']['webdb']=$webdb;
 $user = new user();
-if ($Config['use_cracktracker']){
+if ($CONFIG['features']['use_cracktracker']){
     require_once ('include/cracktracker.php');
 }
 require_once ('include/functions.php');
 
-if ($Config['use_bancontrol']){
+if ($CONFIG['features']['use_bancontrol']){
     require_once ('include/bancontrol.php');
 }
-$cache = new Cache($Config['cache_enabled']);
-if (!$Config['web_debug']) {
+$cache = new Cache($CONFIG['features']['cache_enabled']);
+if (!$CONFIG['debug']['web']) {
     error_reporting(0);
 }
-//$tpl = new tplParser($Config['DSkin']);
-$tpl = new tplParser('l2f');
+$tpl = new tplParser($CONFIG['settings']['DSkin']);
+global $mysql, $CONFIG, $user, $cache, $tpl;
 ?>

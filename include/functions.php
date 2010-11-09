@@ -5,7 +5,7 @@ includeLang('functions');
 
 function includeLang($file)
 {
-	global $langpath, $Lang, $Config;
+	global $langpath, $Lang;
 	$langpath=getLang();
 	define('INLANG', True);
 	if(file_exists('lang/'.$langpath.'/'.$file.'.php'))
@@ -33,9 +33,9 @@ function getLang()
 }
 function includeBlock($file, $block_name='Menu')
 {
-	global $langpath, $skin, $Lang, $Config, $mysql, $tpl, $webdb, $q, $user, $cache;
+	global $CONFIG, $mysql, $user, $tpl, $cache, $q, $Lang, $langpath;
     DEFINE('IN_BLOCK', True);
-    $img_link = 'skins/'.$skin;
+    $img_link = 'skins/'.$CONFIG['settings']['DSkin'];
 	?>
     <table width="200" style="height:95px;" border="0" cellpadding="0" cellspacing="0" class="opacity2">
     <tr style="height:48px;">
@@ -69,26 +69,24 @@ function error($id){
 
 function head($title = "", $head=1, $url='', $time=0)
 {
-    global $skin, $Config, $Lang, $mysql, $tpl, $user;
+    global $CONFIG, $user, $mysql, $tpl, $cache, $Lang;
     DEFINE('INSKIN', True);
-	//$skin = $Config['DSkin'];
-    $skin = 'l2f';
-    $title = $Config['Title']." :: ".$title;
+	$skin = $CONFIG['settings']['DSkin'];
+    $title = $CONFIG['head']['Title']." :: ".$title;
     //echo $skin;
 	require_once("skins/" . $skin . "/head.php");
 }
 
 function foot($foot=1)
 {
-    global $mysql, $skin, $Config, $Lang, $starttime, $user, $tpl, $cache;
+    global $CONFIG, $user, $mysql, $tpl, $cache, $Lang, $starttime;
     if(isset($_COOKIE['skin']))
     {
         $skin = trim($_COOKIE['skin']);
     }
     else
     {
-	   //$skin = $Config['DSkin'];
-       $skin = 'l2f';
+	   $skin = $CONFIG['settings']['DSkin'];
     }
     require_once("skins/" . $skin . "/foot.php");
 }
@@ -98,7 +96,6 @@ function button($text='  ', $name = 'Submit', $return = 0, $disabled=false, $id 
     $parse['text'] = $text;
     $parse['name'] = $name;
     if($id == NULL) { $parse['id'] = "bt_".rand(20,99); } else { $parse['id'] = $id; }
-    //$parse['id'] = "bt_".rand(20,99);
     if ($disabled) $parse['disabled'] = 'disabled="disabled"';
     if ($return)
         return $tpl->parsetemplate('button', $parse, 1);
@@ -139,26 +136,26 @@ function pretty_time_hour ($seconds) {
 
 function getDBName($id)
 {
-	global $mysql, $webdb, $Config;
+    global $CONFIG, $mysql;
 	if(is_numeric($id))
 	{
 		$srv = $mysql->escape(0 + $id);
-		$srvqry = $mysql->query("SELECT `DataBase` FROM `$webdb`.`gameservers` WHERE `ID` = '$srv'");
+		$srvqry = $mysql->query("SELECT `DataBase` FROM `{$CONFIG['settings']['webdb']}`.`gameservers` WHERE `ID` = '$srv'");
 		if($mysql->num_rows($srvqry))
 		{
 			return $mysql->result($srvqry);
  		}
   	}
-  	return $Config['DDB'];
+  	return $CONFIG['settings']['DDB'];
 }
 
 function pagechoose($page, $count=0, $stat, $server)
 {
-    global $Config, $Lang;
+    global $CONFIG, $Lang;;
     $content=NULL;
     $content.='<div class="page-choose" align="center"><br /><table align="center"><tr>';
     
-    $totalpages = ceil($count/$Config['TOP']);
+    $totalpages = ceil($count/$CONFIG['settings']['TOP']);
     if($totalpages==0)
     {
         $totalpages++;
@@ -181,9 +178,9 @@ function pagechoose($page, $count=0, $stat, $server)
         {
             $content.= '<td>&nbsp;&nbsp;<a href="#" class="btn brown" title="';
             $content.= ' [';
-            $content.= ($count!=0) ? $i*$Config['TOP']+1-$Config['TOP'] : 0;
+            $content.= ($count!=0) ? $i*$CONFIG['settings']['TOP']+1-$CONFIG['settings']['TOP'] : 0;
             $content.= ' - ';
-            $content.= ($i*$Config['TOP']>$count)? $count: $i*$Config['TOP'];
+            $content.= ($i*$CONFIG['settings']['TOP']>$count)? $count: $i*$CONFIG['settings']['TOP'];
             $content.= ']"> ';
             $content.= $i;
             $content.= ' </a>&nbsp;&nbsp;</td>';
@@ -194,9 +191,9 @@ function pagechoose($page, $count=0, $stat, $server)
             $content.= '&amp;server='.$server;
             $content.= '&amp;page='.$i;
             $content.= '" title="[';
-            $content.= ($count!=0) ? $i*$Config['TOP']+1-$Config['TOP'] : 0;
+            $content.= ($count!=0) ? $i*$CONFIG['settings']['TOP']+1-$CONFIG['settings']['TOP'] : 0;
             $content.= ' - ';
-            $content.= ($i*$Config['TOP']>$count)? $count: $i*$Config['TOP'];
+            $content.= ($i*$CONFIG['settings']['TOP']>$count)? $count: $i*$CONFIG['settings']['TOP'];
             $content.= ']" class="btn"> ';
             $content.= $i;
             $content.= ' </a>&nbsp;&nbsp;</td>';
@@ -267,5 +264,27 @@ function convertPic($id, $ext, $width, $height)
     }
     imagedestroy($img_src);       
     imagedestroy($img_dst);
+}
+
+function InsertItem($itemId, $count, $loc, $charId)
+{
+    global $mysql;
+    $query=$mysql->query("SELECT `object_id`, `count` FROM `items` WHERE `owner_id`='$charId' AND `item_id` = '$itemId' AND `loc` = '$loc'") OR mysql_error();
+    if($mysql->num_rows($query))
+    {
+        $before=$mysql->result($query,0,1);
+        $mysql->query("UPDATE `items` SET `count` = `count` + '$count' WHERE `owner_id`='$charId' AND `item_id` = '$itemId' AND `loc` = '$loc'");
+    }else{
+        $before=0;
+        $maxloc=$mysql->query("SELECT Max(`loc_data`) FROM `items` WHERE `items`.`owner_id` = '$charId' AND `items`.`loc` = '$loc'") OR mysql_error();
+        $itemloc=$mysql->result($maxloc)+1;
+        $mysql->query("INSERT INTO `items` (`owner_id`,`item_id`,`count`,`loc`,`loc_data`) VALUES ('$charId','$itemId','$count','$loc','$itemloc')") OR mysql_error();
+    }
+    $check=$mysql->query("SELECT `object_id`, `count` FROM `items` WHERE `owner_id`='$charId' AND `item_id` = '$itemId' AND `loc` = '$loc'") OR mysql_error();
+    if(!$mysql->num_rows($check))
+        return false;
+    if($before+$count==$mysql->result($check,0,1))
+        return true;
+    return false;
 }
 ?>

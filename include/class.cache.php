@@ -11,22 +11,16 @@ class Cache{
     function __construct($use_cache){
         $this->use_cache=$use_cache;
     }
-    
-    function __destruct()
-    {
 
-    }
-    function __wakeup()
+    function needUpdate($page, $params=NULL)
     {
-
-    }
-    function needUpdate($page, $params, $seconds)
-    {
-        global $mysql, $webdb;
+        global $CONFIG, $mysql;
         if($this->use_cache)
         {
+            $page=$this->validatePage($page);
+            $seconds=$this->getCacheUpdateTime($page);
             $time = time()-$seconds;
-            $qry=$mysql->query("SELECT * FROM `{webdb}`.`cache` WHERE `page`='{page}' AND `params`='{params}';", array('webdb'=> $webdb, 'page'=> $page, 'params'=>$params));
+            $qry=$mysql->query("SELECT * FROM `{webdb}`.`cache` WHERE `page`='{page}' AND `params`='{params}';", array('webdb'=> $CONFIG['settings']['webdb'], 'page'=> $page, 'params'=>$params));
             if($mysql->num_rows($qry))
             {
                 $cch=$mysql->fetch_array($qry);
@@ -41,7 +35,7 @@ class Cache{
             }
             else
             {
-                $mysql->query("INSERT INTO `{webdb}`.`cache` (`page`, `params`) VALUES ('{page}', '{params}');", array('webdb'=> $webdb, 'page'=> $page, 'params'=>$params));
+                $mysql->query("INSERT INTO `{webdb}`.`cache` (`page`, `params`) VALUES ('{page}', '{params}');", array('webdb'=> $CONFIG['settings']['webdb'], 'page'=> $page, 'params'=>$params));
                 return true;
             }
         }
@@ -49,28 +43,52 @@ class Cache{
             return true;
     }
     
-    function updateCache($page, $params, $content)
+    function updateCache($page, $content, $params=NULL)
     {
-        global $mysql, $webdb;
-        //$filename=md5($page.$params);
-        $mysql->query("UPDATE `{webdb}`.`cache` SET `time`='{time}', `recache`='0' WHERE `page`='{page}' AND `params`='{params}';", array('webdb'=> $webdb, 'page'=> $page, 'params'=>$params, 'time'=>time()));
+        global $CONFIG, $mysql;
+        $page=$this->validatePage($page);
+        $mysql->query("UPDATE `{webdb}`.`cache` SET `time`='{time}', `recache`='0' WHERE `page`='{page}' AND `params`='{params}';", array('webdb'=> $CONFIG['settings']['webdb'], 'page'=> $page, 'params'=>$params, 'time'=>time()));
         if(file_exists($this->folder.'/'.$this->getCacheID($page, $params).'.html'))
             unlink($this->folder.'/'.$this->getCacheID($page, $params).'.html');
         file_put_contents($this->folder.'/'.$this->getCacheID($page, $params).'.html', $content);
         $this->cache_updated=true;
     }
     
-    function getCache($page, $params)
+    function getCache($page, $params=NULL)
     {
-        $this->cache_updated=false;
+        $page=$this->validatePage($page);
         return file_get_contents($this->folder.'/'.$this->getCacheID($page, $params).'.html');
     }
     
     function getCacheID($page, $params)
     {
-        global $mysql, $webdb;
-        return $mysql->result($qry=$mysql->query("SELECT `id` FROM `{webdb}`.`cache` WHERE `page`='{page}' AND `params`='{params}';", array('webdb'=> $webdb, 'page'=> $page, 'params'=>$params)));
+        global $CONFIG, $mysql;
+        return $mysql->result($mysql->query("SELECT `id` FROM `{webdb}`.`cache` WHERE `page`='{page}' AND `params`='{params}';", array('webdb'=> $CONFIG['settings']['webdb'], 'page'=> $page, 'params'=>$params)),0 ,0);
         
+    }
+    function validatePage($page)
+    {
+        $page=explode("\\", $page);
+        $length=count($page);
+        if($page[$length-2]!='')
+            $page=$page[$length-2]."/".$page[$length-1];
+        else
+            $page=$page[$length-1];
+        $page=explode(".",$page);
+        $page=$page[0];
+        return $page;
+    }
+    function getCacheUpdateTime($page)
+    {
+        global $CONFIG, $mysql;
+        if(isset($CONFIG['cache'][$page]))
+            return $CONFIG['cache'][$page];
+        else
+        {
+            $mysql->query("INSERT INTO `{$CONFIG['settings']['webdb']}`.`config` VALUES('$page', 'cache','{$CONFIG['cache']['default']}');");
+            return $CONFIG['cache']['default'];
+        }
+            
     }
 }
 ?>

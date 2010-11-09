@@ -1,5 +1,4 @@
 <?php
-
 //пароль
 if (!defined('IN_BLOCK')) header("Location: ../index.php");
 

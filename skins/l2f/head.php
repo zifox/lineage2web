@@ -21,8 +21,8 @@ $skinurl = 'skins/l2f';
 <head>
 <?php if ($url != ''){ ?><meta http-equiv="refresh" content="<?php echo $time;?> URL=<?php echo $url;?>" /> <?php } ?>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta name="description" content="<?php echo $Config['MetaD'];?>" />
-<meta name="keywords" content="<?php echo $Config['MetaK'];?>" />
+<meta name="description" content="<?php echo $CONFIG['head']['MetaD'];?>" />
+<meta name="keywords" content="<?php echo $CONFIG['head']['MetaK'];?>" />
 <meta name="Author" content="80MXM08" />
 <meta name="Copyright" content="2009 - <?php echo date('Y');?> Lineage II Fantasy World. All rights reserved." />
 <meta name="robots" content="all" />
@@ -67,7 +67,7 @@ var ajax = new Array();
 function raiseVitality(server, charac, id)
 {
 
-    if(confirm('<?php echo sprintf($Lang['confirm_vitality'], $Config['vitality_cost']);?>'))
+    if(confirm('<?php echo sprintf($Lang['confirm_vitality'], $CONFIG['voting']['vitality_cost']);?>'))
     {
     	var index = ajax.length;
     	ajax[index] = new sack();
@@ -221,7 +221,8 @@ includeBlock('vote', $Lang['vote']);
                     <td style="background-image: url(<?php echo $skinurl;?>/img/t_h_l_b.gif);">&nbsp;</td>
                     <td bgcolor="#37301d" colspan="5" align="center">
 <?php
-echo "<h1>{$Config['news']}</h1>";
+if($CONFIG['news']['show_announcement'])
+    echo "<h1>{$CONFIG['news']['announcement']}</h1>";
 ?>
 <hr />
 <?php

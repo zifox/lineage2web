@@ -53,36 +53,6 @@ class MySQL{
         return mysql_real_escape_string($string, $this->link);
     }
 
-/*    function query($sql, $db = NULL, $limit = NULL) {
-        $querytime = explode(" ", microtime());
-        $querystart = $querytime[1] . substr($querytime[0], 1);
-        if($db)
-        {
-            $sql = str_replace('{{table}}', $db, $sql);
-        }
-        if($limit)
-        {
-            $sql = str_replace('{{limit}}', $limit, $sql);
-        }
-        $sql = trim($sql);
-
-        $result = mysql_query($sql, $this->link) OR $this->err("<b>MySQL Query error: </b> $sql");
-
-        $querytime = explode(" ",microtime());
-        $queryend = $querytime[1].substr($querytime[0],1);
-        $time = bcsub($queryend,$querystart,6);
-        $this->totalsqltime+=$time;
-        array_push($this->query, array(
-            "query" => $sql,
-            "result" => $result,
-            "time" => $time
-        ));
-
-        $this->querycount++;
-        end($this->query);
-        return key($this->query);
-    }
-*/
     function query($sql, $array=array()) {
         $querytime = explode(" ", microtime());
         $querystart = $querytime[1] . substr($querytime[0], 1);
@@ -120,10 +90,6 @@ class MySQL{
             $res = key($this->query);
         }
         return mysql_num_rows($this->query[$res]['result']);
-    }
-
-    function num_rows2($res = null) {
-        return $this->num_rows($res);
     }
 
 	function fetch_array($res = null) {

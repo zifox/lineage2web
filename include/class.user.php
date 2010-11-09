@@ -5,8 +5,7 @@ if (!defined('INCONFIG')) {
     die();
 }
 class user {
-//	var $failed = false;
-    
+   
 	function __construct()
 	{
 		if (isset($_SESSION['logged'])&& $_SESSION['logged'] && isset($_SESSION['account'])&& $_SESSION['account']!='')
