@@ -2,7 +2,7 @@
 define('INWEB', True);
 require_once("include/config.php");
 //пароль
-if (!logedin())
+if (!$user->logged())
 {
     error('3'); 
 }

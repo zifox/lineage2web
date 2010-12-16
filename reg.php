@@ -139,7 +139,7 @@ function checkform(f)
  </tr>
  <tr>
   <td>Verification Image</td>
-  <td><img src="img/captcha.php" alt="" /></td>
+  <td><img src="captcha.php" alt="" /></td>
  </tr>
   <tr>
   <td>Verification Code</td>

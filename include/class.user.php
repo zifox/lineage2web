@@ -106,7 +106,7 @@ class user {
 		$ip = $_SERVER['REMOTE_ADDR'];
 		$sql = "SELECT * FROM `accounts` WHERE `login` = '$username' AND `cookie` = '$cookie' AND `session` = '$session' AND `ip` = '$ip'";
         $result = $mysql->query($sql);
-		if ($mysql->num_rows2($result))
+		if ($mysql->num_rows($result))
 		{
 			$this->setSession($mysql->fetch_array($result), false, false);
 		}
