@@ -20,7 +20,7 @@ $q = array(
     200 => 'SELECT `charId`, `char_name`, `sex` FROM `{db}`.`characters` WHERE `accesslevel`=\'0\'  ORDER BY `level` DESC, `pvpkills` DESC, `fame` DESC LIMIT {limit};',
     201 => 'SELECT count(0) FROM `{db}`.`clan_data`;',
     202 => 'SELECT count(0) FROM `{db}`.`characters` WHERE `accessLevel`=\'0\';',
-    203 => 'SELECT count(0) FROM `{db}`.`characters` WHERE `online` = \'1\' AND `accesslevel`=\'0\';',
+    203 => 'SELECT count(0) FROM `{db}`.`characters` WHERE `online` != \'0\' AND `accesslevel`=\'0\';',
     204 => 'SELECT count(0) FROM `{db}`.`characters` WHERE `online` = \'1\' AND `accesslevel`>\'0\';',
     205 => 'SELECT count(0) FROM `{db}`.`characters` WHERE `sex` = \'{sex}\'',
     206 => 'SELECT count(0) FROM `{db}`.`seven_signs` WHERE `cabal` LIKE \'{cabal}\'',
@@ -36,6 +36,8 @@ $q = array(
     216 => 'SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `ClassName`, `clanid`, `clan_name` FROM `{db}`.`characters` INNER JOIN `{db}`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `{db}`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`>\'0\' LIMIT {limit}, {rows}',
     217 => 'SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `ClassName`, `clanid`, `clan_name` FROM `{db}`.`characters` INNER JOIN `{db}`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `{db}`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `online`=\'1\' AND `accesslevel`=\'0\' ORDER BY `exp` DESC LIMIT {limit}, {rows}',
     218 => 'SELECT `charId`, `char_name`, `level`, `sex`, `pvpkills`, `pkkills`, `race`, `online`, `ClassName`, `clanid`, `clan_name` FROM `{db}`.`characters` INNER JOIN `{db}`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId` LEFT OUTER JOIN `{db}`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `accesslevel`=\'0\' ORDER BY `exp` DESC LIMIT {limit}, {rows}',
+    219 => 'SELECT count(0) FROM `{db}`.`characters` WHERE `online` = \'1\' AND `accesslevel`=\'0\';',
+    220 => 'SELECT count(0) FROM `{db}`.`characters` WHERE `online` = \'2\' AND `accesslevel`=\'0\';',
     300 => "SELECT items.object_id,items.item_id,items.count,items.enchant_level,items.loc, 
 			CASE WHEN armor.name != '' THEN armor.name 
 			WHEN weapon.name != '' THEN weapon.name 
@@ -73,33 +75,62 @@ $q = array(
             302 => "SELECT `items`.`item_id`, `items`.`count`, `items`.`enchant_level`, `items`.`loc`, `items`.`loc_data`, `all`.`name`, `all`.`addname`, `all`.`grade`, `all`.`desc`, `all`.`set_bonus`, `all`.`set_extra_desc`, `all`.`icon`
 		FROM `{db}`.`items` 
 		LEFT JOIN (
-			SELECT `all_items`.`id`, `all_items`.`name`, `all_items`.`addname`, `all_items`.`grade`,`all_items`.`icon`, `all_items`.`desc`, `all_items`.`set_bonus`, `all_items`.`set_extra_desc` FROM `{webdb}`.`all_items`
+			SELECT `all_items`.`id`, `all_items`.`name`, `all_items`.`addname`, `all_items`.`grade`,`all_items`.`icon1`, `all_items`.`desc`, `all_items`.`set_bonus`, `all_items`.`set_extra_desc` FROM `{webdb}`.`all_items`
 			) AS `all` ON `all`.`id` = `items`.`item_id`  
 		WHERE `items`.`owner_id`='{charID}' AND `items`.`loc`='{loc}' 
 		ORDER BY `items`.`loc_data`",
-    666 => Array(
+/*    666 => Array(
         0	=> "dress",
-        1	=> "leftearring",
-		2	=> "rightearring",
+        1	=> "leftearring", //helm
+		2	=> "rightearring", //righthair
 		4	=> "necklace",
-		5	=> "leftring",
-		6	=> "rightring",
-		8	=> "helmet",
+		5	=> "leftring", //weapon
+		6	=> "rightring", //top
+		8	=> "helmet", //leftearing
 		9	=> "weapon",
-		10	=> "shield",
-		11	=> "gloves",
-		12	=> "top",
+		10	=> "shield", //gloves
+		11	=> "gloves", //lower
+		12	=> "top", //shoes
 		13	=> "lower",
 		14	=> "bots",
-        15  => "cloak", //cloak
-		16	=> "weapon", //two handed
-        18  => "",
+        15  => "cloak", //ring
+		16	=> "weapon", //bracelet
+        18  => "", //shield?
 		21	=> "righthair",
 		22	=> "braslet",
 		23	=> "ring",
 		30	=> "cloak"
+    ),*/
+        666 => Array(
+        0	=> "dress",
+        1	=> "helmet",
+		2	=> "leftthair",
+        3   => "righthair",
+		4	=> "necklace",
+		5	=> "weapon",
+		6	=> "top",
+        7   => "shield",
+		8	=> "rightearring",
+		9	=> "leftearring",
+		10	=> "gloves",
+		11	=> "lower",
+		12	=> "bots",
+		13	=> "rightring",
+		14	=> "leftring",
+        15  => "ring",
+		16	=> "braslet",
+        17  => "deco1",
+        18  => "deco2",
+        19  => "deco3",
+        20  => "deco4",
+        21  => "deco5",
+        22  => "deco6",
+        23  => "cloak",
+        24  => "belt",
+        25  => "total"
     ),
+
     667 => "SELECT `items`.`item_id`, `items`.`count`, `items`.`enchant_level`, `items`.`loc`, `items`.`loc_data` FROM `{db}`.`items` WHERE `items`.`owner_id`='{charID}' AND `items`.`loc`='{loc}' ORDER BY `items`.`loc_data`",
-    668 => "SELECT `name`, `addname`, `grade`, `icon1`, `icon2`, `icon3`, `desc` FROM `{webdb}`.`all_items` WHERE `id`='{itemid}'"
+    668 => "SELECT `name`, `addname`, `grade`, `icon`, `icon2`, `icon3`, `desc` FROM `{webdb}`.`all_items2` WHERE `id`='{itemid}'"
 );
 ?>

@@ -50,32 +50,8 @@ if($cache->needUpdate(__FILE__, $params))
     
         if($user->logged() && $user->mod())
         {
-            $telnet_q=$mysql->query($q[4], array('db' => $CONFIG['settings']['webdb'], 'server' => $server['Name']));
-            $telnet = $mysql->fetch_array($telnet_q);
-            $usetelnet = @fsockopen($telnet['IP'], $telnet['Port'], $errno, $errstr, 0.5);
-            if($usetelnet) {
-                fputs($usetelnet, $telnet['Password']);
-                fputs($usetelnet, "\r\n");
-                fputs($usetelnet, "status");
-                fputs($usetelnet, "\r\n");
-                fputs($usetelnet, "exit\r\n");
-                while (!feof($usetelnet)) {
-                    $line = fgets($usetelnet, 2000);
-                    if( preg_match('/Player Count: (.*)\/([0-9]{1,9})/i', $line, $matches)) {
-                        $online = $matches[1];
-                    }
-                    if( preg_match('/Offline Count: (.*)\/([0-9]{1,9})/i', $line, $matches)) {
-                        $offline = $matches[1];
-                    }
-                }
-                $real = ($online-$offline);
-                fclose($usetelnet);
-            }
-            else 
-            {
-                $real = "-";
-                $offline = "-";
-            }
+            $real=$mysql->result($mysql->query($q[219], array('db' => $server['DataBase'])));
+            $offline=$mysql->result($mysql->query($q[220], array('db' => $server['DataBase'])));
             $parse['on_off'] = "Tip('(&lt;font color=\'green\'>$real&lt;/font> / &lt;font color=\'red\'>$offline&lt;/font>)', FONTCOLOR, '#FFFFFF',BGCOLOR, '#AAAA00', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold', WIDTH, 50, ABOVE, true)";
         }
 

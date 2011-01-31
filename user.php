@@ -91,7 +91,7 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
                 //$img = (is_file('img/icons/'.$item["icon"].'.png')) ? $item["icon"] : "blank";
                 $type = $q[666][$paperdoll_data["loc_data"]];
         
-                $parse['eq_items'] .= "<div style='position: absolute; width: 32px; height: 32px; padding: 0px;' class='{$type}'><img border='0' src='img/icons/{$item["icon1"]}.png' onmouseover=\"Tip('{$name} {$addname} {$grade} {$enchant}&lt;br /> {$desc}', FONTCOLOR, '#FFFFFF',BGCOLOR, '#406072', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold')\" alt=\"\" /></div>";
+                $parse['eq_items'] .= "<div style='position: absolute; width: 32px; height: 32px; padding: 0px;' class='{$type}'><img border='0' src='img/icons/{$item["icon"]}.png' onmouseover=\"Tip('{$name} {$addname} {$grade} {$enchant}&lt;br /> {$desc}', FONTCOLOR, '#FFFFFF',BGCOLOR, '#406072', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold')\" alt=\"\" /></div>";
                         
             }
             if($user->mod() && $user->logged())

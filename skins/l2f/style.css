@@ -259,7 +259,11 @@ img.floated {
 }
 #paperdoll .braslet{
 	margin-left: 132px;
-	margin-top: 90px;
+	margin-top: 88px;
+}
+#paperdoll .belt{ 
+	margin-left: 39px;
+	margin-top: 114px;
 }
 .contenido-footer {
 background:url("img/footer_01.gif") no-repeat scroll left top transparent;

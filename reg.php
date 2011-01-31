@@ -19,24 +19,25 @@ if($_POST)
         foot();
         exit();
     }
+
     $account = $mysql->escape($_POST['account']);
     $password = $mysql->escape($_POST['password']);
     $password2 = $mysql->escape($_POST['password2']);
     $ip = $_SERVER['REMOTE_ADDR'];
-    if($_POST['ref']!='')
-    {
-        $ref=$mysql->escape($_POST['ref']);
-    }
+    $ref=$mysql->escape($_POST['ref']);
+
 
     if(ereg("^([a-zA-Z0-9_-])*$", $_POST['account']) && ereg("^([a-zA-Z0-9_-])*$", $_POST['password']) && ereg("^([a-zA-Z0-9_-])*$", $_POST['password2']))
     {
-        
+
         
 	   if (strlen($_POST['account'])<16 && strlen($_POST['account'])>4 && $_POST['password'] && $_POST['password2'] && $_POST['password']==$_POST['password2'])
 	   {
+
 		  $check=$mysql->query("SELECT `login` FROM `accounts` WHERE `login`='".$account."'");
-		  if($mysql->num_rows2($check))
+		  if($mysql->num_rows($check))
 		  {
+		      echo "4";
                 head('Registration', 1, 'index.php', 5);
                 msg('Error', 'Account already exists', 'error');
                 foot();
@@ -44,6 +45,7 @@ if($_POST)
 		  }
 		  else
 		  {
+		      echo "4b";
                 head('Registration',1, 'index.php',5);
                 if($user->reguser($account, $password, $ref))
                 {
@@ -59,13 +61,20 @@ if($_POST)
 	   }
 	   else
 	   {
-  	         error('5');
+	       echo "3b";
+            head('Registration', 1, 'index.php', 5);
+            msg('Error', 'Login or password too short', 'error');
+            foot();
             exit();
 	   }
     }
     else
     {
-    	error('4');
+        echo "2b";
+            head('Registration', 1, 'index.php', 5);
+            msg('Error', 'Login or password contains invalid chars', 'error');
+            foot();
+            exit();
     }
 }
 head("Registration");

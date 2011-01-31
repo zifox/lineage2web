@@ -12,7 +12,7 @@ $DB = array(
     "host"      => "localhost", //MySQL Host
     "user"      => "root",      //MySQL User
     "password"  => "",    //MySQL Password
-    "database"  => "l2jdb"        //L2J Main (account)DataBase
+    "database"  => "l2j"        //L2J Main (account)DataBase
 );
 $webdb = "l2web";                 //Webpage DataBase
 
