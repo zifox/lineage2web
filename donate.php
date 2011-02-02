@@ -3,11 +3,16 @@ define('INWEB', True);
 require_once("include/config.php");
 //пароль
 head("Donate");
-includeLang('donate');
-$action = $_GET['action'];
+//includeLang('donate');
+?>
+<table cellpadding="5" cellspacing="5">
+<tr><td><a href="sms_fort.php"><img src="img/sms/smsplus.gif" alt="SMS" title="SMS" border="0" /></a></td><td><a href="paypal_donate.php"><img src="img/paypal.gif" alt="Donate with paypal" title="Donate with paypal" border="0" /></a></td></tr>
+</table>
+<?php
+//$action = $_GET['action'];
 //if($action='addtodb')
 //{
-    msg("NOT YET FINISHED");
+//    msg("NOT YET FINISHED");
 //}
 ####################
 /*if($action='smscoin')

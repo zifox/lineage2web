@@ -5,7 +5,7 @@
 <tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="/forum/" target="_blank">{forum}</a></td></tr>
 <tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="stat.php">{statistic}</a></td></tr>
 <tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="rules.php">{Rules}</a></td></tr>
-<!-- <tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="donate.php">{Donate}</a></td></tr> -->
+<tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="donate.php">{Donate}</a></td></tr>
 </table>
 
 <div id="lang2">

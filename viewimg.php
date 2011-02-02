@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="Author" content="80MXM08" />
-<meta name="Copyright" content="2009 - 2010 Lineage II Fantasy World. All rights reserved." />
+<meta name="Copyright" content="2009 - 2011 Lineage II Fantasy World. All rights reserved." />
 <meta name="robots" content="all" />
 <meta name="google-site-verification" content="OWsTYVKqBaP8O9ZFmiRR489Qj5PasFkQNwiv8-ornuM" />
  <title>View Image</title>

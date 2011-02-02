@@ -100,6 +100,14 @@ class MySQL{
 		return mysql_fetch_assoc($this->query[$res]['result']);
 	}
     
+   	function fetch_row($res = null) {
+		if ($res === null) {
+			end($this->query);
+			$res = key($this->query);
+		}
+		return mysql_fetch_row($this->query[$res]['result']);
+	}
+    
     function free($res = null)
     {
   		if ($res === null) {
