@@ -1,7 +1,7 @@
 <hr />
 
 <?php
-$skinurl = 'skins/'.$CONFIG['settings']['DSkin'];
+$skinurl = 'skins/'.getConfig('settings', 'DTHEME', 'l2f');
 if($foot){
 ?>
 </td>
@@ -22,14 +22,14 @@ $timeparts = explode(" ",microtime());
 $endtime = $timeparts[1].substr($timeparts[0],1);
 ?>
 <tr align="center" valign="bottom">
-<td align="center" valign="middle"><b>Lineage II</b> is a trademark of NCsoft Corporation. Copyright © <b>NCsoft Corporation</b>. All rights reserved.<br /><?php echo $CONFIG['head']['CopyRight']; ?><br /><?php echo sprintf($Lang['page_generated'], bcsub($endtime,$starttime,6), $mysql->totalsqltime, $mysql->querycount);?>
+<td align="center" valign="middle"><b>Lineage II</b> is a trademark of NCsoft Corporation. Copyright © <b>NCsoft Corporation</b>. All rights reserved.<br /><?php echo getConfig('head', 'CopyRight', '<a href="mailto:antons007@gmail.com">80MXM08</a> &copy; LineageII PvP Land'); ?><br /><?php echo sprintf($Lang['page_generated'], bcsub($endtime,$starttime,6), $sql->totalsqltime, $sql->querycount);?>
 </td>
 </tr>
 </table><br />
 <?php
-if ($CONFIG['debug']['sql'])
-    $mysql->debug();
-if ($CONFIG['debug']['user'])
+if (getConfig('debug', 'sql', '0'))
+    $sql->debug();
+if (getConfig('debug', 'user', '0'))
     $user->debug();
 ?>
 <br />

@@ -1,15 +1,15 @@
 <?php
 //пароль
 if (!defined('IN_BLOCK')) {
-    Header("Location: ../index.php");
-    die();
+    header("Location: ../index.php");
+    exit();
 }
 
 $par['lang']=getLang();
 $par['use_cookie']=isset($_COOKIE['lang'])?'true':'false';
-
+$cachefile='blocks/menu';
 $params = implode(';', $par);
-if($cache->needUpdate(__FILE__, $params))
+if($cache->needUpdate($cachefile, $params))
 {
     $parse=$Lang;
     $parse['Home']=menubutton($Lang['Home']);
@@ -25,12 +25,12 @@ if($cache->needUpdate(__FILE__, $params))
     $parse['ru_border'] = $_COOKIE['lang'] == 3 ? '1':'0';
     $parse['img_link'] =  'skins/'.$skin;
     $content = $tpl->parsetemplate('blocks/menu', $parse, 1);
-    $cache->updateCache(__FILE__, $content, $params);
+    $cache->updateCache($cachefile, $content, $params);
     
     echo $content;
 }
 else
 {
-    echo $cache->getCache(__FILE__, $params);
+    echo $cache->getCache($cachefile, $params);
 }
 ?>

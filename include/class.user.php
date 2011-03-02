@@ -21,15 +21,15 @@ class user {
 
 	public function checkLogin( $username, $password, $remember )
 	{
-        global $mysql;
-		$username = $mysql->escape($username);
+        global $sql;
+		$username = $sql->escape($username);
 		$password = $this->encpass($password);
-		$sql = "SELECT * FROM `accounts` WHERE `login` = '$username' AND `password` = '$password'";
-		$result = $mysql->query($sql);
+		$sqlq = "SELECT * FROM `accounts` WHERE `login` = '$username' AND `password` = '$password'";
+		$result = $sql->query($sqlq);
 
-		if ($mysql->num_rows($result))
+		if ($sql->num_rows())
 		{
-			$this->setSession($mysql->fetch_array($result), $remember);
+			$this->setSession($sql->fetch_array($result), $remember);
 			return true;
 		}
 		else
@@ -42,7 +42,7 @@ class user {
 
 	private function setSession($values, $remember, $init = true)
 	{
-        global $mysql;
+        global $sql;
 		$_SESSION['account'] = $values['login'];
         $cookie = $this->encpass($values['login'].$values['password']);
         $_SESSION['cookie'] = $cookie;
@@ -63,11 +63,11 @@ class user {
             $_SESSION['moderator'] = false;
         }
 		if ($init){
-			$session = $mysql->escape(session_id());
-			$ip = $mysql->escape($_SERVER['REMOTE_ADDR']);
+			$session = $sql->escape(session_id());
+			$ip = $sql->escape($_SERVER['REMOTE_ADDR']);
 
-			$sql = "UPDATE `accounts` SET `cookie` = '$cookie', `session` = '$session', `ip` = '$ip' WHERE `login` = '{$values[login]}'";
-			$mysql->query($sql);
+			$sqlq = "UPDATE `accounts` SET `cookie` = '$cookie', `session` = '$session', `ip` = '$ip' WHERE `login` = '{$values[login]}'";
+			$sql->query($sqlq);
 		}
 	}
 
@@ -83,32 +83,32 @@ class user {
 
 	private function checkRemembered($cookie)
 	{
-        global $mysql;
+        global $sql;
 		list($username, $cookie) = @unserialize($cookie);
 		if (!$username || !$cookie) return;
-		$username = $mysql->escape($username);
-		$cookie = $mysql->escape($cookie);
+		$username = $sql->escape($username);
+		$cookie = $sql->escape($cookie);
 
-		$sql = "SELECT * FROM `accounts` WHERE `login` = '$username' AND `cookie` = '$cookie'";
-		$result = $mysql->query( $sql );
-		if ( $mysql->num_rows2( $result ) )
+		$sqlq = "SELECT * FROM `accounts` WHERE `login` = '$username' AND `cookie` = '$cookie'";
+		$result = $sql->query( $sqlq );
+		if ( $sql->num_rows() )
 		{
-			$this->setSession($mysql->fetch_array($result), true );
+			$this->setSession($sql->fetch_array($result), true );
 		}
 	}
 
 	private function checkSession()
 	{
-        global $mysql;
+        global $sql;
 		$username = $_SESSION['account'];
 		$cookie = $_SESSION['cookie'];
 		$session = session_id();
 		$ip = $_SERVER['REMOTE_ADDR'];
-		$sql = "SELECT * FROM `accounts` WHERE `login` = '$username' AND `cookie` = '$cookie' AND `session` = '$session' AND `ip` = '$ip'";
-        $result = $mysql->query($sql);
-		if ($mysql->num_rows($result))
+		$sqlq = "SELECT * FROM `accounts` WHERE `login` = '$username' AND `cookie` = '$cookie' AND `session` = '$session' AND `ip` = '$ip'";
+        $result = $sql->query($sqlq);
+		if ($sql->num_rows())
 		{
-			$this->setSession($mysql->fetch_array($result), false, false);
+			$this->setSession($sql->fetch_array($result), false, false);
 		}
 		else
 		{
@@ -158,27 +158,30 @@ class user {
     }
     private function encpass($password)
     {
-        global $mysql;
-        return base64_encode(pack('H*', sha1($mysql->escape($password))));
+        global $sql;
+        return base64_encode(pack('H*', sha1($sql->escape($password))));
     }
     
     public function reguser($acc, $pass, $ref){
-        global $mysql, $Config;
+        global $sql;
         
-        $acc = $mysql->escape($acc);
+        $acc = $sql->escape($acc);
         $pass = $this->encpass($pass);
-        $ref = $mysql->escape($ref);
-        $ip = $mysql->escape($_SERVER['REMOTE_ADDR']);
+        $ref = $sql->escape($ref);
+        $ip = $sql->escape($_SERVER['REMOTE_ADDR']);
         if($ref != '')
         {
-            $checkref=$mysql->query("SELECT `login`, `lastIP` FROM `accounts` WHERE `login` = '".$ref."'");
-            if($mysql->num_rows2($checkref) && $mysql->result($checkref, 0, 'lastIP') != $ip)
+            $checkref=$sql->query("SELECT `login`, `lastIP` FROM `accounts` WHERE `login` = '".$ref."'");
+            if($sql->num_rows() && $sql->result($checkref, 0, 'lastIP') != $ip)
             {
-                $mysql->query("UPDATE `accounts` SET `webpoints`=`webpoints`+'{$Config['reg_reward']}' WHERE `login`='".$ref."'");
+                $sql->query("UPDATE `accounts` SET `webpoints`=`webpoints`+'".getConfig('features', 'reg_reward', '5')."' WHERE `login`='".$ref."'");
             }
         }
-   	    $mysql->query("INSERT INTO `accounts` (`login`, `password`, `accessLevel`, `lastIP`) VALUES ('".$acc."', '".$pass."', '0', '$ip')");
-        $this->checkLogin($acc,$pass, 0);
+   	    $sql->query("INSERT INTO `accounts` (`login`, `password`, `accessLevel`, `lastIP`) VALUES ('".$acc."', '".$pass."', '0', '$ip')");
+        if($this->checkLogin($acc,$pass, 0))
+            return true;
+        else
+            return false;
     }
     
     public function changepass()

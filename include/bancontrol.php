@@ -1,6 +1,10 @@
 <?php
 //пароль
-if(!defined('INCONFIG')){Header("Location: ../index.php");}
+if(!defined('INCONFIG'))
+{
+    header("Location: ../index.php");
+    exit();
+}
 $user_ip = $_SERVER['REMOTE_ADDR'];
 $data = file("include/bancontrol.txt");
 for($i=0; $i<sizeof($data); $i++)
@@ -22,7 +26,7 @@ unset($fstr[$rem]);
 $fp=fopen("include/bancontrol.txt","w");
 fwrite($fp,implode("",$fstr));
 fclose($fp);
-$mysql->query("INSERT INTO `".$DB['webdb']."`.`log` (`Account`, `Type`, `SubType`, `Comments`) VALUES ('$ip', 'BanControl', 'Succes', 'Reason=\"Ban duration is over\"');");
+$sql->query("INSERT INTO `".getConfig('settings', 'webdb', 'l2web')."`.`log` (`Account`, `Type`, `SubType`, `Comments`) VALUES ('$ip', 'BanControl', 'Succes', 'Reason=\"Ban duration is over\"');");
 } else {
     head("You have been BANNED", 0);
 ?>

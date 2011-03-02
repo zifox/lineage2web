@@ -1,8 +1,8 @@
 <?php
 //пароль
 if (!defined('INCONFIG')) {
-    Header("Location: ../index.php");
-    die();
+    header("Location: ../index.php");
+    exit();
 }
 
 class tplParser

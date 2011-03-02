@@ -1,17 +1,18 @@
 <?php
 if (!defined('IN_BLOCK')) {
-    Header("Location: ../index.php");
+    header("Location: ../index.php");
+    exit();
 }
-
-if($cache->needUpdate(__FILE__))
+$cachefile='blocks/vote';
+if($cache->needUpdate($cachefile))
 {
     $content = $tpl->parsetemplate('blocks/vote', NULL, 1);
-    $cache->updateCache(__FILE__, $content);
+    $cache->updateCache($cachefile, $content);
     
     echo $content;
 }
 else
 {
-    echo $cache->getCache(__FILE__);
+    echo $cache->getCache($cachefile);
 }
 ?>

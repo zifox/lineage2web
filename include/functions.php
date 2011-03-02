@@ -33,9 +33,9 @@ function getLang()
 }
 function includeBlock($file, $block_name='Menu')
 {
-	global $CONFIG, $mysql, $user, $tpl, $cache, $q, $Lang, $langpath;
+	global $sql, $user, $tpl, $cache, $q, $Lang, $langpath;
     DEFINE('IN_BLOCK', True);
-    $img_link = 'skins/'.$CONFIG['settings']['DSkin'];
+    $img_link = 'skins/'.getConfig('settings', 'DTHEME', 'l2f');
 	?>
     <table width="200" style="height:95px;" border="0" cellpadding="0" cellspacing="0" class="opacity2">
     <tr style="height:48px;">
@@ -69,24 +69,24 @@ function error($id){
 
 function head($title = "", $head=1, $url='', $time=0)
 {
-    global $CONFIG, $user, $mysql, $tpl, $cache, $Lang;
+    global $user, $sql, $tpl, $cache, $Lang;
     DEFINE('INSKIN', True);
-	$skin = $CONFIG['settings']['DSkin'];
-    $title = $CONFIG['head']['Title']." :: ".$title;
-    //echo $skin;
+	$skin = getConfig('settings', 'DTHEME', 'l2f');
+    $title = getConfig('head', 'Title', 'Lineage II Fantasy World')." :: ".$title;
+
 	require_once("skins/" . $skin . "/head.php");
 }
 
 function foot($foot=1)
 {
-    global $CONFIG, $user, $mysql, $tpl, $cache, $Lang, $starttime;
+    global $user, $sql, $tpl, $cache, $Lang, $starttime;
     if(isset($_COOKIE['skin']))
     {
         $skin = trim($_COOKIE['skin']);
     }
     else
     {
-	   $skin = $CONFIG['settings']['DSkin'];
+	   $skin = getConfig('settings', 'DTHEME', 'l2f');
     }
     require_once("skins/" . $skin . "/foot.php");
 }
@@ -136,26 +136,26 @@ function pretty_time_hour ($seconds) {
 
 function getDBName($id)
 {
-    global $CONFIG, $mysql;
+    global $sql;
 	if(is_numeric($id))
 	{
-		$srv = $mysql->escape(0 + $id);
-		$srvqry = $mysql->query("SELECT `DataBase` FROM `{$CONFIG['settings']['webdb']}`.`gameservers` WHERE `ID` = '$srv'");
-		if($mysql->num_rows($srvqry))
+		$srv = $sql->escape(0 + $id);
+		$srvqry = $sql->query("SELECT `DataBase` FROM `".getConfig('settings', 'webdb', 'l2web')."`.`gameservers` WHERE `ID` = '$srv'");
+		if($sql->num_rows())
 		{
-			return $mysql->result($srvqry);
+			return $sql->result($srvqry);
  		}
   	}
-  	return $CONFIG['settings']['DDB'];
+  	return getConfig('settings', 'DDB', 'l2jdb');
 }
 
 function pagechoose($page, $count=0, $stat, $server)
 {
-    global $CONFIG, $Lang;;
+    global $Lang;;
     $content=NULL;
     $content.='<div class="page-choose" align="center"><br /><table align="center"><tr>';
     
-    $totalpages = ceil($count/$CONFIG['settings']['TOP']);
+    $totalpages = ceil($count/getConfig('settings', 'TOP', '10'));
     if($totalpages==0)
     {
         $totalpages++;
@@ -178,9 +178,9 @@ function pagechoose($page, $count=0, $stat, $server)
         {
             $content.= '<td>&nbsp;&nbsp;<a href="#" class="btn brown" title="';
             $content.= ' [';
-            $content.= ($count!=0) ? $i*$CONFIG['settings']['TOP']+1-$CONFIG['settings']['TOP'] : 0;
+            $content.= ($count!=0) ? $i*getConfig('settings', 'TOP', '10')+1-getConfig('settings', 'TOP', '10') : 0;
             $content.= ' - ';
-            $content.= ($i*$CONFIG['settings']['TOP']>$count)? $count: $i*$CONFIG['settings']['TOP'];
+            $content.= ($i*getConfig('settings', 'TOP', '10')>$count)? $count: $i*getConfig('settings', 'TOP', '10');
             $content.= ']"> ';
             $content.= $i;
             $content.= ' </a>&nbsp;&nbsp;</td>';
@@ -191,9 +191,9 @@ function pagechoose($page, $count=0, $stat, $server)
             $content.= '&amp;server='.$server;
             $content.= '&amp;page='.$i;
             $content.= '" title="[';
-            $content.= ($count!=0) ? $i*$CONFIG['settings']['TOP']+1-$CONFIG['settings']['TOP'] : 0;
+            $content.= ($count!=0) ? $i*getConfig('settings', 'TOP', '10')+1-getConfig('settings', 'TOP', '10') : 0;
             $content.= ' - ';
-            $content.= ($i*$CONFIG['settings']['TOP']>$count)? $count: $i*$CONFIG['settings']['TOP'];
+            $content.= ($i*getConfig('settings', 'TOP', '10')>$count)? $count: $i*getConfig('settings', 'TOP', '10');
             $content.= ']" class="btn"> ';
             $content.= $i;
             $content.= ' </a>&nbsp;&nbsp;</td>';
@@ -268,23 +268,92 @@ function convertPic($id, $ext, $width, $height)
 
 function InsertItem($itemId, $count, $loc, $charId)
 {
-    global $mysql;
-    $query=$mysql->query("SELECT `object_id`, `count` FROM `items` WHERE `owner_id`='$charId' AND `item_id` = '$itemId' AND `loc` = '$loc'") OR mysql_error();
-    if($mysql->num_rows($query))
+    global $sql;
+    $query=$sql->query("SELECT `object_id`, `count` FROM `items` WHERE `owner_id`='$charId' AND `item_id` = '$itemId' AND `loc` = '$loc'");
+    if($sql->num_rows())
     {
-        $before=$mysql->result($query,0,1);
-        $mysql->query("UPDATE `items` SET `count` = `count` + '$count' WHERE `owner_id`='$charId' AND `item_id` = '$itemId' AND `loc` = '$loc'");
+        $before=$sql->result($query,0,1);
+        $sql->query("UPDATE `items` SET `count` = `count` + '$count' WHERE `owner_id`='$charId' AND `item_id` = '$itemId' AND `loc` = '$loc'");
     }else{
         $before=0;
-        $maxloc=$mysql->query("SELECT Max(`loc_data`) FROM `items` WHERE `items`.`owner_id` = '$charId' AND `items`.`loc` = '$loc'") OR mysql_error();
-        $itemloc=$mysql->result($maxloc)+1;
-        $mysql->query("INSERT INTO `items` (`owner_id`,`item_id`,`count`,`loc`,`loc_data`) VALUES ('$charId','$itemId','$count','$loc','$itemloc')") OR mysql_error();
+        $maxloc=$sql->query("SELECT Max(`loc_data`) FROM `items` WHERE `items`.`owner_id` = '$charId' AND `items`.`loc` = '$loc'");
+        $itemloc=$sql->result($maxloc)+1;
+        $sql->query("INSERT INTO `items` (`owner_id`,`item_id`,`count`,`loc`,`loc_data`) VALUES ('$charId','$itemId','$count','$loc','$itemloc')");
     }
-    $check=$mysql->query("SELECT `object_id`, `count` FROM `items` WHERE `owner_id`='$charId' AND `item_id` = '$itemId' AND `loc` = '$loc'") OR mysql_error();
-    if(!$mysql->num_rows($check))
+    $check=$sql->query("SELECT `object_id`, `count` FROM `items` WHERE `owner_id`='$charId' AND `item_id` = '$itemId' AND `loc` = '$loc'");
+    if(!$sql->num_rows())
         return false;
-    if($before+$count==$mysql->result($check,0,1))
+    if($before+$count==$sql->result($check,0,1))
         return true;
     return false;
+}
+function insertPremiumItem()
+{
+    
+}
+function val_int($string, $default=0, $min=0, $max=999999999)
+{
+    $options = array(
+    'options' => array(
+        'default' => $default,
+        'min_range' => $min,
+        'max_range' => $max
+    ),
+);
+    $int = filter_var($string, FILTER_VALIDATE_INT, $options);
+    return $int;
+}
+function val_string($string)
+{
+    global $sql;
+    $string = trim(htmlentities(str_replace(array("\r\n", "\r", "\0"), array("\n", "\n", ''), $sql->escape($string)), ENT_QUOTES, 'UTF-8'));
+
+    return $string;
+}
+function conv2html($string)
+{
+    return remBlockedHtml(html_entity_decode(stripslashes($string), ENT_QUOTES, 'UTF-8'));
+}
+function remBlockedHtml($string)
+{
+    //TODO: get rid of unwanted html elements
+    return $string;
+}
+function getConfig($type, $name, $default)
+{
+    global $CONFIG, $sql, $webdb, $q;
+    if(isset($CONFIG[$type][$name]))
+    {
+        return $CONFIG[$type][$name];
+    }
+    else
+    {
+        setConfig($type,$name,$default);
+        return $default;
+    }
+}
+function setConfig($type, $name, $val)
+{
+    global $CONFIG, $sql, $q;
+    $params = array("webdb"=>getConfig('settings','webdb','l2web'), "name"=>$name, "type"=> $type, "val"=>$val);
+    $sql->query($q[671], $params);
+    if($sql->num_rows()>0)
+    {
+        $sql->query($q[670], $params);
+    }
+    else
+    {
+        $sql->query($q[669], $params);
+    }
+    $CONFIG[$type][$name]=$val;
+}
+function getVar($v)
+{
+    $var=isset($_SERVER[$v])?$_SERVER[$v]:(isset($_POST[$v])?$_POST[$v]:(isset($_GET[$v])?$_GET[$v]:""));
+    if($var!="")
+    {
+        return is_numeric($var)?val_int($var):val_string($var);
+    }
+    return null;
 }
 ?>

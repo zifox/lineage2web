@@ -6,19 +6,19 @@ head("Home");
 $par['lang']=getLang();
 $par['mod']=$user->mod()==true?'true':'false';
 $params = implode(';', $par);
-if($cache->needUpdate(__FILE__, $params))
+if($cache->needUpdate('index', $params))
 {
     includeLang('index');
     $parse = $Lang;
-    $gsquery = $mysql->query($q[3], array("db" => $webdb));
+    $gsquery = $sql->query($q[3], array("db" => getConfig('settings', 'webdb', 'l2web')));
     $parse['gsrows'] = "";
-    while ($gsrow = $mysql->fetch_array($gsquery))
+    while ($gsrow = $sql->fetch_array($gsquery))
     {
 	   $parse['gsrows'] .= $tpl->parsetemplate('index_gsrow', $gsrow, 1);
     }
-    $newsq=$mysql->query($q[5],  array("db" => $webdb, "limit" => $CONFIG['news']['news_in_index']));
+    $newsq=$sql->query($q[5],  array("db" => getConfig('settings', 'webdb', 'l2web'), "limit" => getConfig('news', 'news_in_index', '10')));
     $parse['news'] = '';
-    while($news=$mysql->fetch_array($newsq))
+    while($news=$sql->fetch_array($newsq))
     {
         $nparse=$news;
         //$nparse['desc']=trim($nparse['desc']);
@@ -45,13 +45,13 @@ if($cache->needUpdate(__FILE__, $params))
     }
 
     $content=$tpl->parsetemplate('index2', $parse,1);
-    $cache->updateCache(__FILE__, $content, $params);
+    $cache->updateCache('index', $content, $params);
     
     echo $content;
 }
 else
 {
-    echo $cache->getCache(__FILE__, $params);
+    echo $cache->getCache('index', $params);
 }
 foot();
 ?>

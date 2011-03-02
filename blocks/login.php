@@ -1,6 +1,10 @@
 <?php
 //пароль
-if (!defined('IN_BLOCK')) header("Location: ../index.php");
+if (!defined('IN_BLOCK'))
+{
+    header("Location: ../index.php");
+    exit();
+}
 
 $parse = $Lang;
 if ($user->logged())

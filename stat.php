@@ -3,10 +3,10 @@ define('INWEB', True);
 require_once("include/config.php");
 //пароль
 includeLang('stat');
-$stat = $mysql->escape($_GET['stat']);
+$stat = getVar('stat');
 if(isset($_GET['page']))
 {
-    $start = $mysql->escape(0 + $_GET['page']);
+    $start = getVar('page');
 }
 else
 {
@@ -14,7 +14,7 @@ else
 }
 if(!is_numeric($start) || $start==0) {$start = 1;}
 $start=abs($start)-1;
-$startlimit = $start*$CONFIG['settings']['TOP'];
+$startlimit = $start*getConfig('settings','TOP','10');
 
 $head = $Lang['head_'.$stat];
 if($head == '') {$head = $Lang['home'];}
@@ -23,7 +23,7 @@ $par['lang']=getLang();
 $par['stat']=$stat!=''?$stat:'home';
 $par['page']=$start+1;
 $params = implode(';', $par);
-if($cache->needUpdate(__FILE__, $params))
+if($cache->needUpdate('stat', $params))
 {
     $content='';
 $parse=$Lang;
@@ -38,22 +38,22 @@ if(isset($_GET['server']))
 	$parse['ID'] = "&amp;server=".$_GET['server'];
 }
 $parse['server_list'] = NULL;
-$server_list = $mysql->query($q[2], array('db'=>$CONFIG['settings']['webdb']));
-while($slist = $mysql->fetch_array($server_list))
+$server_list = $sql->query(2, array('db'=>getConfig('settings','webdb','l2web')));
+while($slist = $sql->fetch_array($server_list))
 {
-	$selected=($slist['ID']==$_GET['server'])?'selected="selected"':'';
-	$parse['server_list'] .= '<option onclick="GoTo(\'stat.php?stat='.$_GET['stat'].'&amp;server='.$slist['ID'].'\')" '.$selected.'>'.$slist['Name'].'</option>';
+	$selected=($slist['ID']==getVar('server'))?'selected="selected"':'';
+	$parse['server_list'] .= '<option onclick="GoTo(\'stat.php?stat='.getVar('stat').'&amp;server='.$slist['ID'].'\')" '.$selected.'>'.$slist['Name'].'</option>';
 }
 $content .= $tpl->parsetemplate('stat_menu', $parse, 1);
 unset($parse);
-if(isset($_GET['server']) && is_numeric($_GET['server']))
+if(isset($_GET['server']))
 {
-	$server = 0 + $_GET['server'];
+	$server = getVar('server');
     $s_db = getDBName($server);
 }else
 {
 	$server = 1;
-	$s_db = $CONFIG['settings']['DDB'];
+	$s_db = getConfig('settings','DDB','l2jdb');
 }
 
 
@@ -61,18 +61,18 @@ if(isset($_GET['server']) && is_numeric($_GET['server']))
 switch($stat){
 	
 	case 'online':
-	$data = $mysql->query($q[217], array('db'=>$s_db, 'limit'=>$startlimit, 'rows'=>$CONFIG['settings']['TOP']));
-    $page_foot = $mysql->query($q[203], array('db'=>$s_db));
+	$data = $sql->query(217, array('db'=>$s_db, 'limit'=>$startlimit, 'rows'=>getConfig('settings','TOP','10')));
+    $page_foot = $sql->query(203, array('db'=>$s_db));
 	$content.= '<h1>'.$Lang['online'].'</h1>';
 	break;
     
     case 'castles':
-    $result = $mysql->query("SELECT `id`, `name`, `taxPercent`, `siegeDate`, `charId`, `char_name`, `clan_id`, `clan_name` FROM `$s_db`.`castle` LEFT OUTER JOIN `$s_db`.`clan_data` ON `clan_data`.`hasCastle`=`castle`.`id` LEFT OUTER JOIN `$s_db`.`characters` ON `clan_data`.`leader_id`=`characters`.`charId` ORDER by `id` ASC");
+    $result = $sql->query("SELECT `id`, `name`, `taxPercent`, `siegeDate`, `charId`, `char_name`, `clan_id`, `clan_name` FROM `$s_db`.`castle` LEFT OUTER JOIN `$s_db`.`clan_data` ON `clan_data`.`hasCastle`=`castle`.`id` LEFT OUTER JOIN `$s_db`.`characters` ON `clan_data`.`leader_id`=`characters`.`charId` ORDER by `id` ASC");
 
 $r=0;
 ?><table border="0" cellpadding="3" cellspacing="3">
 <?php
-while($row = $mysql->fetch_array($result)){
+while($row = $sql->fetch_array($result)){
 
 if ($r==0){echo '<tr>';}
 $r++;
@@ -81,8 +81,8 @@ $r++;
 <td><table border="1"><tr><td class="noborder">
 <h1><?php echo sprintf($Lang['castle_of'],$row['name'],'%s');?></h1><center>
 <?php 
-$ter = $mysql->query("SELECT `ownedWardIds` FROM `$s_db`.`territories` WHERE `castleId`='{$row['id']}'");
-$ter_res = $mysql->result($ter);
+$ter = $sql->query("SELECT `ownedWardIds` FROM `$s_db`.`territories` WHERE `castleId`='{$row['id']}'");
+$ter_res = $sql->result($ter);
 if($ter_res!='')
 {
 	$wards=explode(';', $ter_res);
@@ -116,17 +116,17 @@ else{echo $Lang['no_lord'];}
 
 <tr class="altRow"><td><?php echo $Lang['attackers'];?></td><td>
 <?php
-$result1 = $mysql->query("SELECT `clan_id`, `clan_name` FROM `$s_db`.`siege_clans` INNER JOIN `clan_data` USING (`clan_id`)  WHERE `castle_id`='{$row['id']}' AND `type`='1'");
-while($attackers=$mysql->fetch_array($result1))
+$result1 = $sql->query("SELECT `clan_id`, `clan_name` FROM `$s_db`.`siege_clans` INNER JOIN `clan_data` USING (`clan_id`)  WHERE `castle_id`='{$row['id']}' AND `type`='1'");
+while($attackers=$sql->fetch_array($result1))
 {
 echo '<a href="claninfo.php?clanid='.$attackers['clan_id'].'">'.$attackers['clan_name'].'</a><br />';
 }
 ?>
 </td></tr><tr><td><?php echo $Lang['defenders'];?></td><td>
 <?php
-$result2 = $mysql->query("SELECT `clan_id`, `clan_name` FROM `$s_db`.`siege_clans` INNER JOIN `clan_data` USING (`clan_id`)  WHERE `castle_id`='{$row['id']}' AND `type`='0'");
-if($mysql->num_rows($result2)){
-while($defenders=$mysql->fetch_array($result2))
+$result2 = $sql->query("SELECT `clan_id`, `clan_name` FROM `$s_db`.`siege_clans` INNER JOIN `clan_data` USING (`clan_id`)  WHERE `castle_id`='{$row['id']}' AND `type`='0'");
+if($sql->num_rows($result2)){
+while($defenders=$sql->fetch_array($result2))
 {
 echo '<a href="claninfo.php?clanid='.$defenders['clan_id'].'">'.$defenders['clan_name'].'</a><br /> ';
 }
@@ -147,12 +147,12 @@ echo '<a href="claninfo.php?clanid='.$defenders['clan_id'].'">'.$defenders['clan
     break;
     
     Case 'fort':
-$result = $mysql->query("SELECT `id`, `name`, `lastOwnedTime`, `clan_id`, `clan_name`, `char_name` FROM `$s_db`.`fort` LEFT OUTER JOIN `$s_db`.`clan_data` ON `clan_data`.`clan_id`=`fort`.`owner` LEFT OUTER JOIN `$s_db`.`characters` ON `clan_data`.`leader_id`=`characters`.`charId` ORDER by `id` ASC");
+$result = $sql->query("SELECT `id`, `name`, `lastOwnedTime`, `clan_id`, `clan_name`, `char_name` FROM `$s_db`.`fort` LEFT OUTER JOIN `$s_db`.`clan_data` ON `clan_data`.`clan_id`=`fort`.`owner` LEFT OUTER JOIN `$s_db`.`characters` ON `clan_data`.`leader_id`=`characters`.`charId` ORDER by `id` ASC");
 
 $r=0;
 ?><table border="0" cellpadding="3" cellspacing="3">
 <?php
-while($row = $mysql->fetch_array($result)){
+while($row = $sql->fetch_array($result)){
 
 if ($r==0){echo '<tr>';}
 $r++;
@@ -161,9 +161,9 @@ $r++;
 <h1><?php echo sprintf($Lang['fort_of'],$row['name'],'%s');?></h1>
 <center>
 <?php 
-$ter = $mysql->query("SELECT `ownedWardIds` FROM `$s_db`.`territories` WHERE `fortId`='{$row['id']}'");
+$ter = $sql->query("SELECT `ownedWardIds` FROM `$s_db`.`territories` WHERE `fortId`='{$row['id']}'");
 
-($mysql->num_rows($ter))?$ter_res = $mysql->result($ter):$ter_res = '';
+($sql->num_rows($ter))?$ter_res = $sql->result($ter):$ter_res = '';
 if($ter_res!='')
 {
 	$wards=explode(';', $ter_res);
@@ -195,8 +195,8 @@ else{echo $Lang['no_lord'];}
 
 <tr><td><?php echo $Lang['attackers'];?></td><td>
 <?php
-$result1 = $mysql->query("SELECT `clan_id`, `clan_name` FROM `$s_db`.`fortsiege_clans` INNER JOIN `clan_data` USING (`clan_id`)  WHERE `fort_id`='{$row['id']}'");
-while($attackers=$mysql->fetch_array($result1))
+$result1 = $sql->query("SELECT `clan_id`, `clan_name` FROM `$s_db`.`fortsiege_clans` INNER JOIN `clan_data` USING (`clan_id`)  WHERE `fort_id`='{$row['id']}'");
+while($attackers=$sql->fetch_array($result1))
 {
 echo '<a href="claninfo.php?clanid='.$attackers['clan_id'].'">'.$attackers['clan_name'].'</a><br />';
 }
@@ -223,10 +223,10 @@ $timehour=round($timeheld/60/60);
     break;
     
 	case 'clantop':
-    $result = $mysql->query("SELECT `clan_id`, `clan_name`, `clan_level`, `reputation_score`, `hasCastle`, `ally_id`, `ally_name`, `char_name`, `ccount`, `name` FROM `$s_db`.`clan_data` INNER JOIN `$s_db`.`characters` ON `clan_data`.`leader_id`=`characters`.`charId` LEFT JOIN (SELECT clanid, count(`level`) AS `ccount` FROM `$s_db`.`characters` WHERE `clanid` GROUP BY `clanid`) AS `levels` ON `clan_data`.`clan_id`=`levels`.`clanid` LEFT OUTER JOIN `$s_db`.`castle` ON `clan_data`.`hasCastle`=`castle`.`id` WHERE `characters`.`accessLevel`='0' ORDER BY `clan_level` DESC, `reputation_score` DESC LIMIT $startlimit, {$CONFIG['settings']['TOP']}");
-    $page_foot = $mysql->query("SELECT count(`clan_id`) FROM `$s_db`.`clan_data`, `$s_db`.`characters` WHERE `clan_data`.`leader_id`=`characters`.`charId` AND `characters`.`accessLevel`='0'");
+    $result = $sql->query("SELECT `clan_id`, `clan_name`, `clan_level`, `reputation_score`, `hasCastle`, `ally_id`, `ally_name`, `char_name`, `ccount`, `name` FROM `$s_db`.`clan_data` INNER JOIN `$s_db`.`characters` ON `clan_data`.`leader_id`=`characters`.`charId` LEFT JOIN (SELECT clanid, count(`level`) AS `ccount` FROM `$s_db`.`characters` WHERE `clanid` GROUP BY `clanid`) AS `levels` ON `clan_data`.`clan_id`=`levels`.`clanid` LEFT OUTER JOIN `$s_db`.`castle` ON `clan_data`.`hasCastle`=`castle`.`id` WHERE `characters`.`accessLevel`='0' ORDER BY `clan_level` DESC, `reputation_score` DESC LIMIT $startlimit, {$CONFIG['settings']['TOP']}");
+    $page_foot = $sql->query("SELECT count(`clan_id`) FROM `$s_db`.`clan_data`, `$s_db`.`characters` WHERE `clan_data`.`leader_id`=`characters`.`charId` AND `characters`.`accessLevel`='0'");
     $content .= "<h1> TOP Clans </h1><hr />";
-$content .= "<h2>{$Lang["clantop_total"]}: ". $mysql->result($page_foot)."</h2>";
+$content .= "<h2>{$Lang["clantop_total"]}: ". $sql->result($page_foot)."</h2>";
 $content .= "<table border=\"1\"><thead><tr style=\"color: green;\"><th><b>Clan Name</b></th>";
 $content .= "<th><b>Leader</b></th>";
 $content .= "<th><b>Level</b></th>";
@@ -237,7 +237,7 @@ $content .= "</tr></thead>";
 $content .= "<tbody>";
 
   $i=1;
-  while ($row=$mysql->fetch_array($result))
+  while ($row=$sql->fetch_array($result))
   {
     if($row['hasCastle']!=0){$castle=$row['name'];}else{$castle='No castle';}
     $content.="<tr". (($i++ % 2) ? "" : " class=\"altRow\"") ." onmouseover=\"this.bgColor = '#505050';\" onmouseout=\"this.bgColor = ''\"><td><a href=\"claninfo.php?clan=". $row["clan_id"]."\">". $row["clan_name"]. "</a></td><td><a href=\"user.php?cid={$row['leader_id']}\">". $row["char_name"]. "</a></td><td class=\"numeric sortedColumn\">".$row["clan_level"]. "</td><td>{$row['reputation_score']}</td><td>".$castle. "</td><td class=\"numeric\">".$row["ccount"]. "</td></tr>";
@@ -246,94 +246,94 @@ $content .= "<tbody>";
     break;
 	
 	case 'gm':
-        $data = $mysql->query($q[216], array('db'=>$s_db, 'limit'=>$startlimit, 'rows'=>$CONFIG['settings']['TOP']));
-       $page_foot = $mysql->query($q[212], array('db'=>$s_db));
+        $data = $sql->query(216, array('db'=>$s_db, 'limit'=>$startlimit, 'rows'=>getConfig('settings','TOP','10')));
+       $page_foot = $sql->query(212, array('db'=>$s_db));
 	   $content.= '<h1>'.$Lang['gm'].'</h1>';
 	break;
     
 	case 'count':
-        $data = $mysql->query($q[215], array('db'=>$s_db, 'item'=>'57', 'limit'=>$startlimit, 'rows'=>$CONFIG['settings']['TOP']));
-        $page_foot = $mysql->query($q[214], array('db'=>$s_db, 'item'=>'57'));
+        $data = $sql->query(215, array('db'=>$s_db, 'item'=>'57', 'limit'=>$startlimit, 'rows'=>getConfig('settings','TOP','10')));
+        $page_foot = $sql->query(214, array('db'=>$s_db, 'item'=>'57'));
         $content.='<h1>'.$Lang['rich_players'].'</h1>';
         $addheader='<td><b>'.$Lang['adena'].'</b></td>';
         $addcol=true;
 	break;
 	
 	case 'top_pvp';
-        $data = $mysql->query($q[211], array('db'=>$s_db, 'order'=>'pvpkills', 'limit'=>$startlimit, 'rows'=>$CONFIG['settings']['TOP']));
-        $page_foot = $mysql->query($q[213], array('db'=>$s_db, 'order'=>'pvpkills'));
+        $data = $sql->query(211, array('db'=>$s_db, 'order'=>'pvpkills', 'limit'=>$startlimit, 'rows'=>getConfig('settings','TOP','10')));
+        $page_foot = $sql->query(213, array('db'=>$s_db, 'order'=>'pvpkills'));
         $content.= '<h1>'.$Lang['pvp'].'</h1>';
 	break;
 	
 	case 'top_pk':
-        $data = $mysql->query($q[211], array('db'=>$s_db, 'order'=>'pkkills', 'limit'=>$startlimit, 'rows'=>$CONFIG['settings']['TOP']));
-        $page_foot = $mysql->query($q[213], array('db'=>$s_db, 'order'=>'pkkills'));
+        $data = $sql->query(211, array('db'=>$s_db, 'order'=>'pkkills', 'limit'=>$startlimit, 'rows'=>getConfig('settings','TOP','10')));
+        $page_foot = $sql->query(213, array('db'=>$s_db, 'order'=>'pkkills'));
         $content.= '<h1>'.$Lang['pk'].'</h1>';
 	break;
 	
 	case 'maxCp':
-        $data = $mysql->query($q[210], array('db'=>$s_db, 'order'=>'maxCp', 'limit'=>$startlimit, 'rows'=>$CONFIG['settings']['TOP']));
-        $page_foot = $mysql->query($q[202], array('db'=>$s_db));
+        $data = $sql->query(210, array('db'=>$s_db, 'order'=>'maxCp', 'limit'=>$startlimit, 'rows'=>getConfig('settings','TOP','10')));
+        $page_foot = $sql->query(202, array('db'=>$s_db));
         $content.= '<h1>'.$Lang['cp'].'</h1>';
         $addheader='<td class="maxCp"><b>'.$Lang['max_cp'].'</b></td>';
         $addcol=true;
 	break;
 	
 	case 'maxHp':
-        $data = $mysql->query($q[210], array('db'=>$s_db, 'order'=>'maxHp', 'limit'=>$startlimit, 'rows'=>$CONFIG['settings']['TOP']));
-        $page_foot = $mysql->query($q[202], array('db'=>$s_db));
+        $data = $sql->query(210, array('db'=>$s_db, 'order'=>'maxHp', 'limit'=>$startlimit, 'rows'=>getConfig('settings','TOP','10')));
+        $page_foot = $sql->query(202, array('db'=>$s_db));
         $content.= '<h1>'.$Lang['hp'].'</h1>';
         $addheader='<td class="maxHp"><b>'.$Lang['max_hp'].'</b></td>';
         $addcol=true;
 	break;
 	
 	case 'maxMp':
-        $data = $mysql->query($q[210], array('db'=>$s_db, 'order'=>'maxMp', 'limit'=>$startlimit, 'rows'=>$CONFIG['settings']['TOP']));
-        $page_foot = $mysql->query($q[202], array('db'=>$s_db));
+        $data = $sql->query(210, array('db'=>$s_db, 'order'=>'maxMp', 'limit'=>$startlimit, 'rows'=>getConfig('settings','TOP','10')));
+        $page_foot = $sql->query(202, array('db'=>$s_db));
         $content.= '<h1>'.$Lang['mp'].'</h1>';
         $addheader='<td class="maxMp"><b>'.$Lang['max_mp'].'</b></td>';
         $addcol=true;
 	break;
 	
 	case 'top':
-        $data = $mysql->query($q[218], array('db'=>$s_db, 'race'=>'*', 'limit'=>$startlimit, 'rows'=>$CONFIG['settings']['TOP']));
-        $page_foot = $mysql->query($q[202], array('db'=>$s_db));
-        $content.= '<h1>'.$Lang['top'].' '.$CONFIG['settings']['TOP'].'</h1>';
+        $data = $sql->query(218, array('db'=>$s_db, 'race'=>'*', 'limit'=>$startlimit, 'rows'=>getConfig('settings','TOP','10')));
+        $page_foot = $sql->query(202, array('db'=>$s_db));
+        $content.= '<h1>'.$Lang['top'].' '.getConfig('settings','TOP','10').'</h1>';
 	break;
 	
 	case 'human':
-        $data = $mysql->query($q[209], array('db'=>$s_db, 'race'=>'0', 'limit'=>$startlimit, 'rows'=>$CONFIG['settings']['TOP']));
-        $page_foot=$mysql->query($q[208], array('db'=>$s_db, 'race'=>'0'));
+        $data = $sql->query(209, array('db'=>$s_db, 'race'=>'0', 'limit'=>$startlimit, 'rows'=>getConfig('settings','TOP','10')));
+        $page_foot=$sql->query(208, array('db'=>$s_db, 'race'=>'0'));
         $content.= '<h1>'.$Lang['race'][0].'</h1>';
 	break;
 	
 	case 'elf':
-        $data = $mysql->query($q[209], array('db'=>$s_db, 'race'=>'1', 'limit'=>$startlimit, 'rows'=>$CONFIG['settings']['TOP']));
-        $page_foot=$mysql->query($q[208], array('db'=>$s_db, 'race'=>'1'));
+        $data = $sql->query(209, array('db'=>$s_db, 'race'=>'1', 'limit'=>$startlimit, 'rows'=>getConfig('settings','TOP','10')));
+        $page_foot=$sql->query(208, array('db'=>$s_db, 'race'=>'1'));
         $content.= '<h1>'.$Lang['race'][1].'</h1>';
 	break;
     
 	case 'dark_elf':
-        $data = $mysql->query($q[209], array('db'=>$s_db, 'race'=>'2', 'limit'=>$startlimit, 'rows'=>$CONFIG['settings']['TOP']));
-        $page_foot=$mysql->query($q[208], array('db'=>$s_db, 'race'=>'2'));
+        $data = $sql->query(209, array('db'=>$s_db, 'race'=>'2', 'limit'=>$startlimit, 'rows'=>getConfig('settings','TOP','10')));
+        $page_foot=$sql->query(208, array('db'=>$s_db, 'race'=>'2'));
         $content.= '<h1>'.$Lang['race'][2].'</h1>';
 	break;
 	
 	case 'orc':
-        $data = $mysql->query($q[209], array('db'=>$s_db, 'race'=>'3', 'limit'=>$startlimit, 'rows'=>$CONFIG['settings']['TOP']));
-        $page_foot=$mysql->query($q[208], array('db'=>$s_db, 'race'=>'3'));
+        $data = $sql->query(209, array('db'=>$s_db, 'race'=>'3', 'limit'=>$startlimit, 'rows'=>getConfig('settings','TOP','10')));
+        $page_foot=$sql->query(208, array('db'=>$s_db, 'race'=>'3'));
         $content.= '<h1>'.$Lang['race'][3].'</h1>';
 	break;
 	
 	case 'dwarf':
-        $data = $mysql->query($q[209], array('db'=>$s_db, 'race'=>'4', 'limit'=>$startlimit, 'rows'=>$CONFIG['settings']['TOP']));
-        $page_foot=$mysql->query($q[208], array('db'=>$s_db, 'race'=>'4'));
+        $data = $sql->query(209, array('db'=>$s_db, 'race'=>'4', 'limit'=>$startlimit, 'rows'=>getConfig('settings','TOP','10')));
+        $page_foot=$sql->query(208, array('db'=>$s_db, 'race'=>'4'));
         $content.= '<h1>'.$Lang['race'][4].'</h1>';
 	break;
 	
 	case 'kamael':
-        $data=$mysql->query($q[209], array('db'=>$s_db, 'race'=>'5', 'limit'=>$startlimit, 'rows'=>$CONFIG['settings']['TOP']));
-        $page_foot=$mysql->query($q[208], array('db'=>$s_db, 'race'=>'5'));
+        $data=$sql->query(209, array('db'=>$s_db, 'race'=>'5', 'limit'=>$startlimit, 'rows'=>getConfig('settings','TOP','10')));
+        $page_foot=$sql->query(208, array('db'=>$s_db, 'race'=>'5'));
         $content.= '<h1>'.$Lang['race'][5].'</h1>';
 	break;
 	
@@ -343,29 +343,29 @@ $content .= "<tbody>";
     $parse['male']=$Lang['male'];
     $parse['female']=$Lang['female'];
     $parse['seven_signs']=$Lang['seven_sins'];
-$tchar=$mysql->result($mysql->query($q[202], array('db'=>$s_db)),0,0);
+$tchar=$sql->result($sql->query(202, array('db'=>$s_db)),0,0);
 $parse['race_rows']='';
 for($i=0; $i<6; $i++)
 {
-	$sql = $mysql->query($q[208], array('db'=>$s_db, 'race'=>$i));
-	$tfg = round($mysql->result($sql)/($tchar/100), 2);
+	$sqlq = $sql->query(208, array('db'=>$s_db, 'race'=>$i));
+	$tfg = round($sql->result($sqlq)/($tchar/100), 2);
 	$parse['race_rows'].='<tr><td>'.$Lang['race'][$i].'</td><td><img src="img/stat/sexline.jpg" height="10px" width="'.$tfg .'px" alt="" title="'.$tfg.'%" /> '.$tfg .'%</td></tr>';
 
 }
-$male = $mysql->query($q[205], array('db'=>$s_db, 'sex'=>'0'));
-$parse['mc'] = round($mysql->result($male)/($tchar/100) , 2);
-$female = $mysql->query($q[205], array('db'=>$s_db, 'sex'=>'1'));
-$parse['fc'] = round($mysql->result($female)/($tchar/100) , 2);
+$male = $sql->query(205, array('db'=>$s_db, 'sex'=>'0'));
+$parse['mc'] = round($sql->result($male)/($tchar/100) , 2);
+$female = $sql->query(205, array('db'=>$s_db, 'sex'=>'1'));
+$parse['fc'] = round($sql->result($female)/($tchar/100) , 2);
 
 
-$result1 = $mysql->query($q[206], array('db'=>$s_db, 'cabal'=>'%dusk%'));
-$dawn =$mysql->result($result1);
+$result1 = $sql->query(206, array('db'=>$s_db, 'cabal'=>'%dusk%'));
+$dawn =$sql->result($result1);
 
-$result2 = $mysql->query($q[206], array('db'=>$s_db, 'cabal'=>'%dawn%'));
-$dusk = $mysql->result($result2);
+$result2 = $sql->query(206, array('db'=>$s_db, 'cabal'=>'%dawn%'));
+$dusk = $sql->result($result2);
 
-$result3 = $mysql->query($q[207], array('db'=>$s_db));
-$row=$mysql->fetch_array($result3);
+$result3 = $sql->query(207, array('db'=>$s_db));
+$row=$sql->fetch_array($result3);
 $parse['twilScore'] = $row['avarice_dusk_score'] + $row['gnosis_dusk_score'] + $row['strife_dusk_score'];
 $parse['dawnScore'] = $row['avarice_dawn_score'] + $row['gnosis_dawn_score'] + $row['strife_dawn_score'];
 $parse['date']=date('m/d/Y H:i');
@@ -374,13 +374,6 @@ $parse['active_period']=$row['active_period'];
 $parse['aowner']=$row['avarice_owner'];
 $parse['gowner']=$row['gnosis_owner'];
 $parse['sowner']=$row['strife_owner'];
-
-//$totalScore = $twilScore + $dawnScore;
-
-//$dawnPoint = ($totalScore == 0) ? 0 : round(($dawnScore / $totalScore) * 1000);
-//$twilPoint = ($totalScore == 0) ? 0 : round(($twilScore / $totalScore) * 1000);
-
-
 
 $content.=$tpl->parsetemplate('seven_signs', $parse, 1);
 
@@ -409,11 +402,11 @@ else
 {
     $n=1;
 }
-while ($top=$mysql->fetch_array($data))
+while ($top=$sql->fetch_array($data))
 {
 	if ($top['clan_name']) { $clan_link='<a href="claninfo.php?clan='.$top['clanid'].'&amp;server='.$server.'">'.$top['clan_name'].'</a>'; }else{$clan_link='No Clan';}
 	if ($top['sex']==0) { $color='#8080FF'; } else { $color='#FF8080'; }
-	if ($top['online']) {$online='<font color="green">'.$Lang['online'].'</font>'; } 
+	if ($top['online']!=0) {$online='<font color="green">'.$Lang['online'].'</font>'; } 
 	else {$online='<font color="red">'.$Lang['offline'].'</font>'; }
     $altrow=($n%2==0)? ' class="altRow"': '';
     $parse['char_rows'].='<tr'.$altrow.' onmouseover="this.bgColor = \'#505050\';" onmouseout="this.bgColor = \'\'"><td align="center"><b>'.$n.'</b></td><td><img src="./img/face/'.$top['race'].'_'.$top['sex'].'.gif" alt="" /></td><td><a href="user.php?cid='.$top['charId'].'&amp;server='.$server.'"><font color="'.$color.'">'.$top['char_name'].'</font></a></td><td><center> '.$top['level'].'</center></td><td><center>'.$top['ClassName'].'</center></td><td>'.$clan_link.'</td><td><center><b>'.$top['pvpkills'].'</b>/<b><font color="red">'.$top['pkkills'].'</font></b></center></td><td>'.$online.'</td>';
@@ -427,16 +420,16 @@ $content.=$tpl->parsetemplate('stat', $parse, 1);
 }
 $content.= '<br />';
 if($stat && $stat != 'castles' && $stat != 'fort'){
-    $page_foot=$mysql->result($page_foot);
+    $page_foot=$sql->result($page_foot);
     $content.=pagechoose($start+1, $page_foot, $stat, $server);
 }
 $content.= '<br />';
-$cache->updateCache(__FILE__, $content, $params);
+$cache->updateCache('stat', $content, $params);
 echo $content;
 }
 else
 {
-    echo $cache->getCache(__FILE__, $params);
+    echo $cache->getCache('stat', $params);
 }
 foot();
 ?>

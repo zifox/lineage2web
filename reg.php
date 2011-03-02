@@ -3,57 +3,51 @@
 define('INWEB', True);
 require_once("include/config.php");
 //head('Registration');
+includeLang('reg');
 if($user->logged())
 {
-    head('Registration', 1, 'index.php', 5);
-    msg('Error', 'You already have account', 'error');
+    head($Lang['registration'], 1, 'index.php', 5);
+    msg($Lang['error'], $Lang['already_reg'], 'error');
     foot();
     exit();
 }
-
-if($_POST)
+$ref=getVar('ref');
+if(isset($_POST['account']) && isset($_POST['password']))
 {
-    if(strtolower($_SESSION['captcha'])!=strtolower($_POST['captcha'])){
-        head('Registration', 1, 'index.php', 5);
-        msg('Error', 'Verification code incorrect', 'error');
+    if(strtolower($_SESSION['captcha'])!=strtolower(getVar('captcha'))){
+        head($Lang['registration'], 1, 'index.php', 5);
+        msg($Lang['error'], $Lang['code_incorrect'], 'error');
         foot();
         exit();
     }
 
-    $account = $mysql->escape($_POST['account']);
-    $password = $mysql->escape($_POST['password']);
-    $password2 = $mysql->escape($_POST['password2']);
-    $ip = $_SERVER['REMOTE_ADDR'];
-    $ref=$mysql->escape($_POST['ref']);
+    $account = getVar('account');
+    $password = getVar('password');
+    $password2 = getVar('password2');
+    $ip = getVar('REMOTE_ADDR');
 
-
-    if(ereg("^([a-zA-Z0-9_-])*$", $_POST['account']) && ereg("^([a-zA-Z0-9_-])*$", $_POST['password']) && ereg("^([a-zA-Z0-9_-])*$", $_POST['password2']))
+    if(ereg("^([a-zA-Z0-9_-])*$", $account) && ereg("^([a-zA-Z0-9_-])*$", $password) && ereg("^([a-zA-Z0-9_-])*$", $password2))
     {
-
-        
-	   if (strlen($_POST['account'])<16 && strlen($_POST['account'])>4 && $_POST['password'] && $_POST['password2'] && $_POST['password']==$_POST['password2'])
+	   if (strlen($account)<16 && strlen($account)>4 && strlen($password)<16 && strlen($password)>4 && $password==$password2)
 	   {
-
-		  $check=$mysql->query("SELECT `login` FROM `accounts` WHERE `login`='".$account."'");
-		  if($mysql->num_rows($check))
+		  $check=$sql->query($q[101], array('login'=>$account));
+		  if($sql->num_rows())
 		  {
-		      echo "4";
-                head('Registration', 1, 'index.php', 5);
-                msg('Error', 'Account already exists', 'error');
+                head($Lang['registration'], 1, 'index.php', 5);
+                msg($Lang['error'], $Lang['already_exists'], 'error');
                 foot();
                 exit();
 		  }
 		  else
 		  {
-		      echo "4b";
-                head('Registration',1, 'index.php',5);
+                head($Lang['registration'],1, 'index.php',5);
                 if($user->reguser($account, $password, $ref))
                 {
-                    msg('Success', 'Registration successfull<br />You have been logged in');
+                    msg($Lang['success'], $Lang['success_logged']);
                 }
                 else
                 {
-                    msg('Success', 'Registration successfull<br />There was a problem with autologin');
+                    msg($Lang['success'], $Lang['success_failed']);
                 }
                 foot();
                 exit();
@@ -61,108 +55,38 @@ if($_POST)
 	   }
 	   else
 	   {
-	       echo "3b";
-            head('Registration', 1, 'index.php', 5);
-            msg('Error', 'Login or password too short', 'error');
+            head($Lang['registration'], 1, 'index.php', 5);
+            msg($Lang['error'], $Lang['too_short'], 'error');
             foot();
             exit();
 	   }
     }
     else
     {
-        echo "2b";
-            head('Registration', 1, 'index.php', 5);
-            msg('Error', 'Login or password contains invalid chars', 'error');
+            head($Lang['registration'], 1, 'index.php', 5);
+            msg($Lang['error'], $Lang['invalid_chars'], 'error');
             foot();
             exit();
     }
 }
-head("Registration");
-?>
-<h4>Registration</h4>
-<br /><br />
-<ul>
-<li> Account and password can not be empty .</li>
-<li> Account and password can not be less than 4 and Over 15 characters .</li>
-<li> Account and password are written in English letters and numerals .</li>
-<li> Verification code is case in-sensitive and contains leters and digits.</li>
-</ul>
+head($Lang['registration']);
+$par['lang']=getLang();
 
-<script type="text/javascript">//<![CDATA[
-
-function isAlphaNumeric(value)
+$params = implode(';', $par);
+if($cache->needUpdate('reg', $params))
 {
-  if (value.match(/^[a-zA-Z0-9]+$/))
-    return true;
-  else
-    return false;
+    
+    $parse = $Lang;
+    $parse['ref'] = $ref;
+    $parse['button'] = button($Lang['reg_me'], 'Submit', 1);
+    $content=$tpl->parsetemplate('reg', $parse,1);
+    $cache->updateCache('reg', $content, $params);
+    
+    echo $content;
 }
-function checkform(f)
+else
 {
-  if (f.account.value=="")
-  {
-    alert("Fill in all fields Please");
-    return false;
-  }
-  if (!isAlphaNumeric(f.account.value))
-  {
-    alert("Fill in all fields");
-    return false;
-  }
-  if (f.password.value=="")
-  {
-    alert("No password ");
-    return false;
-  }
-  if (!isAlphaNumeric(f.password.value))
-  {
-    alert("444444");
-    return false;
-  }
-  if (f.password2.value=="")
-  {
-    alert("You didnt repeat a password");
-    return false;
-  }
-  if (f.password.value!=f.password2.value)
-  {
-    alert("Not the same password ");
-    return false; 
-  }
-  return true;
+    echo $cache->getCache('reg', $params);
 }
-//]]></script>
-<form method="post" action="reg.php" onsubmit="return checkform(this)">
-<table>
- <tr>
-  <td>Login</td>
-  <td><input type="text" name="account" maxlength="15" /></td>
- </tr>
- <tr>
-  <td>Password</td>
-  <td><input type="password" name="password" maxlength="15" /></td>
- </tr>
- <tr>
-  <td>Repeat Password</td>
-  <td><input type="password" name="password2" maxlength="15" /></td>
- </tr>
- <tr>
-  <td>Verification Image</td>
-  <td><img src="captcha.php" alt="" /></td>
- </tr>
-  <tr>
-  <td>Verification Code</td>
-  <td><input type="text" name="captcha" maxlength="10" /></td>
- </tr>
- <tr>
-  <td>Referal</td>
-  <td><input type="text" name="ref" maxlength="16" value="<?php echo $_GET['ref'];?>" /></td>
- </tr>
- <tr>
-  <td colspan="2" style="text-align: center;"><?php button('Reg Me');?></td>
- </tr>
-</table>
-</form>
-<?php
 foot();
 ?>         

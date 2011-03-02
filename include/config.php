@@ -15,31 +15,34 @@ $DB = array(
     "database"  => "l2jdb"        //L2J Main (account)DataBase
 );
 $webdb = "l2web";                 //Webpage DataBase
-
+require_once ('queries.php');
 require_once ('class.mysql.php');
 require_once ('class.user.php');
 require_once ('class.tplParser.php');
 require_once ('class.cache.php');
-require_once ('queries.php');
-$mysql = new MySQL($DB);
-$query = $mysql->query($q[0], array("db" => $webdb));
-while ($row = $mysql->fetch_array($query)) {
+
+$sql = new MySQL($DB);
+//$mysql=$sql;
+$query = $sql->query($q[0], array("db" => $webdb));
+while ($row = $sql->fetch_array($query)) {
     $CONFIG[$row['type']][$row['name']] = stripslashes($row['value']);
 }
-$CONFIG['settings']['webdb']=$webdb;
+//$CONFIG['settings']['webdb']=$webdb;
 $user = new user();
-if ($CONFIG['features']['use_cracktracker']){
+require_once ('include/functions.php');
+if (getConfig('features','use_cracktracker','0')){
     require_once ('include/cracktracker.php');
 }
-require_once ('include/functions.php');
 
-if ($CONFIG['features']['use_bancontrol']){
+
+if (getConfig('features','use_bancontrol','0')){
     require_once ('include/bancontrol.php');
 }
-$cache = new Cache($CONFIG['features']['cache_enabled']);
-if (!$CONFIG['debug']['web']) {
+$cache = new Cache(getConfig('features','cache_enabled','1'));
+if (!getConfig('debug','web','0')) {
     error_reporting(0);
 }
-$tpl = new tplParser($CONFIG['settings']['DSkin']);
-global $mysql, $CONFIG, $user, $cache, $tpl;
+$tpl = new tplParser(getConfig('settings','DTHEME','l2f'));
+//global $sql, $CONFIG, $user, $cache, $tpl;
+global $webdb, $q;
 ?>

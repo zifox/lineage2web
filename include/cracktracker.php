@@ -34,7 +34,7 @@ if ($cracktrack != $checkworm)
 $cremotead = $_SERVER['REMOTE_ADDR'];
 $cuseragent = $_SERVER['HTTP_USER_AGENT'];
 $todb = $mysql->escape($_SERVER['QUERY_STRING']);
-$mysql->query("INSERT INTO `".$DB['webdb']."`.`log` (`Account`, `Type`, `SubType`, `Comments`) VALUES ('$cremotead', 'CrackTracker', 'Error', 'Reason=\"Used illegal args\", UserAgent=\"$cuseragent\", Action=\"$todb\"');");
+$sql->query("INSERT INTO `".getConfig('settings', 'webdb', 'l2web')."`.`log` (`Account`, `Type`, `SubType`, `Comments`) VALUES ('$cremotead', 'CrackTracker', 'Error', 'Reason=\"Used illegal args\", UserAgent=\"$cuseragent\", Action=\"$todb\"');");
 die( "Attack detected! <br /><br /><b>Youre attack was blocked:</b><br />$cremotead - $cuseragent" );
 }
 

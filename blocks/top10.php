@@ -2,38 +2,38 @@
 //пароль
 if (! defined('IN_BLOCK'))
 {
-	Header("Location: ../index.php");
+	header("Location: ../index.php");
+    exit();
 }
-
-if($cache->needUpdate(__FILE__))
+$cachefile='blocks/top10';
+if($cache->needUpdate($cachefile))
 {
-    $server_list = $mysql->query($q[1], array('db' => $CONFIG['settings']['webdb']));
-    while ($slist = $mysql->fetch_array($server_list))
+    $server_list = $sql->query(1, array('db' => getConfig('settings', 'webdb', 'l2web')));
+    while ($slist = $sql->fetch_array($server_list))
     {
         $parse['server_name'] = $slist['Name'];
 
-        $topchar = $mysql->query($q[200], array("db" => $slist['DataBase'], "limit" => $CONFIG['settings']['TOP']));
+        $topchar = $sql->query(200, array("db" => $slist['DataBase'], "limit" => getConfig('settings', 'TOP', '10')));
         $n = 1;
         $parse['rows'] = '';
-        while ($top = $mysql->fetch_array())
+        while ($top = $sql->fetch_array())
         {
             $row_parse['nr'] = $n;
             $row_parse['charId'] = $top['charId'];
             $row_parse['sex'] = ($top['sex'] == 0) ? 'male' : 'female';
             $row_parse['char_name'] = $top['char_name'];
             $row_parse['serv_id'] = $slist['ID'];
-            $parse['rows'] .= $tpl->parsetemplate('blocks/top10_row', $row_parse, 1);
+            $parse['rows'] .= $tpl->parsetemplate($cachefile.'_row', $row_parse, 1);
             $n++;
         }
 
-        $content = $tpl->parsetemplate('blocks/top10', $parse, 1);
-        $cache->updateCache(__FILE__, $content);
+        $content = $tpl->parsetemplate($cachefile, $parse, 1);
+        $cache->updateCache($cachefile, $content);
         echo $content;
     }
 }
 else
 {
-    echo $cache->getCache(__FILE__);
+    echo $cache->getCache($cachefile);
 }
-
 ?>

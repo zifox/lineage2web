@@ -10,7 +10,7 @@ class MySQL{
     private $query = array();
     public $querycount = 0;
     public $totalsqltime = 0;
-
+    public $row_count=0;
     function __construct(&$DBInfo){
         $this->DBInfo = $DBInfo;
         unset($DBInfo);
@@ -54,22 +54,29 @@ class MySQL{
     }
 
     function query($sql, $array=array()) {
+        global $q;
         $querytime = explode(" ", microtime());
         $querystart = $querytime[1] . substr($querytime[0], 1);
+        if(is_numeric($sql))
+            $sql=$q[$sql];
         $sql = preg_replace('#\{([a-z0-9\-_]*?)\}#Ssie', '( ( isset($array[\'\1\']) ) ? $array[\'\1\'] : \'\' );', $sql);
+        
         //$sql = trim($sql);
 
         $result = mysql_query($sql, $this->link) OR $this->err("<b>MySQL Query error: </b> $sql");
-
+        
         $querytime = explode(" ",microtime());
         $queryend = $querytime[1].substr($querytime[0],1);
         $time = bcsub($queryend,$querystart,6);
         $this->totalsqltime+=$time;
+        $this->row_count=(substr($sql,0,6)=="SELECT")?@mysql_num_rows($result):@mysql_affected_rows($this->link);
         array_push($this->query, array(
             "query" => $sql,
             "result" => $result,
-            "time" => $time
+            "time" => $time,
+            "rows" => $this->row_count
         ));
+        
 
         $this->querycount++;
         end($this->query);
@@ -84,12 +91,20 @@ class MySQL{
         return mysql_result($this->query[$res]['result'], $row, $field);
     }
 
-    function num_rows($res = null) {
+/*    function num_rows($res = null) {
         if ($res === null) {
             end($this->query);
             $res = key($this->query);
         }
         return mysql_num_rows($this->query[$res]['result']);
+    }*/
+    function num_rows()
+    {
+        if ($res === null) {
+            end($this->query);
+            $res = key($this->query);
+        }
+        return $this->query[$res]['rows'];
     }
 
 	function fetch_array($res = null) {
@@ -107,7 +122,10 @@ class MySQL{
 		}
 		return mysql_fetch_row($this->query[$res]['result']);
 	}
-    
+    function getId()
+    {
+        return mysql_insert_id($this->link);
+    }
     function free($res = null)
     {
   		if ($res === null) {
@@ -152,7 +170,7 @@ class MySQL{
                 $report = '<font color="red" title="Query needs optimization. Execution time is unacceptable">';
             }
             ?>
-            <tr onmouseover="this.bgColor = '#505050';" onmouseout="this.bgColor = ''"><td width="20%">[<?php echo $key+1;?>]&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $report.$value['time'].'</font>';?></b></td><td>[<?php echo $value['query'];?>]<?php echo $value['result'];?></td></tr>
+            <tr onmouseover="this.bgColor = '#505050';" onmouseout="this.bgColor = ''"><td width="20%">[<?php echo $key+1;?>]&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $report.$value['time'].'</font>';?></b></td><td>[<?php echo $value['query'];?>]<?php echo $value['result'];?>[<?php echo $value['rows'];?>]</td></tr>
 <?php   } ?>
         </table>
 <?php
