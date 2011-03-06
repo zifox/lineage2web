@@ -67,7 +67,7 @@ var ajax = new Array();
 function raiseVitality(server, charac, id)
 {
 
-    if(confirm('<?php echo sprintf($Lang['confirm_vitality'], getConfig('voting', 'vitality_cost', '1'));?>'))
+    if(confirm('<?php echo sprintf($Lang['confirm_vit'], getConfig('voting', 'vitality_cost', '1'));?>'))
     {
     	var index = ajax.length;
     	ajax[index] = new sack();
@@ -187,6 +187,7 @@ opacity: 0.85;
 
  </div>
 <?php
+
 if($head){
 ?>
 
@@ -221,6 +222,7 @@ includeBlock('vote', $Lang['vote']);
                     <td style="background-image: url(<?php echo $skinurl;?>/img/t_h_l_b.gif);">&nbsp;</td>
                     <td bgcolor="#37301d" colspan="5" align="center">
 <?php
+
 if(getConfig('news', 'show_announcement', '1'))
     echo "<h1>".getConfig('news', 'announcement', 'Welcome to Fantasy World Freya x50')."</h1>";
 ?>

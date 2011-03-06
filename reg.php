@@ -40,13 +40,16 @@ if(isset($_POST['account']) && isset($_POST['password']))
 		  }
 		  else
 		  {
-                head($Lang['registration'],1, 'index.php',5);
+                //head($Lang['registration'],1, 'index.php',5);
+                head($Lang['registration']);
                 if($user->reguser($account, $password, $ref))
                 {
+                    head($Lang['registration'],1, 'index.php',5);
                     msg($Lang['success'], $Lang['success_logged']);
                 }
                 else
                 {
+                    head($Lang['registration'],1, 'index.php',5);
                     msg($Lang['success'], $Lang['success_failed']);
                 }
                 foot();

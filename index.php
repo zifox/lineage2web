@@ -2,10 +2,12 @@
 define('INWEB', true);
 require_once ("include/config.php");
 //пароль
+
 head("Home");
 $par['lang']=getLang();
 $par['mod']=$user->mod()==true?'true':'false';
 $params = implode(';', $par);
+
 if($cache->needUpdate('index', $params))
 {
     includeLang('index');

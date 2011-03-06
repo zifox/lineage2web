@@ -34,8 +34,7 @@ class user {
 		}
 		else
 		{
-//			$this->failed = true;
-			$this->logout();
+			//$this->logout();
 			return false;
 		}
 	}
@@ -144,13 +143,17 @@ class user {
 	{
 		$_SESSION['account'] = '';
 		$_SESSION['IP'] = $_SERVER['REMOTE_ADDR'];
-		//$_SESSION['last_act'] = time();
 		$_SESSION['vote_time'] = 0;
 		$_SESSION['webpoints'] = 0;
         $_SESSION['admin'] = false;
         $_SESSION['logged'] = false;
         unset($_SESSION);
         setcookie('logincookie', '', 0, '', '');
+        if(isset($_SESSION['account']))
+        {
+            return false;
+        }
+        return true;
 	}
     public function debug()
     {
@@ -166,6 +169,7 @@ class user {
         global $sql;
         
         $acc = $sql->escape($acc);
+        $pass0=$sql->escape($pass);
         $pass = $this->encpass($pass);
         $ref = $sql->escape($ref);
         $ip = $sql->escape($_SERVER['REMOTE_ADDR']);
@@ -178,7 +182,7 @@ class user {
             }
         }
    	    $sql->query("INSERT INTO `accounts` (`login`, `password`, `accessLevel`, `lastIP`) VALUES ('".$acc."', '".$pass."', '0', '$ip')");
-        if($this->checkLogin($acc,$pass, 0))
+        if($this->checkLogin($acc,$pass0, 0))
             return true;
         else
             return false;

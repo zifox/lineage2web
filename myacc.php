@@ -16,16 +16,16 @@ if ($timevoted <= ($now-60*60*12))
 {
     echo "<a href=\"vote.php\"><font color=\"red\">{$Lang['vote']}</font></a><br />";
 }else{
-    echo "<font color=\"red\">You can vote again after ". date('H:i:s', $timevoted -($now-60*60*12)-60*60*2) ."<br />";
+    echo "<font color=\"red\">You can vote again after ". date('H:i:s', $timevoted -($now-60*60*12)-60*60*2) ."</font><br />";
 }?>
     <a href="changepass.php"><?php echo $Lang['changepass'];?></a><br />
     Your Referal Url: <input type="text" name="refurl" value="http://l2.pvpland.lv/reg.php?ref=<?php echo $_SESSION['account'];?>" size="40" onclick="select()"  readonly="readonly" /><br />
-    Every user who registers from your link will add you <?php echo $Config['reg_reward'];?> webpoints<br />
+    Every user who registers from your link will add you <?php echo getConfig('voting','reg_reward','5');?> webpoints<br />
     <h1>Your Chars</h1>
     1 Webpoint = 2500 (12.5%) Vitality points, max = 20000 (4 LvL 100%)
     <?php
-    $dbq = $mysql->query("SELECT `ID`, `Name`, `DataBase` FROM `$webdb`.`gameservers` WHERE `active` = 'true'");
-    while($dbs = $mysql->fetch_array($dbq))
+    $dbq = $sql->query("SELECT `ID`, `Name`, `DataBase` FROM `$webdb`.`gameservers` WHERE `active` = 'true'");
+    while($dbs = $sql->fetch_array($dbq))
     {
     	$dbn = $dbs['DataBase'];
 
@@ -34,15 +34,15 @@ if ($timevoted <= ($now-60*60*12))
     <hr />
     <h1><?php echo $dbs['Name'];?></h1>
     <?php
-    $sql=$mysql->query("SELECT `account_name`, `charId`, `char_name`, `level`, `maxHp`, `maxCp`, `maxMp`, `sex`, `karma`, `fame`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `onlinemap`, `lastAccess`, `nobless`, `vitality_points`, `ClassName`, `clan_id`, `clan_name` FROM `$dbn`.`characters` INNER JOIN `$dbn`.`char_templates` ON `characters`.`classid` = `char_templates`.`ClassId` LEFT OUTER JOIN `$dbn`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `account_name` = '{$_SESSION['account']}';");
-    if ($mysql->num_rows($sql) != 0)
+    $sqlq=$sql->query("SELECT `account_name`, `charId`, `char_name`, `level`, `maxHp`, `maxCp`, `maxMp`, `sex`, `karma`, `fame`, `pvpkills`, `pkkills`, `race`, `online`, `onlinetime`, `onlinemap`, `lastAccess`, `nobless`, `vitality_points`, `ClassName`, `clan_id`, `clan_name` FROM `$dbn`.`characters` INNER JOIN `$dbn`.`char_templates` ON `characters`.`classid` = `char_templates`.`ClassId` LEFT OUTER JOIN `$dbn`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `account_name` = '{$_SESSION['account']}';");
+    if ($sql->num_rows($sqlq) != 0)
     {
     	?>
         <table border="1">
         <tr><td><?php echo $Lang['face'];?></td><td><?php echo $Lang['name'];?></td><td><?php echo $Lang['level'];?></td><td><?php echo $Lang['class'];?></td><td class="maxCp"><?php echo $Lang['cp'];?></td><td class="maxHp"><?php echo $Lang['hp'];?></td><td class="maxMp"><?php echo $Lang['mp'];?></td><td><?php echo $Lang['clan'];?></td><td><?php echo $Lang['pvp_pk'];?></td><td><?php echo $Lang['online_time'];?></td><td><?php echo $Lang['online'];?></td><td><?php echo $Lang['unstuck'];?></td><td>OnlineMap</td><td>Vitality</td></tr>
 <?php
 $i=0;
-    while($char=$mysql->fetch_array($sql))
+    while($char=$sql->fetch_array($sqlq))
     {
         $i++;
         $onlinetimeH=round(($char['onlinetime']/60/60)-0.5);

@@ -336,14 +336,14 @@ function setConfig($type, $name, $val)
 {
     global $CONFIG, $sql, $q;
     $params = array("webdb"=>getConfig('settings','webdb','l2web'), "name"=>$name, "type"=> $type, "val"=>$val);
-    $sql->query($q[671], $params);
+    $sql->query(671, $params);
     if($sql->num_rows()>0)
     {
-        $sql->query($q[670], $params);
+        $sql->query(670, $params);
     }
     else
     {
-        $sql->query($q[669], $params);
+        $sql->query(669, $params);
     }
     $CONFIG[$type][$name]=$val;
 }

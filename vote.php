@@ -8,11 +8,10 @@ if (!$user->logged())
 {
     msg('Error', 'You need to login', 'error'); 
 }
-
-if ($user->logged())
+else
 {
-$action = $_GET['action'];
-
+$action = getVar('action');
+$rew=getConfig('voting','reward','5');
 $timevoted = $_SESSION['vote_time'];
 $now = time();
 
@@ -24,21 +23,20 @@ if ($action == "vote" && $timevoted < ($now-60*60*12))
 {
 if(!$_SESSION['vote_rnd']<time() && !$_SESSION['vote_rnd']>=time()-60*5) die();
 $_SESSION['vote_time']=$now;
-$_SESSION['webpoints']+=$Config['vote_reward'];
-$mysql->query("UPDATE `accounts` SET `voted`='$now', `webpoints`=`webpoints`+'".$Config['vote_reward']."' WHERE `login` = '{$_SESSION['account']}'");
-$mysql->query("INSERT INTO `".$webdb."`.`log` (`Account`, `Type`, `SubType`, `Comments`) VALUES ('{$_SESSION['account']}', 'Voting', 'Success', 'WebPoint Count=\"{$Config['vote_reward']}\"');");
+$_SESSION['webpoints']+=$rew;
+$sql->query("UPDATE `accounts` SET `voted`='$now', `webpoints`=`webpoints`+'".$rew."' WHERE `login` = '{$_SESSION['account']}'");
+$sql->query("INSERT INTO `".$webdb."`.`log` (`Account`, `Type`, `SubType`, `Comments`) VALUES ('{$_SESSION['account']}', 'Voting', 'Success', 'WebPoint Count=\"{$Config['vote_reward']}\"');");
 msg($Lang['thank_you'], $Lang['thank_for_voting']);
 
 }elseif($action == "vote" && $timevoted >= ($now-60*60*12))
 {
-    $mysql->query("INSERT INTO `".$DB['webdb']."`.`log` (`Account`, `Type`, `SubType`, `Comments`) VALUES ('{$_SESSION['account']}', 'Voting', 'Error', 'Link ByPass');");
+    $sql->query("INSERT INTO `".$DB['webdb']."`.`log` (`Account`, `Type`, `SubType`, `Comments`) VALUES ('{$_SESSION['account']}', 'Voting', 'Error', 'Link ByPass');");
     error('8');
 }
-}
+
 $parse = $Lang;
-$parse['vote_reward'] = $Config['vote_reward'];
-if($user->logged())
-{
+$parse['vote_reward'] = $rew;
+
     $_SESSION['vote_rnd']=time();
     if($timevoted < ($now-60*60*12)) $parse['button'] = button($Lang['get_reward'], 'go', 1, true, 'go');
 }
