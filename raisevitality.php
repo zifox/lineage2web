@@ -5,9 +5,9 @@ require_once("include/config.php");
 
 if(isset($_GET['char']) && is_numeric($_GET['char']))
 {
-	$srv = $sql->escape(0 + $_GET['server']);
-	$char = $sql->escape(0 + $_GET['char']);
-	$id = $sql->escape(0 + $_GET['id']);
+	$srv = getVar('server');
+	$char = getVar('char');
+	$id = getVar('id');
     if($_SESSION['webpoints']<=0)
     {
         echo "alert('You don\'t have enought webpoints');";

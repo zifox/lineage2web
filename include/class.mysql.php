@@ -19,7 +19,7 @@ class MySQL{
     
     function __destruct()
     {
-        if($this->link) $this->close();
+        //if($this->link) $this->close();
     }
     function __wakeup()
     {
@@ -38,14 +38,24 @@ class MySQL{
         }
 
         if(!mysql_select_db($this->DBInfo['database'], $this->link))
+        {
             $this->err("Could not open database: <b>{$this->DBInfo['database']}</b>.");
+            exit();
+        }
         unset($this->DBInfo);
     }
 
-
-    function close() {
-        if(!@mysql_close($this->link))
-            $this->err("Could not close MySQL.");
+    private function close() {
+        //if($this->link)
+        try
+        {
+            mysql_close($this->link);
+        }
+        catch(Exception $e)
+        {
+            //$this->err("Could not close MySQL.");
+            $this->err($e);
+        }
     }
 
     function escape($string) {
@@ -158,6 +168,7 @@ class MySQL{
     }
 
     function debug() {
+        echo 'Link: '.$this->link;
         ?>
         <table border="0">
         <?php

@@ -1,11 +1,12 @@
 <?php
 //пароль
 if(!defined('INLANG')){Header("Location: ../../index.php");}
-$Lang['Home'] = 'Home';
-$Lang['Reg'] = 'Registration';
+$Lang['home'] = 'Home';
+$Lang['reg'] = 'Registration';
 $Lang['connect'] = 'How to Connect';
+$Lang['market'] = 'WebShop';
 $Lang['forum'] = 'Forum';
 $Lang['statistic'] = 'Statistic';
-$Lang['Rules'] = 'Rules';
-$Lang['Donate'] = 'Donate';
+$Lang['rules'] = 'Rules';
+$Lang['donate'] = 'Donate';
 ?>

@@ -1,11 +1,12 @@
 <table width="100%" align="center">
-<tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="index.php">{Home}</a></td></tr>
-<tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="reg.php">{Reg}</a></td></tr>
-<tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="connect.php">{Connect}</a></td></tr>
+<tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="index.php">{home}</a></td></tr>
+<tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="reg.php">{reg}</a></td></tr>
+<tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="connect.php">{connect}</a></td></tr>
+<tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="webshop.php">{market}</a></td></tr>
 <tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="/forum/" target="_blank">{forum}</a></td></tr>
 <tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="stat.php">{statistic}</a></td></tr>
-<tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="rules.php">{Rules}</a></td></tr>
-<tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="donate.php">{Donate}</a></td></tr>
+<tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="rules.php">{rules}</a></td></tr>
+<tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="donate.php">{donate}</a></td></tr>
 </table>
 
 <div id="lang2">
