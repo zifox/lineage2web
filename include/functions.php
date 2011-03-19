@@ -223,9 +223,9 @@ function pagechoose($page, $count=0, $stat, $server)
 }
 function convertPic($id, $ext, $width, $height)
 {
-    ini_set('memory_limit', '100M');
+    //ini_set('memory_limit', '100M');
     if(file_exists('news/'.$id.'_thumb.'.$ext))
-    unlink('news/'.$id.'_thumb.'.$ext);
+        unlink('news/'.$id.'_thumb.'.$ext);
     $new_img = 'news/'.$id.'_thumb.'.$ext;
 
     $file_src = "news/$id.$ext";

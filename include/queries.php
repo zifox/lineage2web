@@ -139,4 +139,10 @@ $q = array(
     670 => "UPDATE `{webdb}`.`config` SET `name`='{name}', `type`='{type}', `value`='{val}' WHERE (`name`='{name}') AND (`type`='{type}') LIMIT 1;",
     671 => "SELECT * FROM `{webdb}`.`config` WHERE (`name`='{name}') AND (`type`='{type}');"
 );
+//Cleanup queries
+$clean=array(
+    0=>'TRUNCATE TABLE `{webdb}`.`{table}`;',
+    1=>''
+
+);
 ?>

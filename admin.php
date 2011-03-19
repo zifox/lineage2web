@@ -4,7 +4,7 @@ require_once("include/config.php");
 //пароль
 head("Admin");
 includeLang('admin/settings');
-
+$mysql=$sql;
 if ($user->logged()&& $user->admin()){
     ?>
     <h2><?php echo $Lang['admin_settings']; ?></h2>
@@ -13,7 +13,7 @@ if ($user->logged()&& $user->admin()){
     $config_config=$_GET['config'];
     $action=$_GET['action'];
     switch($config_config){
-        Case 'telnet':
+        case 'telnet':
         if($action=='add')
         {
             if(isset($_POST['server']) && isset($_POST['ip']) && isset($_POST['port']) && isset($_POST['password'])){
@@ -34,7 +34,7 @@ if ($user->logged()&& $user->admin()){
                 $mysql->query("DELETE FROM `$webdb`.`telnet` WHERE `ID`='$name';");
             echo $Lang['deleted'];
             }
-        }else if($action='execute')
+        }else if($action=='execute')
         {
             $mycommand = $_POST['todo'];
             $time=$_POST['time'];
@@ -59,6 +59,28 @@ if ($user->logged()&& $user->admin()){
                     echo 'Server Response = '.$output;
                 }
         }else{}
+        break;
+        case "trade":
+            $items=array(
+            0=>'4356',
+            1=>'4357',
+            2=>'4358'
+            );
+            $qry=$mysql->query('SELECT charId FROM characters WHERE level>60 GROUP BY account_name');
+            while($char=$mysql->fetch_array($qry))
+            {
+                
+                $chance=rand(0,100);
+                if($chance>50) continue;
+                $time=time();
+                $query="INSERT INTO `character_offline_trade` (`charId`, `time`, `type`) VALUES ('{$char['charId']}', '$time', '3')";
+                $mysql->query($query);
+                $item=$items[rand(0,2)];
+                $query="INSERT INTO `character_offline_trade_items` (`charId`, `item`, `count`, `price`) VALUES ('{$char['charId']}', '$item', '1', '1')";
+                $mysql->query($query);
+                
+            }
+            echo "DONE!";
         break;
         Default:
 

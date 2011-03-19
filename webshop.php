@@ -125,6 +125,25 @@ if($user->logged())
             $item=$sql->fetch_array();
             $qry=$sql->query('SELECT * FROM l2web.all_items WHERE id=\''.$item['item_id'].'\'');
             $itemi=$sql->fetch_array();
+            $count=getVar('count');
+            $sum=$count*$item['money_count'];
+            if($item['money']==0) //adena
+            {
+                $qry=$sql->query('SELECT `characters`. `char');
+                //SELECT characters.charId, characters.char_name, items.object_id, items.`count`,items.loc FROM characters ,items WHERE characters.charId =  items.owner_id AND items.item_id =  '57' AND characters.account_name =  '80mxm08'
+                //SELECT characters.account_name, SUM(items.`count`) AS adena FROM characters , items WHERE characters.charId =  items.owner_id AND items.item_id =  '57' AND characters.account_name =  '80mxm08'
+            }
+            else //webpoints
+            {
+                if($_SESSION['webpoints']-$sum<0)
+                {
+                    msg('Error', 'You don\'t have '.$sum.' webpoints <br /> You have '.$_SESSION['webpoints'].' webpoints','error');
+                }
+                else
+                {
+                    
+                }
+            }
             
         break;
         default:

@@ -1,7 +1,9 @@
 <?php
+
 if(!defined('INSKIN'))header("Location: ../../index.php");
 //$expires = 60*60*24*14;
 $expires = 0;
+
 header("Pragma: public");
 header("Cache-control: public");
 header("Cache-Control: maxage=".$expires);
