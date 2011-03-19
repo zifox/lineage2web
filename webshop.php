@@ -46,9 +46,10 @@ if($user->logged())
             $qry=$sql->query('SELECT * FROM l2web.all_items WHERE id=\''.$item['item_id'].'\'');
             $itemi=$sql->fetch_array();
             $addname=($itemi['addname']!='')?' - '.$itemi['adname']:'';
-            $qry=$sql->query('SELECT char_name FROM characters WHERE charId=\''.$item['owner_id'].'\'');
-            $char=$sql->fetch_array();
-            if($char['char_name']=='') $char['char_name']='No Owner';
+            //$qry=$sql->query('SELECT char_name FROM characters WHERE charId=\''.$item['owner_id'].'\'');
+            //$char=$sql->fetch_array();
+            //if($char['char_name']=='') $char['char_name']='No Owner';
+            if($item['owner']=='') $item['owner']='No Owner';
             ?>
             <table cellpadding="5" cellspacing="5" border="2" width="425px">
     <tr><td><img src="img/icons/<?php echo $itemi['icon1'];?>.png" alt="<?php echo $itemi['name'];?>" title="<?php echo $itemi['name'];?>" width="64" height="64"/></td>
@@ -69,7 +70,7 @@ if($user->logged())
     ?>
     <tr><td>Count</td><td><?php echo $item['count'];?></td></tr>
     <tr><td>Price<br /> per 1 item</td><td><?php echo $item['money_count'];?> <?php echo ($item['money']==0)?'Adena':'WebPoints';?></td></tr>
-    <tr><td>Owner</td><td><?php echo $char['char_name'];?></td></tr>
+    <tr><td>Owner</td><td><?php echo $item['owner'];?></td></tr>
     </table>
     </td></tr>
     </table>
@@ -129,9 +130,54 @@ if($user->logged())
             $sum=$count*$item['money_count'];
             if($item['money']==0) //adena
             {
-                $qry=$sql->query('SELECT `characters`. `char');
+                $qry=$sql->query('SELECT SUM(items.`count`) AS adena FROM characters , items WHERE characters.charId =  items.owner_id AND items.item_id =  \'57\' AND characters.account_name =  \''.$_SESSION['account'].'\'');
                 //SELECT characters.charId, characters.char_name, items.object_id, items.`count`,items.loc FROM characters ,items WHERE characters.charId =  items.owner_id AND items.item_id =  '57' AND characters.account_name =  '80mxm08'
-                //SELECT characters.account_name, SUM(items.`count`) AS adena FROM characters , items WHERE characters.charId =  items.owner_id AND items.item_id =  '57' AND characters.account_name =  '80mxm08'
+                //
+                $itema=$sql->fetch_array();
+                if($itema['adena']-$sum<0 || $count>$item['count'])
+                {
+                    if($itema['adena']-$sum<0)
+                        msg('Error', 'You don\'t have '.$sum.' Adena <br /> You have '.$itema['adena'].' Adena in your account','error');
+                    else
+                        msg('Error', 'Incorrect count', 'error');
+                }
+                else
+                {
+                    $taked=0;
+                    $left=$item['money_count'];
+                    //decrease adena
+                    $sql->query('SELECT characters.charId, characters.char_name, items.object_id, items.`count`,items.loc FROM characters ,items WHERE characters.charId =  items.owner_id AND items.item_id =  \'57\' AND characters.account_name =  \''.$_SESSION['account'].'\'');
+                    while($adena=$sql->fetch_array())
+                    {
+                        if($adena['count']>=$left)
+                        {
+                            $taked=$adena['count'];
+                        }
+                        else
+                        {
+                            $taked=$left-$adena['count'];
+                        }
+                        $left=$left-$taked;
+                        $sql->query('UPDATE items SET count = count-\''.$taked.'\' WHERE object_id=\''.$item['object_id'].'\'');
+                        if($left==0)
+                            break;
+                    }
+                    if($count<$item['count'])
+                    {
+                        $object_id=getConfig('webshop','inc','0')+1;
+                        $sql->query('INSERT INTO `webshop` (`owner`, `object_id`, `item_id`, `count`, `loc`, `active`) VALUES (\''.$_SESSION['account'].'\', \''.$object_id.'\', \''.$item['item_id'].'\', \''.$count.'\', \'WEBINV\', \'0\')');
+                        setConfig('webshop','inc',$object_id);
+                        $sql->query('UPDATE `webshop` SET `count`=`count`-\''.$count.'\' WHERE `object_id`=\''.$item['object_id'].'\'');
+                    }
+                    else
+                    {
+                        $object_id=getConfig('webshop','inc','0')+1;
+                        $sql->query('UPDATE `webshop` SET `owner`=\''.$_SESSION['account'].'\', `active`=\'0\' WHERE `object_id`=\''.$item['object_id'].'\'');
+                        setConfig('webshop','inc',$object_id);
+                        $sql->query('INSERT INTO `webshop` (`owner`, `object_id`, `item_id`, `count`, `loc`, `active`) VALUES (\''.$item['owner'].'\', \''.$object_id.'\', \'57\', \''.$count.'\', \'WEBINV\', \'0\')');
+                    }
+                    msg('Succes', 'You have successfully bought item','error');
+                }
             }
             else //webpoints
             {
@@ -141,7 +187,21 @@ if($user->logged())
                 }
                 else
                 {
-                    
+                    $sql->query('UPDATE `accounts` SET `webpoints`=`webpoints`-\''.$sum.'\' WHERE `login`=\''.$_SESSION['account'].'\'');
+                    $_SESSION['webpoints']-=$sum;
+                    $sql->query('UPDATE `accounts` SET `webpoints`=`webpoints`+\''.$sum.'\' WHERE `login`=\''.$item['owner'].'\'');
+                    if($count<$item['count'])
+                    {
+                        $object_id=getConfig('webshop','inc','0')+1;
+                        $sql->query('INSERT INTO `l2web`.`webshop` (`owner`, `object_id`, `item_id`, `count`, `loc`, `active`) VALUES (\''.$_SESSION['account'].'\', \''.$object_id.'\', \''.$item['item_id'].'\', \''.$count.'\', \'WEBINV\', \'0\')');
+                        setConfig('webshop','inc',$object_id);
+                        $sql->query('UPDATE `l2web`.`webshop` SET `count`=`count`-\''.$count.'\' WHERE `object_id`=\''.$item['object_id'].'\'');
+                    }
+                    else
+                    {
+                        $sql->query('UPDATE `l2web`.`webshop` SET `owner`=\''.$_SESSION['account'].'\', `active`=\'0\' WHERE `object_id`=\''.$item['object_id'].'\'');
+                    }
+                    msg('Succes', 'You have successfully bought item');
                 }
             }
             
@@ -180,23 +240,13 @@ if($user->logged())
         $i=0;
         echo "<table border=\"1\">";
         echo "<tr><th>Icon</th><th>Name</th><th>Price</th><th>Owner</th><th>Action</th></tr>";
-        $select=$sql->query("SELECT `owner_id`, `object_id`, `item_id`, `count`, `enchant_level`, `mana_left` , `time`, `money`, `money_count` FROM `{webdb}`.`webshop` WHERE `active`='1' LIMIT $startlimit, {$CONFIG['settings']['TOP']}", array('webdb'=>$webdb));
+        $select=$sql->query("SELECT `owner`, `object_id`, `item_id`, `count`, `enchant_level`, `mana_left` , `time`, `money`, `money_count` FROM `{webdb}`.`webshop` WHERE `active`='1' LIMIT $startlimit, {$CONFIG['settings']['TOP']}", array('webdb'=>$webdb));
         while($item=$sql->fetch_array($select))
         {
             $details=$sql->query("SELECT * FROM `{webdb}`.`all_items2` WHERE `id`='{$item['item_id']}'", array('webdb'=>$webdb));
             $item_d=$sql->fetch_array($details);
             $addname=($item_d['addname']=="")?"":" - ".$item_d['addname'];
             $price=($item['money']=="0")?" Adena":" WebPoints";
-            $query=$sql->query("SELECT char_name FROM characters WHERE charId='{$item['owner_id']}'");
-            if($sql->num_rows($query))
-            {
-                $fquery=$sql->fetch_array();
-                $owner=$fquery['char_name'];
-            }
-            else
-            {
-                $owner='No owner';
-            }
             $grade = $item_d["grade"];
             $grade = (!empty($grade) || $grade!="none") ? "&lt;img border=\\'0\\' src=\\'img/grade/" . $grade . "-grade.png\\' />" : "";
             $enchant = $item["enchant_level"] > 0 ? " +" . $item["enchant_level"] : "";
@@ -210,7 +260,7 @@ if($user->logged())
             echo "</td><td>";
             echo "{$item['money_count']} $price";
             echo "</td><td>";
-            echo "$owner";
+            echo "{$item['owner']}";
             echo "</td><td>";
             echo "<a href=\"webshop.php?a=view&amp;id={$item['object_id']}\">View</a>";
             echo "</td></tr>";
