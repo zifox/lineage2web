@@ -325,3 +325,40 @@ p {
     font-weight: normal;
 }
 /*body, table, tr, td, img, div, a, input { behavior: url(../../img/iepngfix.htc) }*/
+.spoiler-head {
+	font-size: 11px; padding: 1px 14px 3px; margin-left: 6px; line-height: 15px;
+}
+
+.spoiler-body {
+	padding: 1px 6px 2px; display: none;
+	border-top: 1px solid #C3CBD1; background: #F5F5F5;border-bottom: 1px solid #C3CBD1;
+}
+
+.spoiler-wrap {
+	width: 95%; margin: 6px auto; clear: both; background: #E9E9E6;
+	border: solid #C3CBD1; border-width: 1px 1px 1px 2px;
+}
+td.colhead {
+  font-weight: bold;
+  color: #516A88;
+  background-image: url(img/header.gif);
+}
+.editor {
+	margin: 0px 0px 1px 0px;
+	width: 400px;
+	height: 21px;
+	border: 1px #D1D8EC solid;
+}
+
+.editorinput {
+	background: #FAFAFA;
+	color: #000000;
+	border: 1px #D1D8EC solid;
+	font-size: 11px; font-family: Verdana, Helvetica; text-decoration: none;
+}
+
+.editorbutton {
+	float: left;
+	cursor: pointer;
+	padding: 2px 1px 0px 5px;
+}

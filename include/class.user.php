@@ -116,7 +116,7 @@ class user {
 	}
     
     public function logged(){
-		if ($_SESSION['logged'] == true)
+		if ($_SESSION['logged'] == true && $_SESSION['account']!='')
 		{
 			return true;
 		}
@@ -146,6 +146,7 @@ class user {
 		$_SESSION['vote_time'] = 0;
 		$_SESSION['webpoints'] = 0;
         $_SESSION['admin'] = false;
+        $_SESSION['mod'] = false;
         $_SESSION['logged'] = false;
         unset($_SESSION);
         setcookie('logincookie', '', 0, '', '');

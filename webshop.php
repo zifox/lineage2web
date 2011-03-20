@@ -165,16 +165,19 @@ if($user->logged())
                     if($count<$item['count'])
                     {
                         $object_id=getConfig('webshop','inc','0')+1;
-                        $sql->query('INSERT INTO `webshop` (`owner`, `object_id`, `item_id`, `count`, `loc`, `active`) VALUES (\''.$_SESSION['account'].'\', \''.$object_id.'\', \''.$item['item_id'].'\', \''.$count.'\', \'WEBINV\', \'0\')');
+                        $sql->query('INSERT INTO `l2web`.`webshop` (`owner`, `object_id`, `item_id`, `count`, `loc`, `active`) VALUES (\''.$_SESSION['account'].'\', \''.$object_id.'\', \''.$item['item_id'].'\', \''.$count.'\', \'WEBINV\', \'0\')');
                         setConfig('webshop','inc',$object_id);
-                        $sql->query('UPDATE `webshop` SET `count`=`count`-\''.$count.'\' WHERE `object_id`=\''.$item['object_id'].'\'');
+                        $sql->query('UPDATE `l2web`.`webshop` SET `count`=`count`-\''.$count.'\' WHERE `object_id`=\''.$item['object_id'].'\'');
+                        $object_id=getConfig('webshop','inc','0')+1;
+                        $sql->query('INSERT INTO `l2web`.`webshop` (`owner`, `object_id`, `item_id`, `count`, `loc`, `active`) VALUES (\''.$item['owner'].'\', \''.$object_id.'\', \'57\', \''.$sum.'\', \'WEBINV\', \'0\')');
+                        setConfig('webshop','inc',$object_id);
                     }
                     else
                     {
                         $object_id=getConfig('webshop','inc','0')+1;
-                        $sql->query('UPDATE `webshop` SET `owner`=\''.$_SESSION['account'].'\', `active`=\'0\' WHERE `object_id`=\''.$item['object_id'].'\'');
+                        $sql->query('UPDATE `l2web`.`webshop` SET `owner`=\''.$_SESSION['account'].'\', `active`=\'0\' WHERE `object_id`=\''.$item['object_id'].'\'');
                         setConfig('webshop','inc',$object_id);
-                        $sql->query('INSERT INTO `webshop` (`owner`, `object_id`, `item_id`, `count`, `loc`, `active`) VALUES (\''.$item['owner'].'\', \''.$object_id.'\', \'57\', \''.$count.'\', \'WEBINV\', \'0\')');
+                        $sql->query('INSERT INTO `l2web`.`webshop` (`owner`, `object_id`, `item_id`, `count`, `loc`, `active`) VALUES (\''.$item['owner'].'\', \''.$object_id.'\', \'57\', \''.$count.'\', \'WEBINV\', \'0\')');
                     }
                     msg('Succes', 'You have successfully bought item','error');
                 }

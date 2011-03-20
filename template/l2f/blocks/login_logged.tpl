@@ -1,6 +1,5 @@
 <table border="0" cellpadding="0">
 {admin_link}
-{admin_link2}
 <tr><td align="center"><font color="red">{vote_after_msg}
 <script language="JavaScript" type="text/javascript">
 <!--
@@ -16,7 +15,6 @@ secs = Math.floor(secs - time);
     <span id="vote">&nbsp;</span><script type="text/javascript">Clock(secs.valueOf());</script>
     </font></td></tr>
     <tr><td><center><a href="myacc.php">{my_account}</a></center></td></tr>
-    <tr><td><center><a href="contact.php">{write_message}</a></center></td></tr>
     <tr><td><center>{wp_link}</center></td></tr>
     <tr><td><center><a href="logout.php">{logout}</a></center></td></tr>
     </table>
