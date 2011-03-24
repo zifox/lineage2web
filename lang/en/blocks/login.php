@@ -18,4 +18,8 @@ $Lang['hours'] = 'Hours';
 $Lang['minutes'] = 'Minutes';
 $Lang['seconds'] = 'Seconds';
 $Lang['register'] = 'Registration';
+$Lang['inbox']='Inbox';
+$Lang['outbox']='Outbox';
+$Lang['in_mes']='%s message(s) in Inbox. %s message(s) unread';
+$Lang['out_mes']='%s message(s)in Outbox.';
 ?>

@@ -322,7 +322,15 @@ function val_string($string)
     if(!is_array($string))
         $string = trim(htmlentities(str_replace(array("\r\n", "\r", "\0"), array("\n", "\n", ''), $sql->escape($string)), ENT_QUOTES, 'UTF-8'));
     else
-        $string=val_string($string);
+        {
+            $strings = array();
+            foreach($string as $key => $value)
+            {
+                array_push($strings,val_string($value));
+            }
+            $string=$strings;
+        }
+        
     return $string;
 }
 //function conv2html($string)
@@ -767,7 +775,7 @@ function repl(t,a,b){
 	return t;
 }
 </script>
-<textarea class="editorinput" id="area" name="<?php echo $name;?>" cols="65" rows="10" style="width:400px" onkeypress="TransliteFeld(this, event)" onselect="FieldName(this, this.name)" onclick="FieldName(this, this.name)" onkeyup="FieldName(this, this.name)"><?php echo $content;?></textarea>
+<textarea class="editorinput" id="area" name="<?php echo $name;?>" cols="65" rows="10" style="width:400px" onkeypress="" onselect="FieldName(this, this.name)" onclick="FieldName(this, this.name)" onkeyup="FieldName(this, this.name)"><?php echo $content;?></textarea>
 <div class="editor" style="background-image: url(img/editor/bg.gif); background-repeat: repeat-x;">
 	<div class="editorbutton" onclick="RowsTextarea('area',1)"><img title="Increase size" src="img/editor/plus.gif" /></div>
 	<div class="editorbutton" onclick="RowsTextarea('area',0)"><img title="Decrease size" src="img/editor/minus.gif" /></div>

@@ -42,7 +42,7 @@ class user {
 	private function setSession($values, $remember, $init = true)
 	{
         global $sql;
-		$_SESSION['account'] = $values['login'];
+		$_SESSION['account'] = strtolower($values['login']);
         $cookie = $this->encpass($values['login'].$values['password']);
         $_SESSION['cookie'] = $cookie;
 		$_SESSION['logged'] = true;

@@ -202,7 +202,8 @@ if($head){
 <?php
 includeBlock('login', (!$user->logged()) ? $Lang['login']: $_SESSION['account'] );
 includeBlock('menu', $Lang['menu']);
-includeBlock('vote', $Lang['vote']);
+includeBlock('donate', 'Donate');
+//includeBlock('vote', $Lang['vote']);
 ?>
         </td>
         <td id="main" width="70%" align="center" valign="top">
@@ -227,6 +228,13 @@ includeBlock('vote', $Lang['vote']);
 
 if(getConfig('news', 'show_announcement', '1'))
     echo "<h1>".getConfig('news', 'announcement', 'Welcome to Fantasy World Freya x50')."</h1>";
+$sql->query("SELECT Count(*) AS new FROM l2web.messages WHERE receiver='{$_SESSION['account']}' AND unread='yes'");
+$msg=$sql->fetch_array();
+if($user->logged() && $msg['new']>0)
+{
+    $title=sprintf($Lang['unread_msg'], $msg['new'], $msg['new']=='1'?'':$Lang['s']);
+    msg('','<a href="message.php?viewmailbox&amp;box=1">'.$title.'</a>');
+}
 ?>
 <hr />
 <?php

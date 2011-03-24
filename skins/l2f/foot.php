@@ -16,6 +16,7 @@ if($foot){
 //пароль
 includeBlock('stats', $Lang['stats']);
 includeBlock('top10', $Lang['top10']);
+includeBlock('vote', $Lang['vote']);
 ?>
 </td></tr></table></td></tr><?php }else{ ?><table align="center"><?php } 
 $timeparts = explode(" ",microtime());
