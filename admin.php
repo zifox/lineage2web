@@ -4,7 +4,7 @@ require_once("include/config.php");
 //пароль
 head("Admin");
 includeLang('admin/settings');
-$mysql=$sql;
+
 if ($user->logged()&& $user->admin()){
     ?>
     <h2><?php echo $Lang['admin_settings']; ?></h2>
@@ -17,11 +17,11 @@ if ($user->logged()&& $user->admin()){
         if($action=='add')
         {
             if(isset($_POST['server']) && isset($_POST['ip']) && isset($_POST['port']) && isset($_POST['password'])){
-            $name=$mysql->escape($_POST['server']);
-            $ip=$mysql->escape($_POST['ip']);
-            $port=$mysql->escape($_POST['port']);
-            $password=$mysql->escape($_POST['password']);
-            $mysql->query("INSERT INTO `$webdb`.`telnet` (`Server`, `IP`, `Port`, `Password`) VALUES ('$name', '$ip', '$port', '$password');");
+            $name=$sql->escape($_POST['server']);
+            $ip=$sql->escape($_POST['ip']);
+            $port=$sql->escape($_POST['port']);
+            $password=$sql->escape($_POST['password']);
+            $sql->query("INSERT INTO `$webdb`.`telnet` (`Server`, `IP`, `Port`, `Password`) VALUES ('$name', '$ip', '$port', '$password');");
             echo $Lang['saved'];
             }else{
                 echo 'Nothing to insert!!!';
@@ -31,19 +31,19 @@ if ($user->logged()&& $user->admin()){
         {
             if(isset($_GET['server']) && is_numeric($_GET['server'])){
                 $name=0+$_GET['server'];
-                $mysql->query("DELETE FROM `$webdb`.`telnet` WHERE `ID`='$name';");
+                $sql->query("DELETE FROM `$webdb`.`telnet` WHERE `ID`='$name';");
             echo $Lang['deleted'];
             }
         }else if($action=='execute')
         {
             $mycommand = $_POST['todo'];
             $time=$_POST['time'];
-            $password=$mysql->escape($_POST['telnet_password']);
-            $serverid=$mysql->escape($_POST['server']);
+            $password=$sql->escape($_POST['telnet_password']);
+            $serverid=$sql->escape($_POST['server']);
 
-                $targetserver=$mysql->query('SELECT * FROM `'.$webdb.'`.`telnet` WHERE `Server`=\''.$serverid.'\' ');
-                if($mysql->num_rows2($targetserver)){
-                    $server_data=$mysql->fetch_array($targetserver);
+                $targetserver=$sql->query('SELECT * FROM `'.$webdb.'`.`telnet` WHERE `Server`=\''.$serverid.'\' ');
+                if($sql->num_rows($targetserver)){
+                    $server_data=$sql->fetch_array($targetserver);
                     $fp=@fsockopen($server_data['IP'],$server_data['Port'],$errno,$errstr);
                     //$command="$mycommand $time\r";
                     $command="$mycommand\r";
@@ -66,27 +66,27 @@ if ($user->logged()&& $user->admin()){
             1=>'4357',
             2=>'4358'
             );
-            $qry=$mysql->query('SELECT charId FROM characters WHERE level>60 GROUP BY account_name');
-            while($char=$mysql->fetch_array($qry))
+            $qry=$sql->query('SELECT charId FROM characters WHERE level>60 GROUP BY account_name');
+            while($char=$sql->fetch_array($qry))
             {
                 
                 $chance=rand(0,100);
                 if($chance>50) continue;
                 $time=time();
                 $query="INSERT INTO `character_offline_trade` (`charId`, `time`, `type`) VALUES ('{$char['charId']}', '$time', '3')";
-                $mysql->query($query);
+                $sql->query($query);
                 $item=$items[rand(0,2)];
                 $query="INSERT INTO `character_offline_trade_items` (`charId`, `item`, `count`, `price`) VALUES ('{$char['charId']}', '$item', '1', '1')";
-                $mysql->query($query);
+                $sql->query($query);
                 
             }
             echo "DONE!";
         break;
         Default:
 
-$sql=$mysql->query("SELECT * FROM `".$webdb."`.`config`");
-while ( $row = $mysql->fetch_array($sql) ) {
-    $mysql->query("UPDATE `".$webdb."`.`config` SET `value` = '". $mysql->escape($_POST[$row['name']])."' WHERE `name` = '{$row['name']}'");
+$qry=$sql->query("SELECT * FROM `".$webdb."`.`config`");
+while ( $row = $sql->fetch_array($qry) ) {
+    $sql->query("UPDATE `".$webdb."`.`config` SET `value` = '". $sql->escape($_POST[$row['name']])."' WHERE `name` = '{$row['name']}'");
     }
 echo $Lang['saved'];
 ?> <meta http-equiv="refresh" content="1; URL=admin.php" />
@@ -106,9 +106,9 @@ break;
 <form action="admin.php" method="post">
 <table>
 <?php
-$sql=$mysql->query("SELECT * FROM `".$webdb."`.`config`");
+$qry=$sql->query("SELECT * FROM `".$webdb."`.`config`");
 
-while ( $row = $mysql->fetch_array($sql) ) {
+while ( $row = $sql->fetch_array($qry) ) {
     ?>
     <tr>
 	<td><?php echo $Lang[$row['name']];?>:</td>
@@ -128,8 +128,8 @@ while ( $row = $mysql->fetch_array($sql) ) {
                 <table border="1" align="center"><tr><td>
                     <select name="server">
     <?php
-    $servers=$mysql->query('SELECT `Server` FROM `'.$webdb.'`.`telnet`');
-    while($slist=$mysql->fetch_array($servers))
+    $servers=$sql->query('SELECT `Server` FROM `'.$webdb.'`.`telnet`');
+    while($slist=$sql->fetch_array($servers))
     {
       ?>
       <option value="<?php echo $slist['Server'];?>"><?php echo $slist['Server'];?></option>
@@ -163,8 +163,8 @@ while ( $row = $mysql->fetch_array($sql) ) {
     <thead><tr><th>Server</th><th>IP</th><th>Port</th><th>Password</th><th>Action</th></tr></thead>
     <tbody>
     <?php
-    $servers=$mysql->query('SELECT * FROM `'.$webdb.'`.`telnet`');
-    while($slist=$mysql->fetch_array($servers))
+    $servers=$sql->query('SELECT * FROM `'.$webdb.'`.`telnet`');
+    while($slist=$sql->fetch_array($servers))
     {
       ?>
       <tr><td><?php echo $slist['Server'];?></td><td><?php echo $slist['IP'];?></td><td><?php echo $slist['Port'];?></td><td><?php echo $slist['Password'];?></td><td><a href="admin.php?config=telnet&amp;action=delete&amp;server=<?php echo $slist['ID'];?>">Delete</a></td></tr>

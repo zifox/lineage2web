@@ -202,7 +202,7 @@ if($head){
 <?php
 includeBlock('login', (!$user->logged()) ? $Lang['login']: $_SESSION['account'] );
 includeBlock('menu', $Lang['menu']);
-includeBlock('donate', 'Donate');
+//includeBlock('donate', 'Donate');
 //includeBlock('vote', $Lang['vote']);
 ?>
         </td>

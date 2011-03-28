@@ -11,15 +11,16 @@ if ($_POST && !$user->logged()) {
         ($remember == true) ? $remember=true : $remember=false;
         if($user->checkLogin($account, $pass, $remember))
         {
-            head("Login", 1, 'index.php', 5);
-            msg("Success", "You have been successfully loged in");
-            foot();
-            exit();
+            if(isset($_SESSION['returnto']))
+                header ("Refresh: 3; url={$_SESSION['returnto']}");
+            else
+                header ("Refresh: 3; url=index.php");
+            suc("Success", "You have been successfully loged in");
+
         }else{
-            head("Login", 1, 'index.php', 5);
-            msg("Error", "You have failed to log in", 'error');
-            foot();
-            exit();
+            header ("Refresh: 3; url=index.php");
+            err("Error", "You have failed to log in");
+
         }
     }
 }else{
@@ -37,8 +38,8 @@ if ($_POST && !$user->logged()) {
         <center><a href="reg.php"><?php echo $Lang['register'];?></a></center>
         <?php
     }else{
-        head("Login", 1, 'index.php', 5);
-        msg("Error", "You are already logged in", 'error');
+        header ("Refresh: 3; url=index.php");
+        err("Error", "You are already logged in");
     }
 foot();
 }

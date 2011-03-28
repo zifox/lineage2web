@@ -810,4 +810,15 @@ function get_date_time($timestamp = 0) {
 	else
 		return date("Y-m-d H:i:s");
 }
+function loggedInOrReturn($url='')
+{
+    global $user, $Lang;
+    if(!$user->logged())
+    {
+        if($url)
+            $_SESSION['returnto']=$url;
+        header ("Refresh: 3; url=login.php");
+        err($Lang['error'], $Lang['need_to_login']);
+    }
+}
 ?>

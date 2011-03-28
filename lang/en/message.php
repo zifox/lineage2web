@@ -1,5 +1,5 @@
 <?php
-//??????
+//пароль
 if(!defined('INLANG')){Header("Location: ../../index.php");}
 
 $Lang['inbox']='Inbox';

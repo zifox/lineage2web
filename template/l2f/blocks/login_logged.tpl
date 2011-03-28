@@ -16,6 +16,6 @@ secs = Math.floor(secs - time);
     </font></td></tr>
     <tr><td><center><a href="myacc.php">{my_account}</a></center></td></tr>
     <tr><td><center>{wp_link}</center></td></tr>
-    <tr><td><center><a href="message.php?a=viewmailbox&amp;box=1"><img src="img/pn_inbox{new}.gif" alt="{inbox}" title="{in_mes}" /></a>/<a href="message.php?a=viewmailbox&amp;box=2"><img src="img/pn_sentbox.gif" alt="{outbox}" title="{out_mes}" /></a></center></td></tr>
+    <tr><td><center><a href="message.php?a=viewmailbox&amp;box=1"><img src="img/pn_inbox{new}.gif" alt="{inbox}" title="{in_mes}" border="0" /></a>/<a href="message.php?a=viewmailbox&amp;box=2"><img src="img/pn_sentbox.gif" alt="{outbox}" title="{out_mes}" border="0" /></a></center></td></tr>
     <tr><td><center><a href="logout.php">{logout}</a></center></td></tr>
     </table>

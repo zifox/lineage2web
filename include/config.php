@@ -20,15 +20,15 @@ require_once ('class.mysql.php');
 require_once ('class.user.php');
 require_once ('class.tplParser.php');
 require_once ('class.cache.php');
-
+require_once ('include/functions.php');
 $sql = new MySQL($DB);
 $query = $sql->query($q[0], array("db" => $webdb));
 while ($row = $sql->fetch_array($query)) {
     $CONFIG[$row['type']][$row['name']] = stripslashes($row['value']);
 }
-
+$webdb=getConfig('settings','webdb','l2web');
 $user = new user();
-require_once ('include/functions.php');
+
 if (getConfig('features','use_cracktracker','0')){
     require_once ('include/cracktracker.php');
 }

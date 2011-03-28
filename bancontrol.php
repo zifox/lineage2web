@@ -2,9 +2,11 @@
 define('INWEB', True);
 require_once("include/config.php");
 //пароль
-if (!logedin() && !is_admin())
-  die;
-
+loggedInOrReturn('bancontrol.php');
+if(!$user->mod())
+{
+    die();
+}
 head("BanList");
 
 echo "<center><a href='bancontrol.php?page=index'>Banu saraksts</a> | <a href='bancontrol.php?page=control'>Pievienot</a>";
@@ -12,7 +14,7 @@ echo "<center><a href='bancontrol.php?page=index'>Banu saraksts</a> | <a href='b
 
 
 
-$page = $_REQUEST['page'];
+$page = getVar('page');
 if($page== "index")
 {
 echo "<table cellpadding='4' cellspacing='1' border='0' style='width:100%' class='tableinborder'";
@@ -68,8 +70,8 @@ echo "
 </table>
 </form>";
 }
-$addr = $_REQUEST['addr'];
-$op = $_REQUEST['op'];
+$addr = getVar('addr');
+$op = getVar('op');
 if($addr)
 {
 $addr = strip_tags(stripslashes(trim($addr)));

@@ -30,27 +30,7 @@ function str_replace_once($search, $replace, $subject) {
 $a=$_GET['a'];
 switch($a)
 {
-    case 'upgabfai': ###update grade and bodypart for allitems1
-    $query = mysql_query("SELECT item_id, bodypart, crystal_type FROM $db.weapon") OR die(mysql_error());
-    $i=0;
-    while($r=mysql_fetch_assoc($query))
-    {
-        mysql_query("UPDATE `$webdb`.`$aitable` SET `bodypart`='{$r['bodypart']}', `grade`='{$r['crystal_type']}' WHERE `id`='{$r['item_id']}';") OR die(mysql_error());
-        $i++;
-    }
-    $query = mysql_query("SELECT item_id, bodypart, crystal_type FROM $db.armor") OR die(mysql_error());
-    while($r=mysql_fetch_assoc($query))
-    {
-        mysql_query("UPDATE `$webdb`.`$aitable` SET `bodypart`='{$r['bodypart']}', `grade`='{$r['crystal_type']}' WHERE `id`='{$r['item_id']}';") OR die(mysql_error());
-        $i++;
-    }
-    $query = mysql_query("SELECT item_id, item_type, crystal_type FROM $db.etcitem") OR die(mysql_error());
-    while($r=mysql_fetch_assoc($query))
-    {
-        mysql_query("UPDATE `$webdb`.`$aitable` SET `type`='{$r['item_type']}', `grade`='{$r['crystal_type']}' WHERE `id`='{$r['item_id']}';") OR die(mysql_error());
-        $i++;
-    }
-    break;
+
 ################################################################################################
     case 'idiai': #####insert data into all_items1
     //$query = mysql_query("SELECT temp.id AS tid, temp2.f21 AS a2, temp2.f22 AS a3, temp2.f23 AS a4, temp2.f24 AS a5, temp2.f25 AS a6  FROM $webdb.temp INNER JOIN $webdb.temp2 USING (id)") OR die(mysql_error());
@@ -247,44 +227,6 @@ CREATE TABLE `$webdb`.`$aitable` (
   `desc` varchar(650) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED;") OR die(mysql_error());
-    break;
-################################################################################################
-    case 'cl2jdb': ###Chech l2jdb table
-    $query = mysql_query("SELECT item_id, name FROM $db.weapon") OR mysql_error();
-    $i=0;
-    while($r=mysql_fetch_assoc($query))
-    {
-        $sq=mysql_query("SELECT `id` FROM `$webdb`.`$aitable` WHERE `id`='{$r['item_id']}';") OR mysql_error("$i");
-        if(!mysql_num_rows($sq))
-        {
-            echo 'Missing data for weapon '.$r[item_id].'<br />';
-            $i++;
-        }
-
-    }
-    $query = mysql_query("SELECT item_id, name FROM $db.armor") OR mysql_error();
-    $i=0;
-    while($r=mysql_fetch_assoc($query))
-    {
-        $sq=mysql_query("SELECT `id` FROM `$webdb`.`$aitable` WHERE `id`='{$r['item_id']}';") OR mysql_error("$i");
-        if(!mysql_num_rows($sq))
-        {
-            echo 'Missing data for armor '.$r[item_id].'<br />';
-            $i++;
-        }
-    }
-    $query = mysql_query("SELECT item_id, name FROM $db.etcitem") OR mysql_error();
-    $i=0;
-    while($r=mysql_fetch_assoc($query))
-    {
-        $sq=mysql_query("SELECT `id` FROM `$webdb`.`$aitable` WHERE `id`='{$r['item_id']}';") OR mysql_error("$i");
-        if(!mysql_num_rows($sq))
-        {
-            echo 'Missing data for etcitem '.$r[item_id].'<br />';
-            $i++;
-        }
-
-    }
     break;
 ################################################################################################
     case 'ctemp2': ###Chech temp2 table

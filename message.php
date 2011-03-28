@@ -1,11 +1,8 @@
 <?php
+//пароль
 define('INWEB', True);
 require_once("include/config.php");
-
-if(!$user->logged())
-{
-    err('Error', 'You need to login');
-}
+loggedInOrReturn('message.php');
 define('PM_DELETED',0); // Message was deleted
 define('PM_INBOX',1); // Message located in Inbox for reciever
 define('PM_SENTBOX',2); // GET value for sent box
@@ -18,23 +15,19 @@ if (!$a)
 switch($a)
 {
     case "viewmailbox":
-            // Get Mailbox Number
         $mailbox = getVar('box');
         if (!$mailbox)
         {
                 $mailbox = PM_INBOX;
         }
-                if ($mailbox == PM_INBOX)
-                {
-                        $mailbox_name = $Lang['inbox'];
-                }
-                else
-                {
-                        $mailbox_name = $Lang['outbox'];
-                }
-
-        // Start Page
-
+        if ($mailbox == PM_INBOX)
+        {
+            $mailbox_name = $Lang['inbox'];
+        }
+        else
+        {
+            $mailbox_name = $Lang['outbox'];
+        }
         head($mailbox_name); ?>
         <script language="Javascript" type="text/javascript">
         <!-- Begin
@@ -77,18 +70,19 @@ switch($a)
         <td width="10%" class="colhead"><?php echo $Lang['date'];?></td>
         <td width="2%" class="colhead"><input type="checkbox" title="<?php echo $Lang['mark_all'];?>" value="<?php echo $Lang['mark_all'];?>" onclick="this.value=check(document.form1.elements);" /></td>
         </tr>
-        <?php if ($mailbox != PM_SENTBOX) {
-                $res=$sql->query('SELECT * FROM l2web.messages WHERE receiver=\''.$_SESSION['account'].'\' AND location=\''.$mailbox.'\' ORDER BY id DESC');
+        <?php
+        if ($mailbox != PM_SENTBOX) {
+                $res=$sql->query(30, array('webdb'=>$webdb, 'account' => $_SESSION['account'],'loc'=>$mailbox));
         } else {
-                $res=$sql->query('SELECT * FROM l2web.messages WHERE sender=\''.$_SESSION['account'].'\' AND saved=\'yes\' ORDER BY id DESC');
+                $res=$sql->query(31, array('webdb'=>$webdb, 'account' => $_SESSION['account']));
         }
         if (!$sql->num_rows()) {
                 echo'<td colspan="6" align="center">'.$Lang['no_messages'].'.</td><br />';
         }
         else
         {
-                while ($row = $sql->fetch_array())
-                {
+            while ($row = $sql->fetch_array())
+            {
                         if ($row['sender'] != 0) {
                             $username = "<a href=\"userdetails.php?id=" . $row['sender'] . "\">" . $row["sender"] . "</a>";
                                 
@@ -146,7 +140,7 @@ switch($a)
         }
         
         
-        $res=$sql->query('SELECT * FROM l2web.messages WHERE id=\''.$pm_id.'\' AND (receiver=\'' . $_SESSION['account'] . '\' OR (sender=\'' . $_SESSION['account']. '\' AND saved=\'yes\')) LIMIT 1');
+        $res=$sql->query(32, array('webdb'=>$webdb, 'account' => $_SESSION['account'],'pm_id'=>$pm_id));
         if (!$sql->num_rows())
         {
                 msg($Lang['error'],'Message Not Found!','error');
@@ -187,7 +181,7 @@ switch($a)
         {
                 $subject = "No subject";
         }
-        $sql->query("UPDATE l2web.messages SET unread='no' WHERE id='" . $pm_id . "' AND receiver='" . $_SESSION['account'] . "' LIMIT 1");
+        $sql->query(33, array('webdb'=>$webdb, 'account' => $_SESSION['account'],'pm_id'=>$pm_id));
         head("Private Message (Subject: $subject)"); ?>
         <table width="660" border="0" cellpadding="4" cellspacing="0">
         <tr><td class="colhead" colspan="2">Subject: <?php echo $subject; ?></td></tr>
@@ -212,7 +206,7 @@ switch($a)
             if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 $pm_id = getVar('id');
 
-                $res = $sql->query("SELECT * FROM l2web.messages WHERE id='$pm_id' AND (receiver='{$_SESSION['account']}' OR sender='{$_SESSION['account']}') LIMIT 1");
+                $res = $sql->query(32, array('webdb'=>$webdb, 'account' => $_SESSION['account'],'pm_id'=>$pm_id));
 
                 if (!$res) {
                         err($Lang['error'], "Invalid ID");
@@ -275,7 +269,7 @@ switch($a)
         else {
                 $pm_id = getVar('id');
 
-                $res = $sql->query("SELECT * FROM l2web.messages WHERE id='$pm_id' AND (receiver='{$_SESSION['account']}' OR sender='{$_SESSION['account']}') LIMIT 1");
+                $res = $sql->query(32, array('webdb'=>$webdb, 'account' => $_SESSION['account'],'pm_id'=>$pm_id));
                 if (!$res) {
                         err($Lang['error'], "You don't have permission to forward this message");
                 }
@@ -288,7 +282,7 @@ switch($a)
                 $subject = getVar('subject');
                 $username = getVar('to');
 
-                $res = $sql->query("SELECT login FROM accounts WHERE LOWER(login)=LOWER('$username') LIMIT 1");
+                $res = $sql->query(101, array('login'=>$username));
                 if (!$res) {
                         err($Lang['error'], "User not found");
                 }
@@ -323,7 +317,7 @@ switch($a)
         case "deletemessage":
                 $pm_id = getVar('id');
 
-        $res = $sql->query("SELECT * FROM l2web.messages WHERE id='$pm_id'") ;
+        $res = $sql->query(34, array('webdb'=>$webdb, 'pm_id'=>$pm_id)) ;
         if (!$res) {
                 err($Lang['error'],"Message not found");
         }
@@ -332,19 +326,19 @@ switch($a)
         }
         $message = $sql->fetch_array();
         if (strtolower($message['receiver']) == $_SESSION['account'] && $message['saved'] == 'no') {
-                $res2 = $sql->query("DELETE FROM l2web.messages WHERE id='$pm_id'");
+                $res2 = $sql->query(35, array('webdb'=>$webdb, 'pm_id'=>$pm_id));
                 $loc=1;
         }
         elseif (strtolower($message['sender']) == $_SESSION['account'] && $message['location'] == PM_DELETED) {
-                $res2 = $sql->query("DELETE FROM l2web.messages WHERE id='$pm_id'");
+                $res2 = $sql->query(35, array('webdb'=>$webdb, 'pm_id'=>$pm_id));
                 $loc=1;
         }
         elseif (strtolower($message['receiver']) == $_SESSION['account'] && $message['saved'] == 'yes') {
-                $res2 = $sql->query("UPDATE l2web.messages SET location='0' WHERE id='$pm_id'");
+                $res2 = $sql->query(36, array('webdb'=>$webdb, 'pm_id'=>$pm_id));
                 $loc=1;
         }
         elseif (strtolower($message['sender']) == $_SESSION['account'] && $message['location'] != PM_DELETED) {
-                $res2 = $sql->query("UPDATE l2web.messages SET saved='no' WHERE id='$pm_id'");
+                $res2 = $sql->query(37, array('webdb'=>$webdb, 'pm_id'=>$pm_id));
                 $loc=2;
         }
         if (!$res2) {
@@ -423,7 +417,7 @@ if ($a == "sendmessage") {
         $replyto = getVar('replyto');
 
         if ($replyto) {
-                $res = $sql->query("SELECT * FROM l2web.messages WHERE id=$replyto");
+                $res = $sql->query(34, array('webdb'=>$webdb, 'pm_id'=>$replyto));
                 $msga = $sql->fetch_array();
                 if ($msga["receiver"] != $_SESSION['account'])
                         err($Lang['error'], "You cannot reply to yourself!");
@@ -487,16 +481,16 @@ if ($a == 'takemessage') {
         {
                 if ($delete == "yes")
                 {
-                        $res = $sql->query("SELECT * FROM messages WHERE id=$origmsg");
+                        $res = $sql->query(34, array('webdb'=>$webdb, 'pm_id'=>$origmsg));
                         if ($sql->num_rows())
                         {
                                 $arr = $sql->fetch_array();
                                 if ($arr["receiver"] != $_SESSION['account'])
                                         err($Lang['error'],"Incorrect message!");
                                 if ($arr["saved"] == "no")
-                                        $sql->query("DELETE FROM messages WHERE id=$origmsg");
+                                        $sql->query(35, array('webdb'=>$webdb, 'pm_id'=>$origmsg));
                                 elseif ($arr["saved"] == "yes")
-                                        $sql->query("UPDATE messages SET unread = 'no', location = '0' WHERE id=$origmsg");
+                                        $sql->query(38, array('webdb'=>$webdb, 'pm_id'=>$origmsg));
                         }
                 }
                 if (!$returnto)
@@ -560,19 +554,19 @@ if ($a == "moveordel") {
                         if (is_array($pm_messages))
                         foreach ($pm_messages as $id) {
                             $id=val_int($id);
-                                $res = $sql->query("select * FROM l2web.messages WHERE id=" . $id);
+                                $res = $sql->query(34, array('webdb'=>$webdb, 'pm_id'=>$id));
                                 $message = $sql->fetch_array($res);
                                 if ($message['receiver'] == $_SESSION['account'] && $message['saved'] == 'no') {
-                                        $sql->query("DELETE FROM l2web.messages WHERE id=" .$id);
+                                        $sql->query(35, array('webdb'=>$webdb, 'pm_id'=>$id));
                                 }
                                 elseif ($message['sender'] == $_SESSION['account'] && $message['location'] == PM_DELETED) {
-                                        $sql->query("DELETE FROM l2web.messages WHERE id=" . $id);
+                                        $sql->query(35, array('webdb'=>$webdb, 'pm_id'=>$id));
                                 }
                                 elseif ($message['receiver'] == $_SESSION['account'] && $message['saved'] == 'yes') {
-                                        $sql->query("UPDATE l2web.messages SET location=0 WHERE id=" . $id);
+                                        $sql->query(36, array('webdb'=>$webdb, 'pm_id'=>$id));
                                 }
                                 elseif ($message['sender'] == $_SESSION['account'] && $message['location'] != PM_DELETED) {
-                                        $sql->query("UPDATE l2web.messages SET saved='no' WHERE id=" . $id);
+                                        $sql->query(37, array('webdb'=>$webdb, 'pm_id'=>$id));
                                 }
                         }
                 }
@@ -593,7 +587,7 @@ if ($a == "moveordel") {
                 		if (is_array($pm_messages))
                         foreach ($pm_messages as $id) {
                             $id=val_int($id);
-                                $res = $sql->query("select * FROM l2web.messages WHERE id=" . $id);
+                                $res = $sql->query(34, array('webdb'=>$webdb, 'pm_id'=>$id));
                                 $message = $sql->fetch_array($res);
                                 $sql->query("UPDATE l2web.messages SET unread='no' WHERE id = " . $id) ;
                         }

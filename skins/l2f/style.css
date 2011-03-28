@@ -43,6 +43,8 @@ td, pre{font-family:Tahoma, Verdana, Arial, Helvetica, sans-serif;font-size:11px
 .error b{color:#990000;background:inherit;}
 .success{color:#7ba813;padding:7px;margin-top:5px;margin-bottom:5px;border:1px dashed #7ba813;}
 .success b{color:#7ba813;background:inherit;}
+.warning{color:#F2B90F;padding:7px;margin-top:5px;margin-bottom:5px;border:1px dashed #F2B90F;}
+.warning b{color:#F2B90F;background:inherit;}
 h1{font-size:16px;color:#7ba813;text-align:center;font-weight:bold;}
 h2{font-size:16px;color:#7daa94;text-align:center;}
 h3{font-size:16px;color:teal;text-align:center;}

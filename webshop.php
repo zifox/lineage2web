@@ -3,10 +3,7 @@ define('INWEB', True);
 require_once("include/config.php");
 //пароль
 includeLang('webpoints');
-
-
-if($user->logged())
-{
+loggedInOrReturn('webshop.php');
     $stat = getVar('stat');
     if(isset($_GET['page']))
     {
@@ -564,10 +561,6 @@ if($user->logged())
         echo "</table>";
         break;
     }
-}
-else
-{
-    msg($Lang['error'], $Lang['need_to_login'], 'error');
-}
+
 foot();
 ?>
