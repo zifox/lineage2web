@@ -161,6 +161,36 @@ function getDBName($id)
   	}
   	return getConfig('settings', 'DDB', 'l2jdb');
 }
+function getDBInfo($id)
+{
+    global $sql;
+    $webdb=getConfig('settings','webdb','l2web');
+    if(is_numeric($id))
+    {
+        $id=val_int($id);
+        if($id)
+        {
+            $srvqry = $sql->query("SELECT `ID`, `Name`, `DataBase` FROM `{webdb}`.`gameservers` WHERE `ID` = '{id}' AND `active`='true'", array('webdb'=>$webdb,'id'=>$id));
+            if($sql->num_rows())
+            {
+                return $sql->fetch_array($srvqry);
+            }
+        }
+  	}
+    else
+    {
+        $id=val_string($id);
+        if($id)
+        {
+            $srvqry = $sql->query("SELECT `ID`, `Name`, `DataBase` FROM `{webdb}`.`gameservers` WHERE `DataBase` = '{db}' AND `active`='true'", array('webdb'=>$webdb,'db'=>$id));
+            if($sql->num_rows())
+            {
+                return $sql->fetch_array($srvqry);
+            }
+        }
+    }
+    err('Error','Incorrect Database');
+}
 
 function pagechoose($page, $count=0, $stat, $server)
 {

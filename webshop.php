@@ -4,6 +4,50 @@ require_once("include/config.php");
 //пароль
 includeLang('webpoints');
 loggedInOrReturn('webshop.php');
+$elements=array();
+$elements[0]="Fire";
+$elements[1]="Water";
+$elements[2]="Wind";
+$elements[3]="Earth";
+$elements[4]="Holy";
+$elements[5]="Dark";
+$FIRST_WEAPON_BONUS = 20;
+$NEXT_WEAPON_BONUS = 5;
+$ARMOR_BONUS = 6;
+$WEAPON_VALUES =array
+	(
+		0,   // Level 1
+		25,  // Level 2
+		75,  // Level 3
+		150, // Level 4
+		175, // Level 5
+		225, // Level 6
+		300, // Level 7
+		325, // Level 8
+		375, // Level 9
+		450, // Level 10
+		475, // Level 11
+		525, // Level 12
+		600, // Level 13
+		Integer.MAX_VALUE  // TODO: Higher stones
+	);
+$ARMOR_VALUES =array
+	(
+		0,  // Level 1
+		12, // Level 2
+		30, // Level 3
+		60, // Level 4
+		72, // Level 5
+		90, // Level 6
+		120, // Level 7
+		132, // Level 8
+		150, // Level 9
+		180, // Level 10
+		192, // Level 11
+		210, // Level 12
+		240, // Level 13
+		Integer.MAX_VALUE  // TODO: Higher stones
+	);
     $stat = getVar('stat');
     if(isset($_GET['page']))
     {
@@ -12,6 +56,11 @@ loggedInOrReturn('webshop.php');
     else
     {
         $start = 1;
+    }
+    $server=getVar('server');
+    if(!$server)
+    {
+        $server=getDBInfo($server);
     }
     if(!is_numeric($start) || $start==0) {$start = 1;}
     $start=abs($start)-1;
@@ -94,6 +143,16 @@ loggedInOrReturn('webshop.php');
     {?>
     <tr><td>Enchant</td><td><?php echo $item['enchant_level'];?></td></tr><?php
     }
+    $sql->query("SELECT * FROM item_elementals WHERE itemId={$item[item_id]}");
+    if($sql->num_rows())
+    {
+        while($ele=$sql->fetch_array())
+        {
+            
+        }
+
+    }
+
     ?>
     <tr><td>Count</td><td><input type="text" name="count" /> Max:<?php echo $item['count'];?></td></tr>
     <tr><td>Price<br /> per 1 item</td><td><select name="money"><option value="0">Adena</option><option value="1">Webpoints</option></select><input type="text" name="money_count" /></td></tr>
@@ -197,20 +256,37 @@ loggedInOrReturn('webshop.php');
         break;
         case "transfer":
         $id=getVar('id');
+        $qry=$sql->query("SELECT * FROM l2web.webshop WHERE object_id='$id'");
+        if(!$sql->num_rows($qry))
+        {
+            err('Error','Cannot find item');
+        }
+        $item=$sql->fetch_array($qry);
         if($_POST)
         {
-            
+            $char=getVar('char');
+            $serv=getDBInfo($item['server']);
+            $sql->query("SELECT `charId`, `char_name` FROM `{$serv['DataBase']}`.`characters` WHERE `account_name`='{$_SESSION['account']}' AND `online`='0'");
+            if(!$sql->num_rows())
+            {
+                err('Error','Character not found');
+            }
+            $char=$sql->fetch_array();
+            $sql->query('DELETE FROM l2web.webshop WHERE object_id=\''.$item['object_id'].'\'');
+            if(!$sql->row_count)
+            {
+                err('Error','Failed to remove item from webshop');
+            }
+            $sql->query("INSERT INTO `{$serv['DataBase']}`.`character_premium_items` (`charId`, `itemId`, `itemCount`, `itemSender`) VALUES ('{$char['charId']}', '{$item['item_id']}', '{$item['count']}', 'WebShop')");
+            if(!$sql->row_count)
+            {
+                err('Error','Failed to insert item in game. Please contact ADMIN with this info ['.print_r($item).']');
+            }
+            suc('Success','Your item has been successfully delivered to game. Please visit Dimensional Merchant to receive your item');
         }
         else
         {
             
-            $qry=$sql->query("SELECT * FROM l2web.webshop WHERE object_id='$id'");
-            if(!$sql->num_rows($qry))
-            {
-                err('Error','Cannot find item');
-            }
-            
-            $item=$sql->fetch_array($qry);
             $sql->query("SELECT * FROM l2web.all_items WHERE id='{$item['item_id']}'");
             $itemi=$sql->fetch_array();
             $addname=($itemi['addname']!='')?' - '.$itemi['adname']:'';
@@ -278,7 +354,9 @@ loggedInOrReturn('webshop.php');
     <form action="?a=transfer" method="POST">
     <table><select name="char">
     <?php
-    $sql->query("SELECT charId, char_name FROM characters WHERE account_name='{$_SESSION['account']}' AND online='0'");
+    $serv=getDBInfo($item['server']);
+    
+    $sql->query("SELECT `charId`, `char_name` FROM `{$serv['DataBase']}`.`characters` WHERE `account_name`='{$_SESSION['account']}' AND `online`='0'");
     while($char=$sql->fetch_array())
     {
         echo '<option value="'.$char['charId'].'">'.$char['char_name'].'</option>';

@@ -11,15 +11,16 @@ class MySQL{
     public $querycount = 0;
     public $totalsqltime = 0;
     public $row_count=0;
-    function __construct(&$DBInfo){
+    private $pconnect=false;
+    function __construct(&$DBInfo,$persistant=true){
         $this->DBInfo = $DBInfo;
         unset($DBInfo);
-        $this->connect();
+        $this->connect($persistant);
     }
     
     function __destruct()
     {
-        //if($this->link) $this->close();
+        if(!$this->pconnect && $this->link) $this->close();
     }
     function __wakeup()
     {
@@ -29,8 +30,12 @@ class MySQL{
     {
         return $this->query[$res]['result'];
     }
-    private function connect() {
-        $this->link=mysql_pconnect($this->DBInfo['host'],$this->DBInfo['user'],$this->DBInfo['password']);
+    private function connect($persistant=true) {
+        $this->pconnect=$persistant;
+        if($persistant)
+            $this->link=mysql_pconnect($this->DBInfo['host'],$this->DBInfo['user'],$this->DBInfo['password']);
+        else
+            $this->link=mysql_connect($this->DBInfo['host'],$this->DBInfo['user'],$this->DBInfo['password']);
         if (!$this->link)
         {
             $this->err("Could not connect to server: <b>{$this->DBInfo['host']}</b>.");
@@ -46,18 +51,8 @@ class MySQL{
     }
 
     private function close() {
-        //if($this->link)
-        try
-        {
-            mysql_close($this->link);
-        }
-        catch(Exception $e)
-        {
-            //$this->err("Could not close MySQL.");
-            $this->err($e);
-        }
+        mysql_close($this->link);
     }
-
     function escape($string) {
         if(get_magic_quotes_runtime()) $string = stripslashes($string);
         return mysql_real_escape_string($string, $this->link);
@@ -70,8 +65,6 @@ class MySQL{
         if(is_numeric($sql))
             $sql=$q[$sql];
         $sql = preg_replace('#\{([a-z0-9\-_]*?)\}#Ssie', '( ( isset($array[\'\1\']) ) ? $array[\'\1\'] : \'\' );', $sql);
-        
-        //$sql = trim($sql);
 
         $result = mysql_query($sql, $this->link) OR $this->err("<b>MySQL Query error: </b> $sql");
         
@@ -101,13 +94,6 @@ class MySQL{
         return mysql_result($this->query[$res]['result'], $row, $field);
     }
 
-/*    function num_rows($res = null) {
-        if ($res === null) {
-            end($this->query);
-            $res = key($this->query);
-        }
-        return mysql_num_rows($this->query[$res]['result']);
-    }*/
     function num_rows()
     {
         if ($res === null) {

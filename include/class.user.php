@@ -34,7 +34,6 @@ class user {
 		}
 		else
 		{
-			//$this->logout();
 			return false;
 		}
 	}
@@ -83,14 +82,14 @@ class user {
 	private function checkRemembered($cookie)
 	{
         global $sql;
-		list($username, $cookie) = @unserialize($cookie);
+		list($username, $cookie) = unserialize($cookie);
 		if (!$username || !$cookie) return;
-		$username = $sql->escape($username);
-		$cookie = $sql->escape($cookie);
+		$username = val_string($username);
+		$cookie = val_string($cookie);
 
 		$sqlq = "SELECT * FROM `accounts` WHERE `login` = '$username' AND `cookie` = '$cookie'";
 		$result = $sql->query( $sqlq );
-		if ( $sql->num_rows() )
+		if ($sql->num_rows())
 		{
 			$this->setSession($sql->fetch_array($result), true );
 		}
