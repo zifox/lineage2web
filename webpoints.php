@@ -1,4 +1,5 @@
 <?php
+die('Currently Disabled');
 define('INWEB', True);
 require_once("include/config.php");
 //пароль

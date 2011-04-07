@@ -188,9 +188,35 @@ class user {
             return false;
     }
     
-    public function changepass()
+    public function changepass($acc,$old,$pass,$pass2)
     {
+        global $sql, $Lang;
         
+        if(ereg("^([a-zA-Z0-9_-])*$", $old) && ereg("^([a-zA-Z0-9_-])*$", $pass) && ereg("^([a-zA-Z0-9_-])*$", $pass2))
+        {
+    
+            if ($pass==$pass2)
+            {
+                $result=$sql->query("SELECT `login`, `password` FROM `accounts` WHERE `login`='$acc' AND `password`='".encodePass($old));
+                if ($sql->num_rows())
+                {
+                    $sql->query("UPDATE `accounts` SET `password`='".encodePass($pass)."' WHERE `login`='{$acc}'");
+                    suc('Success',$Lang['password_changed']);
+                }
+                else
+                {
+                    err('Error',$Lang['old_password_incorret']);
+                }
+            }
+            else
+            {
+                err('Error',$Lang['passwords_no_match']);
+            }
+        }
+        else
+        {
+	       err('Error',$Lang['incorrect_chars']);
+        }
     }
 }
 

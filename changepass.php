@@ -2,33 +2,16 @@
 define('INWEB', True);
 require_once("include/config.php");
 //пароль
-if (!$user->logged())
-{
-    error('3'); 
-}
+loggedinOrReturn('changepass.php');
 head("Change Password");
 includeLang('change_pass');
 
 if($_POST){
-    if(ereg("^([a-zA-Z0-9_-])*$", $_POST['oldpassword']) && ereg("^([a-zA-Z0-9_-])*$", $_POST['newpassword']) && ereg("^([a-zA-Z0-9_-])*$", $_POST['newpassword2']))
-{
-    
-	if ($_POST['newpassword']==$_POST['newpassword2'])
-	{
-  	$result=mysql_query("SELECT `login`, `password` FROM `accounts` WHERE `login`='{$CURUSER['login']}' AND `password`='".encodePass($_POST['oldpassword']));
-  	if (mysql_num_rows($result))
-  	{
-    	mysql_query("UPDATE `accounts` SET `password`='".encodePass($_POST['newpassword'])."' WHERE `login`='{$CURUSER['login']}'");
-	    echo $Lang['password_changed'];
-  	}
-  	else
-	    {echo $Lang['old_password_incorret'];}
-	}else {echo $Lang['passwords_no_match'];}
-}
-else
-{
-	echo $Lang['incorrect_chars'];
-}
+    $acc=$_SESSION['account'];
+    $old=getVar('oldpassword');
+    $pass=getVar('newpassword');
+    $pass2=getVar('newpassword2');
+    $user->changepass($acc,$old,$pass,$pass2);
 }else{
 ?>
 <h1><?php echo $Lang['changepass'];?></h1>
@@ -91,9 +74,7 @@ return true;
  </tr>
 </table>
 </form>
-
 <?php
 }
-
 foot();
 ?>
