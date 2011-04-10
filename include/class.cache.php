@@ -6,7 +6,6 @@ if (!defined('INCONFIG')) {
 }
 
 class Cache{
-    
     private $folder = "cache";
     private $cache_id;
     var $use_cache=NULL;
@@ -20,7 +19,6 @@ class Cache{
         global $sql,$q;
         if($this->use_cache)
         {
-            //$page=$this->validatePage($page);
             $seconds=getConfig('cache', $page, getConfig('cache', 'default', '900'));
             $time = time()-$seconds;
             $qry=$sql->query(11, array('webdb'=> getConfig('settings', 'webdb', 'l2web'), 'page'=> $page, 'params'=>$params));
@@ -51,7 +49,7 @@ class Cache{
     function updateCache($page, $content, $params=NULL)
     {
         global $sql;
-        //$page=$this->validatePage($page);
+        if(!$this->use_cache) return;
         $id=$this->cache_id;
         $sql->query(13, array('webdb'=> getConfig('settings', 'webdb', 'l2web'), 'time'=>time(), 'id'=>$id));
         if(file_exists($this->folder.'/'.$id.'.html'))
@@ -62,22 +60,7 @@ class Cache{
     
     function getCache($page, $params=NULL)
     {
-        //$page=$this->validatePage($page);
         return file_get_contents($this->folder.'/'.$this->cache_id.'.html');
     }
-    /*
-    function validatePage($page)
-    {
-        //echo $page;
-        $page=explode("\\", $page);
-        $length=count($page);
-        if($page[$length-2]!='')
-            $page=$page[$length-2]."/".$page[$length-1];
-        else
-            $page=$page[$length-1];
-        $page=explode(".",$page);
-        $page=$page[0];
-        return $page;
-    }*/
 }
 ?>

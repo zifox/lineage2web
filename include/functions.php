@@ -189,6 +189,11 @@ function getDBInfo($id)
             }
         }
     }
+    $srvqry = $sql->query("SELECT `ID`, `Name`, `DataBase` FROM `{webdb}`.`gameservers` WHERE `DataBase` = '{db}' AND `active`='true'", array('webdb'=>$webdb,'db'=>getConfig('settings','DDB','l2jdb')));
+    if($sql->num_rows())
+    {
+        return $sql->fetch_array($srvqry);
+    }
     err('Error','Incorrect Database');
 }
 
@@ -264,6 +269,94 @@ function pagechoose($page, $count=0, $stat, $server)
     return $content;
 
 }
+function page($page, $count=0, $link, $server)
+{
+    global $Lang;
+    $content=NULL;
+    $content.='<div class="page-choose" align="center"><br /><table align="center"><tr>';
+    $ps="?";
+    $lnkquest=stripos($link,"?");
+    if($lnkquest!==false)
+    {
+        $ss="&amp;";
+        $ps="&amp;";
+    }
+    else
+    {
+        $ss="?";
+    }
+    if($server!='')
+    {
+        $server=$ss."server=$server";
+        $ps="&amp;";
+        
+    }
+    $totalpages = ceil($count/getConfig('settings', 'TOP', '10'));
+    if($totalpages==0)
+    {
+        $totalpages++;
+    }
+    if($page==0)$page=1;
+    if($page>3)
+    {
+        $content.="<td><a href=\"{$link}{$server}{$ps}page=1\" title=\"{$Lang['first']}\"  class=\"btn\"> &laquo; </a></td>";
+    }
+    if($page>1)
+    {
+        $content.="<td><a href=\"{$link}{$server}{$ps}page=\"";
+        $content.="".$page-1;
+        $content.="\" title=\"{$Lang['prev']}\" class=\"btn\"> &lt; </a></td>";
+    }
+    if($page-2>0){$start=$page-2;}else{$start=1;}
+    for($i=$start; $i<=$totalpages && $i<=$page+2; $i++)
+    {
+
+        if($i==$page)
+        {
+            $content.= '<td>&nbsp;&nbsp;<a href="#" class="btn brown" title="';
+            $content.= ' [';
+            $content.= ($count!=0) ? $i*getConfig('settings', 'TOP', '10')+1-getConfig('settings', 'TOP', '10') : 0;
+            $content.= ' - ';
+            $content.= ($i*getConfig('settings', 'TOP', '10')>$count)? $count: $i*getConfig('settings', 'TOP', '10');
+            $content.= ']"> ';
+            $content.= $i;
+            $content.= ' </a>&nbsp;&nbsp;</td>';
+        }
+        else
+        {
+            $content.= '<td>&nbsp;&nbsp;<a href="'.$link.$server.$ps;
+            $content.= 'page='.$i;
+            $content.= '" title="[';
+            $content.= ($count!=0) ? $i*getConfig('settings', 'TOP', '10')+1-getConfig('settings', 'TOP', '10') : 0;
+            $content.= ' - ';
+            $content.= ($i*getConfig('settings', 'TOP', '10')>$count)? $count: $i*getConfig('settings', 'TOP', '10');
+            $content.= ']" class="btn"> ';
+            $content.= $i;
+            $content.= ' </a>&nbsp;&nbsp;</td>';
+        }
+
+    }
+    if($totalpages > $page)
+    {
+        
+        $content.="<td><a href=\"{$link}{$server}{$ps}page=";
+        $content.= $page+1;
+        $content.="\" title=\"{$Lang['next']}\" class=\"btn\"> &gt; </a></td>";
+        
+    }
+    if($totalpages > $page+2)
+    {
+        
+        $content.="<td><a href=\"{$link}{$server}{$ps}page=";
+        $content.= $totalpages;
+         $content.="\" title=\"{$Lang['last']}\" class=\"btn\"> &raquo; </a></td>";
+         
+    }
+
+    $content.='</tr></table>&nbsp;</div>';
+    return $content;
+
+}
 function convertPic($id, $ext, $width, $height)
 {
     //ini_set('memory_limit', '100M');
@@ -330,19 +423,15 @@ function InsertItem($itemId, $count, $loc, $charId)
         return true;
     return false;
 }
-function insertPremiumItem()
-{
-    
-}
+
 function val_int($string, $default=0, $min=0, $max=999999999)
 {
     $options = array(
     'options' => array(
         'default' => $default,
         'min_range' => $min,
-        'max_range' => $max
-    ),
-);
+        'max_range' => $max),
+    );
     $int = filter_var($string, FILTER_VALIDATE_INT, $options);
     return $int;
 }
@@ -398,12 +487,19 @@ function setConfig($type, $name, $val)
 }
 function getVar($v)
 {
-    $var=isset($_SERVER[$v])?$_SERVER[$v]:(isset($_POST[$v])?$_POST[$v]:(isset($_GET[$v])?$_GET[$v]:""));
-    if($var!="")
-    {
-        return is_numeric($var)?val_int($var):val_string($var);
-    }
-    return null;
+    //global $_REQUEST;
+    //die(print_r($_REQUEST));
+    //$var=$_POST[$v];
+    $var=isset($_REQUEST[$v])?$_REQUEST[$v]:$_POST[$v];
+    //die($var);
+    //$var=isset($_SERVER[$v])?$_SERVER[$v]:(isset($_POST[$v])?$_POST[$v]:(isset($_GET[$v])?$_GET[$v]:""));
+    //if($var=='')
+    //{
+    //    $var=$_POST[$v];
+    //}
+    //die($var);
+    return is_numeric($var)?val_int($var):val_string($var);
+
 }
 function htmlspecialchars_uni($message) {
     $message = preg_replace("#&(?!\#[0-9]+;)#si", "&amp;", $message);
@@ -849,6 +945,144 @@ function loggedInOrReturn($url='')
             $_SESSION['returnto']=$url;
         header ("Refresh: 3; url=login.php");
         err($Lang['error'], $Lang['need_to_login']);
+    }
+}
+function drawElement($body,$type,$value)
+{
+    $elements=array();
+    $elements[0]="Fire";
+    $elements[1]="Water";
+    $elements[2]="Wind";
+    $elements[3]="Earth";
+    $elements[4]="Holy";
+    $elements[5]="Dark";
+    $FIRST_WEAPON_BONUS = 20;
+    $WEAPON_BONUS = 5;
+    $ARMOR_BONUS = 6;
+    $WEAPON_VALUES =array
+	(
+		0,   // Level 1
+		25,  // Level 2
+		75,  // Level 3
+		150, // Level 4
+		175, // Level 5
+		225, // Level 6
+		300, // Level 7
+		325, // Level 8
+		375 // Level 9
+	);
+    $ARMOR_VALUES =array
+	(
+		0,  // Level 1
+		12, // Level 2
+		30, // Level 3
+		60, // Level 4
+		72, // Level 5
+		90, // Level 6
+		120, // Level 7
+		132, // Level 8
+		150 // Level 9
+	);
+    $lvl=0;
+    if($body=="weapon")
+    {
+        foreach($WEAPON_VALUES as $v)
+        {
+            if($value<$v)
+            {
+                break;
+            }
+            $lvl++;
+        }
+    }
+    else
+    {
+        foreach($ARMOR_VALUES as $v)
+        {
+            if($value<$v)
+            {
+                break;
+            }
+            $lvl++;
+        }
+    }
+    $name=$elements[$type];
+    if($body=="weapon")
+    {
+        echo '<tr>';
+        if($value>=450)
+        {
+            ?><td>
+            <?php echo $name;?> Lv <?php echo $lvl;?> (<?php echo $name;?> P. Atk. <?php echo $value ;?>) <br />
+            <img src="img/elementals/<?php echo $name;?>/<?php echo $name;?>.png"  style=" height: 12px; width: 235px;  background-repeat: repeat-x;"/><br /></td>
+            <?php
+        }
+        else if($value==$WEAPON_VALUES[$lvl-1])
+        {
+            ?><td>
+            <?php echo $name;?> Lv <?php echo $lvl;?> (<?php echo $name;?> P. Atk. <?php echo $value ;?>) <br />
+            <img src="img/elementals/<?php echo $name;?>/<?php echo $name;?>_bg.png"  style=" height: 12px; width: 235px;  background-repeat: repeat-x;"/><br /></td>
+            <?php
+        }
+        else
+        {
+            $width=($value-$WEAPON_VALUES[$lvl-1])/($WEAPON_VALUES[$lvl]-$WEAPON_VALUES[$lvl-1]);
+                        ?><td><table><tr><td> <?php echo $name;?> Lv <?php echo $lvl;?> (<?php echo $name;?> P. Atk. <?php echo $value ;?>)</td></tr>
+           
+            <tr><td width="235px" style="background-size: 235px 12px; background-image: url('img/elementals/<?php echo $name;?>/<?php echo $name;?>_bg.png'); bbackground-repeat: repeat-x; "><img src="img/elementals/<?php echo $name;?>/<?php echo $name;?>.png"  style=" height: 12px; width: <?php echo round($width*235,0);?>  background-repeat: repeat-x;"/><br /></td></tr>
+            </table>
+            </td>
+            <?php
+        }
+        echo '</tr>';
+    }
+    else
+    {
+        $aname=$type%2==0?$elements[$type+1]:$elements[$type-1];
+        echo '<tr>';
+        if($value>=180)
+        {
+            ?><td>
+            <?php echo $name;?> Lv <?php echo $lvl;?> (<?php echo $aname;?> P. Def. <?php echo $value ;?>) <br />
+            <img src="img/elementals/<?php echo $aname;?>/<?php echo $aname;?>.png"  style=" height: 12px; width: 235px;  background-repeat: repeat-x;"/><br /></td>
+            <?php
+        }
+        else if($value==$ARMOR_VALUES[$lvl-1])
+        {
+            ?><td>
+            <?php echo $name;?> Lv <?php echo $lvl;?> (<?php echo $aname;?> P. Def. <?php echo $value ;?>) <br />
+            <img src="img/elementals/<?php echo $aname;?>/<?php echo $aname;?>_bg.png"  style=" height: 12px; width: 235px;  background-repeat: repeat-x;"/><br /></td>
+            <?php
+        }
+        else
+        {
+            $width=($value-$ARMOR_VALUES[$lvl-1])/($ARMOR_VALUES[$lvl]-$ARMOR_VALUES[$lvl-1]);
+                        ?><td><table><tr><td> <?php echo $name;?> Lv <?php echo $lvl;?> (<?php echo $aname;?> P. Def. <?php echo $value ;?>)</td></tr>
+           
+            <tr><td width="235px" style="background-size: 235px 12px; background-image: url('img/elementals/<?php echo $aname;?>/<?php echo $aname;?>_bg.png'); bbackground-repeat: repeat-x; "><img src="img/elementals/<?php echo $aname;?>/<?php echo $aname;?>.png"  style=" height: 12px; width: <?php echo round($width*235,0);?>  background-repeat: repeat-x;"/><br /></td></tr>
+            </table>
+            </td>
+            <?php
+        }
+        echo '</tr>';
+    }
+}
+function augColor($lvl)
+{
+    switch($lvl)
+    {
+        case 1:
+            return "#D6D378";
+        break;
+        case 2:
+            return "#5ACBED";
+        break;
+        case 3:
+            return "#CC23B3";
+        break;
+        case 4:
+            return "#F75959";
+        break;
     }
 }
 ?>

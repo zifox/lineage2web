@@ -248,6 +248,34 @@ CREATE TABLE `$webdb`.`$aitable` (
     }
 
     break;
+    case 'odata':
+    $query=mysql_query("SELECT id, desc1,desc2,desc3 FROM $webdb.optiondata");
+    $i=0;
+
+    while($r=mysql_fetch_assoc($query))
+    {
+    $s=array("\\\\n", "\0", "\\0", "\<br />");
+    $re=array("<br />", "", "", "");
+    $desc1 = $r['desc1'];
+    $desc1=substr($desc1, 2, strlen($desc1)-2);
+    $desc2 = $r['desc2'];
+    $desc2=substr($desc2, 2, strlen($desc2)-2);
+    $desc3 = $r['desc3'];
+    $desc3=substr($desc3, 2, strlen($desc3)-2);
+
+    $desc1=str_replace($s, $re, $desc1);
+    $desc2=str_replace($s, $re, $desc2);
+    $desc3=str_replace($s, $re, $desc3);
+
+    $desc=(($desc1=="")?"$desc2":"$desc1<br />$desc2");
+    $desc=(($desc3!="")?"$desc<br />$desc3":"$desc");
+
+    $desc=mysql_real_escape_string($desc);
+    mysql_query("UPDATE `$webdb`.`optiondata` SET `desc`='$desc' WHERE `id`='{$r['id']}';") OR die(mysql_error());
+        $i++;
+    }
+
+    break;
 ################################################################################################
     default:
     echo '<a href="?a=upgabfai">update grade and bodypart for allitems1</a><br />';
@@ -256,6 +284,7 @@ CREATE TABLE `$webdb`.`$aitable` (
     echo '<a href="?a=gmdl">get max desc length</a><br />';
     echo '<a href="?a=mifs">missing incons from sql</a><br />';
     echo '<a href="?a=uli">useless icons</a><br />';
+    echo '<a href="?a=odata">Format OptionData</a><br />';
     echo '<a href="?a=carf">Copy and rename files</a><br />';
     echo '<a href="?a=ct">Create tables</a><br />';
     break;
