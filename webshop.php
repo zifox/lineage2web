@@ -28,6 +28,14 @@ $par['page']=$start+1;
 $webdb=getConfig('settings','webdb','l2web');
 $content="";
 $content.= "<h1>WebShop</h1><br />";
+$content.='<select name="server">';
+$server_list = $sql->query(2, array('db' => getConfig('settings', 'webdb', 'l2web')));
+while($slist = $sql->fetch_array($server_list)) {
+    $selected = ($slist['ID'] == $serverId)?'selected="selected"':'';
+    $content .= '<option onclick="GoTo(\'webshop.php?a='.$a.
+			'&amp;server='.$slist['ID'].'\')" '.$selected.'>'.$slist['Name'].'</option>';
+}
+$content.='</select>';
 $content.= "<center><a href=\"webshop.php\">All Items</a> | <a href=\"webshop.php?a=add\">Add Item</a> | <a href=\"webshop.php?a=my\">View My Items</a></center><br />";
 $db=$server['DataBase'];
 switch($a)
@@ -47,7 +55,7 @@ switch($a)
         {
             err('Error','Incorrect count!');
         }
-        if($money!='1' || $money!=0)
+        if($money>'1' || $money<0)
         {
             err('Error', 'Incorrect money!');
         }
@@ -136,7 +144,7 @@ switch($a)
             if($sql->num_rows($eleq))
             {
                 echo '<tr><td>Elementals</td><td><table>';
-                $type=$item['type'];
+                $type=$itemadd['type'];
                 while($ele=$sql->fetch_array($eleq))
                 {
                     drawElement($type,$ele['elemType'],$ele['elemValue']);
@@ -297,7 +305,7 @@ switch($a)
         {
             err('Error','Failed to remove item from webshop');
         }
-        $itemNum=$sql->result($sql->query("SELECT MAX(`itemNum`) FROM `{$serv['DataBase']}`.`character_premium_items` WHHERE `charId`='{$char['charId']}'"))+1;
+        $itemNum=$sql->result($sql->query("SELECT MAX(`itemNum`) FROM `{$serv['DataBase']}`.`character_premium_items` WHERE `charId`='{$char['charId']}'"))+1;
         $sql->query("INSERT INTO `{$serv['DataBase']}`.`character_premium_items` (`charId`, `itemNum`, `itemId`, `itemCount`, `itemSender`, `itemEnchantLevel`, `itemAugument`, `itemElementals`) VALUES ('{$char['charId']}', '$itemNum', '{$item['item_id']}', '{$item['count']}', 'WebShop', '{$item['enchant_level']}', '{$item['augument']}', '{$item['elementals']}')");
         if(!$sql->row_count)
         {
@@ -506,14 +514,14 @@ switch($a)
 ##################################################  Buy Item   ############################################
     case "buy":
     $id=getVar('id');
-    $count=val_int($_POST['itemcount']);
-    echo $_POST['itemcount'];
-    die($id);
+    $count=getVar('itemcount');
+
     $qry=$sql->query("SELECT * FROM `$webdb`.`webshop` WHERE `object_id`='$id' AND `active`='1'");
     if(!$sql->num_rows())
     {
         err('Error','Item not found');
     }
+
     $item=$sql->fetch_array();
     if($_SESSION['account']==$item['owner'])
     {
@@ -525,7 +533,7 @@ switch($a)
     
     if($count>$item['count'])$count=$item['count'];
     $sum=$count*$item['money_count'];
-    die($sum);
+
     if($item['money']==0) //adena
     {
         $qry=$sql->query("SELECT `object_id`, SUM(`items`.`count`) AS adena FROM `$db`.`characters` , `items` WHERE `characters`.`charId` =  `items`.`owner_id` AND `items`.`item_id` = '57' AND `characters`.`account_name` = '{$_SESSION['account']}'");
@@ -700,11 +708,11 @@ switch($a)
     if($type) $sql_add.=" AND `type`='$type'";
     if($grade) $sql_add.=" AND `grade`='$grade'"; 
     echo "<table border=\"1\">";
-    echo "<tr><th>Icon</th><th>Name</th><th>Price</th><th>Owner</th><th>Action</th></tr>";
+    echo "<tr><th>Icon</th><th>Name</th><th>Price</th><th>Count</th><th>Owner</th><th>Action</th></tr>";
     $select=$sql->query("SELECT `owner`, `object_id`, `item_id`, `count`, `enchant_level`, `money`, `money_count` FROM `{webdb}`.`webshop` WHERE `active`='1'$sql_add LIMIT $startlimit, {$CONFIG['settings']['TOP']}", array('webdb'=>$webdb));
     while($item=$sql->fetch_array($select))
     {
-        $details=$sql->query("SELECT * FROM `{webdb}`.`all_items2` WHERE `id`='{$item['item_id']}'", array('webdb'=>$webdb));
+        $details=$sql->query("SELECT * FROM `{webdb}`.`all_items` WHERE `id`='{$item['item_id']}'", array('webdb'=>$webdb));
         $item_d=$sql->fetch_array($details);
         $addname=($item_d['addname']=="")?"":" - ".$item_d['addname'];
         $price=($item['money']=="0")?" Adena":" WebPoints";
@@ -713,13 +721,15 @@ switch($a)
         $enchant = $item["enchant_level"] > 0 ? " +" . $item["enchant_level"] : "";
 
         echo "<tr><td>";
-        echo "<img src=\"img/icons/{$item_d['icon']}.png\" alt=\"{$item_d['name']}\" title=\"{$item_d['name']}\" onmouseover=\"Tip('&lt;img src=\'img/icons/{$item_d['icon']}.png\' /&rt;&lt;br /> {$item_d['desc']}',TITLE, '{$enchant} {$item_d['name']}$addname {$gradeimg}', FONTCOLOR, '#FFFFFF',BGCOLOR, '#406072', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold')\" />";
+        echo "<img src=\"img/icons/{$item_d['icon1']}.png\" alt=\"{$item_d['name']}\" title=\"{$item_d['name']}\" onmouseover=\"Tip('&lt;img src=\'img/icons/{$item_d['icon']}.png\' /&rt;&lt;br /> {$item_d['desc']}',TITLE, '{$enchant} {$item_d['name']}$addname {$gradeimg}', FONTCOLOR, '#FFFFFF',BGCOLOR, '#406072', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold')\" />";
         echo "</td><td>";
             
         echo "{$item_d['name']}$addname";
             
         echo "</td><td>";
         echo "{$item['money_count']} $price";
+        echo "</td><td>";
+        echo "{$item['count']}";
         echo "</td><td>";
         echo "{$item['owner']}";
         echo "</td><td>";
