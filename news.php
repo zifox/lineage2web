@@ -2,7 +2,7 @@
 define('INWEB', true);
 require_once ("include/config.php");
 //пароль
-head("Home");
+head("News");
 
 $maxfilesize = 1024 * 1024 * 1024 * 5; // 5Mb
 
@@ -21,13 +21,15 @@ switch ($action)
 		{
 			if ($_POST['add'])
 			{
+                $name=getVar('name');
+                $desc=getVar('desc');
 				$error = 0;
-				if (! isset($_POST['name']) || $_POST['name'] == '')
+				if ($name=='')
 				{
 					echo 'Invalid or empty name! <br />';
 					$error++;
 				}
-				if (! isset($_POST['desc']) || $_POST['desc'] == '')
+				if ($desc=='')
 				{
 					echo 'Invalid or empty Content!  <br />';
 					$error++;
@@ -50,19 +52,15 @@ switch ($action)
 
 				if ($error === 0)
 				{
-					$name = $mysql->escape($_POST['name']);
-					$desc = $mysql->escape($_POST['desc']);
-					$desc = str_replace(array('\r\n'), '<br />', $desc);
-					$desc = str_replace(array('\n'), '<br />', $desc);
-					$desc = str_replace(array('\r'), '<br />', $desc);
-
 					$descdb = substr($desc, 0, 500);
-					$md5 = substr(md5($name . $id . time()), 0, 12);
+					//$desc=str_replace('\r\n','<br />');
 					$ext = $allowed_types[$_FILES['file']['type']];
-					$mysql->query($q[10], array('db' => $webdb, 'page' => 'index'));
-					$mysql->query($q[9], array("db" => $webdb, "desc" => $descdb, "name" => $name, "author" => $_SESSION['account'], "date" => date('Y-m-d H:i:s'), "image" => $md5 . '.' . $ext));
-					$id = $mysql->result($mysql->query("SELECT LAST_INSERT_ID()"));
-
+                    $md5 = substr(md5($name .  time()), 0, 12);
+					$sql->query($q[10], array('db' => $webdb, 'page' => 'index'));
+					$sql->query($q[9], array("db" => $webdb, "desc" => $descdb, "name" => $name, "author" => $_SESSION['account'], "date" => date('Y-m-d H:i:s'), "image" => $md5 . '.' . $ext));
+					//$id = $sql->result($sql->query("SELECT LAST_INSERT_ID()"));
+                    if($sql->row_count)
+                    {
 					if (file_exists('news/' . $md5 . '.html')) unlink('news/' . $md5 . '.html');
 					file_put_contents('news/' . $md5 . '.html', $desc);
 
@@ -70,7 +68,13 @@ switch ($action)
 
 					move_uploaded_file($_FILES['file']['tmp_name'], 'news/' . $md5 . '.' . $ext);
 					convertPic($md5, $ext, 150, 150);
-					echo 'News added!';
+					msg('Success','News added');
+                    }
+                    else
+                    {
+                        msg('Error','Something went wrong');
+                    }
+                        
 				}
 				else
 				{
@@ -79,7 +83,7 @@ switch ($action)
 
 			}
             ?>
-            <form action="news.php?action=add" method="post"  enctype="multipart/form-data">
+            <form name="news" action="news.php?action=add" method="post"  enctype="multipart/form-data">
             <table>
                 <tr><td>
                     <label for="name">Title:
@@ -87,8 +91,8 @@ switch ($action)
                     </label>
                 </td></tr>
                 <tr><td>
-                    <label for="desc">Text:
-                        <textarea rows="10" cols="20" title="News Content" accesskey="c" style="width: 100%;" id="desc" name="desc" ></textarea>
+                    <label for="desc">
+                        <?php textbbcode("news","desc");?>
                     </label>
                 </td></tr>
                 <tr><td>
@@ -134,15 +138,15 @@ switch ($action)
 
 				if ($error === 0)
 				{
-					$name = $mysql->escape($_POST['name']);
+					$name = $sql->escape($_POST['name']);
 					$desc = $_POST['desc'];
 					$desc = str_replace(array('\r\n'), '<br />', $desc);
 					$desc = str_replace(array('\n'), '<br />', $desc);
 					$desc = str_replace(array('\r'), '<br />', $desc);
-					$newsq = $mysql->query($q[6], array("db" => $webdb, "news_id" => $id));
-					if ($mysql->num_rows($newsq))
+					$newsq = $sql->query(6, array("db" => $webdb, "news_id" => $id));
+					if ($sql->num_rows($newsq))
 					{
-						$news = $mysql->fetch_array($newsq);
+						$news = $sql->fetch_array($newsq);
 						$md5 = explode(".", $news['image']);
 						$md5 = $md5[0];
 						$ext = $allowed_types[$_FILES['file']['type']];
@@ -151,9 +155,9 @@ switch ($action)
 							unlink('news/' . $md5 . '.html');
 						}
 						file_put_contents('news/' . $md5 . '.html', $desc);
-						$desc = $mysql->escape(substr($desc, 0, 500));
-						$mysql->query($q[10], array('db' => $webdb, 'page' => 'index'));
-						$mysql->query($q[8], array("db" => $webdb, "news_id" => $id, "desc" => $desc, "name" => $name, "date" => date('Y-m-d H:i:s'), "editor" => $_SESSION['account']));
+						$desc = $sql->escape(substr($desc, 0, 500));
+						$sql->query($q[10], array('db' => $webdb, 'page' => 'index'));
+						$sql->query($q[8], array("db" => $webdb, "news_id" => $id, "desc" => $desc, "name" => $name, "date" => date('Y-m-d H:i:s'), "editor" => $_SESSION['account']));
 						if ($_FILES['file']['name'] != '')
 						{
 							if (file_exists('news/' . $md5 . '.' . $ext)) unlink('news/' . $md5 . '.' . $ext);
@@ -171,13 +175,16 @@ switch ($action)
 
 			}
 
-			$newsq = $mysql->query($q[6], array("db" => $webdb, "news_id" => $id));
-			if ($mysql->num_rows($newsq))
+			$newsq = $sql->query($q[6], array("db" => $webdb, "news_id" => $id));
+			if ($sql->num_rows($newsq))
 			{
-				$news = $mysql->fetch_array($newsq);
-				$desc = file_exists('news/' . $id . '.html') ? file_get_contents('news/' . $id . '.html') : $news['desc'];
+				$news = $sql->fetch_array($newsq);
+                $md5 = explode(".", $news['image']);
+				$desc = file_exists('news/' . $md5[0] . '.html') ? file_get_contents('news/' . $md5[0] . '.html') : $news['desc'];
+                $desc=str_replace('\\r\\n',"\n",$desc);
+                //$desc = nl2br($desc);
                 ?>
-                <form action="news.php?action=edit&amp;id=<?php echo $id; ?>" method="post"  enctype="multipart/form-data">
+                <form name="news" action="news.php?action=edit&amp;id=<?php echo $id; ?>" method="post"  enctype="multipart/form-data">
                 <table>
                 <tr><td>
                     <label for="name">Title:
@@ -185,8 +192,8 @@ switch ($action)
                     </label>
                 </td></tr>
                 <tr><td>
-                    <label for="desc">Text:
-                        <textarea rows="10" cols="20" title="News Content" accesskey="c" style="width: 100%;" id="desc" name="desc" ><?php echo htmlspecialchars($desc); ?></textarea>
+                    <label for="desc">
+                        <?php textbbcode("news","desc",$desc);?>
                     </label>
                 </td></tr>
                 <tr><td>
@@ -208,14 +215,15 @@ switch ($action)
 
 		if (isset($id) && isset($_GET['confirm']) && $id != null && $user->mod())
 		{
-			$news = $mysql->query($q[6], array("db" => $webdb, "news_id" => $id));
-			if ($mysql->num_rows($news))
+			$news = $sql->query($q[6], array("db" => $webdb, "news_id" => $id));
+			if ($sql->num_rows($news))
 			{
-				$new = $mysql->fetch_array($news);
-				$mysql->query($q[7], array("db" => $webdb, "news_id" => $id));
+				$new = $sql->fetch_array($news);
+				$sql->query($q[7], array("db" => $webdb, "news_id" => $id));
 				$md5 = explode(".", $news['image']);
+                $ext = $md5[1];
 				$md5 = $md5[0];
-				$ext = $md5[1];
+				
 				if (file_exists('news/' . $md5 . '.html'))
 				{
 					if (unlink('news/' . $md5 . '.html'))
@@ -237,7 +245,7 @@ switch ($action)
 						echo 'File <b>news/' . $md5 . '_thumb.' . $ext . '</b> deleted!<br />';
 					}
 				}
-				$mysql->query($q[10], array('db' => $webdb, 'page' => 'index'));
+				$sql->query($q[10], array('db' => $webdb, 'page' => 'index'));
 				echo 'Deleted from DataBase!';
 			}
 			else
@@ -258,10 +266,10 @@ switch ($action)
 	default:
 		if (isset($id) && $id != null)
 		{
-			$new = $mysql->query($q[6], array("db" => $webdb, "news_id" => $id));
-			if ($mysql->num_rows($new))
+			$new = $sql->query($q[6], array("db" => $webdb, "news_id" => $id));
+			if ($sql->num_rows($new))
 			{
-				$newid = $mysql->fetch_array($new);
+				$newid = $sql->fetch_array($new);
 
 				$md5 = explode(".", $newid['image']);
 				$md5 = $md5[0];
@@ -269,7 +277,7 @@ switch ($action)
 				if (file_exists('news/' . $md5 . '.html'))
 				{
 					$parse += $newid;
-					$parse['desc'] = file_get_contents('news/' . $md5 . '.html');
+					$parse['desc'] = format_body(file_get_contents('news/' . $md5 . '.html'), 'false');
 					$parse['read_more'] = '';
 					$parse['thumb'] = $newid['image'];
 					if ($newid['edited_by'] != '')
@@ -294,8 +302,8 @@ switch ($action)
 		}
 		else
 		{
-			$newsq = $mysql->query($q[5], array("db" => $webdb, "limit" => $Config['news_limit']));
-			while ($news = $mysql->fetch_array($newsq))
+			$newsq = $sql->query($q[5], array("db" => $webdb, "limit" => $Config['news_limit']));
+			while ($news = $sql->fetch_array($newsq))
 			{
 				$parse = $Lang;
 				$parse += $news;

@@ -573,7 +573,7 @@ function format_body($text, $strip_html = true) {
 	$s = preg_replace($bb, $html, $s);
 
 	$s = nl2br($s);
-
+    $s = str_replace('\r\n','<br />',$s);
 	$s = format_urls($s);
 
 

@@ -1,1 +1,0 @@
-<tr class="row"><td align="center" width="25%"><b>{nr}</b></td><td><a href="user.php?cid={charId}&amp;server={serv_id}" class="{sex}">{char_name}</a></td></tr>

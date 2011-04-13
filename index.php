@@ -23,7 +23,7 @@ if($cache->needUpdate('index', $params))
     while($news=$sql->fetch_array($newsq))
     {
         $nparse=$news;
-        //$nparse['desc']=trim($nparse['desc']);
+        $nparse['desc']=format_body($nparse['desc']);
         if($news['edited_by']!='')
         {
             $nparse['edited']='Last edited <strong>'.$news['edited'].'</strong> by <strong>'.$news['edited_by'].'</strong>';
@@ -45,7 +45,12 @@ if($cache->needUpdate('index', $params))
         $nparse['read_more']='<a href="news.php?id='. $news['news_id'].'">'.$Lang['read_more'].'</a>';
         $parse['news'].=$tpl->parsetemplate('news_row', $nparse, 1);
     }
-
+    if(!$sql->num_rows())
+    {
+        $parse['news']='Currently there isn\'t any news!';
+        if($user->mod())
+            $parse['news'].='<br /><a href="news.php?action=add"><img src="img/add.png" alt="'.$Lang['add'].'" title="'.$Lang['add'].'" border="0" /></a>';
+    }
     $content=$tpl->parsetemplate('index2', $parse,1);
     $cache->updateCache('index', $content, $params);
     
