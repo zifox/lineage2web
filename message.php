@@ -415,7 +415,14 @@ if ($a == "sendmessage") {
 
         $receiver = getVar('receiver');
         $replyto = getVar('replyto');
-
+        $t = getVar('t');
+        $srv=getDBInfo(getVar('server'));
+        if($t=='c')
+        {
+            $rec=$sql->result($sql->query("SELECT `account_name` FROM `{$srv['DataBase']}`.`characters` WHERE `char_name`='$receiver'"));
+            if($rec)
+                $receiver=$rec;
+        }
         if ($replyto) {
                 $res = $sql->query(34, array('webdb'=>$webdb, 'pm_id'=>$replyto));
                 $msga = $sql->fetch_array();
@@ -450,7 +457,7 @@ if ($a == "sendmessage") {
         <input type="hidden" name="origmsg" value="<?php echo $replyto; ?>" /></td>
         <?php } ?>
         <td align="center"><input type="checkbox" name="save" value="yes" />Save PM in outbox</td></tr>
-        <tr><td<?php echo $replyto?" colspan=2":"";?> align="center"><input type="submit" value="Send!" class="btn" /></td></tr>
+        <tr><td<?php echo $replyto?" colspan=2":"";?> align="center"><?php echo button('Send');?></td></tr>
         </table>
         <input type="hidden" name="receiver" value="<?php echo $receiver; ?>" />
         </form>

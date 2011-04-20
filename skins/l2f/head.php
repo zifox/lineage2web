@@ -32,16 +32,6 @@ $skinurl = 'skins/l2f';
 <title><?php echo $title;?></title>
 <link rel="SHORTCUT ICON" href="favicon.ico" />
 <link href="skins/l2f/style.css" type="text/css" rel="stylesheet" />
-<?php /*<script type="text/javascript" src="scripts/tiny_mce/tiny_mce.js"></script>
-<script type="text/javascript">
-tinyMCE.init({
-	mode : "textareas",
-	theme : "simple",
-    skin : "o2k7",
-    language : "lv"
-
-});
-</script>*/?>
 <script type="text/javascript" language="javascript" src="scripts/show.js"></script>
 <script type="text/javascript" language="javascript">
 document.write(unescape("%3Cscript src='scripts/ga.js' type='text/javascript'%3E%3C/script%3E"));

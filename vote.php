@@ -26,7 +26,6 @@ if ($action == "vote" && $timevoted < ($now-60*60*12))
 
 }elseif($action == "vote" && $timevoted >= ($now-60*60*12))
 {
-    //$sql->query("INSERT INTO `".$DB['webdb']."`.`log` (`Account`, `Type`, `SubType`, `Comments`) VALUES ('{$_SESSION['account']}', 'Voting', 'Error', 'Link ByPass');");
     error('8');
 }
 

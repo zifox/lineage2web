@@ -35,7 +35,7 @@ function includeBlock($file, $block_name='Menu')
 {
 	global $sql, $user, $tpl, $cache, $q, $Lang, $langpath;
     DEFINE('IN_BLOCK', True);
-    $img_link = 'skins/'.getConfig('settings', 'DTHEME', 'l2f');
+    $img_link = 'skins/l2f';
 	?>
     <table width="200" style="height:95px;" border="0" cellpadding="0" cellspacing="0" class="opacity2">
     <tr style="height:48px;">
@@ -457,7 +457,7 @@ function val_string($string)
 //    return html_entity_decode(stripslashes($string), ENT_QUOTES, 'UTF-8');
 //}
 
-function getConfig($type, $name, $default)
+function getConfig($type, $name, $default='')
 {
     global $CONFIG, $sql, $webdb, $q;
     if(isset($CONFIG[$type][$name]))
@@ -466,8 +466,12 @@ function getConfig($type, $name, $default)
     }
     else
     {
-        setConfig($type,$name,$default);
-        return $default;
+        if($default!='')
+        {
+            setConfig($type,$name,$default);
+            return $default;
+        }
+        return null;
     }
 }
 function setConfig($type, $name, $val)

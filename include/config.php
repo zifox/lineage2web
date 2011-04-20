@@ -42,5 +42,6 @@ $cache = new Cache(getConfig('features','cache_enabled','1'));
 if (!getConfig('debug','web','0')) {
     error_reporting(0);
 }
-$tpl = new tplParser(getConfig('settings','DTHEME','l2f'));
+//$tpl = new tplParser(getConfig('settings','DTHEME','l2f'));
+$tpl = new tplParser('l2f');
 ?>

@@ -14,14 +14,6 @@ function four() {
 window.open("http://la2.mmotop.ru/vote/20088/");
 setTimeout("document.vote.elements[4].disabled=false",5000);
 }
-function five() {
-window.open("http://top-games100.com/vote/121.html");
-setTimeout("document.vote.elements[5].disabled=false",5000);
-}
-function six() {
-window.open("http://www.topgames.lv/?mode=in&amp;id=1044");
-setTimeout("document.vote.elements[6].disabled=false",5000);
-}
 function finish() {
 window.open("http://l2.hopzone.net/vote.php?site=79484");
 setTimeout("document.getElementById('go').disabled=false",5000);

@@ -147,7 +147,7 @@ $q = array(
     ),
 
     667 => "SELECT `items`.`item_id`, `items`.`count`, `items`.`enchant_level`, `items`.`loc`, `items`.`loc_data` FROM `{db}`.`items` WHERE `items`.`owner_id`='{charID}' AND `items`.`loc`='{loc}' ORDER BY `items`.`loc_data`",
-    668 => "SELECT `name`, `addname`, `grade`, `icon`, `icon2`, `icon3`, `desc` FROM `{webdb}`.`all_items2` WHERE `id`='{itemid}'",
+    668 => "SELECT `name`, `addname`, `grade`, `icon1`, `icon2`, `icon3`, `desc` FROM `{webdb}`.`all_items` WHERE `id`='{itemid}'",
     669 => "INSERT INTO `{webdb}`.`config` (`name`, `type`, `value`) VALUES ('{name}', '{type}', '{val}');",
     670 => "UPDATE `{webdb}`.`config` SET `name`='{name}', `type`='{type}', `value`='{val}' WHERE (`name`='{name}') AND (`type`='{type}') LIMIT 1;",
     671 => "SELECT * FROM `{webdb}`.`config` WHERE (`name`='{name}') AND (`type`='{type}');"

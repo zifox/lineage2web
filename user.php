@@ -16,10 +16,10 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
 
     $dbname = getDBName($srv);
 
-    $sql=$sql->query("SELECT `account_name`, `charId`, `char_name`, `level`, `maxHp`, `maxCp`, `maxMp`, `sex`, `pvpkills`, `pkkills`, `race`, `characters`.`classid`, `base_class`, `online`, `ClassName`, `clan_id`, `clan_name` FROM `$dbname`.`characters` INNER JOIN `$dbname`.`char_templates` ON `characters`.`classid` = `char_templates`.`ClassId` LEFT OUTER JOIN `$dbname`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `characters`.`charId` = '$id'");
+    $qry=$sql->query("SELECT `account_name`, `charId`, `char_name`, `level`, `maxHp`, `maxCp`, `maxMp`, `sex`, `pvpkills`, `pkkills`, `race`, `characters`.`classid`, `base_class`, `online`, `ClassName`, `clan_id`, `clan_name` FROM `$dbname`.`characters` INNER JOIN `$dbname`.`char_templates` ON `characters`.`classid` = `char_templates`.`ClassId` LEFT OUTER JOIN `$dbname`.`clan_data` ON `characters`.`clanid`=`clan_data`.`clan_id` WHERE `characters`.`charId` = '$id'");
 
-    if($sql->num_rows($sql)!= 0){
-        $char=$sql->fetch_array($sql);
+    if($sql->num_rows($qry)!= 0){
+        $char=$sql->fetch_array($qry);
         head("User {$char['char_name']} Info");
         $page='user';
         $par['lang']=getLang();
@@ -34,6 +34,8 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
             $parse['time']=date('d.m.Y H:i:s');
             $parse['update_time']= date('d.m.Y H:i:s', time()+$sec);
             $char['sex']==0?$parse['color']='#8080FF':$parse['color']='#FF8080';
+            $parse['server']= $srv;
+            $parse['c_name'] = $char['char_name'];
             $parse['c_race'] = $char['race'];
             $parse['c_sex'] = $char['sex'];
     
@@ -71,7 +73,7 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
             $i++;
         }
     }*/
-            $query_paperdoll = $sql->query($q[667], array("db" => $dbname, "charID" => $id, "loc" => "PAPERDOLL"));
+            $query_paperdoll = $sql->query(667, array("db" => $dbname, "charID" => $id, "loc" => "PAPERDOLL"));
             $parse['eq_items'] ='';
             while ($paperdoll_data = $sql->fetch_array($query_paperdoll))
             {
@@ -89,12 +91,12 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
                 //$img = (is_file('img/icons/'.$item["icon"].'.png')) ? $item["icon"] : "blank";
                 $type = $q[666][$paperdoll_data["loc_data"]];
         
-                $parse['eq_items'] .= "<div style='position: absolute; width: 32px; height: 32px; padding: 0px;' class='{$type}'><img border='0' src='img/icons/{$item["icon"]}.png' onmouseover=\"Tip('{$name} {$addname} {$grade} {$enchant}&lt;br /> {$desc}', FONTCOLOR, '#FFFFFF',BGCOLOR, '#406072', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold')\" alt=\"\" /></div>";
+                $parse['eq_items'] .= "<div style='position: absolute; width: 32px; height: 32px; padding: 0px;' class='{$type}'><img border='0' src='img/icons/{$item["icon1"]}.png' onmouseover=\"Tip('{$name} {$addname} {$grade} {$enchant}&lt;br /> {$desc}', FONTCOLOR, '#FFFFFF',BGCOLOR, '#406072', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold')\" alt=\"\" /></div>";
                         
             }
             if($user->mod() && $user->logged())
             {
-            $query = $sql->query($q[667], array("db" => $dbname, "charID" => $id, "loc" => "INVENTORY"));
+            $query = $sql->query(667, array("db" => $dbname, "charID" => $id, "loc" => "INVENTORY"));
             $parse['inv_items'] = '<div id="inventory" align="left">
 	<div id="inventory_items" class="flexcroll">';
             while ($inv_data = $sql->fetch_array($query))
@@ -139,12 +141,12 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
                     }
                 }//$sql->num_rows(other chars)
             }//while*/
-            $query = $sql->query($q[667], array("db" => $dbname, "charID" => $id, "loc" => "WAREHOUSE"));
+            $query = $sql->query(667, array("db" => $dbname, "charID" => $id, "loc" => "WAREHOUSE"));
             $parse['ware_items'] = '<div id="inventory" align="left">
 	<div id="inventory_items" class="flexcroll">';
             while ($ware_data = $sql->fetch_array($query))
             {
-                $qry=$sql->query($q[668], array("webdb" => $webdb, "itemid" => $ware_data['item_id']));
+                $qry=$sql->query(668, array("webdb" => $webdb, "itemid" => $ware_data['item_id']));
                 $item=$sql->fetch_array($qry);
                 $name = $item["name"];
                 $name = str_replace("'", "\\'", $name);

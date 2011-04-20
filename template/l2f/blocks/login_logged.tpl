@@ -1,4 +1,4 @@
-<table border="0" cellpadding="0">
+<table border="0" cellpadding="0" align="center">
 {admin_link}
 <tr><td align="center"><font color="red">{vote_after_msg}
 <script language="JavaScript" type="text/javascript">

@@ -2,6 +2,7 @@ Last updated: {time}<br />
 Next update: {update_time}<br />
 <table border="0">
     <tr><td><img src="img/face/{c_race}_{c_sex}.png" alt="" /></td><td>
+    <table><tr><td><a href="message.php?a=sendmessage&receiver={c_name}&t=c&server={server}"><img src="img/new_message.png" title="Send PM" alt="Send PM"/></a></td></tr></table>
     <table border="1">
     <tr><td>{level}:</td><td>{c_level}</td></tr>
     <tr><td class="maxCp">{cp}:</td><td class="maxCp">{maxCp}</td></tr>

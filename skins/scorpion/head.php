@@ -12,8 +12,8 @@ header('Content-Type: gzip');
 includeLang('skin');
 
 $parse['title'] = $title;
-$parse['skinurl'] = '/skins/l2f';
-$skinurl = 'skins/l2f';
+$parse['skinurl'] = '/skins/scorpion';
+$skinurl = 'skins/scorpion';
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -30,16 +30,6 @@ $skinurl = 'skins/l2f';
 <title><?php echo $title;?></title>
 <link rel="SHORTCUT ICON" href="favicon.ico" />
 <link href="skins/l2f/style.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript" src="scripts/tiny_mce/tiny_mce.js"></script>
-<script type="text/javascript">
-tinyMCE.init({
-	mode : "textareas",
-	theme : "simple",
-    skin : "o2k7",
-    language : "lv"
-
-});
-</script>
 <script type="text/javascript" language="javascript" src="scripts/show.js"></script>
 <script type="text/javascript" language="javascript">
 document.write(unescape("%3Cscript src='scripts/ga.js' type='text/javascript'%3E%3C/script%3E"));
@@ -123,33 +113,11 @@ body  {
 margin : 0px;
 font-size : 14px;
 font-family : Arial;
-color : #ffffff;
-background : url('<?php echo $skinurl;?>/bg/bg.jpg')  no-repeat scroll left top #406072;
+background-color: #000000;
+
+
 cursor : url('<?php echo $skinurl;?>/cursors/cursor.cur'), auto;
 
-}
-
-#logo {
-display:block;
-z-index: -1;
-left:125px;
-top:0px;
-position: absolute;
-text-align: center;
-}
-#freya {
-display:block;
-z-index: -2;
-right:0px;
-top:50px;
-position: absolute;
-text-align: center;
-}
-#header {
-height: 300px;
-right: 50px;
-top: 50px;
-text-align: right;
 }
 
 .opacity1 {
@@ -164,31 +132,22 @@ opacity: 0.85;
 </head>
 <body>
 <script type="text/javascript" src="scripts/wz_tooltip.js"></script>
-<!--<div id="valid">
-<a href="http://validator.w3.org/check?uri=referer" target="_blank">
-<img style="border:0;width:88px;height:31px" src="img/valid-xhtml.png" alt="Valid XHTML 1.0 Transitional" />
-</a><a href="http://jigsaw.w3.org/css-validator/check/referer" target="_blank">
-<img style="border:0;width:88px;height:31px" src="img/valid-css.png" alt="Valid CSS!" /></a>
-<a href="http://games.top.org/lineage-2/" title="Lineage 2 TOP.ORG"><img style="border:none;" src="http://img1.top.org/toporg_12309.gif" alt="Lineage 2 TOP.ORG" /></a>
-</div>-->
+<div id="bg" style="z-index: -1;"><img src="<?php echo $skinurl;?>/img/background.jpg" width="100%" height="100%" alt="" /></div>
 <div id="frm"><img width="150" height="150" border="0" longdesc="/" usemap="#Map" alt="Visit forum" style="" src="img/visit_forum.png" />
 <map id="Map" name="Map">
 <area href="./forum" target="_blank" coords="3,119,117,3,77,3,3,77,3,119" shape="poly" alt="" />
-
 </map></div>
-<div id="logo" align="center">
-<img border="0" alt="" style="" src="<?php echo $skinurl;?>/bg/<?php // echo date('w') ;?><?php echo isset($_GET['bg'])?$_GET['bg']:date('w');?>.png" />
-</div>
-<div id="freya" align="right">
-<img border="0" alt="" style="" src="img/freya.gif" />
-</div>
-
- <div id="header" align="right">
-
- </div>
 <?php
-
 if($head){
+    ?>
+    <div id="menu" style="position: absolute; left: 200px; top: 120px; z-index: 1;"><img src="<?php echo $skinurl;?>/img/menu.png" width="100%" /></div>
+    <div id="content" style="position: absolute; left: 200px; top: 220px; z-index: 1;">
+    <table>
+    <tr><td width="600px" height="69px" style="background: url('<?php echo $skinurl;?>/img/contbg_top.png');">&nbsp;</td></tr>
+    <tr><td align="center" width="600px" height="auto" style="background: url('<?php echo $skinurl;?>/img/contbg_mid.png');">
+    
+    <?php
+    /*
 ?>
 
 <table width="100%" cellpadding="0" cellspacing="0" align="center">
@@ -222,11 +181,9 @@ includeBlock('vote', $Lang['vote']);
                     <td style="background-image: url(<?php echo $skinurl;?>/img/t_h_l_b.gif);">&nbsp;</td>
                     <td bgcolor="#37301d" colspan="5" align="center">
 <?php
-
+*/
 if(getConfig('news', 'show_announcement', '1'))
     echo "<h1>".getConfig('news', 'announcement', 'Welcome to Fantasy World Freya x50')."</h1>";
-?>
-<hr />
-<?php
+ 
 }
 ?>

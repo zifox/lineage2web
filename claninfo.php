@@ -3,15 +3,15 @@ define('INWEB', True);
 require_once("include/config.php");
 //пароль
 if(isset($_GET['clan'])){
-    $clanid=$mysql->escape(0+$_GET['clan']);  
-    $srv=$mysql->escape(0+$_GET['server']);
+    $clanid=getVar('clan');  
+    $srv=getVar('server');
     $dbname = getDBName($srv);
-    $query=$mysql->query('SELECT `clan_id`, `clan_name`, `clan_level`, `reputation_score`, `charId`, `char_name` FROM `'.$dbname.'`.`clan_data` INNER JOIN `'.$dbname.'`.`characters` ON `clan_data`.`leader_id`=`characters`.`charId` WHERE `clan_id`='.$clanid);
-    if($mysql->num_rows($query))
+    $query=$sql->query('SELECT `clan_id`, `clan_name`, `clan_level`, `reputation_score`, `charId`, `char_name` FROM `'.$dbname.'`.`clan_data` INNER JOIN `'.$dbname.'`.`characters` ON `clan_data`.`leader_id`=`characters`.`charId` WHERE `clan_id`='.$clanid);
+    if($sql->num_rows($query))
     {
         includeLang('clan_info');
         head($Lang['clan_info']);
-        $clan_data=$mysql->fetch_array($query);
+        $clan_data=$sql->fetch_array($query);
         ?>
          <div align="center"><h1>Clan Info</h1>
         <div align="center">
@@ -26,9 +26,9 @@ if(isset($_GET['clan'])){
         <div align="center">
         <table border="1">
         <?php
-        $clan_skills=$mysql->query("SELECT * FROM `clan_skills` WHERE `clan_id`='$clanid'");
+        $clan_skills=$sql->query("SELECT * FROM `clan_skills` WHERE `clan_id`='$clanid'");
         $i=0;
-        while($clan_skill=$mysql->fetch_array($clan_skills))
+        while($clan_skill=$sql->fetch_array($clan_skills))
         {
             if($i==0)
             {
@@ -54,9 +54,9 @@ if(isset($_GET['clan'])){
         <table border="1" align="center"><thead><tr><th><?php echo $Lang['nr'];?></th><th><?php echo $Lang['name'];?></th><th><?php echo $Lang['sex'];?></th><th><?php echo $Lang['class'];?></th><th>Level</th><th><?php echo $Lang['pvp_pk'];?></th><th>Fame</th></tr></thead>
         <tbody>
         <?php
-        $query=$mysql->query('SELECT `charId`, `char_name`, `sex`, `level`, `fame`, `pvpkills`, `pkkills`, `ClassName` FROM `'.$dbname.'`.`characters` INNER JOIN `'.$dbname.'`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId`  WHERE `clanid`='.$clan_data['clan_id'].' AND charId!='.$clan_data['charId'].' ORDER BY `level` DESC,`pvpkills` DESC, `fame` DESC');
+        $query=$sql->query('SELECT `charId`, `char_name`, `sex`, `level`, `fame`, `pvpkills`, `pkkills`, `ClassName` FROM `'.$dbname.'`.`characters` INNER JOIN `'.$dbname.'`.`char_templates` ON `characters`.`base_class`=`char_templates`.`ClassId`  WHERE `clanid`='.$clan_data['clan_id'].' AND charId!='.$clan_data['charId'].' ORDER BY `level` DESC,`pvpkills` DESC, `fame` DESC');
         $i=0;
-        while($clan_char=$mysql->fetch_array($query))
+        while($clan_char=$sql->fetch_array($query))
         {
             $i++;
             ?>
