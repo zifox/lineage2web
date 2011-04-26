@@ -72,11 +72,11 @@ if($cache->needUpdate($cachefile, $params))
         $content .=$tpl->parsetemplate('blocks/stats_serverlist', $parse, 1);
     }
     $cache->updateCache($cachefile, $content, $params);
-    
-    echo $content;
+    global $content;
 }
 else
 {
-    echo $cache->getCache($cachefile, $params);
+    $content= $cache->getCache($cachefile, $params);
+    global $content;
 }
 ?>

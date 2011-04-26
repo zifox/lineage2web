@@ -31,36 +31,51 @@ function getLang()
         break;
     }
 }
-function includeBlock($file, $block_name='Menu')
+function includeBlock($file, $block_name='Menu', $frame=1, $return=false)
 {
-	global $sql, $user, $tpl, $cache, $q, $Lang, $langpath;
-    DEFINE('IN_BLOCK', True);
+	global $sql, $user, $tpl, $cache, $q, $Lang, $langpath, $content;
+    define('IN_BLOCK', true);
     $img_link = 'skins/l2f';
-	?>
-    <table width="200" style="height:95px;" border="0" cellpadding="0" cellspacing="0" class="opacity2">
+    $cnt='';
+    if($frame)
+    {
+	$cnt .='<table width="200" style="height:95px;" border="0" cellpadding="0" cellspacing="0" class="opacity2">
     <tr style="height:48px;">
-    <td width="23"><img width="23" height="50" alt="" src="<?php echo $img_link;?>/img/h_l_c.gif" /></td>
-    <td width="159" style="background-image: url(<?php echo $img_link;?>/img/h_c.gif); background-repeat: no-repeat;">
-    <div align="center" class="block_name"><?php echo $block_name;?></div></td>
-    <td width="18"><img width="18" height="50" alt="" src="<?php echo $img_link;?>/img/h_r_c.gif" /></td></tr>
-
-    <tr><td style="background-image: url(<?php echo $img_link;?>/img/h_l_b.gif);">&nbsp;</td>
-    <td width="80%" bgcolor="#37301d" align="center">
-    <?php
+    <td width="23"><img width="23" height="50" alt="" src="'.$img_link.'/img/h_l_c.gif" /></td>
+    <td width="159" style="background-image: url('.$img_link.'/img/h_c.gif); background-repeat: no-repeat;">
+    <div align="center" class="block_name">'.$block_name.'</div></td>
+    <td width="18"><img width="18" height="50" alt="" src="'.$img_link.'/img/h_r_c.gif" /></td></tr>
+    <tr><td style="background-image: url('.$img_link.'/img/h_l_b.gif);">&nbsp;</td>
+    <td width="80%" bgcolor="#37301d" align="center">';
+    }
     includeLang('blocks/'.$file);
-    require_once('blocks/'.$file.'.php');
-    ?>
-    </td><td style="background-image: url(<?php echo $img_link;?>/img/h_r_b.gif);">&nbsp;</td></tr>
-    <tr><td width="23"><img width="23" height="26" alt="" src="<?php echo $img_link;?>/img/b_l_c.gif" /></td>
-    <td width="159"><img width="159" height="26" alt="" src="<?php echo $img_link;?>/img/b_c.gif" /></td>
-    <td width="18"><img width="18" height="26" alt="" src="<?php echo $img_link;?>/img/b_r_c.gif" /></td>
-    </tr></table>
-    <?php
+    if(file_exists('blocks/'.$file.'.php'))
+    {
+            require_once('blocks/'.$file.'.php');
+            //if($return) 
+            $cnt.=$content;
+    }
+    else
+        $cnt .= msg('Error','Failed to get block '.$file, 'error', 1);
+    if($frame)
+    {
+        $cnt .='</td><td style="background-image: url('.$img_link.'/img/h_r_b.gif);">&nbsp;</td></tr>
+    <tr><td width="23"><img width="23" height="26" alt="" src="'.$img_link.'/img/b_l_c.gif" /></td>
+    <td width="159"><img width="159" height="26" alt="" src="'.$img_link.'/img/b_c.gif" /></td>
+    <td width="18"><img width="18" height="26" alt="" src="'.$img_link.'/img/b_r_c.gif" /></td>
+    </tr></table>';
+    }
+    if($return)
+        return $cnt;
+    else
+        echo $cnt;
 }
 
-function msg($heading = '', $text = '', $div = 'success') {
-    echo '<table width="90%" border="0"><tr><td>';
-    echo '<div align="center" class="'.$div.'">'.($heading ? '<b>'.$heading.'</b><br />' : '').$text.'</div></td></tr></table>';
+function msg($heading = '', $text = '', $div = 'success', $return=0) {
+    $content='';
+    $content .= '<table width="90%" border="0"><tr><td>';
+    $content .= '<div align="center" class="'.$div.'">'.($heading ? '<b>'.$heading.'</b><br />' : '').$text.'</div></td></tr></table>';
+    if($return) return $content; else echo $content;
 }
 function err($head, $text)
 {
@@ -84,7 +99,7 @@ function head($title = "", $head=1, $url='', $time=0)
 {
     global $user, $sql, $tpl, $cache, $Lang;
     DEFINE('INSKIN', True);
-	$skin = getConfig('settings', 'DTHEME', 'l2f');
+	$skin = select_skin();
     $title = getConfig('head', 'Title', 'Lineage II Fantasy World')." :: ".$title;
 
 	require_once("skins/" . $skin . "/head.php");
@@ -93,14 +108,7 @@ function head($title = "", $head=1, $url='', $time=0)
 function foot($foot=1)
 {
     global $user, $sql, $tpl, $cache, $Lang, $starttime;
-    if(isset($_COOKIE['skin']))
-    {
-        $skin = trim($_COOKIE['skin']);
-    }
-    else
-    {
-	   $skin = getConfig('settings', 'DTHEME', 'l2f');
-    }
+    $skin = select_skin();
     require_once("skins/" . $skin . "/foot.php");
 }
 function button($text='  ', $name = 'Submit', $return = 0, $disabled=false, $id = NULL)
@@ -1088,5 +1096,43 @@ function augColor($lvl)
             return "#F75959";
         break;
     }
+}
+function is_skin($skin) {
+	return file_exists("skins/$skin/head.php") && file_exists("skins/$skin/foot.php");
+}
+function get_skins() {
+	$handle = opendir("skins");
+	$skinlist = array();
+	while ($file = readdir($handle)) {
+		if (is_skin($file) && $file != "." && $file != "..") {
+			$skinlist[] = $file;
+		}
+	}
+	closedir($handle);
+	sort($skinlist);
+	return $skinlist;
+}
+function skin_selector($sel_skin = "", $js = false) {
+	$skins = get_skins();
+	$cnt = "<select name=\"skin\"".($js ? " onchange=\"window.location='changeskin.php?skin='+this.options[this.selectedIndex].value\"" : "").">\n";
+	foreach ($skins as $skin)
+    {
+		$cnt .= "<option value=\"$skin\"".($skin == $sel_skin ? " selected" : "").">$skin</option>\n";
+    }
+	$cnt .= "</select>";
+	return $cnt;
+}
+
+function select_skin() {
+    global $user;
+	if ($user->logged())
+		$skin = $_SESSION['skin'];
+	elseif(isset($_COOKIE['skin']))
+        $skin = $_COOKIE['skin'];
+    else
+		$skin = getConfig('settings','DTHEME');
+	if (!is_skin($skin))
+		$skin = getConfig('settings','DTHEME');
+	return $skin;
 }
 ?>

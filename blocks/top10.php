@@ -8,6 +8,7 @@ if (! defined('IN_BLOCK'))
 $cachefile='blocks/top10';
 if($cache->needUpdate($cachefile))
 {
+    $content ='';
     $server_list = $sql->query(1, array('db' => getConfig('settings', 'webdb', 'l2web')));
     while ($slist = $sql->fetch_array($server_list))
     {
@@ -27,13 +28,15 @@ if($cache->needUpdate($cachefile))
             $n++;
         }
 
-        $content = $tpl->parsetemplate($cachefile, $parse, 1);
-        $cache->updateCache($cachefile, $content);
-        echo $content;
+        $content .= $tpl->parsetemplate($cachefile, $parse, 1);
+
     }
+    $cache->updateCache($cachefile, $content);
+    global $content;
 }
 else
 {
-    echo $cache->getCache($cachefile);
+    $content = $cache->getCache($cachefile);
+    global $content;
 }
 ?>

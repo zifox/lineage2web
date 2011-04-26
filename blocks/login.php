@@ -33,13 +33,15 @@ if ($user->logged())
     $parse['in_mes']=sprintf($Lang['in_mes'], $parse['rec'], $parse['unread']);
     $parse['out_mes']=sprintf($Lang['out_mes'], $parse['sent']);
 	$parse['wp_link'] = sprintf($Lang['webpoints'], $_SESSION['webpoints']);
-	$tpl->parsetemplate( 'blocks/login_logged', $parse );
+	$content = $tpl->parsetemplate( 'blocks/login_logged', $parse,1 );
+    global $content;
 }
 else
 {
     $parse['static'] = $staticurl;
 	$parse['button'] = button( $Lang['login'], '', 1 );
-	$tpl->parsetemplate( 'blocks/login', $parse );
+	$content = $tpl->parsetemplate( 'blocks/login', $parse, 1 );
+    global $content;
 }
 
 ?>

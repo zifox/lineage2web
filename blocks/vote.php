@@ -9,10 +9,11 @@ if($cache->needUpdate($cachefile))
     $content = $tpl->parsetemplate('blocks/vote', NULL, 1);
     $cache->updateCache($cachefile, $content);
     
-    echo $content;
+    global $content;
 }
 else
 {
-    echo $cache->getCache($cachefile);
+    $content = $cache->getCache($cachefile);
+    global $content;
 }
 ?>

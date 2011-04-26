@@ -128,6 +128,14 @@ opacity: 0.7;
 filter: alpha(opacity=85);
 opacity: 0.85;
 }
+#status, #sstatus {
+    font-size:  5px !important;
+    line-height: 3px;
+    margin: 0px;
+}
+#info2 {
+    font-size: 12px !important;
+}
 </style>
 </head>
 <body>
@@ -140,50 +148,22 @@ opacity: 0.85;
 <?php
 if($head){
     ?>
-    <div id="menu" style="position: absolute; left: 200px; top: 120px; z-index: 1;"><img src="<?php echo $skinurl;?>/img/menu.png" width="100%" /></div>
-    <div id="content" style="position: absolute; left: 200px; top: 220px; z-index: 1;">
+    <div id="menu" class="opacity2" style="position: absolute; left: 200px; top: 120px; z-index: 1;"><img src="<?php echo $skinurl;?>/img/menu.png" width="850px" /></div>
+    <div id="content" class="opacity2" style="position: absolute; left: 200px; top: 220px; z-index: 1;">
     <table>
     <tr><td width="600px" height="69px" style="background: url('<?php echo $skinurl;?>/img/contbg_top.png');">&nbsp;</td></tr>
     <tr><td align="center" width="600px" height="auto" style="background: url('<?php echo $skinurl;?>/img/contbg_mid.png');">
     
     <?php
-    /*
-?>
-
-<table width="100%" cellpadding="0" cellspacing="0" align="center">
-<tr>
-	<td width="100%">
-<table border="0" width="100%" cellpadding="0" cellspacing="0">
-    <tr>
-        <td width="15%" valign="top" align="center">
-<?php
-includeBlock('login', (!$user->logged()) ? $Lang['login']: $_SESSION['account'] );
-includeBlock('menu', $Lang['menu']);
-includeBlock('vote', $Lang['vote']);
-?>
-        </td>
-        <td id="main" width="70%" align="center" valign="top">
-            <table width="100%" cellspacing="0" cellpadding="0" border="0" align="right" class="opacity2" style="height: 100px;">
-                <tbody>
-                <tr>
-                    <td width="40"><img width="40" height="53" alt="" src="<?php echo $skinurl;?>/img/t_h_lc.gif" /></td>
-                    <td width="1"><img width="1" height="53" alt="" src="<?php echo $skinurl;?>/img/t_h_l_c.gif" /></td>
-                    <td width="335" style="background-image: url(<?php echo $skinurl;?>/img/t_h_cl.gif);">&nbsp;</td>
-                    <td width="480" style="">
-	                   <table width="100%" style="height:53px;" cellspacing="0" cellpadding="0" border="0" align="center"><tbody><tr>
-                            <td height="19" style="background-image: url(<?php echo $skinurl;?>/img/t_h_c.gif); background-repeat: no-repeat; background-position: center center;"><div align="center">Main</div></td>
-                        </tr></tbody></table></td>
-                    <td width="309" style="background-image: url(<?php echo $skinurl;?>/img/t_h_cr.gif);">&nbsp;</td>
-                    <td width="1"><img width="1" height="53" alt="" src="<?php echo $skinurl;?>/img/t_h_r_c.gif" /></td>
-                    <td width="40"><img width="40" height="53" alt="" src="<?php echo $skinurl;?>/img/t_h_rc.gif" /></td>
-                </tr>
-                <tr>
-                    <td style="background-image: url(<?php echo $skinurl;?>/img/t_h_l_b.gif);">&nbsp;</td>
-                    <td bgcolor="#37301d" colspan="5" align="center">
-<?php
-*/
 if(getConfig('news', 'show_announcement', '1'))
     echo "<h1>".getConfig('news', 'announcement', 'Welcome to Fantasy World Freya x50')."</h1>";
- 
+$sql->query("SELECT Count(*) AS new FROM l2web.messages WHERE receiver='{$_SESSION['account']}' AND unread='yes'");
+$msg=$sql->fetch_array();
+if($user->logged() && $msg['new']>0)
+{
+    $title=sprintf($Lang['unread_msg'], $msg['new'], $msg['new']=='1'?'':$Lang['s']);
+    msg('','<a href="message.php?viewmailbox&amp;box=1">'.$title.'</a>');
 }
+}
+
 ?>

@@ -8,7 +8,7 @@
 <tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="rules.php">{rules}</a></td></tr>
 <tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="donate.php">{donate}</a></td></tr>
 </table>
-
+{skin}
 <div id="lang2">
 <a href="server.php?lang=1"><img src="img/lang/lv.png" border="{lv_border}" title="Latviski" alt="Latviski"/></a>
 <a href="server.php?lang=2"><img src="img/lang/en.png" border="{en_border}" title="English" alt="English"/></a>

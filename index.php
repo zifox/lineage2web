@@ -41,7 +41,15 @@ if($cache->needUpdate('index', $params))
             $nparse['delete'] = '';
         }
         $md5=explode(".",$news['image']);
-        $nparse['thumb']=$md5[0].'_thumb.'.$md5[1];
+        if(!file_exists('news/'.$md5[0].'.'.$md5[1]))
+        {
+            $nparse['image']='image.png';
+            $nparse['thumb']='image_thumb.png';
+        }
+        else
+        {
+            $nparse['thumb']=$md5[0].'_thumb.'.$md5[1];
+        }
         $nparse['read_more']='<a href="news.php?id='. $news['news_id'].'">'.$Lang['read_more'].'</a>';
         $parse['news'].=$tpl->parsetemplate('news_row', $nparse, 1);
     }

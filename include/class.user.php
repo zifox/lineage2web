@@ -47,6 +47,7 @@ class user {
 		$_SESSION['logged'] = true;
         $_SESSION['webpoints'] = $values['webpoints'];
         $_SESSION['vote_time'] = $values['voted'];
+        $_SESSION['skin'] = $values['skin'];
 		if ($remember){
 			$this->updateCookie($cookie, true);
 		}

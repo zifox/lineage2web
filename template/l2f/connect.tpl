@@ -42,8 +42,7 @@ Patch Features:
 </ol>
 Installation quick guide
 <ol>
-<li>Download the file. <a href="">Fantasy World patch v7</a> <font color="red">NOT YET AVAILABLE</font></li>
-<li>Download this instead. <a href="files/fantasy7_0a.rar">Fantasy World patch v7 Alpha</a></li>
+<li>Download the file. <a href="files/fantasy.rar">Fantasy World patch v7</a></li>
 <li>Open it and press install button(press browse if l2 directory folder is different from C:\Program Files\Lineage II).</li>
 <li>Open the game from Fantasy World shortcut on your desktop.</li>
 </ol>

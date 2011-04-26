@@ -20,6 +20,7 @@ if($cache->needUpdate($cachefile, $params))
     $parse['statistic']=menubutton($Lang['statistic']);
     $parse['rules']=menubutton($Lang['rules']);
     $parse['donate']=menubutton($Lang['donate']); #NOT YET FINISHED
+    $parse['skin']=skin_selector(select_skin(),true); 
     $parse['langpath'] = $langpath;
     $parse['lv_border'] = $_COOKIE['lang'] == 1 ? '1':'0';
     $parse['en_border'] = $_COOKIE['lang'] == 2 ? '1':'0';
@@ -28,10 +29,11 @@ if($cache->needUpdate($cachefile, $params))
     $content = $tpl->parsetemplate('blocks/menu', $parse, 1);
     $cache->updateCache($cachefile, $content, $params);
     
-    echo $content;
+    global $content;
 }
 else
 {
-    echo $cache->getCache($cachefile, $params);
+    $content = $cache->getCache($cachefile, $params);
+    global $content;
 }
 ?>

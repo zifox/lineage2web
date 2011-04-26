@@ -14,10 +14,15 @@ else
     $start = 1;
 }
 $serverId=getVar('server');
-if(!$serverId)
+if($serverId)
 {
     $server=getDBInfo($serverId);
 }
+else
+{
+    $server=getDBInfo(getConfig('settings','DDB'));
+}
+
 if(!is_numeric($start) || $start==0) {$start = 1;}
 $start=abs($start)-1;
 $startlimit = $start*getConfig('settings', 'TOP', '10');
@@ -230,9 +235,10 @@ switch($a)
     case "my":
     $page=getVar('page');
     $par['user']=$_SESSION['account'];
+    $par['server']=$server['ID'];
     $params = implode(';', $par);
     $cachefile='webshop';
-    $qry=$sql->query("SELECT * FROM `$webdb`.`webshop` WHERE `owner`='{$_SESSION['account']}' LIMIT $startlimit, {$CONFIG['settings']['TOP']}");
+    $qry=$sql->query("SELECT * FROM `$webdb`.`webshop` WHERE `owner`='{$_SESSION['account']}' AND `server`='{$server['ID']}' LIMIT $startlimit, {$CONFIG['settings']['TOP']}");
     if(!$sql->num_rows($qry))
     {
         err('Error', 'You don\'t have any item in webshop');
@@ -709,7 +715,7 @@ switch($a)
     if($grade) $sql_add.=" AND `grade`='$grade'"; 
     echo "<table border=\"1\">";
     echo "<tr><th>Icon</th><th>Name</th><th>Price</th><th>Count</th><th>Owner</th><th>Action</th></tr>";
-    $select=$sql->query("SELECT `owner`, `object_id`, `item_id`, `count`, `enchant_level`, `money`, `money_count` FROM `{webdb}`.`webshop` WHERE `active`='1'$sql_add LIMIT $startlimit, {$CONFIG['settings']['TOP']}", array('webdb'=>$webdb));
+    $select=$sql->query("SELECT `owner`, `object_id`, `item_id`, `count`, `enchant_level`, `money`, `money_count` FROM `{webdb}`.`webshop` WHERE `active`='1' AND `server`='{$server['ID']}'$sql_add LIMIT $startlimit, {$CONFIG['settings']['TOP']}", array('webdb'=>$webdb));
     while($item=$sql->fetch_array($select))
     {
         $details=$sql->query("SELECT * FROM `{webdb}`.`all_items` WHERE `id`='{$item['item_id']}'", array('webdb'=>$webdb));

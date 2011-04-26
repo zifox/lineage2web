@@ -1,7 +1,6 @@
 <hr />
-
 <?php
-$skinurl = 'skins/'.getConfig('settings', 'DTHEME', 'l2f');
+$skinurl = 'skins/l2f';
 if($foot){
 ?>
 </td>

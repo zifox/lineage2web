@@ -31,6 +31,7 @@ tr.row
 tr.row:hover
 {
     background-color: #505050;
+    font-size: smaller;
 }
 td.records{color:#a1967c;}
 td.noborder{border-bottom-width:0;border-left-width:0;border-right-width:0;border-top-width:0;}
@@ -38,7 +39,6 @@ ol, ul, li.left{text-align:left;}
 input.login{border:0 none;background:url("img/login_text.gif") 0% 0% no-repeat scroll transparent;color:rgb(217, 222, 218);width:129px;}
 .style3{font-size:16px;font-weight:bold;color:#7fff00;}
 .style7{font-weight:bold;color:#ff4500;}
-td, pre{font-family:Tahoma, Verdana, Arial, Helvetica, sans-serif;font-size:11px;color:#ffffff;margin:5px;}
 .error{color:#990000;padding:7px;margin-top:5px;margin-bottom:10px;border:1px dashed #990000;}
 .error b{color:#990000;background:inherit;}
 .success{color:#7ba813;padding:7px;margin-top:5px;margin-bottom:5px;border:1px dashed #7ba813;}
@@ -321,7 +321,7 @@ width: expression(this.width > 360 ? 360: true);
 }
 p {
     text-align: justify;
-    font-size: 12px;
+    font-size: 6px;
     font-weight: normal;
 }
 /*body, table, tr, td, img, div, a, input { behavior: url(../../img/iepngfix.htc) }*/

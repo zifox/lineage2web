@@ -34,22 +34,24 @@ switch ($action)
 					echo 'Invalid or empty Content!  <br />';
 					$error++;
 				}
-				if ($_FILES['file']['size'] > $maxfilesize)
-				{
-					echo 'File is too large! <br />';
-					$error++;
-				}
-				if ($_FILES['file']['name'] == '')
-				{
-					echo 'File is not specified! <br />';
-					$error++;
-				}
-				if (! array_key_exists($_FILES['file']['type'], $allowed_types) && $_FILES['file']['name'] != '')
-				{
-					echo 'Wrong file type! <br />';
-					$error++;
-				}
-
+                if($_FILES['file']['name']!=null)
+                {
+				    if ($_FILES['file']['size'] > $maxfilesize)
+				    {
+					   echo 'File is too large! <br />';
+					   $error++;
+				    }
+				    if ($_FILES['file']['name'] == '')
+				    {
+				    	echo 'File is not specified! <br />';
+					   $error++;
+				    }
+				    if (! array_key_exists($_FILES['file']['type'], $allowed_types) && $_FILES['file']['name'] != '')
+				    {
+					   echo 'Wrong file type! <br />';
+					   $error++;
+				    }
+                }
 				if ($error === 0)
 				{
 					$descdb = substr($desc, 0, 500);
@@ -65,9 +67,11 @@ switch ($action)
 					file_put_contents('news/' . $md5 . '.html', $desc);
 
 					if (file_exists('news/' . $md5 . '.' . $ext)) unlink('news/' . $md5 . '.' . $ext);
-
-					move_uploaded_file($_FILES['file']['tmp_name'], 'news/' . $md5 . '.' . $ext);
-					convertPic($md5, $ext, 150, 150);
+                    if($_FILES['file'])
+                    {
+					   move_uploaded_file($_FILES['file']['tmp_name'], 'news/' . $md5 . '.' . $ext);
+					   convertPic($md5, $ext, 150, 150);
+                    }
 					msg('Success','News added');
                     }
                     else
@@ -125,17 +129,19 @@ switch ($action)
 					echo 'Invalid or empty Content!  <br />';
 					$error++;
 				}
-				if ($_FILES['file']['size'] > $maxfilesize)
-				{
-					echo 'File is too large! <br />';
-					$error++;
-				}
-				if (! array_key_exists($_FILES['file']['type'], $allowed_types) && $_FILES['file']['name'] != '')
-				{
-					echo 'Wrong file type! <br />';
-					$error++;
-				}
-
+                if($_FILES['file'])
+                {
+				    if ($_FILES['file']['size'] > $maxfilesize)
+				    {
+					   echo 'File is too large! <br />';
+					   $error++;
+				    }
+				    if (! array_key_exists($_FILES['file']['type'], $allowed_types) && $_FILES['file']['name'] != '')
+				    {
+					   echo 'Wrong file type! <br />';
+					   $error++;
+				    }
+                }
 				if ($error === 0)
 				{
 					$name = $sql->escape($_POST['name']);
@@ -158,7 +164,7 @@ switch ($action)
 						$desc = $sql->escape(substr($desc, 0, 500));
 						$sql->query($q[10], array('db' => $webdb, 'page' => 'index'));
 						$sql->query($q[8], array("db" => $webdb, "news_id" => $id, "desc" => $desc, "name" => $name, "date" => date('Y-m-d H:i:s'), "editor" => $_SESSION['account']));
-						if ($_FILES['file']['name'] != '')
+						if ($_FILES['file'])
 						{
 							if (file_exists('news/' . $md5 . '.' . $ext)) unlink('news/' . $md5 . '.' . $ext);
 							move_uploaded_file($_FILES['file']['tmp_name'], 'news/' . $md5 . '.' . $ext);
@@ -220,9 +226,9 @@ switch ($action)
 			{
 				$new = $sql->fetch_array($news);
 				$sql->query($q[7], array("db" => $webdb, "news_id" => $id));
-				$md5 = explode(".", $news['image']);
-                $ext = $md5[1];
-				$md5 = $md5[0];
+				$md = explode(".", $new['image']);
+                $ext = $md[1];
+				$md5 = $md[0];
 				
 				if (file_exists('news/' . $md5 . '.html'))
 				{
@@ -257,6 +263,7 @@ switch ($action)
 		{
 			if ($user->mod())
 			{
+                echo 'Are you sure you want to delete this new?<br />';
 				echo '<a href="news.php?action=delete&amp;confirm=1&amp;id=' . $id . '">';
 				echo menubutton($Lang['delete']);
 				echo '</a>';
@@ -272,14 +279,24 @@ switch ($action)
 				$newid = $sql->fetch_array($new);
 
 				$md5 = explode(".", $newid['image']);
+                $ext=$md5[1];
 				$md5 = $md5[0];
 
 				if (file_exists('news/' . $md5 . '.html'))
 				{
 					$parse += $newid;
+                    if(!file_exists('news/'.$md5.'.'.$ext))
+                    {
+                        $parse['image']='image.png';
+                        $parse['thumb']='image.png';
+                    }
+                    else
+                    {
+                        $parse['thumb'] = $newid['image'];
+                    }
 					$parse['desc'] = format_body(file_get_contents('news/' . $md5 . '.html'), 'false');
 					$parse['read_more'] = '';
-					$parse['thumb'] = $newid['image'];
+					
 					if ($newid['edited_by'] != '')
 					{
 						$parse['edited'] = 'Last edited <strong>' . $newid['edited'] . '</strong> by <strong>' . $newid['edited_by'] . '</strong>';
@@ -298,6 +315,10 @@ switch ($action)
 					}
 					$tpl->parsetemplate('news_row', $parse);
 				}
+                else
+                {
+                    echo 'Not Found';
+                }
 			}
 		}
 		else
@@ -310,7 +331,14 @@ switch ($action)
 
 				$parse['read_more'] = '<a href="news.php?id=' . $news['news_id'] . '">' . $Lang['read_more'] . '</a>';
 				$md5 = explode(".", $news['image']);
-				$parse['thumb'] = $md5[0] . '_thumb.' . $md5[1];
+                if(!file_exists('news/'.$md5[0].'_thumb.'.$md5[1]))
+                {
+                    $parse['thumb']='image_thumb.png';
+                }
+                else
+                {
+				    $parse['thumb'] = $md5[0] . '_thumb.' . $md5[1];
+                }
 				if ($news['edited_by'] != '')
 				{
 					$parse['edited'] = 'Last edited <strong>' . $news['edited'] . '</strong> by <strong>' . $news['edited_by'] . '</strong>';

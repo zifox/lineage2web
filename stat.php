@@ -23,6 +23,7 @@ head("$head");
 $par['lang'] = getLang();
 $par['stat'] = $stat != ''?$stat:'home';
 $par['page'] = $start + 1;
+$par['server'] = getVar('server')!=''?getVar('server'):'1';
 $params = implode(';', $par);
 if($cache->needUpdate('stat', $params)) {
 	$content = '';
