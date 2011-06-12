@@ -13,7 +13,7 @@ if(isset($_GET['clan'])){
         head($Lang['clan_info']);
         $clan_data=$sql->fetch_array($query);
         ?>
-         <div align="center"><h1>Clan Info</h1>
+         <div align="center"><h1>Clan Info</h1></div>
         <div align="center">
         <table border="1">
         <tr><td><?php echo $Lang['clan'];?>: </td><td><?php echo $clan_data['clan_name'];?></td></tr>
@@ -22,7 +22,7 @@ if(isset($_GET['clan'])){
         <tr><td><?php echo $Lang['rep'];?>: </td><td><?php echo $clan_data['reputation_score'];?></td></tr>
         </table>
         </div>
-         <div align="center"><h1>Clan Skills</h1>
+         <div align="center"><h1>Clan Skills</h1></div>
         <div align="center">
         <table border="1">
         <?php

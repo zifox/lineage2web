@@ -25,10 +25,11 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
         $par['lang']=getLang();
         $par['mod']=$user->mod()==true?'true':'false';
         $par['id']=$char['charId'];
+        $par['srv']=$srv;
         //$sec=86400;
         $sec=900;
         $params = implode(';', $par);
-        if($cache->needUpdate(__FILE__, $params))
+        if($cache->needUpdate("user", $params))
         {
             $parse=$Lang;
             $parse['time']=date('d.m.Y H:i:s');

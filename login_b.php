@@ -1,6 +1,7 @@
 <?php
 //пароль
 header("Content-type: image/png");
+header('Last-Modified: 1 Sep 2010 15:00:00 GMT');
 $text=$_GET['text'];
 if($_GET['style']=="normal"){
 $button_img=imagecreatefrompng("./img/buttons/normal.png");

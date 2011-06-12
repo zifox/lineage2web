@@ -9,7 +9,7 @@ header("Cache-control: public");
 header("Cache-Control: maxage=".$expires);
 header('Expires: ' . gmdate('D, d M Y H:i:s', time()+$expires) . ' GMT');
 header('Last-Modified: 1 Sep 2010 15:00:00 GMT');
-header('Content-Type: gzip');
+header('Content-Type: application/xhtml+xml');
 //пароль
 includeLang('skin');
 
@@ -164,7 +164,7 @@ opacity: 0.85;
 <img style="border:0;width:88px;height:31px" src="img/valid-css.png" alt="Valid CSS!" /></a>
 <a href="http://games.top.org/lineage-2/" title="Lineage 2 TOP.ORG"><img style="border:none;" src="http://img1.top.org/toporg_12309.gif" alt="Lineage 2 TOP.ORG" /></a>
 </div>-->
-<div id="bg" style="position: absolute;z-index: -1;"><img src="<?php echo $skinurl;?>/bg/bg.jpg" width="100%" /></div>
+<div id="bg" style="position: absolute;z-index: -1;"><img src="<?php echo $skinurl;?>/bg/bg.jpg" width="100%" alt="" title="Lineage II Fantasy World High Five" /></div>
 <div id="frm"><img width="150" height="150" border="0" longdesc="/" usemap="#Map" alt="Visit forum" style="" src="img/visit_forum.png" />
 <map id="Map" name="Map">
 <area href="./forum" target="_blank" coords="3,119,117,3,77,3,3,77,3,119" shape="poly" alt="" />

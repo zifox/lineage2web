@@ -1,1 +1,1 @@
-<tr class="content"><td class="content">{Name}:</td><td class="content">{Exp}</td><td class="content">{SP}</td><td class="content">{Adena}</td><td class="content">{ItemDrop}</td><td class="content">{Spoil}</td><td class="content">{Quest}</td><td class="content">{SafeEnchant}({SafeEnchantFull}) / {MaxEnchant}</td></tr>
+<tr><td>{Name}:</td><td>{Exp}</td><td>{SP}</td><td>{Adena}</td><td>{ItemDrop}</td><td>{Spoil}</td><td>{Quest}</td><td>{SafeEnchant}({SafeEnchantFull}) / {MaxEnchant}</td></tr>

@@ -1117,7 +1117,7 @@ function skin_selector($sel_skin = "", $js = false) {
 	$cnt = "<select name=\"skin\"".($js ? " onchange=\"window.location='changeskin.php?skin='+this.options[this.selectedIndex].value\"" : "").">\n";
 	foreach ($skins as $skin)
     {
-		$cnt .= "<option value=\"$skin\"".($skin == $sel_skin ? " selected" : "").">$skin</option>\n";
+		$cnt .= "<option value=\"$skin\"".($skin == $sel_skin ? " selected=\"selected\"" : "").">$skin</option>\n";
     }
 	$cnt .= "</select>";
 	return $cnt;

@@ -73,7 +73,7 @@ header("Pragma: public");
 header("Cache-control: public");
 header("Cache-Control: maxage=".$expires);
 header('Expires: ' . gmdate('D, d M Y H:i:s', time()+$expires) . ' GMT');
-
+header('Last-Modified: 1 Sep 2010 15:00:00 GMT');
 //$text=$_GET['text'];
 //$text=iconv('UTF-8','ISO-8859-15', 'Lejuplādes');
 $text=foxy_utf8_to_nce($_GET['text']);

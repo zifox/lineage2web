@@ -227,6 +227,7 @@ else
 <input type="image" src="https://www.paypal.com/en_GB/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online." />
 <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
 </form>
+<div>
 <p align="center">DONATIONS</p>
 
 <p align="center">
@@ -322,7 +323,7 @@ else
 <p><strong>CONTACT DONATION ADMINISTRATOR:</strong></p>
 
 <p>Forum name:80MXM08, in game: contact any GM <a href="mailto:antons007@gmail.com">antons007@gmail.com</a></p>
-
+</div>
 <?php
 }
 foot();

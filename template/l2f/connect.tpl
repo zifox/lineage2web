@@ -29,7 +29,7 @@ Enjoy playing! </p>
 <p>
 If you have problems with connection info steps - Download and install Fantasy World patch. <br />(This isn't necessary to play on Fantasy World </p>
 
-<p>
+
 Patch Features:
 <ol>
 <li>You don`t have to change your hosts file to connect.</li>
@@ -42,9 +42,9 @@ Patch Features:
 </ol>
 Installation quick guide
 <ol>
-<li>Download the file. <a href="files/fantasy.rar">Fantasy World patch v7</a></li>
+<li>Download the file. <a href="files/fantasy.exe">Fantasy World patch v8</a></li>
 <li>Open it and press install button(press browse if l2 directory folder is different from C:\Program Files\Lineage II).</li>
 <li>Open the game from Fantasy World shortcut on your desktop.</li>
 </ol>
-</p>
+
 </div>

@@ -188,11 +188,11 @@ if($cache->needUpdate('stat', $params)) {
             break;
 
 		case 'clantop':
-			$result = $sql->query("SELECT `clan_id`, `clan_name`, `clan_level`, `reputation_score`, `hasCastle`, `ally_id`, `ally_name`, `char_name`, `ccount`, `name` FROM `$s_db`.`clan_data` INNER JOIN `$s_db`.`characters` ON `clan_data`.`leader_id`=`characters`.`charId` LEFT JOIN (SELECT clanid, count(`level`) AS `ccount` FROM `$s_db`.`characters` WHERE `clanid` GROUP BY `clanid`) AS `levels` ON `clan_data`.`clan_id`=`levels`.`clanid` LEFT OUTER JOIN `$s_db`.`castle` ON `clan_data`.`hasCastle`=`castle`.`id` WHERE `characters`.`accessLevel`='0' ORDER BY `clan_level` DESC, `reputation_score` DESC LIMIT $startlimit, ".getConfig('settings','TOP','10').";");
+			$result = $sql->query("SELECT `clan_id`, `clan_name`, `clan_level`, `reputation_score`, `hasCastle`, `ally_id`, `ally_name`, `charId`, `char_name`, `ccount`, `name` FROM `$s_db`.`clan_data` INNER JOIN `$s_db`.`characters` ON `clan_data`.`leader_id`=`characters`.`charId` LEFT JOIN (SELECT clanid, count(`level`) AS `ccount` FROM `$s_db`.`characters` WHERE `clanid` GROUP BY `clanid`) AS `levels` ON `clan_data`.`clan_id`=`levels`.`clanid` LEFT OUTER JOIN `$s_db`.`castle` ON `clan_data`.`hasCastle`=`castle`.`id` WHERE `characters`.`accessLevel`='0' ORDER BY `clan_level` DESC, `reputation_score` DESC LIMIT $startlimit, ".getConfig('settings','TOP','10').";");
 			$page_foot = $sql->query("SELECT count(`clan_id`) FROM `$s_db`.`clan_data`, `$s_db`.`characters` WHERE `clan_data`.`leader_id`=`characters`.`charId` AND `characters`.`accessLevel`='0'");
 			$content .= "<h1> TOP Clans </h1><hr />";
 			$content .= "<h2>{$Lang["clantop_total"]}: ".$sql->result($page_foot)."</h2>";
-			$content .= "<table border=\"1\"><thead><tr style=\"color: green;\"><th><b>Clan Name</b></th>";
+			$content .= "<table border=\"1\" align=\"center\"><thead><tr style=\"color: green;\"><th><b>Clan Name</b></th>";
 			$content .= "<th><b>Leader</b></th>";
 			$content .= "<th><b>Level</b></th>";
 			$content .= "<th><b>Reputation</b></th>";
@@ -209,7 +209,7 @@ if($cache->needUpdate('stat', $params)) {
 					$castle = 'No castle';
 				}
 				$content .= "<tr".(($i++ % 2)?"":" class=\"altRow\"")." onmouseover=\"this.bgColor = '#505050';\" onmouseout=\"this.bgColor = ''\"><td><a href=\"claninfo.php?clan=".
-					$row["clan_id"]."\">".$row["clan_name"]."</a></td><td><a href=\"user.php?cid={$row['leader_id']}\">".
+					$row["clan_id"]."&server=$server \">".$row["clan_name"]."</a></td><td><a href=\"user.php?cid={$row['charId']}&server=$server \">".
 					$row["char_name"]."</a></td><td class=\"numeric sortedColumn\">".$row["clan_level"].
 					"</td><td>{$row['reputation_score']}</td><td>".$castle."</td><td class=\"numeric\">".
 					$row["ccount"]."</td></tr>";

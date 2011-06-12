@@ -1,5 +1,5 @@
 <h1>{rates}</h1>
-<table border="1"><tr class="header"><td class="header">{Server}</td><td class="header">{Exp}</td><td class="header">{SP}</td><td class="header">{Adena}</td><td class="header">{Items}</td><td class="header">{Spoil}</td><td class="header">{Quest}</td><td class="header">{Enchant}</td></tr>
+<table border="1" width="540"><tr><th width="10">{Server}</th><th width="10">{Exp}</th><th width="10">{SP}</th><th width="10">{Adena}</th><th width="10">{Items}</th><th width="10">{Spoil}</th><th width="10">{Quest}</th><th width="30">{Enchant}</th></tr>
 {gsrows}
 </table><br />
 {news}

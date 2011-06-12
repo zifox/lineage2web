@@ -119,7 +119,18 @@ background-color: #000000;
 cursor : url('<?php echo $skinurl;?>/cursors/cursor.cur'), auto;
 
 }
-
+#menu
+{
+    width: 800px;
+    height: 86px;
+    padding-top: 20px;
+    padding-left: 25px;
+    padding-right: 25px;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: cursive;
+    text-align: center;
+}
 .opacity1 {
 filter: alpha(opacity=70);
 opacity: 0.7;
@@ -148,7 +159,9 @@ opacity: 0.85;
 <?php
 if($head){
     ?>
-    <div id="menu" class="opacity2" style="position: absolute; left: 200px; top: 120px; z-index: 1;"><img src="<?php echo $skinurl;?>/img/menu.png" width="850px" /></div>
+    <div id="menu" class="opacity2" style="position: absolute; left: 200px; top: 120px; z-index: 1; background: url('<?php echo $skinurl;?>/img/menu3.png') 850px 106px;">
+    <a href="index.php">Home</a> | <a href="reg.php">Registration</a> | <a href="connect.php">Connect</a> | <a href="webshop.php">WebShop</a> | <a href="/forum" target="_blank">Forum</a> | <a href="stat.php">Stats</a> | <a href="rules.php">Rules</a> | <a href="donate.php">Donate</a>
+    </div>
     <div id="content" class="opacity2" style="position: absolute; left: 200px; top: 220px; z-index: 1;">
     <table>
     <tr><td width="600px" height="69px" style="background: url('<?php echo $skinurl;?>/img/contbg_top.png');">&nbsp;</td></tr>

@@ -1,5 +1,5 @@
 <h1>{home}</h1><hr />
-<table border="1" width="50%">
+<table border="1" width="50%" align="center">
 {race_rows}
 <tr><td>{male}<img src="img/stat/sex.jpg" alt="{male}" /></td><td><img src="img/stat/sexline.jpg" height="10px" width="{mc}px" alt="" /> {mc}%</td></tr>
 <tr><td>{female}<img src="img/stat/sex1.jpg" alt="{female}" /></td><td><img src="img/stat/sexline.jpg" height="10px" width="{fc}px" alt="" /> {fc}%</td></tr>
