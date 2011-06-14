@@ -30,7 +30,7 @@ $webdb=getConfig('settings','webdb','l2web');
 $user = new user();
 
 if (getConfig('features','use_cracktracker','0')){
-    //require_once ('include/cracktracker.php');
+    require_once ('include/cracktracker.php');
 }
 
 

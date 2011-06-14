@@ -183,7 +183,7 @@ switch($a)
         }
         $sql->query(33, array('webdb'=>$webdb, 'account' => $_SESSION['account'],'pm_id'=>$pm_id));
         head("Private Message (Subject: $subject)"); ?>
-        <table width="660" border="0" cellpadding="4" cellspacing="0">
+        <table width="580" border="0" cellpadding="4" cellspacing="0">
         <tr><td class="colhead" colspan="2">Subject: <?php echo $subject; ?></td></tr>
         <tr>
         <td width="50%" class="colhead"><?php echo $from; ?></td>

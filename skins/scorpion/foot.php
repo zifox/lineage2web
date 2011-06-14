@@ -21,15 +21,15 @@ if($foot){
     echo $blckStat; ?>
     </div></div>
     
-    <div id="status" style="position: absolute; left:800px; top: 250px; z-index: 1; width: 250px; height: 303px; background: url('<?php echo $skinurl;?>/img/status.png') 250px 303px" onclick="document.getElementById('info2').style.display='block';">
+    <div id="status" style="position: absolute; left:750px; top: 250px; z-index: 1; width: 250px; height: 303px; background: url('<?php echo $skinurl;?>/img/status.png') 250px 303px" onclick="document.getElementById('info2').style.display='block';">
     
     <table width="165px" style="margin-left: 50px; margin-top: 70px;"><tr><td>    <?php echo $blckStat; ?></td></tr></table>
 
 
     </div>
-    <div id="login" style="position: absolute; left:800px; top: 550px; z-index: 1; width: 250px;"><a href="#" onclick="document.getElementById('info').style.display='block';"><img width="100%" src="<?php echo $skinurl;?>/img/login.png" /></a></div>
+    <div id="login" style="position: absolute; left:750px; top: 550px; z-index: 1; width: 250px;"><a href="#" onclick="document.getElementById('info').style.display='block';"><img width="100%" src="<?php echo $skinurl;?>/img/login.png" /></a></div>
     <!--div id="forum" style="position: absolute; left:5px; top: 500px; z-index: 1; width: 200px;"><a href="<?php echo getConfig('head','url');?>/forum" target="_blank"><img width="100%" src="<?php echo $skinurl;?>/img/forum.png" /></a></div -->
-    <div id="connect" style="position: absolute; left:800px; top: 775px; z-index: 1; width: 250px;"><a href="connect.php"><img width="100%" src="<?php echo $skinurl;?>/img/connect.png" /></a></div>
+    <div id="connect" style="position: absolute; left:750px; top: 775px; z-index: 1; width: 250px;"><a href="connect.php"><img width="100%" src="<?php echo $skinurl;?>/img/connect.png" /></a></div>
     <div style="position: absolute; top: 1000px; left: 100px;">
     <?php echo skin_selector(select_skin(),true); 
     

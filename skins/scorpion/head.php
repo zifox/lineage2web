@@ -14,7 +14,12 @@ includeLang('skin');
 $parse['title'] = $title;
 $parse['skinurl'] = '/skins/scorpion';
 $skinurl = 'skins/scorpion';
-
+if($user->logged())
+{
+    $sql->query("SELECT Count(*) AS new FROM l2web.messages WHERE receiver='{$_SESSION['account']}' AND unread='yes'");
+    $msg=$sql->fetch_array();
+    $_SESSION['new']=$msg['new'];
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -147,6 +152,17 @@ opacity: 0.85;
 #info2 {
     font-size: 12px !important;
 }
+#menu{
+    position: absolute;
+    left: 150px;
+    top: 120px;
+    min-height:106px;
+    width:850px;
+    height: 106px;
+    
+    z-index: 1;
+    background: url('<?php echo $skinurl;?>/img/menu3.png') 850px 106px;
+}
 </style>
 </head>
 <body>
@@ -170,13 +186,11 @@ if($head){
     <?php
 if(getConfig('news', 'show_announcement', '1'))
     echo "<h1>".getConfig('news', 'announcement', 'Welcome to Fantasy World Freya x50')."</h1>";
-$sql->query("SELECT Count(*) AS new FROM l2web.messages WHERE receiver='{$_SESSION['account']}' AND unread='yes'");
-$msg=$sql->fetch_array();
-if($user->logged() && $msg['new']>0)
+
+if($user->logged() && $_SESSION['new']>0)
 {
-    $title=sprintf($Lang['unread_msg'], $msg['new'], $msg['new']=='1'?'':$Lang['s']);
+    $title=sprintf($Lang['unread_msg'], $_SESSION['new'], $_SESSION['new']=='1'?'':$Lang['s']);
     msg('','<a href="message.php?viewmailbox&amp;box=1">'.$title.'</a>');
 }
 }
-
 ?>

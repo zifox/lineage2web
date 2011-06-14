@@ -48,12 +48,11 @@ function includeBlock($file, $block_name='Menu', $frame=1, $return=false)
     <tr><td style="background-image: url('.$img_link.'/img/h_l_b.gif);">&nbsp;</td>
     <td width="80%" bgcolor="#37301d" align="center">';
     }
-    includeLang('blocks/'.$file);
     if(file_exists('blocks/'.$file.'.php'))
     {
-            require_once('blocks/'.$file.'.php');
-            //if($return) 
-            $cnt.=$content;
+        includeLang('blocks/'.$file);
+        require_once('blocks/'.$file.'.php');
+        $cnt.=$content;
     }
     else
         $cnt .= msg('Error','Failed to get block '.$file, 'error', 1);
