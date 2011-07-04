@@ -1,0 +1,79 @@
+<h4>Registration</h4>
+<br /><br />
+<ul>
+<li>Account and password can not be empty.</li>
+<li>Account and password can not be less than 6 and Over 15 characters.</li>
+<li>Account and password are written in English letters and numerals.</li>
+<li>Verification code is case in-sensitive and contains leters and digits.</li>
+</ul>
+
+<script type="text/javascript">//<![CDATA[
+function isAlphaNumeric(value)
+{
+  if (value.match(/^[a-zA-Z0-9]+$/))
+    return true;
+  else
+    return false;
+}
+function checkform(f)
+{
+  if (f.account.value=="")
+  {
+    alert("Fill in all fields!");
+    return false;
+  }
+  if (!isAlphaNumeric(f.account.value))
+  {
+    alert("Fill in all fields!");
+    return false;
+  }
+  if (f.password.value=="")
+  {
+    alert("Fill in all fields!");
+    return false;
+  }
+  if (!isAlphaNumeric(f.password.value))
+  {
+    alert("Fill in all fields!");
+    return false;
+  }
+  if (f.password2.value=="")
+  {
+    alert("Fill in all fields!");
+    return false;
+  }
+  if (f.password.value!=f.password2.value)
+  {
+    alert("");
+    return false; 
+  }
+  return true;
+}
+//]]></script>
+<form method="post" action="reg.php" onsubmit="return checkform(this)">
+<table>
+ <tr>
+  <td>Log In</td>
+  <td><input type="text" name="account" maxlength="15" /></td>
+ </tr>
+ <tr>
+  <td>Password</td>
+  <td><input type="password" name="password" maxlength="15" /></td>
+ </tr>
+ <tr>
+  <td>Repeat Password</td>
+  <td><input type="password" name="password2" maxlength="15" /></td>
+ </tr>
+ <tr>
+  <td>Verification Image</td>
+  <td><img src="captcha.php" alt="" /></td>
+ </tr>
+  <tr>
+  <td>Verification Code</td>
+  <td><input type="text" name="captcha" maxlength="10" /><input type="hidden" name="ref" maxlength="16" value="" /></td>
+ </tr>
+ <tr>
+  <td colspan="2" style="text-align: center;"><input id="bt_37" type="image"  onmouseout="this.src = './login_b.php?text=   Register&amp;style=press';" onmousemove="this.src = './login_b.php?text=   Register&amp;style=hover';" src="./login_b.php?text=   Register&amp;style=normal" /></td>
+ </tr>
+</table>
+</form>

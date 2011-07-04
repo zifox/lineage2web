@@ -187,6 +187,20 @@ $i++;
 }
     break;
 ################################################################################################
+    case 'renico': #rename icons
+    if ($handle = opendir('PNG/')) {
+    while (false !== ($file = readdir($handle))) {
+        if ($file != "." && $file != ".." && $file != ".svn") {
+            $file = str_replace('.PNG', '', $file);
+
+            rename("PNG/$file.PNG", "icon/BranchSys2.Icon.$file.png");
+
+        }
+    }
+    closedir($handle);
+}
+    break;
+################################################################################################
     case 'carf': ###Copy and rename files
     if ($handle = opendir('C:\xampp\htdocs\l2web\img\icon')) {
     while (false !== ($file = readdir($handle))) {
