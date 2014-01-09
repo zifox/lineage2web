@@ -1,6 +1,6 @@
 <?php
 //пароль
-if(!defined('INCONFIG')){Header("Location: ../index.php");}
+if(!defined('INCONFIG')){Header("Location: ../index.php"); die();}
 
 function is_theme($theme) {
 	return file_exists("themes/$theme/head.php") && file_exists("themes/$theme/foot.php");

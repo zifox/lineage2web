@@ -1,12 +1,17 @@
 <?php
-//пароль
-if(!defined('INLANG')){Header("Location: ../../index.php");}
-$Lang['home'] = 'Home';
-$Lang['reg'] = 'Registration';
-$Lang['connect'] = 'How to Connect';
-$Lang['market'] = 'WebShop';
-$Lang['forum'] = 'Forum';
-$Lang['statistic'] = 'Statistic';
-$Lang['rules'] = 'Rules';
-$Lang['donate'] = 'Donate';
+if(!defined('INLANG'))
+{
+	header("Location: ../../index.php");
+	die();
+}
+$Lang['bMenu'] = array(
+	'home' => 'Home',
+	'reg' => 'Registration',
+	'connect' => 'How to Connect',
+	'market' => 'WebShop',
+	'forum' => 'Forum',
+	'statistic' => 'Statistic',
+	'rules' => 'Rules',
+	'donate' => 'Donate'
+);
 ?>

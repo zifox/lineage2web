@@ -76,24 +76,58 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
     }*/
             $query_paperdoll = $sql->query(667, array("db" => $dbname, "charID" => $id, "loc" => "PAPERDOLL"));
             $parse['eq_items'] ='';
+            $armor_array=array();
+            //$armor_item=array();
+            $main_armor_data=null;
+            $main_armor_item=null;
             while ($paperdoll_data = $sql->fetch_array($query_paperdoll))
             {
+                
                 $qry=$sql->query($q[668], array("webdb" => $webdb, "itemid" => $paperdoll_data['item_id']));
                 $item=$sql->fetch_array($qry);
-                $name = $item["name"];
-                $name = str_replace("'", "\\'", $name);
-                $addname = str_replace("'", "\\'", $item["addname"]);
-                $addname = $addname!=''?' - &lt;font color=#333333>'. $addname .'&lt;/font>':'';
-                $desc = htmlentities($item["desc"]);
-                $desc = str_replace("'", "\\'", $desc);
-                $grade = $item["grade"];
-                $grade = (!empty($grade) || $grade!="none") ? "&lt;img border=\\'0\\' src=\\'img/grade/" . $grade . "-grade.png\\' />" : "";
-                $enchant = $paperdoll_data["enchant_level"] > 0 ? " +" . $paperdoll_data["enchant_level"] : "";
-                //$img = (is_file('img/icons/'.$item["icon"].'.png')) ? $item["icon"] : "blank";
-                $type = $q[666][$paperdoll_data["loc_data"]];
-        
-                $parse['eq_items'] .= "<div style='position: absolute; width: 32px; height: 32px; padding: 0px;' class='{$type}'><img border='0' src='img/icons/{$item["icon1"]}.png' onmouseover=\"Tip('{$name} {$addname} {$grade} {$enchant}&lt;br /> {$desc}', FONTCOLOR, '#FFFFFF',BGCOLOR, '#406072', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold')\" alt=\"\" /></div>";
+                switch($item['type'])
+                {
+                    case 'a':
+                    if($item['set_ids']=='')
+                    {
+                        $parse['eq_items'] .= buildArmor($paperdoll_data,$item);
+                        array_push($armor_array,array($paperdoll_data['item_id'], $paperdoll_data['enchant_level']));
+                        //array_push($armor_item, $item);
                         
+                    }
+                    else
+                    {
+                        $main_armor_data=$paperdoll_data;
+                        $main_armor_item=$item;
+                    }
+                    break;
+                    case 'e':
+                        $parse['eq_items'] .= buildEtcItem($paperdoll_data,$item);
+                    break;
+                    case 'w';
+                        $parse['eq_items'] .= buildWeapon($paperdoll_data,$item);
+                    break;
+                }
+                //$name = $item["name"];
+                //$name = str_replace("'", "\\'", $name);
+                //$addname = str_replace("'", "\\'", $item["add_name"]);
+                //$addname = $addname!=''?' - &lt;font color=#333333>'. $addname .'&lt;/font>':'';
+                //$desc = htmlentities($item["desc"]);
+                //$desc = str_replace("'", "\\'", $desc);
+                //$grade = $item["grade"];
+                //$grade = (!empty($grade) || $grade!="none") ? "&lt;img border=\\'0\\' src=\\'img/grade/" . $grade . "-grade.png\\' />" : "";
+                //$enchant = $paperdoll_data["enchant_level"] > 0 ? " +" . $paperdoll_data["enchant_level"] : "";
+                //$img = (is_file('img/icons/'.$item["icon"].'.png')) ? $item["icon"] : "blank";
+                //$type = $q[666][$paperdoll_data["loc_data"]];
+        
+                //$parse['eq_items'] .= "<div style='position: absolute; width: 32px; height: 32px; padding: 0px;' class='{$type}'><img border='0' src='img/icons/{$item["icon"]}.png' onmouseover=\"Tip('{$name} {$addname} {$grade} {$enchant}&lt;br /> {$desc}', FONTCOLOR, '#FFFFFF',BGCOLOR, '#000000', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold')\" alt=\"\" /></div>";
+                        
+            }
+            if($main_armor_data!=null && $main_armor_item!=null)
+            {
+                echo 'Will build main armor';
+                print_r($armor_array);
+                buildMainArmor($main_armor_data,$main_armor_item, $armor_array);
             }
             if($user->mod() && $user->logged())
             {
@@ -189,12 +223,12 @@ if ($_GET['cid'] && is_numeric($_GET['cid']))
             }//while
             }
             $content = $tpl->parsetemplate('user', $parse, 1);
-            $cache->updateCache(__FILE__, $content, $params);
+            $cache->updateCache("user", $content, $params);
             echo $content;
         }
         else
         {
-            echo $cache->getCache(__FILE__, $params);
+            echo $cache->getCache("user", $params);
         } //cache  
     }//$sql->num_rows(main user)
     else

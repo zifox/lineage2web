@@ -1,47 +1,60 @@
 <?php
-//пароль
-if (!defined('INWEB')) {
-    Header("Location: ../index.php");
+if(!defined('INWEB'))
+{
+	header("Location: ../index.php");
+	die();
 }
-$timeparts = explode(" ", microtime());
-$starttime = $timeparts[1] . substr($timeparts[0], 1);
-session_start();
 
+$timeParts = explode(" ", microtime());
+$startTime = $timeParts[1] . substr($timeParts[0], 1);
+session_start();
 define('INCONFIG', true);
-$DB = array(
-    "host"      => "localhost", //MySQL Host
-    "user"      => "root",      //MySQL User
-    "password"  => "",    //MySQL Password
-    "database"  => "l2jdb"        //L2J Main (account)DataBase
+
+####################      DATABASE CONFIG     ####################
+$DB = array
+(
+	"host" => "localhost",	//MySQL Host
+	"user" => "root",		//MySQL User
+	"password" => "",		//MySQL Password
+	"database" => "l2jdb"	//L2J Main (account)DataBase
 );
-$webdb = "l2web";                 //Webpage DataBase
+$webdb = "l2web"; //Webpage DataBase
+####################   DATABASE CONFIG END    ####################
+
 require_once ('queries.php');
+require_once ('class.tplParser.php');
+
+$tpl = new TplParser('l2f');
 require_once ('class.mysql.php');
 require_once ('class.user.php');
-require_once ('class.tplParser.php');
+
 require_once ('class.cache.php');
-require_once ('include/functions.php');
+require_once ('functions.php');
 $sql = new MySQL($DB);
-$query = $sql->query($q[0], array("db" => $webdb));
-while ($row = $sql->fetch_array($query)) {
-    $CONFIG[$row['type']][$row['name']] = stripslashes($row['value']);
+
+$query = $sql->query($q[0], array("webdb" => $webdb));
+while ($row = $sql->fetchArray($query))
+{
+	$CONFIG[$row['type']][$row['name']] = stripslashes($row['value']);
 }
-$webdb=getConfig('settings','webdb','l2web');
-$user = new user();
+//$tpl = new TplParser(getConfig('settings','dtheme','l2f'));
+$user = new User();
 
-if (getConfig('features','use_cracktracker','0')){
-    require_once ('include/cracktracker.php');
-}
-
-
-if (getConfig('features','use_bancontrol','0')){
-    require_once ('include/bancontrol.php');
+if(getConfig('features', 'cracktracker', '0'))
+{
+	require_once ('include/cracktracker.php');
 }
 
-$cache = new Cache(getConfig('features','cache_enabled','1'));
-if (!getConfig('debug','web','0')) {
-    error_reporting(0);
+if(getConfig('features', 'bancontrol', '0'))
+{
+	require_once ('include/bancontrol.php');
 }
-//$tpl = new tplParser(getConfig('settings','DTHEME','l2f'));
-$tpl = new tplParser('l2f');
+
+//$cache = new Cache(getConfig('cache','enabled','1'));
+$cache = new Cache(false);
+if(!getConfig('debug', 'web', '0'))
+{
+	error_reporting(0);
+}
+
 ?>

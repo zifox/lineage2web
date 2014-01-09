@@ -1,7 +1,9 @@
 <?php
 if(!defined('INCONFIG'))
-  Header("Location: ../index.php");
-
+{
+    header("Location: ../index.php");
+    die();
+}
 $cracktrack = $_SERVER['QUERY_STRING'];
 $wormprotector = array('chr(', 'chr=', 'chr%20', '%20chr', 'wget%20', '%20wget', 'wget(',
 'cmd=', '%20cmd', 'cmd%20', 'rush=', '%20rush', 'rush%20',
@@ -31,11 +33,10 @@ $checkworm = str_replace($wormprotector, '*', $cracktrack);
 
 if ($cracktrack != $checkworm)
 {
-$cremotead = $_SERVER['REMOTE_ADDR'];
-$cuseragent = $_SERVER['HTTP_USER_AGENT'];
-$todb = $mysql->escape($_SERVER['QUERY_STRING']);
-$sql->query("INSERT INTO `".getConfig('settings', 'webdb', 'l2web')."`.`log` (`Account`, `Type`, `SubType`, `Comments`) VALUES ('$cremotead', 'CrackTracker', 'Error', 'Reason=\"Used illegal args\", UserAgent=\"$cuseragent\", Action=\"$todb\"');");
-die( "Attack detected! <br /><br /><b>Youre attack was blocked:</b><br />$cremotead - $cuseragent" );
+    $cremotead = $_SERVER['REMOTE_ADDR'];
+    $cuseragent = $_SERVER['HTTP_USER_AGENT'];
+    $todb = $sql->escape($_SERVER['QUERY_STRING']);
+    $sql->query("INSERT INTO `".getConfig('settings', 'webdb', 'l2web')."`.`log` (`Account`, `Type`, `SubType`, `Comments`) VALUES ('$cremotead', 'CrackTracker', 'Error', 'Reason=\"Used illegal args\", UserAgent=\"$cuseragent\", Action=\"$todb\"');");
+    die( "Attack detected! <br /><br /><b>Youre attack was blocked:</b><br />$cremotead - $cuseragent" );
 }
-
 ?>

@@ -221,3 +221,21 @@ ul.extra_menu img{margin:0 0px -3px 0;}
 .footer_logo_right{float:right;padding:14px 73px 0 0;}
 .footer_center{float:left;width:640px;text-align:center;color:#5b86b;font-size:0.6em;font-family:Tahoma, Verdana, Arial, sans-serif;}
 .footer_center div{font-size:1.2em;padding:1px 0;color:#512222;text-transform:uppercase;font-family:Tahoma, Verdana, Arial, sans-serif;}
+.ele_full
+{
+    height: 12px;
+    width: 235px; 
+    background-repeat: repeat-x;
+    color: #FFFFFF;
+}
+.ele_half
+{
+    height: 12px;
+    background-repeat: repeat-x;
+    color: #FFFFFF;
+}
+.ele_half_t
+{
+    width: 235px;
+    color: #FFFFFF;
+}
