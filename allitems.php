@@ -7,10 +7,13 @@ $DB = array(
 $db = $DB['database'];
 $webdb='l2web';
 
-ini_set('max_execution_time', '180');
+ini_set('max_execution_time', '300');
 mysql_connect($DB['host'],$DB['user'],$DB['password']);
 mysql_select_db($webdb);
-
+header("Pragma: public");
+header("Cache-control: public");
+header("Cache-Control: maxage=0");
+header('Expires: ' . gmdate('D, d M Y H:i:s', time()) . ' GMT');
 $a=$_GET['a'];
 switch($a)
 {
@@ -130,9 +133,25 @@ DROP COLUMN `set_ids[4]`;");
 header("Location: ?a=step5");
     break;
 ################################################################################################
-    case 'step5': #missing icons from sql
-    
-$query = mysql_query("SELECT id, name, icon, icon1, icon2, icon3, icon4 FROM itemname WHERE icon <> ''") OR mysql_error();
+    case 'step5':
+    $qry=mysql_query("SELECT id, icon, icon1, icon2, icon3, icon4 FROM itemname WHERE icon !='';") OR die(mysql_error());
+    $search=array('BranchSys.Icon.','BranchSys.Icon2.','BranchSys2.Icon.','br_cashtex.item.','branchsys2.icon2.','BranchSys2.','BranchSys.','Icon.', 'icon.','Branchsys2.','branchsys2.','icon2.','etc_i.');
+    $replace=array('','','','','','','','','','','','','');
+    while($it=mysql_fetch_assoc($qry))
+    {
+        $icon=mysql_real_escape_string(str_replace($search, $replace, $it['icon']));
+        $icon1=str_replace($search, $replace, $it['icon1']);
+        $icon2=str_replace($search, $replace, $it['icon2']);
+        $icon3=str_replace($search, $replace, $it['icon3']);
+        $icon4=str_replace($search, $replace, $it['icon4']);
+        mysql_query("UPDATE itemname SET icon='$icon', icon1='$icon1', icon2='$icon2', icon3='$icon3', icon4='$icon4' WHERE id='{$it['id']}'") OR die(mysql_error());
+    }
+    header("Location: ?a=step6");
+    echo 'Moving to step 6 ...';
+    break;
+################################################################################################
+    case 'step6': #missing icons from sql
+$query = mysql_query("SELECT id, name, icon, icon1, icon2, icon3, icon4 FROM itemname WHERE icon != ''") OR mysql_error();
 $i=0;
 $err=0;
 while($r=mysql_fetch_assoc($query))
@@ -142,14 +161,14 @@ while($r=mysql_fetch_assoc($query))
     $icon2 = $r['icon2'];
     $icon3 = $r['icon3'];
     $icon4 = $r['icon4'];
-    if(!file_exists('img/icons/'.$icon.'.png'))
+    if(!file_exists('img/icon/'.$icon.'.png'))
     {
         echo 'Item ['.$r['id'].' - '.$r['name'].'] icon['.$icon.'] doesnt exists<br />';
         $err++;
     }
     if($icon1!='')
     {
-       if(!file_exists('img/icons/'.$icon1.'.png'))
+       if(!file_exists('img/icon/'.$icon1.'.png'))
         {
             echo 'Item ['.$r['id'].' - '.$r['name'].'] icon['.$icon1.'] doesnt exists<br />';
             $err++;
@@ -157,7 +176,7 @@ while($r=mysql_fetch_assoc($query))
     }
     if($icon2!='')
     {
-       if(!file_exists('img/icons/'.$icon2.'.png'))
+       if(!file_exists('img/icon/'.$icon2.'.png'))
         {
             echo 'Item ['.$r['id'].' - '.$r['name'].'] icon['.$icon2.'] doesnt exists<br />';
             $err++;
@@ -165,7 +184,7 @@ while($r=mysql_fetch_assoc($query))
     }
     if($icon3!='')
     {
-       if(!file_exists('img/icons/'.$icon3.'.png'))
+       if(!file_exists('img/icon/'.$icon3.'.png'))
         {
             echo 'Item ['.$r['id'].' - '.$r['name'].'] icon['.$icon3.'] doesnt exists<br />';
             $err++;
@@ -173,7 +192,7 @@ while($r=mysql_fetch_assoc($query))
     }
     if($icon4!='')
     {
-       if(!file_exists('img/icons/'.$icon4.'.png'))
+       if(!file_exists('img/icon/'.$icon4.'.png'))
         {
             echo 'Item ['.$r['id'].' - '.$r['name'].'] icon['.$icon4.'] doesnt exists<br />';
             $err++;
@@ -181,59 +200,61 @@ while($r=mysql_fetch_assoc($query))
     }
 $i++;
 }
-header("Location: ?a=step6");
+header("Location: ?a=step7");
+echo 'Moving to step 7 ...';
     break;
 ################################################################################################
-    case 'uli': #useless icons
-    if ($handle = opendir('img/icons/')) {
+    case 'step7': #useless icons
+    if ($handle = opendir('img/icon/')) {
     while (false !== ($file = readdir($handle))) {
         if ($file != "." && $file != ".." && $file != ".svn") {
             $file = str_replace('.png', '', $file);
             $file = mysql_real_escape_string($file);
-            $query = mysql_query("SELECT id FROM l2web.itemname WHERE icon='$file'") OR mysql_error();
+            $query = mysql_query("SELECT id FROM itemname WHERE icon='$file' OR icon1='$file' OR icon2='$file' OR icon3='$file' OR icon4='$file'") OR mysql_error();
             if(!mysql_num_rows($query))
             {
                 echo "$file<br />";
                 $file=stripslashes($file);
-                copy("img/icons/$file.png", "img/icon/$file.png");
-                unlink("img/icons/$file.png");
-            }
-        }
-    }
-    closedir($handle);
-}
-    break;
-################################################################################################
-    case 'renico': #rename icons
-    if ($handle = opendir('PNG/')) {
-    while (false !== ($file = readdir($handle))) {
-        if ($file != "." && $file != ".." && $file != ".svn") {
-            $file = str_replace('.PNG', '', $file);
-
-            rename("PNG/$file.PNG", "icon/BranchSys2.Icon.$file.png");
-
-        }
-    }
-    closedir($handle);
-}
-    break;
-################################################################################################
-    case 'carf': ###Copy and rename files
-    if ($handle = opendir('C:\xampp\htdocs\l2web\img\icon')) {
-    while (false !== ($file = readdir($handle))) {
-        if ($file != "." && $file != ".." && $file != ".svn") {
-            $newfile='C:\xampp\htdocs\l2web\img\icons\\'.substr($file, 0, strlen($file)-6).'.png';
-            if (!copy('C:\xampp\htdocs\l2web\img\icon\\'.$file, $newfile)) {
-                echo "failed to copy $file...\n";
+                rename("img/icon/$file.png", "img/notused/$file.png");
             }
             else
             {
-                unlink('C:\xampp\htdocs\l2web\img\icon\\'.$file);
+                $file=stripslashes($file);
+                rename("img/icon/$file.png", "img/icons/$file.png");
             }
         }
     }
     closedir($handle);
+}
+header("Location: ?a=finish");
+echo 'Moving to finish...';
+    break;
+################################################################################################
+    case 'finish':
+    mysql_query("ALTER TABLE `itemname`
+ADD COLUMN `item_type`  tinyint(2) UNSIGNED NOT NULL DEFAULT 0 AFTER `grade`;");
+    $q=mysql_query("SELECT id, armor_type FROM armorgrp;") OR die(mysql_error());
+    while($it=mysql_fetch_assoc($q))
+    {
+        mysql_query("UPDATE itemname SET `item_type`='{$it['armor_type']}' WHERE id='{$it[id]}'") OR die(mysql_error());
     }
+    $q=mysql_query("SELECT id, family FROM etcitemgrp;") OR die(mysql_error());
+    while($it=mysql_fetch_assoc($q))
+    {
+        mysql_query("UPDATE itemname SET `item_type`='{$it['family']}' WHERE id='{$it[id]}'") OR die(mysql_error());
+    }
+    $q=mysql_query("SELECT id, weapon_type FROM weapongrp;") OR die(mysql_error());
+    while($it=mysql_fetch_assoc($q))
+    {
+        mysql_query("UPDATE itemname SET `item_type`='{$it['weapon_type']}' WHERE id='{$it[id]}'") OR die(mysql_error());
+    }
+    mysql_query("ALTER TABLE `armorgrp`
+DROP COLUMN `armor_type`;") or die(mysql_error());
+mysql_query("ALTER TABLE `etcitemgrp`
+DROP COLUMN `family`;") or die(mysql_error());
+mysql_query("ALTER TABLE `weapongrp`
+DROP COLUMN `weapon_type`;") or die(mysql_error());
+    echo 'ALL done!';
     break;
 ################################################################################################
     default:
@@ -241,8 +262,5 @@ header("Location: ?a=step6");
     break;
 ################################################################################################
 }
-
-//echo $err.' missing icons<br />';
-//echo $i.' items updated';
 mysql_close();
 ?>

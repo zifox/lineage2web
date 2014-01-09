@@ -1,36 +1,43 @@
-<hr />
 <?php
-$skinurl = 'skins/l2f';
-if($foot){
+$parse=getLang();
+$parse['skinurl'] = 'skins/'.selectSkin();
+$parse['foot'] = '';
+$parse['blocks_right'] = includeBlock('stats', getLang('stats'), 1, true);
+$parse['blocks_right'] .= includeBlock('top10', getLang('top10'), 1, true);
+//$parse['blocks_right'].=includeBlock('vote', getLang('vote'),1,true);
+$parse['foot'] = $tpl->parseTemplate('skin/foot_foot' . ((!$foot) ? '_e' : ''), $parse, true);
+
+//$timeParts = explode(" ", microtime());
+//$endTime = $timeParts[1] . substr($timeParts[0], 1);
+$parse['copyrights'] = (getLang('l2_trademark') . getConfig('head', 'CopyRight', '<a href="mailto:antons007@gmail.com">80MXM08</a> (c) LineageII PvP Land') . '<br />' . sprintf(getLang('page_generated'), bcsub($endTime, $startTime, 6), $sql->totalSqlTime, $sql->queryCount));
+$parse['debugs'] = '';
+//if(getConfig('debug', 'sql', '0'))
+//	$parse['debugs'] .= $sql->debug();
+//if(getConfig('debug', 'user', '0'))
+//	$parse['debugs'] .= $user->debug();
+	
+	
+if(getConfig('debug', 'sql', '0') /*&& $user->logged() /*&& $user->hasAccess('admin')*/)
+{
+    $tp = explode(" ", microtime());
+    $endTime = $tp[1] . substr($tp[0], 1);
+    $totalTime = round(bcsub($endTime,$startTime,6),4);
+    $avgqt=round($sql->totalSqlTime/$sql->queryCount,4);
+    $tsqlt=round($sql->totalSqltime,4);
+    $qc=round($sql->queryCount,4);
+    $parse2=$parse;
+    $parse2['timeString']=sprintf(getLang('page_generated'),$totalTime, $tsqlt, $qc, $avgqt);  
+	//$parse2['debugDisplay']=!$user->getVar('debug_menu')? 'block':'none'; 
+	$parse2['debugDisplay']='block';
+    
+	$parse['debugs'].=$sql->debug($parse2);
+
+}
+if(getConfig('debug','user',0))
+{
+    //$parse['debugs'] .= $user->debug();
+}
+
+
+$tpl->parseTemplate('skin/foot', $parse, false);
 ?>
-</td>
-<td style="background-image: url(<?php echo $skinurl;?>/img/t_h_r_b.gif); background-repeat: repeat-y;">&nbsp;</td></tr>
-<tr>
-<td><img width="40" height="28" alt="" src="<?php echo $skinurl;?>/img/t_b_lc.gif" /></td>
-<td style="background-image: url(<?php echo $skinurl;?>/img/t_b_c.gif);" colspan="5">&nbsp;</td>
-<td><img width="40" height="28" alt="" src="<?php echo $skinurl;?>/img/t_b_rc.gif" /></td>
-</tr></tbody></table></td>
-<td width="15%" align="center" valign="top">
-<?php
-//пароль
-includeBlock('stats', $Lang['stats']);
-includeBlock('top10', $Lang['top10']);
-//includeBlock('vote', $Lang['vote']);
-?>
-</td></tr></table></td></tr><?php }else{ ?><table align="center"><?php } 
-$timeparts = explode(" ",microtime());
-$endtime = $timeparts[1].substr($timeparts[0],1);
-?>
-<tr align="center" valign="bottom">
-<td align="center" valign="middle"><b>Lineage II</b> is a trademark of NCsoft Corporation. Copyright © <b>NCsoft Corporation</b>. All rights reserved.<br /><?php echo getConfig('head', 'CopyRight', '<a href="mailto:antons007@gmail.com">80MXM08</a> &copy; LineageII PvP Land'); ?><br /><?php echo sprintf($Lang['page_generated'], bcsub($endtime,$starttime,6), $sql->totalsqltime, $sql->querycount);?>
-</td>
-</tr>
-</table><br />
-<?php
-if (getConfig('debug', 'sql', '0'))
-    $sql->debug();
-if (getConfig('debug', 'user', '0'))
-    $user->debug();
-?>
-<br />
-</body></html>

@@ -108,8 +108,7 @@ function createChars(index)
 }
 // -->
 </script>
-
-		<link rel="stylesheet" href="<?php echo $skinurl;?>/style.css" type="text/css" />
+<link rel="stylesheet" href="<?php echo $skinurl;?>/style.css" type="text/css" />
 	</head>
 	<body id="main_body"><script type="text/javascript" src="scripts/wz_tooltip.js"></script>
     <div id="logo2">
@@ -147,7 +146,7 @@ function createChars(index)
                     if(getConfig('news', 'show_announcement', '1'))
     echo "<h1>".getConfig('news', 'announcement', 'Welcome to Fantasy World High Five x50')."</h1>";
 $sql->query("SELECT Count(*) AS new FROM l2web.messages WHERE receiver='{$_SESSION['account']}' AND unread='yes'");
-$msg=$sql->fetch_array();
+$msg=$sql->fetchArray();
 if($user->logged() && $msg['new']>0)
 {
     $title=sprintf($Lang['unread_msg'], $msg['new'], $msg['new']=='1'?'':$Lang['s']);

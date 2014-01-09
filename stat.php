@@ -38,7 +38,7 @@ if($cache->needUpdate('stat', $params)) {
 		$parse['ID'] = "&amp;server=".getVar('server');
 	}
 	$parse['server_list'] = NULL;
-	$server_list = $sql->query(2, array('db' => getConfig('settings', 'webdb', 'l2web')));
+	$server_list = $sql->query(2, array('webdb' => $webdb));
 	while($slist = $sql->fetch_array($server_list)) {
 		$selected = ($slist['ID'] == getVar('server'))?'selected="selected"':'';
 		$parse['server_list'] .= '<option onclick="GoTo(\'stat.php?stat='.getVar('stat').

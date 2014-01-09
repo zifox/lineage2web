@@ -35,7 +35,7 @@ $endtime = $timeparts[1].substr($timeparts[0],1);
 				<div class="footer_logo_left"><img src="<?php echo $skinurl;?>/img/footer_logo_01.gif" alt="" height="17" width="83" /></div>
 				<div class="footer_logo_right"><img src="<?php echo $skinurl;?>/img/footer_logo_02.gif" alt="" height="9" width="62" /></div>
 				<div class="footer_center">
-					<b>Lineage II</b> is a trademark of NCsoft Corporation. Copyright © <b>NCsoft Corporation</b>. All rights reserved.<br /><?php echo getConfig('head', 'CopyRight', '<a href="mailto:antons007@gmail.com">80MXM08</a> &copy; LineageII PvP Land'); ?><br /><?php echo sprintf($Lang['page_generated'], bcsub($endtime,$starttime,6), $sql->totalsqltime, $sql->querycount);?>
+					<b>Lineage II</b> is a trademark of NCsoft Corporation. Copyright © <b>NCsoft Corporation</b>. All rights reserved.<br /><?php echo getConfig('head', 'CopyRight', '<a href="mailto:antons007@gmail.com">80MXM08</a> &copy; LineageII PvP Land'); ?><br /><?php echo sprintf($Lang['page_generated'], bcsub($endtime,$startTime,6), $sql->totalSqlTime, $sql->queryCount);?>
                     
 			  </div>
 				<div class="cl"></div>

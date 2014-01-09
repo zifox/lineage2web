@@ -1,951 +1,568 @@
 <?php
-//пароль
-if(!defined('INCONFIG')){Header("Location: ../index.php");}
+if(!defined('INCONFIG'))
+{
+	header("Location: ../index.php");
+	die();
+}
 includeLang('functions');
 
 function includeLang($file)
 {
-	global $langpath, $Lang;
-	$langpath=getLang();
-	define('INLANG', True);
-	if(file_exists('lang/'.$langpath.'/'.$file.'.php'))
+	global $langName, $Lang;
+	$langName = getLangName();
+	define('INLANG', true);
+	if(file_exists('lang/' . $langName . '/' . $file . '.php'))
 	{
-	require_once("lang/{$langpath}/{$file}.php");	
+		require_once ("lang/{$langName}/{$file}.php");
 	}
 }
-function getLang()
+function getLangName()
 {
-    switch ($_COOKIE['lang'])
-    {
-        case 1:
-            return 'lv';
-        break;
-        case 2:
-            return 'en';
-        break;
-        case 3:
-            return 'ru';
-        break;
-        default:
-            return 'en';
-        break;
-    }
+	switch (isset($_COOKIE['lang']) ? $_COOKIE['lang'] : 2)
+	{
+		case 1:
+			return 'lv';
+			break;
+		case 2:
+			return 'en';
+			break;
+		case 3:
+			return 'ru';
+			break;
+	}
 }
-function includeBlock($file, $block_name='Menu', $frame=1, $return=false)
+function includeBlock($file, $blockTitle = 'Menu', $frame = true, $return = false)
 {
-	global $sql, $user, $tpl, $cache, $q, $Lang, $langpath, $content;
-    define('IN_BLOCK', true);
-    $img_link = 'skins/l2f';
-    $cnt='';
-    if($frame)
-    {
-	$cnt .='<table width="200" style="height:95px;" border="0" cellpadding="0" cellspacing="0" class="opacity2">
-    <tr style="height:48px;">
-    <td width="23"><img width="23" height="50" alt="" src="'.$img_link.'/img/h_l_c.gif" /></td>
-    <td width="159" style="background-image: url('.$img_link.'/img/h_c.gif); background-repeat: no-repeat;">
-    <div align="center" class="block_name">'.$block_name.'</div></td>
-    <td width="18"><img width="18" height="50" alt="" src="'.$img_link.'/img/h_r_c.gif" /></td></tr>
-    <tr><td style="background-image: url('.$img_link.'/img/h_l_b.gif);">&nbsp;</td>
-    <td width="80%" bgcolor="#37301d" align="center">';
-    }
-    if(file_exists('blocks/'.$file.'.php'))
-    {
-        includeLang('blocks/'.$file);
-        require_once('blocks/'.$file.'.php');
-        $cnt.=$content;
-    }
-    else
-        $cnt .= msg('Error','Failed to get block '.$file, 'error', 1);
-    if($frame)
-    {
-        $cnt .='</td><td style="background-image: url('.$img_link.'/img/h_r_b.gif);">&nbsp;</td></tr>
-    <tr><td width="23"><img width="23" height="26" alt="" src="'.$img_link.'/img/b_l_c.gif" /></td>
-    <td width="159"><img width="159" height="26" alt="" src="'.$img_link.'/img/b_c.gif" /></td>
-    <td width="18"><img width="18" height="26" alt="" src="'.$img_link.'/img/b_r_c.gif" /></td>
-    </tr></table>';
-    }
-    if($return)
-        return $cnt;
-    else
-        echo $cnt;
+	global $sql, $user, $tpl, $cache, $q, $langPath, $Lang, $content, $webdb;
+	define('IN_BLOCK', true);
+	$imgLink = 'skins/'.selectSkin();
+	$cnt = '';
+	if($frame)
+	{
+		$parse['blockTitle']=$blockTitle;
+		$parse2=$parse;
+		$cnt.=$tpl->parseTemplate('blocks/block_t', $parse,true);
+	}
+
+	if(file_exists('blocks/' . $file . '.php'))
+	{
+		includeLang('blocks/' . $file);
+		require_once ('blocks/' . $file . '.php');
+		$cnt .= $content;
+	}
+	else
+		$cnt .= msg('Error', 'Failed to get block ' . $file, 'error', 1);
+	if($frame)
+	{
+		$cnt.=$tpl->parseTemplate('blocks/block_b', $parse2,true);
+	}
+	if($return)
+		return $cnt;
+	else
+		echo $cnt;
 }
 
-function msg($heading = '', $text = '', $div = 'success', $return=0) {
-    $content='';
-    $content .= '<table width="90%" border="0"><tr><td>';
-    $content .= '<div align="center" class="'.$div.'">'.($heading ? '<b>'.$heading.'</b><br />' : '').$text.'</div></td></tr></table>';
-    if($return) return $content; else echo $content;
-}
-function err($head, $text)
+function msg($heading = '', $text = '', $div = 'success', $return = false)
 {
-    head($head);
-    msg($head,$text,'error');
-    foot();
-    exit();
-}
-function suc($head, $text)
-{
-    head($head);
-    msg($head,$text);
-    foot();
-    exit();
-}
-function error($id){
-    header('Location: error.php?error='.$id);
+	$content = '';
+	$content .= '<table width="90%" border="0"><tr><td>';
+	$content .= '<div align="center" class="' . $div . '">' . ($heading ? '<b>' . $heading . '</b><br />' : '') . $text . '</div></td></tr></table>';
+	if($return)
+		return $content;
+	else
+		echo $content;
 }
 
-function head($title = "", $head=1, $url='', $time=0)
+function head($title = "", $head = true, $url = '', $time = 0)
 {
-    global $user, $sql, $tpl, $cache, $Lang;
-    DEFINE('INSKIN', True);
-	$skin = select_skin();
-    $title = getConfig('head', 'Title', 'Lineage II Fantasy World')." :: ".$title;
-
-	require_once("skins/" . $skin . "/head.php");
+	global $user, $sql, $tpl, $cache, $Lang;
+	DEFINE('INSKIN', true);
+	$title = getConfig('head', 'title', 'Lineage II Fantasy World') . " :: " . $title;
+	
+	require_once ("skins/" . selectSkin() . "/head.php");
 }
 
-function foot($foot=1)
+function foot($foot = true)
 {
-    global $user, $sql, $tpl, $cache, $Lang, $starttime;
-    $skin = select_skin();
-    require_once("skins/" . $skin . "/foot.php");
+	global $user, $sql, $tpl, $cache, $startTime, $Lang;
+	require_once ("skins/" . selectSkin() . "/foot.php");
 }
-function button($text='  ', $name = 'Submit', $return = 0, $disabled=false, $id = NULL)
+function button($text = '  ', $name = 'Submit', $return = true, $disabled = false, $id = null)
 {
-    global $tpl;
-    $parse['text'] = $text;
-    $parse['name'] = $name;
-    if($id == NULL) { $parse['id'] = "bt_".rand(20,99); } else { $parse['id'] = $id; }
-    if ($disabled) $parse['disabled'] = 'disabled="disabled"';
-    if ($return)
-        return $tpl->parsetemplate('button', $parse, 1);
-    else
-        $tpl->parsetemplate('button', $parse);
+	global $tpl;
+	$parse['text'] = $text;
+	$parse['name'] = $name;
+	if($id == null)
+	{
+		$parse['id'] = "bt_" . rand(20, 99);
+	}
+	else
+	{
+		$parse['id'] = $id;
+	}
+	if($disabled)
+		$parse['disabled'] = 'disabled="disabled"';
+	return $tpl->parseTemplate('button', $parse, $return);
 }
-function menubutton($text)
+function menuButton($text)
 {
-    return '<img src="./button.php?text='.$text.'" title="'.$text.'" alt="'.$text.'" border="0" width="138" height="34" />';
+	return '<img src="./button.php?text=' . $text . '" title="' . $text . '" alt="' . $text . '" border="0" width="138" height="34" />';
 }
-function pretty_time ($seconds) {
+function prettyTime($seconds)
+{
 	$day = floor($seconds / (24 * 3600));
 	$hs = floor($seconds / 3600 % 24);
 	$ms = floor($seconds / 60 % 60);
 	$sr = floor($seconds / 1 % 60);
 
-	if ($hs < 10) { $hh = "0" . $hs; } else { $hh = $hs; }
-	if ($ms < 10) { $mm = "0" . $ms; } else { $mm = $ms; }
-	if ($sr < 10) { $ss = "0" . $sr; } else { $ss = $sr; }
+	if($hs < 10)
+	{
+		$hh = "0" . $hs;
+	}
+	else
+	{
+		$hh = $hs;
+	}
+	if($ms < 10)
+	{
+		$mm = "0" . $ms;
+	}
+	else
+	{
+		$mm = $ms;
+	}
+	if($sr < 10)
+	{
+		$ss = "0" . $sr;
+	}
+	else
+	{
+		$ss = $sr;
+	}
 
 	$time = '';
-	if ($day != 0) { $time .= $day . 'd '; }
-	if ($hs  != 0) { $time .= $hh . 's ';  } else { $time .= '00s '; }
-	if ($ms  != 0) { $time .= $mm . 'm ';  } else { $time .= '00m '; }
+	if($day != 0)
+	{
+		$time .= $day . 'd ';
+	}
+	if($hs != 0)
+	{
+		$time .= $hh . 's ';
+	}
+	else
+	{
+		$time .= '00s ';
+	}
+	if($ms != 0)
+	{
+		$time .= $mm . 'm ';
+	}
+	else
+	{
+		$time .= '00m ';
+	}
 	$time .= $ss . 's';
 
 	return $time;
 }
 
-function pretty_time_hour ($seconds) {
+function prettyTimeHour($seconds)
+{
 	$min = floor($seconds / 60 % 60);
 
 	$time = '';
-	if ($min != 0) { $time .= $min . 'min '; }
+	if($min != 0)
+	{
+		$time .= $min . 'min ';
+	}
 
 	return $time;
 }
 
 function getDBName($id)
 {
-    global $sql;
+	global $sql, $webdb;
 	if(is_numeric($id))
 	{
 		$srv = $sql->escape(0 + $id);
-		$srvqry = $sql->query("SELECT `DataBase` FROM `".getConfig('settings', 'webdb', 'l2web')."`.`gameservers` WHERE `ID` = '$srv'");
-		if($sql->num_rows())
+		$srvqry = $sql->query("SELECT `database` FROM `$webdb`.`gameservers` WHERE `id` = '$srv'");
+		if($sql->numRows())
 		{
 			return $sql->result($srvqry);
- 		}
-  	}
-  	return getConfig('settings', 'DDB', 'l2jdb');
+		}
+	}
+	return getConfig('settings', 'ddb', 'l2jgs');
 }
 function getDBInfo($id)
 {
-    global $sql;
-    $webdb=getConfig('settings','webdb','l2web');
-    if(is_numeric($id))
-    {
-        $id=val_int($id);
-        if($id)
-        {
-            $srvqry = $sql->query("SELECT `ID`, `Name`, `DataBase` FROM `{webdb}`.`gameservers` WHERE `ID` = '{id}' AND `active`='true'", array('webdb'=>$webdb,'id'=>$id));
-            if($sql->num_rows())
-            {
-                return $sql->fetch_array($srvqry);
-            }
-        }
-  	}
-    else
-    {
-        $id=val_string($id);
-        if($id)
-        {
-            $srvqry = $sql->query("SELECT `ID`, `Name`, `DataBase` FROM `{webdb}`.`gameservers` WHERE `DataBase` = '{db}' AND `active`='true'", array('webdb'=>$webdb,'db'=>$id));
-            if($sql->num_rows())
-            {
-                return $sql->fetch_array($srvqry);
-            }
-        }
-    }
-    $srvqry = $sql->query("SELECT `ID`, `Name`, `DataBase` FROM `{webdb}`.`gameservers` WHERE `DataBase` = '{db}' AND `active`='true'", array('webdb'=>$webdb,'db'=>getConfig('settings','DDB','l2jdb')));
-    if($sql->num_rows())
-    {
-        return $sql->fetch_array($srvqry);
-    }
-    err('Error','Incorrect Database');
+	global $sql, $webdb;
+	if(is_numeric($id))
+	{
+		$id = val_int($id);
+		if($id)
+		{
+			$srvqry = $sql->query("SELECT `id`, `name`, `database` FROM `{webdb}`.`gameservers` WHERE `id` = '{id}' AND `active`='true'", array('webdb' => $webdb, 'id' => $id));
+		}
+	}
+	else
+	{
+		$id = val_string($id);
+		if($id)
+		{
+			$srvqry = $sql->query("SELECT `id`, `name`, `database` FROM `{webdb}`.`gameservers` WHERE `database` = '{db}' AND `active`='true'", array('webdb' => $webdb, 'db' => $id));
+
+		}
+	}
+	if($sql->numRows())
+	{
+		return $sql->fetchArray($srvqry);
+	}
+	msg(getLang('error'), getLang('incorrect_database'),'error');
 }
 
-function pagechoose($page, $count=0, $stat, $server)
+function pageChoose($page, $count = 0, $stat, $server)
 {
-    global $Lang;;
-    $content=NULL;
-    $content.='<div class="page-choose" align="center"><br /><table align="center"><tr>';
-    
-    $totalpages = ceil($count/getConfig('settings', 'TOP', '10'));
-    if($totalpages==0)
-    {
-        $totalpages++;
-    }
-    if($page>3)
-    {
-        $content.="<td><a href=\"stat.php?stat=$stat&amp;server=$server&amp;page=1\" title=\"{$Lang['first']}\"  class=\"btn\"> &laquo; </a></td>";
-    }
-    if($page>1)
-    {
-        $content.="<td><a href=\"stat.php?stat=$stat&amp;server=$server&amp;page=\"";
-        $content.="".$page-1;
-        $content.="\" title=\"{$Lang['prev']}\" class=\"btn\"> &lt; </a></td>";
-    }
-    if($page-2>0){$start=$page-2;}else{$start=1;}
-    for($i=$start; $i<=$totalpages && $i<=$page+2; $i++)
-    {
+	$top = getConfig('settings', 'top', '10');
+	$content = null;
+	$content .= '<div class="page-choose" align="center"><br /><table align="center"><tr>';
 
-        if($i==$page)
-        {
-            $content.= '<td>&nbsp;&nbsp;<a href="#" class="btn brown" title="';
-            $content.= ' [';
-            $content.= ($count!=0) ? $i*getConfig('settings', 'TOP', '10')+1-getConfig('settings', 'TOP', '10') : 0;
-            $content.= ' - ';
-            $content.= ($i*getConfig('settings', 'TOP', '10')>$count)? $count: $i*getConfig('settings', 'TOP', '10');
-            $content.= ']"> ';
-            $content.= $i;
-            $content.= ' </a>&nbsp;&nbsp;</td>';
-        }
-        else
-        {
-            $content.= '<td>&nbsp;&nbsp;<a href="stat.php?stat='.$stat;
-            $content.= '&amp;server='.$server;
-            $content.= '&amp;page='.$i;
-            $content.= '" title="[';
-            $content.= ($count!=0) ? $i*getConfig('settings', 'TOP', '10')+1-getConfig('settings', 'TOP', '10') : 0;
-            $content.= ' - ';
-            $content.= ($i*getConfig('settings', 'TOP', '10')>$count)? $count: $i*getConfig('settings', 'TOP', '10');
-            $content.= ']" class="btn"> ';
-            $content.= $i;
-            $content.= ' </a>&nbsp;&nbsp;</td>';
-        }
+	$totalpages = ceil($count / $top);
+	if($totalpages == 0)
+	{
+		$totalpages++;
+	}
+	if($page > 3)
+	{
+		$content .= '<td><a href="stat.php?stat='.$stat.'&amp;server='.$server.'&amp;page=1" title="'.getLang('first').'"  class="btn"> &laquo; </a></td>';
+	}
+	if($page > 1)
+	{
+		$content .= '<td><a href="stat.php?stat='.$stat.'&amp;server='.$server.'&amp;page="';
+		$content .= '' . $page - 1;
+		$content .= '" title="'.getLang('prev').'" class="btn"> &lt; </a></td>';
+	}
+	if($page - 2 > 0)
+	{
+		$start = $page - 2;
+	}
+	else
+	{
+		$start = 1;
+	}
+	for ($i = $start; $i <= $totalpages && $i <= $page + 2; $i++)
+	{
 
-    }
-    if($totalpages > $page)
-    {
-        
-        $content.="<td><a href=\"stat.php?stat=$stat&amp;server=$server&amp;page=";
-        $content.= $page+1;
-        $content.="\" title=\"{$Lang['next']}\" class=\"btn\"> &gt; </a></td>";
-        
-    }
-    if($totalpages > $page+2)
-    {
-        
-        $content.="<td><a href=\"stat.php?stat=$stat&amp;server=$server&amp;page=";
-        $content.= $totalpages;
-         $content.="\" title=\"{$Lang['last']}\" class=\"btn\"> &raquo; </a></td>";
-         
-    }
+		if($i == $page)
+		{
+			$content .= '<td>&nbsp;&nbsp;<a href="#" class="btn brown" title="';
+			$content .= ' [';
+			$content .= ($count != 0) ? $i * $top + 1 - $top : 0;
+			$content .= ' - ';
+			$content .= ($i * $top > $count) ? $count : $i * $top;
+			$content .= ']"> ';
+			$content .= $i;
+			$content .= ' </a>&nbsp;&nbsp;</td>';
+		}
+		else
+		{
+			$content .= '<td>&nbsp;&nbsp;<a href="stat.php?stat=' . $stat;
+			$content .= '&amp;server=' . $server;
+			$content .= '&amp;page=' . $i;
+			$content .= '" title="[';
+			$content .= ($count != 0) ? $i * $top + 1 - $top : 0;
+			$content .= ' - ';
+			$content .= ($i * $top > $count) ? $count : $i * $top;
+			$content .= ']" class="btn"> ';
+			$content .= $i;
+			$content .= ' </a>&nbsp;&nbsp;</td>';
+		}
 
-    $content.='</tr></table>&nbsp;</div>';
-    return $content;
+	}
+	if($totalpages > $page)
+	{
+
+		$content .= '<td><a href="stat.php?stat='.$stat.'&amp;server='.$server.'&amp;page=';
+		$content .= $page + 1;
+		$content .= '" title="'.getLang('next').'" class="btn"> &gt; </a></td>';
+	}
+	if($totalpages > $page + 2)
+	{
+		$content .= '<td><a href="stat.php?stat='.$stat.'&amp;server='.$server.'&amp;page=';
+		$content .= $totalpages;
+		$content .= '" title="'.getLang('last').'" class="btn"> &raquo; </a></td>';
+	}
+
+	$content .= '</tr></table>&nbsp;</div>';
+	return $content;
 
 }
-function page($page, $count=0, $link, $server)
+function page($page, $count = 0, $link, $server)
 {
-    global $Lang;
-    $content=NULL;
-    $content.='<div class="page-choose" align="center"><br /><table align="center"><tr>';
-    $ps="?";
-    $lnkquest=stripos($link,"?");
-    if($lnkquest!==false)
-    {
-        $ss="&amp;";
-        $ps="&amp;";
-    }
-    else
-    {
-        $ss="?";
-    }
-    if($server!='')
-    {
-        $server=$ss."server=$server";
-        $ps="&amp;";
-        
-    }
-    $totalpages = ceil($count/getConfig('settings', 'TOP', '10'));
-    if($totalpages==0)
-    {
-        $totalpages++;
-    }
-    if($page==0)$page=1;
-    if($page>3)
-    {
-        $content.="<td><a href=\"{$link}{$server}{$ps}page=1\" title=\"{$Lang['first']}\"  class=\"btn\"> &laquo; </a></td>";
-    }
-    if($page>1)
-    {
-        $content.="<td><a href=\"{$link}{$server}{$ps}page=\"";
-        $content.="".$page-1;
-        $content.="\" title=\"{$Lang['prev']}\" class=\"btn\"> &lt; </a></td>";
-    }
-    if($page-2>0){$start=$page-2;}else{$start=1;}
-    for($i=$start; $i<=$totalpages && $i<=$page+2; $i++)
-    {
+	$top = getConfig('settings', 'top', '10');
+	$content = null;
+	$content .= '<div class="page-choose" align="center"><br /><table align="center"><tr>';
+	$ps = "?";
+	$lnkquest = stripos($link, "?");
+	if($lnkquest !== false)
+	{
+		$ss = '&amp;';
+		$ps = '&amp;';
+	}
+	else
+	{
+		$ss = "?";
+	}
+	if($server != '')
+	{
+		$server = $ss . 'server='.$server;
+		$ps = '&amp;';
 
-        if($i==$page)
-        {
-            $content.= '<td>&nbsp;&nbsp;<a href="#" class="btn brown" title="';
-            $content.= ' [';
-            $content.= ($count!=0) ? $i*getConfig('settings', 'TOP', '10')+1-getConfig('settings', 'TOP', '10') : 0;
-            $content.= ' - ';
-            $content.= ($i*getConfig('settings', 'TOP', '10')>$count)? $count: $i*getConfig('settings', 'TOP', '10');
-            $content.= ']"> ';
-            $content.= $i;
-            $content.= ' </a>&nbsp;&nbsp;</td>';
-        }
-        else
-        {
-            $content.= '<td>&nbsp;&nbsp;<a href="'.$link.$server.$ps;
-            $content.= 'page='.$i;
-            $content.= '" title="[';
-            $content.= ($count!=0) ? $i*getConfig('settings', 'TOP', '10')+1-getConfig('settings', 'TOP', '10') : 0;
-            $content.= ' - ';
-            $content.= ($i*getConfig('settings', 'TOP', '10')>$count)? $count: $i*getConfig('settings', 'TOP', '10');
-            $content.= ']" class="btn"> ';
-            $content.= $i;
-            $content.= ' </a>&nbsp;&nbsp;</td>';
-        }
+	}
+	$totalpages = ceil($count / $top);
+	if($totalpages == 0)
+	{
+		$totalpages++;
+	}
+	if($page == 0)
+		$page = 1;
+	if($page > 3)
+	{
+		$content .= '<td><a href="'.$link.$server.$ps.'page=1" title="'.getLang('first').'"  class="btn"> &laquo; </a></td>';
+	}
+	if($page > 1)
+	{
+		$content .= '<td><a href="'.$link.$server.$ps.'page="';
+		$content .= $page - 1;
+		$content .= '" title="'.getLang('prev').'" class="btn"> &lt; </a></td>';
+	}
+	if($page - 2 > 0)
+	{
+		$start = $page - 2;
+	}
+	else
+	{
+		$start = 1;
+	}
+	for ($i = $start; $i <= $totalpages && $i <= $page + 2; $i++)
+	{
 
-    }
-    if($totalpages > $page)
-    {
-        
-        $content.="<td><a href=\"{$link}{$server}{$ps}page=";
-        $content.= $page+1;
-        $content.="\" title=\"{$Lang['next']}\" class=\"btn\"> &gt; </a></td>";
-        
-    }
-    if($totalpages > $page+2)
-    {
-        
-        $content.="<td><a href=\"{$link}{$server}{$ps}page=";
-        $content.= $totalpages;
-         $content.="\" title=\"{$Lang['last']}\" class=\"btn\"> &raquo; </a></td>";
-         
-    }
+		if($i == $page)
+		{
+			$content .= '<td>&nbsp;&nbsp;<a href="#" class="btn brown" title="';
+			$content .= ' [';
+			$content .= ($count != 0) ? $i * $top + 1 - $top : 0;
+			$content .= ' - ';
+			$content .= ($i * $top > $count) ? $count : $i * $top;
+			$content .= ']"> ';
+			$content .= $i;
+			$content .= ' </a>&nbsp;&nbsp;</td>';
+		}
+		else
+		{
+			$content .= '<td>&nbsp;&nbsp;<a href="' . $link . $server . $ps;
+			$content .= 'page=' . $i;
+			$content .= '" title="[';
+			$content .= ($count != 0) ? $i * $top + 1 - $top : 0;
+			$content .= ' - ';
+			$content .= ($i * $top > $count) ? $count : $i * $top;
+			$content .= ']" class="btn"> ';
+			$content .= $i;
+			$content .= ' </a>&nbsp;&nbsp;</td>';
+		}
 
-    $content.='</tr></table>&nbsp;</div>';
-    return $content;
+	}
+	if($totalpages > $page)
+	{
+
+		$content .= '<td><a href="'.$link.$server.$ps.'page=';
+		$content .= $page + 1;
+		$content .= '" title="'.getLang('next').'" class="btn"> &gt; </a></td>';
+
+	}
+	if($totalpages > $page + 2)
+	{
+
+		$content .= '<td><a href="'.$link.$server.$ps.'page=';
+		$content .= $totalpages;
+		$content .= '" title="'.getLang('next').'" class="btn"> &raquo; </a></td>';
+
+	}
+
+	$content .= '</tr></table>&nbsp;</div>';
+	return $content;
 
 }
 function convertPic($id, $ext, $width, $height)
 {
-    //ini_set('memory_limit', '100M');
-    if(file_exists('news/'.$id.'_thumb.'.$ext))
-        unlink('news/'.$id.'_thumb.'.$ext);
-    $new_img = 'news/'.$id.'_thumb.'.$ext;
+	if(file_exists('news/' . $id . '_thumb.' . $ext))
+		unlink('news/' . $id . '_thumb.' . $ext);
+	$new_img = 'news/' . $id . '_thumb.' . $ext;
 
-    $file_src = "news/$id.$ext";
+	$file_src = 'news/'.$id.$ext;
 
-    list($w_src, $h_src, $type) = getimagesize($file_src);
-    $ratio = $w_src/$h_src;
-    if ($width/$height > $ratio) {$width = floor($height*$ratio);} else {$height = floor($width/$ratio);}
+	list($w_src, $h_src, $type) = getimagesize($file_src);
+	$ratio = $w_src / $h_src;
+	if($width / $height > $ratio)
+	{
+		$width = floor($height * $ratio);
+	}
+	else
+	{
+		$height = floor($width / $ratio);
+	}
 
-    switch ($type)
-    {
-        case 1:   //   gif -> jpg
-            $img_src = imagecreatefromgif($file_src);
-        break;
-        case 2:   //   jpeg -> jpg
-            $img_src = imagecreatefromjpeg($file_src);
-        break;
-        case 3:  //   png -> jpg
-            $img_src = imagecreatefrompng($file_src);
-        break;
-    }
-    $img_dst = imagecreatetruecolor($width, $height);  //  resample
-    //$img_dst = imagecreate($width, $height);  //  resample
-    imageantialias($img_dst, true);
-    imagecopyresampled($img_dst, $img_src, 0, 0, 0, 0, $width, $height, $w_src, $h_src);
-    switch ($type)
-    {
-        case 1:
-            imagegif($img_dst, $new_img);
-        break;
-        case 2:
-            imagejpeg($img_dst, $new_img);
-        break;
-        case 3:
-            imagepng($img_dst, $new_img);
-        break;
-    }
-    imagedestroy($img_src);       
-    imagedestroy($img_dst);
+	switch ($type)
+	{
+		case 1: //   gif -> jpg
+			$img_src = imagecreatefromgif($file_src);
+			break;
+		case 2: //   jpeg -> jpg
+			$img_src = imagecreatefromjpeg($file_src);
+			break;
+		case 3: //   png -> jpg
+			$img_src = imagecreatefrompng($file_src);
+			break;
+	}
+	$img_dst = imagecreatetruecolor($width, $height); //  resample
+	//$img_dst = imagecreate($width, $height);  //  resample
+	imageantialias($img_dst, true);
+	imagecopyresampled($img_dst, $img_src, 0, 0, 0, 0, $width, $height, $w_src, $h_src);
+	switch ($type)
+	{
+		case 1:
+			imagegif($img_dst, $new_img);
+			break;
+		case 2:
+			imagejpeg($img_dst, $new_img);
+			break;
+		case 3:
+			imagepng($img_dst, $new_img);
+			break;
+	}
+	imagedestroy($img_src);
+	imagedestroy($img_dst);
 }
 
 function InsertItem($itemId, $count, $loc, $charId)
 {
-    global $sql;
-    $query=$sql->query("SELECT `object_id`, `count` FROM `items` WHERE `owner_id`='$charId' AND `item_id` = '$itemId' AND `loc` = '$loc'");
-    if($sql->num_rows())
-    {
-        $before=$sql->result($query,0,1);
-        $sql->query("UPDATE `items` SET `count` = `count` + '$count' WHERE `owner_id`='$charId' AND `item_id` = '$itemId' AND `loc` = '$loc'");
-    }else{
-        $before=0;
-        $maxloc=$sql->query("SELECT Max(`loc_data`) FROM `items` WHERE `items`.`owner_id` = '$charId' AND `items`.`loc` = '$loc'");
-        $itemloc=$sql->result($maxloc)+1;
-        $sql->query("INSERT INTO `items` (`owner_id`,`item_id`,`count`,`loc`,`loc_data`) VALUES ('$charId','$itemId','$count','$loc','$itemloc')");
-    }
-    $check=$sql->query("SELECT `object_id`, `count` FROM `items` WHERE `owner_id`='$charId' AND `item_id` = '$itemId' AND `loc` = '$loc'");
-    if(!$sql->num_rows())
-        return false;
-    if($before+$count==$sql->result($check,0,1))
-        return true;
-    return false;
-}
-
-function val_int($string, $default=0, $min=0, $max=999999999)
-{
-    $options = array(
-    'options' => array(
-        'default' => $default,
-        'min_range' => $min,
-        'max_range' => $max),
-    );
-    $int = filter_var($string, FILTER_VALIDATE_INT, $options);
-    return $int;
-}
-function val_string($string)
-{
-    global $sql;
-    if(!is_array($string))
-        $string = trim(htmlentities(str_replace(array("\r\n", "\r", "\0"), array("\n", "\n", ''), $sql->escape($string)), ENT_QUOTES, 'UTF-8'));
-    else
-        {
-            $strings = array();
-            foreach($string as $key => $value)
-            {
-                array_push($strings,val_string($value));
-            }
-            $string=$strings;
-        }
-        
-    return $string;
-}
-//function conv2html($string)
-//{
-//    return html_entity_decode(stripslashes($string), ENT_QUOTES, 'UTF-8');
-//}
-
-function getConfig($type, $name, $default='')
-{
-    global $CONFIG, $sql, $webdb, $q;
-    if(isset($CONFIG[$type][$name]))
-    {
-        return $CONFIG[$type][$name];
-    }
-    else
-    {
-        if($default!='')
-        {
-            setConfig($type,$name,$default);
-            return $default;
-        }
-        return null;
-    }
-}
-function setConfig($type, $name, $val)
-{
-    global $CONFIG, $sql, $q;
-    $params = array("webdb"=>getConfig('settings','webdb','l2web'), "name"=>$name, "type"=> $type, "val"=>$val);
-    $sql->query(671, $params);
-    if($sql->num_rows()>0)
-    {
-        $sql->query(670, $params);
-    }
-    else
-    {
-        $sql->query(669, $params);
-    }
-    $CONFIG[$type][$name]=$val;
-}
-function getVar($v)
-{
-    //global $_REQUEST;
-    //die(print_r($_REQUEST));
-    //$var=$_POST[$v];
-    $var=isset($_REQUEST[$v])?$_REQUEST[$v]:$_POST[$v];
-    //die($var);
-    //$var=isset($_SERVER[$v])?$_SERVER[$v]:(isset($_POST[$v])?$_POST[$v]:(isset($_GET[$v])?$_GET[$v]:""));
-    //if($var=='')
-    //{
-    //    $var=$_POST[$v];
-    //}
-    //die($var);
-    return is_numeric($var)?val_int($var):val_string($var);
-
-}
-function htmlspecialchars_uni($message) {
-    $message = preg_replace("#&(?!\#[0-9]+;)#si", "&amp;", $message);
-    $message = str_replace("<","&lt;",$message);
-    $message = str_replace(">","&gt;",$message);
-    $message = str_replace("\"","&quot;",$message);
-    $message = str_replace("  ", "&nbsp;&nbsp;", $message);
-    return $message;
-}
-function format_urls($s)
-{
-	return preg_replace(
-    	"/(\A|[^=\]'\"a-zA-Z0-9])((http|ftp|https|ftps|irc):\/\/[^()<>\s]+)/i",
-	    "\\1<a href=\"\\2\">\\2</a>", $s);
-}
-function format_body($text, $strip_html = true) {
-	//global $smilies, $privatesmilies;
-	//$smiliese = $smilies;
-	$s = $text;
-
-	if ($strip_html)
-		$s = htmlspecialchars_uni($s);
-
-	$bb[] = "#\[img\](?!javascript:)([^?](?:[^\[]+|\[(?!url))*?)\[/img\]#i";
-	$html[] = "<img class=\"linked-image\" src=\"\\1\" border=\"0\" alt=\"\\1\" title=\"\\1\" />";
-	$bb[] = "#\[img=([a-zA-Z]+)\](?!javascript:)([^?](?:[^\[]+|\[(?!url))*?)\[/img\]#is";
-	$html[] = "<img class=\"linked-image\" src=\"\\2\" align=\"\\1\" border=\"0\" alt=\"\\2\" title=\"\\2\" />";
-	$bb[] = "#\[img\ alt=([a-zA-Zą-˙Ą-ß0-9\_\-\. ]+)\](?!javascript:)([^?](?:[^\[]+|\[(?!url))*?)\[/img\]#is";
-	$html[] = "<img class=\"linked-image\" src=\"\\2\" align=\"\\1\" border=\"0\" alt=\"\\1\" title=\"\\1\" />";
-	$bb[] = "#\[img=([a-zA-Z]+) alt=([a-zA-Zą-˙Ą-ß0-9\_\-\. ]+)\](?!javascript:)([^?](?:[^\[]+|\[(?!url))*?)\[/img\]#is";
-	$html[] = "<img class=\"linked-image\" src=\"\\3\" align=\"\\1\" border=\"0\" alt=\"\\2\" title=\"\\2\" />";
-	$bb[] = "#\[kp=([0-9]+)\]#is";
-	$html[] = "<a href=\"http://www.kinopoisk.ru/level/1/film/\\1/\" rel=\"nofollow\"><img src=\"http://www.kinopoisk.ru/rating/\\1.gif/\" alt=\"Źčķīļīčńź\" title=\"Źčķīļīčńź\" border=\"0\" /></a>";
-	$bb[] = "#\[url\]([\w]+?://([\w\#$%&~/.\-;:=,?@\]+]+|\[(?!url=))*?)\[/url\]#is";
-	$html[] = "<a href=\"\\1\" title=\"\\1\">\\1</a>";
-	$bb[] = "#\[url\]((www|ftp)\.([\w\#$%&~/.\-;:=,?@\]+]+|\[(?!url=))*?)\[/url\]#is";
-	$html[] = "<a href=\"http://\\1\" title=\"\\1\">\\1</a>";
-	$bb[] = "#\[url=([\w]+?://[\w\#$%&~/.\-;:=,?@\[\]+]*?)\]([^?\n\r\t].*?)\[/url\]#is";
-	$html[] = "<a href=\"\\1\" title=\"\\1\">\\2</a>";
-	$bb[] = "#\[url=((www|ftp)\.[\w\#$%&~/.\-;:=,?@\[\]+]*?)\]([^?\n\r\t].*?)\[/url\]#is";
-	$html[] = "<a href=\"http://\\1\" title=\"\\1\">\\3</a>";
-	$bb[] = "/\[url=([^()<>\s]+?)\]((\s|.)+?)\[\/url\]/i";
-	$html[] = "<a href=\"\\1\">\\2</a>";
-	$bb[] = "/\[url\]([^()<>\s]+?)\[\/url\]/i";
-	$html[] = "<a href=\"\\1\">\\1</a>";
-	$bb[] = "#\[mail\](\S+?)\[/mail\]#i";
-	$html[] = "<a href=\"mailto:\\1\">\\1</a>";
-	$bb[] = "#\[mail\s*=\s*([\.\w\-]+\@[\.\w\-]+\.[\w\-]+)\s*\](.*?)\[\/mail\]#i";
-	$html[] = "<a href=\"mailto:\\1\">\\2</a>";
-	$bb[] = "#\[color=(\#[0-9A-F]{6}|[a-z]+)\](.*?)\[/color\]#si";
-	$html[] = "<span style=\"color: \\1\">\\2</span>";
-	$bb[] = "#\[(font|family)=([A-Za-z ]+)\](.*?)\[/\\1\]#si";
-	$html[] = "<span style=\"font-family: \\2\">\\3</span>";
-	$bb[] = "#\[size=([0-9]+)\](.*?)\[/size\]#si";
-	$html[] = "<span style=\"font-size: \\1\">\\2</span>";
-	$bb[] = "#\[(left|right|center|justify)\](.*?)\[/\\1\]#is";
-	$html[] = "<div align=\"\\1\">\\2</div>";
-	$bb[] = "#\[b\](.*?)\[/b\]#si";
-	$html[] = "<b>\\1</b>";
-	$bb[] = "#\[i\](.*?)\[/i\]#si";
-	$html[] = "<i>\\1</i>";
-	$bb[] = "#\[u\](.*?)\[/u\]#si";
-	$html[] = "<u>\\1</u>";
-	$bb[] = "#\[s\](.*?)\[/s\]#si";
-	$html[] = "<s>\\1</s>";
-	$bb[] = "#\[li\]#si";
-	$html[] = "<li>";
-	$bb[] = "#\[hr\]#si";
-	$html[] = "<hr>";
-
-	$s = preg_replace($bb, $html, $s);
-
-	$s = nl2br($s);
-    $s = str_replace('\r\n','<br />',$s);
-	$s = format_urls($s);
-
-
-	//foreach ($smiliese as $code => $url)
-	//	$s = str_replace($code, "<img border=\"0\" src=\"pic/smilies/$url\" alt=\"" . htmlspecialchars_uni($code) . "\">", $s);
-
-	//foreach ($privatesmilies as $code => $url)
-	//	$s = str_replace($code, "<img border=\"0\" src=\"pic/smilies/$url\">", $s);
-
-	while (preg_match("#\[quote\](.*?)\[/quote\]#si", $s)) $s = encode_quote($s);
-	while (preg_match("#\[quote=(.+?)\](.*?)\[/quote\]#si", $s)) $s = encode_quote_from($s);
-	while (preg_match("#\[hide\](.*?)\[/hide\]#si", $s)) $s = encode_spoiler($s);
-	while (preg_match("#\[hide=(.+?)\](.*?)\[/hide\]#si", $s)) $s = encode_spoiler_from($s);
-	if (preg_match("#\[code\](.*?)\[/code\]#si", $s)) $s = encode_code($s);
-	if (preg_match("#\[php\](.*?)\[/php\]#si", $s)) $s = encode_php($s);
-
-	return $s;
-}
-function encode_code($text) {
-	$start_html = "<div align=\"center\"><div style=\"width: 85%; overflow: auto\">"
-	."<table width=\"100%\" cellspacing=\"1\" cellpadding=\"3\" border=\"0\" align=\"center\" class=\"bgcolor4\">"
-	."<tr bgcolor=\"E5EFFF\"><td colspan=\"2\"><font class=\"block-title\">Code</font></td></tr>"
-	."<tr class=\"bgcolor1\"><td align=\"right\" class=\"code\" style=\"width: 5px; border-right: none\">{ZEILEN}</td><td class=\"code\">";
-	$end_html = "</td></tr></table></div></div>";
-	$match_count = preg_match_all("#\[code\](.*?)\[/code\]#si", $text, $matches);
-    for ($mout = 0; $mout < $match_count; ++$mout) {
-      $before_replace = $matches[1][$mout];
-      $after_replace = $matches[1][$mout];
-      $after_replace = trim ($after_replace);
-      $zeilen_array = explode ("<br />", $after_replace);
-      $j = 1;
-      $zeilen = "";
-      foreach ($zeilen_array as $str) {
-        $zeilen .= "".$j."<br />";
-        ++$j;
-      }
-      $after_replace = str_replace ("", "", $after_replace);
-      $after_replace = str_replace ("&amp;", "&", $after_replace);
-      $after_replace = str_replace ("", "&nbsp; ", $after_replace);
-      $after_replace = str_replace ("", " &nbsp;", $after_replace);
-      $after_replace = str_replace ("", "&nbsp; &nbsp;", $after_replace);
-      $after_replace = preg_replace ("/^ {1}/m", "&nbsp;", $after_replace);
-      $str_to_match = "[code]".$before_replace."[/code]";
-      $replace = str_replace ("{ZEILEN}", $zeilen, $start_html);
-      $replace .= $after_replace;
-      $replace .= $end_html;
-      $text = str_replace ($str_to_match, $replace, $text);
-    }
-
-    $text = str_replace ("[code]", $start_html, $text);
-    $text = str_replace ("[/code]", $end_html, $text);
-    return $text;
-}
-
-function encode_php($text) {
-	$start_html = "<div align=\"center\"><div style=\"width: 85%; overflow: auto\">"
-	."<table width=\"100%\" cellspacing=\"1\" cellpadding=\"3\" border=\"0\" align=\"center\" class=\"bgcolor4\">"
-	."<tr bgcolor=\"F3E8FF\"><td colspan=\"2\"><font class=\"block-title\">PHP - Code</font></td></tr>"
-	."<tr class=\"bgcolor1\"><td align=\"right\" class=\"code\" style=\"width: 5px; border-right: none\">{ZEILEN}</td><td>";
-	$end_html = "</td></tr></table></div></div>";
-	$match_count = preg_match_all("#\[php\](.*?)\[/php\]#si", $text, $matches);
-    for ($mout = 0; $mout < $match_count; ++$mout) {
-        $before_replace = $matches[1][$mout];
-        $after_replace = $matches[1][$mout];
-        $after_replace = trim ($after_replace);
-		$after_replace = str_replace("&lt;", "<", $after_replace);
-		$after_replace = str_replace("&gt;", ">", $after_replace);
-		$after_replace = str_replace("&quot;", '"', $after_replace);
-		$after_replace = preg_replace("/<br.*/i", "", $after_replace);
-		$after_replace = (substr($after_replace, 0, 5 ) != "<?php") ? "<?php\n".$after_replace."" : "".$after_replace."";
-		$after_replace = (substr($after_replace, -2 ) != "?>") ? "".$after_replace."\n?>" : "".$after_replace."";
-        ob_start ();
-        highlight_string ($after_replace);
-        $after_replace = ob_get_contents ();
-        ob_end_clean ();
-		$zeilen_array = explode("<br />", $after_replace);
-        $j = 1;
-        $zeilen = "";
-      foreach ($zeilen_array as $str) {
-        $zeilen .= "".$j."<br />";
-        ++$j;
-      }
-		$after_replace = str_replace("\n", "", $after_replace);
-		$after_replace = str_replace("&amp;", "&", $after_replace);
-		$after_replace = str_replace("  ", "&nbsp; ", $after_replace);
-		$after_replace = str_replace("  ", " &nbsp;", $after_replace);
-		$after_replace = str_replace("\t", "&nbsp; &nbsp;", $after_replace);
-		$after_replace = preg_replace("/^ {1}/m", "&nbsp;", $after_replace);
-		$str_to_match = "[php]".$before_replace."[/php]";
-		$replace = str_replace("{ZEILEN}", $zeilen, $start_html);
-      $replace .= $after_replace;
-      $replace .= $end_html;
-      $text = str_replace ($str_to_match, $replace, $text);
-    }
-	$text = str_replace("[php]", $start_html, $text);
-	$text = str_replace("[/php]", $end_html, $text);
-    return $text;
-}
-function encode_quote($text) {
-	$start_html = "<div align=\"center\"><div style=\"width: 85%; overflow: auto\">"
-	."<table width=\"100%\" cellspacing=\"1\" cellpadding=\"3\" border=\"0\" align=\"center\" class=\"bgcolor4\">"
-	."<tr bgcolor=\"FFE5E0\"><td><font class=\"block-title\">Quote</font></td></tr><tr class=\"bgcolor1\"><td>";
-	$end_html = "</td></tr></table></div></div>";
-	$text = preg_replace("#\[quote\](.*?)\[/quote\]#si", "".$start_html."\\1".$end_html."", $text);
-	return $text;
-}
-
-// Format quote from
-function encode_quote_from($text) {
-	$start_html = "<div align=\"center\"><div style=\"width: 85%; overflow: auto\">"
-	."<table width=\"100%\" cellspacing=\"1\" cellpadding=\"3\" border=\"0\" align=\"center\" class=\"bgcolor4\">"
-	."<tr bgcolor=\"FFE5E0\"><td><font class=\"block-title\">\\1 quote</font></td></tr><tr class=\"bgcolor1\"><td>";
-	$end_html = "</td></tr></table></div></div>";
-	$text = preg_replace("#\[quote=(.+?)\](.*?)\[/quote\]#si", "".$start_html."\\2".$end_html."", $text);
-	return $text;
-}
-// Format spoiler
-function escape1($matches){
-	return "<div class=\"spoiler-wrap\"><div class=\"spoiler-head folded clickable\">Spoiler</div><div class=\"spoiler-body\"><textarea>".htmlspecialchars($matches[1])."</textarea></div></div>";
-}
-
-// Format spoiler from
-function escape2($matches){
-	return "<div class=\"spoiler-wrap\"><div class=\"spoiler-head folded clickable\">".$matches[1]."</div><div class=\"spoiler-body\"><textarea>".htmlspecialchars($matches[2])."</textarea></div></div>";
-}
-function encode_spoiler($text) {
-	$text = preg_replace_callback("#\[hide\](.*?)\[/hide\]#si", 'escape1', $text);
-	return $text;
-}
-
-// Format spoiler from
-function encode_spoiler_from($text) {
-	$text = preg_replace_callback("#\[hide=(.+?)\](.*?)\[/hide\]#si", 'escape2', $text);
-	return $text;
-}
-function display_date_time($ts = 0 , $off = 0){
-        return date("Y-m-d H:i:s", $ts + ($off * 60));
-}
-function textbbcode($form, $name, $content="") {
-?>
-<script type="text/javascript" language="javascript">
-function RowsTextarea(n, w) {
-	var inrows = document.getElementById(n);
-	if (w < 1) {
-		var rows = -5;
-	} else {
-		var rows = +5;
+	global $sql;
+	$query = $sql->query("SELECT `object_id`, `count` FROM `items` WHERE `owner_id`='$charId' AND `item_id` = '$itemId' AND `loc` = '$loc'");
+	if($sql->numRows())
+	{
+		$before = $sql->result($query, 0, 1);
+		$sql->query("UPDATE `items` SET `count` = `count` + '$count' WHERE `owner_id`='$charId' AND `item_id` = '$itemId' AND `loc` = '$loc'");
 	}
-	var outrows = inrows.rows + rows;
-	if (outrows >= 5 && outrows < 50) {
-		inrows.rows = outrows;
+	else
+	{
+		$before = 0;
+		$maxloc = $sql->query("SELECT Max(`loc_data`) FROM `items` WHERE `items`.`owner_id` = '$charId' AND `items`.`loc` = '$loc'");
+		$itemloc = $sql->result($maxloc) + 1;
+		$sql->query("INSERT INTO `items` (`owner_id`,`item_id`,`count`,`loc`,`loc_data`) VALUES ('$charId','$itemId','$count','$loc','$itemloc')");
 	}
+	$check = $sql->query("SELECT `object_id`, `count` FROM `items` WHERE `owner_id`='$charId' AND `item_id` = '$itemId' AND `loc` = '$loc'");
+	if(!$sql->numRows())
+		return false;
+	if($before + $count == $sql->result($check, 0, 1))
+		return true;
 	return false;
 }
 
-var SelField = document.<?php echo $form;?>.<?php echo $name;?>;
-var TxtFeld  = document.<?php echo $form;?>.<?php echo $name;?>;
-
-var clientPC = navigator.userAgent.toLowerCase(); // Get client info
-var clientVer = parseInt(navigator.appVersion); // Get browser version
-
-var is_ie = ((clientPC.indexOf("msie") != -1) && (clientPC.indexOf("opera") == -1));
-var is_nav = ((clientPC.indexOf('mozilla')!=-1) && (clientPC.indexOf('spoofer')==-1)
-                && (clientPC.indexOf('compatible') == -1) && (clientPC.indexOf('opera')==-1)
-                && (clientPC.indexOf('webtv')==-1) && (clientPC.indexOf('hotjava')==-1));
-
-var is_moz = 0;
-
-var is_win = ((clientPC.indexOf("win")!=-1) || (clientPC.indexOf("16bit") != -1));
-var is_mac = (clientPC.indexOf("mac")!=-1);
-
-function StoreCaret(text) {
-	if (text.createTextRange) {
-		text.caretPos = document.selection.createRange().duplicate();
-	}
-}
-function FieldName(text, which) {
-	if (text.createTextRange) {
-		text.caretPos = document.selection.createRange().duplicate();
-	}
-	if (which != "") {
-		var Field = eval("document.<?php echo $form;?>."+which);
-		SelField = Field;
-		TxtFeld  = Field;
-	}
-}
-function AddSmile(SmileCode) {
-	var SmileCode;
-	var newPost;
-	var oldPost = SelField.value;
-	newPost = oldPost+SmileCode;
-	SelField.value=newPost;
-	SelField.focus();
-	return;
-}
-function AddSelectedText(Open, Close) {
-	if (SelField.createTextRange && SelField.caretPos && Close == '\n') {
-		var caretPos = SelField.caretPos;
-		caretPos.text = caretPos.text.charAt(caretPos.text.length - 1) == ' ' ? Open + Close + ' ' : Open + Close;
-		SelField.focus();
-	} else if (SelField.caretPos) {
-		SelField.caretPos.text = Open + SelField.caretPos.text + Close;
-	} else {
-		SelField.value += Open + Close;
-		SelField.focus();
-	}
-}
-function InsertCode(code, info, type, error) {
-	if (code == 'name') {
-		AddSelectedText('[b]' + info + '[/b]', '\n');
-	} else if (code == 'url' || code == 'mail') {
-		if (code == 'url') var url = prompt(info, 'http://');
-		if (code == 'mail') var url = prompt(info, '');
-		if (!url) return alert(error);
-		if ((clientVer >= 4) && is_ie && is_win) {
-			selection = document.selection.createRange().text;
-			if (!selection) {
-				var title = prompt(type, type);
-				AddSelectedText('[' + code + '=' + url + ']' + title + '[/' + code + ']', '\n');
-			} else {
-				AddSelectedText('[' + code + '=' + url + ']', '[/' + code + ']');
-			}
-		} else {
-			mozWrap(TxtFeld, '[' + code + '=' + url + ']', '[/' + code + ']');
-		}
-	} else if (code == 'color' || code == 'family' || code == 'size') {
-		if ((clientVer >= 4) && is_ie && is_win) {
-			AddSelectedText('[' + code + '=' + info + ']', '[/' + code + ']');
-		} else if (TxtFeld.selectionEnd && (TxtFeld.selectionEnd - TxtFeld.selectionStart > 0)) {
-			mozWrap(TxtFeld, '[' + code + '=' + info + ']', '[/' + code + ']');
-		}
-	} else if (code == 'li' || code == 'hr') {
-		if ((clientVer >= 4) && is_ie && is_win) {
-			AddSelectedText('[' + code + ']', '');
-		} else {
-			mozWrap(TxtFeld, '[' + code + ']', '');
-		}
-	} else {
-		if ((clientVer >= 4) && is_ie && is_win) {
-			var selection = false;
-			selection = document.selection.createRange().text;
-			if (selection && code == 'quote') {
-				AddSelectedText('[' + code + ']' + selection + '[/' + code + ']', '\n');
-			} else {
-				AddSelectedText('[' + code + ']', '[/' + code + ']');
-			}
-		} else {
-			mozWrap(TxtFeld, '[' + code + ']', '[/' + code + ']');
-		}
-	}
-}
-
-function mozWrap(txtarea, open, close)
+function valInt($string, $default = 0, $min = 0, $max = 999999999)
 {
-        var selLength = txtarea.textLength;
-        var selStart = txtarea.selectionStart;
-        var selEnd = txtarea.selectionEnd;
-        if (selEnd == 1 || selEnd == 2)
-                selEnd = selLength;
+	$options = array('options' => array(
+			'default' => $default,
+			'min_range' => $min,
+			'max_range' => $max), );
+	$int = filter_var($string, FILTER_VALIDATE_INT, $options);
+	return $int;
+}
+function valString($string)
+{
+	global $sql;
+	if(!is_array($string))
+		$string = trim(htmlentities(str_replace(array(
+			"\r\n",
+			"\r",
+			"\0"), array(
+			"\n",
+			"\n",
+			''), $sql->escape($string)), ENT_QUOTES, 'UTF-8'));
+	else
+	{
+		$strings = array();
+		foreach ($string as $key => $value)
+		{
+			array_push($strings, valString($value));
+		}
+		$string = $strings;
+	}
 
-        var s1 = (txtarea.value).substring(0,selStart);
-        var s2 = (txtarea.value).substring(selStart, selEnd)
-        var s3 = (txtarea.value).substring(selEnd, selLength);
-        txtarea.value = s1 + open + s2 + close + s3;
-        txtarea.focus();
-        return;
+	return $string;
 }
-
-language=1;
-richtung=1;
-var DOM = document.getElementById ? 1 : 0, 
-opera = window.opera && DOM ? 1 : 0, 
-IE = !opera && document.all ? 1 : 0, 
-NN6 = DOM && !IE && !opera ? 1 : 0; 
-var ablauf = new Date();
-var jahr = ablauf.getTime() + (365 * 24 * 60 * 60 * 1000);
-ablauf.setTime(jahr);
-var richtung=1;
-var isChat=false;
-NoHtml=true;
-NoScript=true;
-NoStyle=true;
-NoBBCode=true;
-NoBefehl=false;
-
-function setZustand() {
-	transHtmlPause=false;
-	transScriptPause=false;
-	transStylePause=false;
-	transBefehlPause=false;
-	transBBPause=false;
-}
-setZustand();
-function keks(Name,Wert){
-	document.cookie = Name+"="+Wert+"; expires=" + ablauf.toGMTString();
-}
-function changeNoTranslit(Nr){
-	if(document.trans.No_translit_HTML.checked)NoHtml=true;else{NoHtml=false}
-	if(document.trans.No_translit_BBCode.checked)NoBBCode=true;else{NoBBCode=false}
-	keks("NoHtml",NoHtml);keks("NoScript",NoScript);keks("NoStyle",NoStyle);keks("NoBBCode",NoBBCode);
-}
-function changeRichtung(r){
-	richtung=r;keks("TransRichtung",richtung);setFocus()
-}
-function changelanguage(){  
-	if (language==1) {language=0;}
-	else {language=1;}
-	keks("autoTrans",language);
-	setFocus();
-	setZustand();
-}
-function setFocus(){
-	TxtFeld.focus();
-}
-function repl(t,a,b){
-	var w=t,i=0,n=0;
-	while((i=w.indexOf(a,n))>=0){
-		t=t.substring(0,i)+b+t.substring(i+a.length,t.length);	
-		w=w.substring(0,i)+b+w.substring(i+a.length,w.length);
-		n=i+b.length;
-		if(n>=w.length){
-			break;
+function getLang($name)
+{
+	global $Lang;
+	if($name)
+	{
+		if(isset($Lang[$name]))
+		{
+			return $Lang[$name];
+		}
+		else
+		{
+			return $name;
 		}
 	}
-	return t;
-}
-</script>
-<textarea class="editorinput" id="area" name="<?php echo $name;?>" cols="65" rows="10" style="width:400px" onkeypress="" onselect="FieldName(this, this.name)" onclick="FieldName(this, this.name)" onkeyup="FieldName(this, this.name)"><?php echo $content;?></textarea>
-<div class="editor" style="background-image: url(img/editor/bg.gif); background-repeat: repeat-x;">
-	<div class="editorbutton" onclick="RowsTextarea('area',1)"><img title="Increase size" src="img/editor/plus.gif" /></div>
-	<div class="editorbutton" onclick="RowsTextarea('area',0)"><img title="Decrease size" src="img/editor/minus.gif" /></div>
-	<div class="editorbutton" onclick="InsertCode('b')"><img title="Bold" src="img/editor/bold.gif" /></div>
-	<div class="editorbutton" onclick="InsertCode('i')"><img title="Italic" src="img/editor/italic.gif" /></div>
-	<div class="editorbutton" onclick="InsertCode('u')"><img title="Underline" src="img/editor/underline.gif" /></div>
-	<div class="editorbutton" onclick="InsertCode('s')"><img title="Strikethrought" src="img/editor/striket.gif" /></div>
-	<div class="editorbutton" onclick="InsertCode('li')"><img title="List" src="img/editor/li.gif" /></div>
-	<div class="editorbutton" onclick="InsertCode('hr')"><img title="Horizontal Line" src="img/editor/hr.gif" /></div>
-	<div class="editorbutton" onclick="InsertCode('left')"><img title="Align left" src="img/editor/left.gif" /></div>
-	<div class="editorbutton" onclick="InsertCode('center')"><img title="Align center" src="img/editor/center.gif" /></div>
-	<div class="editorbutton" onclick="InsertCode('right')"><img title="Align right" src="img/editor/right.gif" /></div>
-	<div class="editorbutton" onclick="InsertCode('justify')"><img title="Align both sides" src="img/editor/justify.gif" /></div>
-	<div class="editorbutton" onclick="InsertCode('code')"><img title="Code" src="img/editor/code.gif" /></div>
-	<div class="editorbutton" onclick="InsertCode('php')"><img title="PHP-Code" src="img/editor/php.gif" /></div>
-	<div class="editorbutton" onclick="InsertCode('hide')"><img title="Hide" src="img/editor/hide.gif" /></div>
-	<div class="editorbutton" onclick="InsertCode('url','Link','Link','Input full adress!')"><img title="Link" src="img/editor/url.gif" /></div>
-	<div class="editorbutton" onclick="InsertCode('mail','Link','Link','Input full adress!')"><img title="E-Mail" src="img/editor/mail.gif" /></div>
-	<div class="editorbutton" onclick="InsertCode('img')"><img title="Image" src="img/editor/img.gif" /></div>
-</div>
-<div class="editor" style="background-image: url(img/editor/bg.gif); background-repeat: repeat-x;">
-	<div class="editorbutton" onclick="InsertCode('quote')"><img title="Quote" src="editor/quote.gif" /></div>
-	<div class="editorbutton"><select class="editorinput" tabindex="1" style="font-size:10px;" name="family" onchange="InsertCode('family',this.options[this.selectedIndex].value)"><option style="font-family:Verdana;" value="Verdana">Verdana</option><option style="font-family:Arial;" value="Arial">Arial</option><option style="font-family:'Courier New';" value="Courier New">Courier New</option><option style="font-family:Tahoma;" value="Tahoma">Tahoma</option><option style="font-family:Helvetica;" value="Helvetica">Helvetica</option></select></div>
-	<div class="editorbutton"><select class="editorinput" tabindex="1" style="font-size:10px;" name="color" onchange="InsertCode('color',this.options[this.selectedIndex].value)"><option style="color:black;" value="black">Black</option><option style="color:silver;" value="silver">Silver</option><option style="color:gray;" value="gray">Gray</option><option style="color:white;" value="white">White</option><option style="color:maroon;" value="maroon">Maroon</option><option style="color:red;" value="red">Red</option><option style="color:purple;" value="purple">Purple</option><option style="color:fuchsia;" value="fuchsia">Fuchsia</option><option style="color:green;" value="green">Green</option><option style="color:lime;" value="lime">Lime</option><option style="color:olive;" value="olive">Olive</option><option style="color:yellow;" value="yellow">Yellow</option><option style="color:navy;" value="navy">Navy</option><option style="color:blue;" value="blue">Blue</option><option style="color:teal;" value="teal">Teal</option><option style="color:aqua;" value="aqua">Aqua</option></select></div>
-	<div class="editorbutton"><select class="editorinput" tabindex="1" style="font-size:10px;" name="size" onchange="InsertCode('size',this.options[this.selectedIndex].value)"><option value="8">Size 8</option><option value="10">Size 10</option><option value="12">Size 12</option><option value="14">Size 14</option><option value="18">Size 18</option><option value="24">Size 24</option></select></div>
-</div>
-<?php
-}
-function get_date_time($timestamp = 0) {
-	if ($timestamp)
-		return date("Y-m-d H:i:s", $timestamp);
 	else
-		return date("Y-m-d H:i:s");
+	{
+		return $Lang;
+	}
+
+}
+function getConfig($type, $name, $default = '')
+{
+	global $CONFIG, $sql, $webdb, $q;
+	if(isset($CONFIG[$type][$name]))
+	{
+		return $CONFIG[$type][$name];
+	}
+	else
+	{
+		if($default != '')
+		{
+			setConfig($type, $name, $default);
+			return $default;
+		}
+		return null;
+	}
+}
+function setConfig($type, $name, $val)
+{
+	global $CONFIG, $sql, $q, $webdb;
+	$CONFIG[$type][$name] = $val;
+	$qry = $sql->query(672, array("webdb" => $webdb, "type_id" => $type));
+	$type = $sql->fetchArray($qry);
+	$id = $type['id'];
+	$params = array(
+		"webdb" => $webdb,
+		"name" => $name,
+		"type" => $id,
+		"val" => $val);
+	$sql->query(671, $params);
+	if($sql->numRows() > 0)
+	{
+		$sql->query(670, $params);
+	}
+	else
+	{
+		$sql->query(669, $params);
+	}
+}
+function getVar($v)
+{
+	$var = isset($_REQUEST[$v]) ? $_REQUEST[$v] : $_POST[$v];
+	return is_numeric($var) ? valInt($var) : valString($var);
+
 }
 function loggedInOrReturn($url='')
 {
@@ -954,37 +571,46 @@ function loggedInOrReturn($url='')
     {
         if($url)
             $_SESSION['returnto']=$url;
-        header ("Refresh: 3; url=login.php");
-        err($Lang['error'], $Lang['need_to_login']);
+        //header ("Refresh: 3; url=login.php");
+        head(getLang('error'), true, 'login.php',5);
+        msg(getLang('error'), getLang('need_to_login'),'error');
+        foot();
+        die();
     }
 }
-function drawElement($body,$type,$value)
+function get_date_time($timestamp = 0)
 {
-    $elements=array();
-    $elements[0]="Fire";
-    $elements[1]="Water";
-    $elements[2]="Wind";
-    $elements[3]="Earth";
-    $elements[4]="Holy";
-    $elements[5]="Dark";
-    $FIRST_WEAPON_BONUS = 20;
-    $WEAPON_BONUS = 5;
-    $ARMOR_BONUS = 6;
-    $WEAPON_VALUES =array
-	(
-		0,   // Level 1
-		25,  // Level 2
-		75,  // Level 3
+	if($timestamp)
+		return date("Y-m-d H:i:s", $timestamp);
+	else
+		return date("Y-m-d H:i:s");
+}
+
+function drawElement($body, $type, $value)
+{
+	$elements = array();
+	$elements[0] = 'Fire';
+	$elements[1] = 'Water';
+	$elements[2] = 'Wind';
+	$elements[3] = 'Earth';
+	$elements[4] = 'Holy';
+	$elements[5] = 'Dark';
+	$FIRST_WEAPON_BONUS = 20;
+	$WEAPON_BONUS = 5;
+	$ARMOR_BONUS = 6;
+	$WEAPON_VALUES = array(
+		0, // Level 1
+		25, // Level 2
+		75, // Level 3
 		150, // Level 4
 		175, // Level 5
 		225, // Level 6
 		300, // Level 7
 		325, // Level 8
 		375 // Level 9
-	);
-    $ARMOR_VALUES =array
-	(
-		0,  // Level 1
+			);
+	$ARMOR_VALUES = array(
+		0, // Level 1
 		12, // Level 2
 		30, // Level 3
 		60, // Level 4
@@ -993,117 +619,97 @@ function drawElement($body,$type,$value)
 		120, // Level 7
 		132, // Level 8
 		150 // Level 9
-	);
-    $lvl=0;
-    if($body=="weapon")
-    {
-        foreach($WEAPON_VALUES as $v)
-        {
-            if($value<$v)
-            {
-                break;
-            }
-            $lvl++;
-        }
-    }
-    else
-    {
-        foreach($ARMOR_VALUES as $v)
-        {
-            if($value<$v)
-            {
-                break;
-            }
-            $lvl++;
-        }
-    }
-    $name=$elements[$type];
-    if($body=="weapon")
-    {
-        echo '<tr>';
-        if($value>=450)
-        {
-            ?><td>
-            <?php echo $name;?> Lv <?php echo $lvl;?> (<?php echo $name;?> P. Atk. <?php echo $value ;?>) <br />
-            <img src="img/elementals/<?php echo $name;?>/<?php echo $name;?>.png"  style=" height: 12px; width: 235px;  background-repeat: repeat-x;"/><br /></td>
-            <?php
-        }
-        else if($value==$WEAPON_VALUES[$lvl-1])
-        {
-            ?><td>
-            <?php echo $name;?> Lv <?php echo $lvl;?> (<?php echo $name;?> P. Atk. <?php echo $value ;?>) <br />
-            <img src="img/elementals/<?php echo $name;?>/<?php echo $name;?>_bg.png"  style=" height: 12px; width: 235px;  background-repeat: repeat-x;"/><br /></td>
-            <?php
-        }
-        else
-        {
-            $width=($value-$WEAPON_VALUES[$lvl-1])/($WEAPON_VALUES[$lvl]-$WEAPON_VALUES[$lvl-1]);
-                        ?><td><table><tr><td> <?php echo $name;?> Lv <?php echo $lvl;?> (<?php echo $name;?> P. Atk. <?php echo $value ;?>)</td></tr>
-           
-            <tr><td width="235px" style="background-size: 235px 12px; background-image: url('img/elementals/<?php echo $name;?>/<?php echo $name;?>_bg.png'); bbackground-repeat: repeat-x; "><img src="img/elementals/<?php echo $name;?>/<?php echo $name;?>.png"  style=" height: 12px; width: <?php echo round($width*235,0);?>  background-repeat: repeat-x;"/><br /></td></tr>
-            </table>
-            </td>
-            <?php
-        }
-        echo '</tr>';
-    }
-    else
-    {
-        $aname=$type%2==0?$elements[$type+1]:$elements[$type-1];
-        echo '<tr>';
-        if($value>=180)
-        {
-            ?><td>
-            <?php echo $name;?> Lv <?php echo $lvl;?> (<?php echo $aname;?> P. Def. <?php echo $value ;?>) <br />
-            <img src="img/elementals/<?php echo $aname;?>/<?php echo $aname;?>.png"  style=" height: 12px; width: 235px;  background-repeat: repeat-x;"/><br /></td>
-            <?php
-        }
-        else if($value==$ARMOR_VALUES[$lvl-1])
-        {
-            ?><td>
-            <?php echo $name;?> Lv <?php echo $lvl;?> (<?php echo $aname;?> P. Def. <?php echo $value ;?>) <br />
-            <img src="img/elementals/<?php echo $aname;?>/<?php echo $aname;?>_bg.png"  style=" height: 12px; width: 235px;  background-repeat: repeat-x;"/><br /></td>
-            <?php
-        }
-        else
-        {
-            $width=($value-$ARMOR_VALUES[$lvl-1])/($ARMOR_VALUES[$lvl]-$ARMOR_VALUES[$lvl-1]);
-                        ?><td><table><tr><td> <?php echo $name;?> Lv <?php echo $lvl;?> (<?php echo $aname;?> P. Def. <?php echo $value ;?>)</td></tr>
-           
-            <tr><td width="235px" style="background-size: 235px 12px; background-image: url('img/elementals/<?php echo $aname;?>/<?php echo $aname;?>_bg.png'); bbackground-repeat: repeat-x; "><img src="img/elementals/<?php echo $aname;?>/<?php echo $aname;?>.png"  style=" height: 12px; width: <?php echo round($width*235,0);?>  background-repeat: repeat-x;"/><br /></td></tr>
-            </table>
-            </td>
-            <?php
-        }
-        echo '</tr>';
-    }
+			);
+	$lvl = 0;
+	if($body == 'weapon')
+	{
+		foreach ($WEAPON_VALUES as $v)
+		{
+			if($value < $v)
+			{
+				break;
+			}
+			$lvl++;
+		}
+	}
+	else
+	{
+		foreach ($ARMOR_VALUES as $v)
+		{
+			if($value < $v)
+			{
+				break;
+			}
+			$lvl++;
+		}
+	}
+	$name = $elements[$type];
+	$rcon = '';
+	if($body == 'weapon')
+	{
+		if($value >= 450)
+		{
+			$rcon .= $name . ' Lv ' . $lvl . ' (' . $name . ' P. Atk. ' . $value . ') <br />
+            <img src=\'img/elementals/' . $name . '/' . $name . '.png\' class=\'ele_full\' /><br />';
+
+		}
+		else
+			if($value == $WEAPON_VALUES[$lvl - 1])
+			{
+				$rcon .= $name . ' Lv ' . $lvl . ' (' . $name . ' P. Atk. ' . $value . ') &lt;br />
+            &lt;img src=\\\'img/elementals/' . $name . '/' . $name . '_bg.png\\\' class=\\\'ele_full\\\' />&lt;br />';
+			}
+			else
+			{
+				$width = ($value - $WEAPON_VALUES[$lvl - 1]) / ($WEAPON_VALUES[$lvl] - $WEAPON_VALUES[$lvl - 1]);
+				//$rcon .='&lt;table>&lt;tr>&lt;td> '.$name.' Lv '.$lvl.' ('.$name.' P. Atk. '.$value.')&lt;/td>&lt;/tr>
+				//&lt;tr>&lt;td width="235px" style="background-size: 235px 12px; background-image: url(\\\'img/elementals/'.$name.'/'.$name.'_bg.png\\\'); background-repeat: repeat-x; ">&lt;img src="img/elementals/'.$name.'/'.$name.'.png"  style=" height: 12px; width: '.round($width*235,0).'  background-repeat: repeat-x;"/>&lt;br />&lt;/td>&lt;/tr>
+				//&lt;/table>';
+
+			}
+	}
+	else
+	{
+		$aname = $type % 2 == 0 ? $elements[$type + 1] : $elements[$type - 1];
+		$width = ($value - $ARMOR_VALUES[$lvl - 1]) / ($ARMOR_VALUES[$lvl] - $ARMOR_VALUES[$lvl - 1]);
+
+		$rcon .= '&lt;table class=\\\'ele_half\\\' width=\\\'200px\\\'>&lt;tr>&lt;td> ' . $name . ' Lv ' . $lvl . ' (' . $aname . ' P. Def. ' . $value . ')&lt;/td>&lt;/tr>';
+		$rcon .= '&lt;tr>&lt;td class=\\\'ele_half_t\\\' style=\\\'background-size: 200px 12px; background-image: url(img/elementals/' . $aname . '/' . $aname . '_bg.png); background-repeat: repeat-x; \\\'>';
+		$rcon .= '&lt;img src=\\\'img/elementals/' . $aname . '/' . $aname . '.png\\\' class=\\\'ele_half\\\'  style=\\\'width: ' . round($width * 200, 0) . '\\\' />&lt;br />&lt;/td>&lt;/tr>';
+		$rcon .= '&lt;/table>';
+	}
+	return $rcon;
 }
 function augColor($lvl)
 {
-    switch($lvl)
-    {
-        case 1:
-            return "#D6D378";
-        break;
-        case 2:
-            return "#5ACBED";
-        break;
-        case 3:
-            return "#CC23B3";
-        break;
-        case 4:
-            return "#F75959";
-        break;
-    }
+	switch ($lvl)
+	{
+		case 1:
+			return '#D6D378';
+			break;
+		case 2:
+			return '#5ACBED';
+			break;
+		case 3:
+			return '#CC23B3';
+			break;
+		case 4:
+			return '#F75959';
+			break;
+	}
 }
-function is_skin($skin) {
+function isSkin($skin)
+{
 	return file_exists("skins/$skin/head.php") && file_exists("skins/$skin/foot.php");
 }
-function get_skins() {
+function getSkins()
+{
 	$handle = opendir("skins");
 	$skinlist = array();
-	while ($file = readdir($handle)) {
-		if (is_skin($file) && $file != "." && $file != "..") {
+	while ($file = readdir($handle))
+	{
+		if(isSkin($file) && $file != "." && $file != "..")
+		{
 			$skinlist[] = $file;
 		}
 	}
@@ -1111,27 +717,152 @@ function get_skins() {
 	sort($skinlist);
 	return $skinlist;
 }
-function skin_selector($sel_skin = "", $js = false) {
-	$skins = get_skins();
-	$cnt = "<select name=\"skin\"".($js ? " onchange=\"window.location='changeskin.php?skin='+this.options[this.selectedIndex].value\"" : "").">\n";
+function skinSelector($sel_skin = "", $js = false)
+{
+	$skins = getSkins();
+	$cnt = "<select name=\"skin\"" . ($js ? " onchange=\"window.location='changeskin.php?skin='+this.options[this.selectedIndex].value\"" : "") . ">\n";
 	foreach ($skins as $skin)
-    {
-		$cnt .= "<option value=\"$skin\"".($skin == $sel_skin ? " selected=\"selected\"" : "").">$skin</option>\n";
-    }
+	{
+		$cnt .= "<option value=\"$skin\"" . ($skin == $sel_skin ? " selected=\"selected\"" : "") . ">$skin</option>\n";
+	}
 	$cnt .= "</select>";
 	return $cnt;
 }
 
-function select_skin() {
-    global $user;
-	if ($user->logged())
+function selectSkin()
+{
+	global $user;
+	if($user->logged())
 		$skin = $_SESSION['skin'];
-	elseif(isset($_COOKIE['skin']))
-        $skin = $_COOKIE['skin'];
-    else
-		$skin = getConfig('settings','DTHEME');
-	if (!is_skin($skin))
-		$skin = getConfig('settings','DTHEME');
+	elseif (isset($_COOKIE['skin']))
+		$skin = $_COOKIE['skin'];
+	else
+		$skin = getConfig('settings', 'dtheme');
+	if(!isSkin($skin))
+		$skin = getConfig('settings', 'dtheme');
 	return $skin;
+}
+function getGrade($g)
+{
+	switch ($g)
+	{
+		case 0:
+			return 'no';
+		case 1:
+			return 'd';
+		case 2:
+			return 'c';
+		case 3:
+			return 'b';
+		case 4:
+			return 'a';
+		case 5:
+			return 's';
+		case 6:
+			return 's80';
+		case 7:
+			return 's84';
+		case 8:
+			return 'r85';
+		case 9:
+			return 'r95';
+		case 10:
+			return 'r99';
+	}
+}
+function buildEtcItem($inv, $item)
+{
+	global $q;
+
+	$type = $q[666][$inv["loc_data"]];
+	$name = $item["name"];
+	$name = str_replace("'", "\\'", $name);
+	$addname = str_replace("'", "\\'", $item["addname"]);
+	$addname = $addname != '' ? ' - &lt;font color=#333333>' . $addname . '&lt;/font>' : '';
+	if($item["grade"] != 0)
+	{
+		$grade = getGrade($item["grade"]);
+		$grade = " &lt;img border=\\'0\\' src=\\'img/grade/" . $grade . "-grade.png\\' />";
+	}
+	$enchant = $inv["enchant_level"] > 0 ? "+" . $inv["enchant_level"] . " " : "";
+	return "<div style='position: absolute; width: 32px; height: 32px; padding: 0px;' class='{$type}'><img border='0' src='img/icons/{$item["icon"]}.png' onmouseover=\"Tip('{$enchant}{$name} {$addname}{$count} {$grade} &lt;br /> {$desc}', FONTCOLOR, '#FFFFFF',BGCOLOR, '#406072', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold')\" alt=\"\" /></div>";
+}
+function buildWeapon($inv, $item)
+{
+	global $q, $sql, $webdb;
+	print_r($inv);
+	echo '<br />';
+	print_r($item);
+	$type = $q[666][$inv["loc_data"]];
+	$enchant = $inv["enchant_level"] > 0 ? "+" . $inv["enchant_level"] . " " : "";
+	$sql->query("SELECT * FROM item_attributes WHERE itemId='{$inv['item_id']}';");
+	if($sql->num_rows())
+	{
+		$augmented = "Augmeneted ";
+	}
+	else
+	{
+		$augmented = "";
+	}
+	$name = $item["name"];
+	$name = str_replace("'", "\\'", $name);
+	$addname = str_replace("'", "\\'", $item["addname"]);
+	$addname = $addname != '' ? ' - &lt;font color=#333333>' . $addname . '&lt;/font>' : '';
+	if($item["grade"] != 0)
+	{
+		$grade = getGrade($item["grade"]);
+		$grade = " &lt;img border=\\'0\\' src=\\'img/grade/" . $grade . "-grade.png\\' />";
+	}
+	$item_type = $q[665]['w'][$item['item_type']];
+	$sql->query("SELECT * FROM {webdb}.weapongrp WHERE id='{$inv['item_id']}';", array("webdb" => $webdb));
+	$grp = $sql->fetch_array();
+	$hands = $q[665]['body'][$grp['body_part']];
+	$element = '';
+	return "<div style='position: absolute; width: 32px; height: 32px; padding: 0px;' class='{$type}'><img border='0' src='img/icons/{$item["icon"]}.png' onmouseover=\"Tip('{$enchant}{$augmented}{$name} {$addname}{$count} {$grade} &lt;br />{$item_type} / {$hands}&lt;br /> &lt;Weapon Specifications>&lt;br />P. Atk. : {$grp['patt']}&lt;br />M. Atk. : {$grp['matt']}&lt;br />Atk. Spd. : {$grp['speed']}&lt;br />Soulshot Used : X {$grp['SS_count']}&lt;br />Spiritshot Used : X {$grp['SPS_count']}&lt;br />&lt;Augmentation Effects>&lt;br />{$augment_effect}&lt;br /> {$desc}&lt;br />$element', FONTCOLOR, '#FFFFFF',BGCOLOR, '#406072', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold')\" alt=\"\" /></div>";
+}
+function buildArmor($inv, $item)
+{
+	global $q, $sql, $webdb;
+	$type = $q[666][$inv['loc_data']];
+	$enchant = $inv['enchant_level'] > 0 ? '+' . $inv['enchant_level'] . ' ' : '';
+	$sql->query("SELECT * FROM item_attributes WHERE itemId='{$inv['item_id']}';");
+	if($sql->num_rows())
+	{
+		$augmented = "Augmeneted ";
+		$effects = "&lt;Augmentation Effects>&lt;br />{$augment_effect}";
+	}
+	else
+	{
+		$augmented = "";
+	}
+	$name = str_replace('\'', '\\\'', $item['name']);
+	$addname = str_replace('\'', '\\\'', $item['addname']);
+	$addname = $addname != '' ? ' - &lt;font color=#333333>' . $addname . '&lt;/font>' : '';
+	if($item["grade"] != 0)
+	{
+		$grade = getGrade($item['grade']);
+		$grade = ' &lt;img border=\\\'0\\\' src=\\\'img/grade/' . $grade . '-grade.png\\\' />';
+	}
+	$item_type = $item['item_type'] != 0 ? ' / ' . $q[665]['a'][$item['item_type']] : '';
+	$sql->query('SELECT * FROM {webdb}.armorgrp WHERE id=\'{item_id}\';', array('webdb' => $webdb, 'item_id' => $item['id']));
+	$grp = $sql->fetchArray();
+	$hands = $q[665]['body'][$grp['body_part']];
+	$desc = ($item['desc'] != '') ? '&lt;br />' . str_replace(array("'", "<"), array("\\'", "&lt;"), $item['desc']) : '';
+
+	$mpbonus = $grp['mpbonus'] > 0 ? '&lt;br /> MP Increase : ' . $grp['mpbonus'] : '';
+	$pdef = $grp['pdef'] > 0 ? '&lt;br /> P. Def. : ' . $grp['pdef'] : '';
+	$mdef = $grp['mdef'] > 0 ? '&lt;br /> M. Def. : ' . $grp['mdef'] : '';
+	$weight = '&lt;br />Weight : ' . $item['weight'];
+	$element = '';
+	$sql->query("SELECT * FROM item_elementals WHERE itemId='{$inv['object_id']}'");
+	while ($ele = $sql->fetchArray())
+	{
+		$element .= drawElement("armor", $ele['elemType'], $ele['elemValue']) . '&lt;br />';
+	}
+	return "<div style='position: absolute; width: 32px; height: 32px; padding: 0px;' class='{$type}'><img border='0' src='img/icons/{$item["icon"]}.png' onmouseover=\"Tip('{$enchant}{$name} {$addname}{$count} {$grade}&lt;br />{$hands}{$item_type}{$mpbonus}{$pdef}{$mdef}{$weight}{$desc}$element', FONTCOLOR, '#FFFFFF',BGCOLOR, '#406072', BORDERCOLOR, '#666666', FONTWEIGHT, 'bold')\" alt=\"\" /></div>";
+}
+function buildMainArmor($inv, $item, $other)
+{
+
 }
 ?>

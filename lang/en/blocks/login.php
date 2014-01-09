@@ -1,25 +1,30 @@
 <?php
-//пароль
-if(!defined('INLANG')){Header("Location: ../../../index.php");}
-$Lang['welcome'] = 'Welcome %s!';
-$Lang['account'] = 'Account';
-$Lang['password'] = 'Password';
-$Lang['login'] = 'Log In';
-$Lang['remember_me'] = 'Remember Me';
-$Lang['vote'] = 'Vote for Server';
-$Lang['admin'] = 'Admin';
-$Lang['contact'] = 'Read Messages';
-$Lang['my_account'] = 'My Account';
-$Lang['write_message'] = 'Write Message';
-$Lang['webpoints'] = 'Webpoints: <a id="wp" href="webpoints.php">%s</a>';
-$Lang['logout'] = 'Logout';
-$Lang['vote_after'] = 'Next vote after';
-$Lang['hours'] = 'Hours';
-$Lang['minutes'] = 'Minutes';
-$Lang['seconds'] = 'Seconds';
-$Lang['register'] = 'Registration';
-$Lang['inbox']='Inbox';
-$Lang['outbox']='Outbox';
-$Lang['in_mes']='%s message(s) in Inbox. %s message(s) unread';
-$Lang['out_mes']='%s message(s)in Outbox.';
+if(!defined('INLANG'))
+{
+	header("Location: ../../../index.php");
+	die();
+}
+
+$Lang['bLogin'] = array(
+	'welcome'		=>	'Welcome %s!',
+	'account'		=>	'Account',
+	'password'		=>	'Password',
+	'login'			=>	'Log In',
+	'remember_me'	=>	'Remember Me',
+	'vote'			=>	'Vote for Server',
+	'admin'			=>	'Admin',
+	'contact'		=>	'Read Messages',
+	'my_account'	=>	'My Account',
+	'write_message'	=>	'Write Message',
+	'webpoints'		=>	'Webpoints: <a id="wp" href="webpoints.php">%s</a>',
+	'logout'		=>	'Logout',
+	'vote_after'	=>	'Next vote after',
+	'hours'			=>	'Hours',
+	'minutes'		=>	'Minutes',
+	'seconds'		=>	'Seconds',
+	'register'		=>	'Registration',
+	'inbox'			=>	'Inbox',
+	'outbox'		=>	'Outbox',
+	'in_mes'		=>	'%s message(s) in Inbox. %s message(s) unread',
+	'out_mes'		=>	'%s message(s)in Outbox.');
 ?>

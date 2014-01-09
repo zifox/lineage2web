@@ -1,38 +1,37 @@
 <?php
 define('INWEB', true);
 require_once ("include/config.php");
-//пароль
 
 head("Home");
-$par['lang']=getLang();
+$par['lang']=getLangName();
 $par['mod']=$user->mod()==true?'true':'false';
 $params = implode(';', $par);
 
 if($cache->needUpdate('index', $params))
 {
     includeLang('index');
-    $parse = $Lang;
-    $gsquery = $sql->query($q[3], array("db" => getConfig('settings', 'webdb', 'l2web')));
+    $parse = getLang('main');
+    $gsquery = $sql->query($q[2], array("webdb" => $webdb));
     $parse['gsrows'] = "";
-    while ($gsrow = $sql->fetch_array($gsquery))
+    while ($gsrow = $sql->fetchArray($gsquery))
     {
-	   $parse['gsrows'] .= $tpl->parsetemplate('index_gsrow', $gsrow, 1);
+	   $parse['gsrows'] .= $tpl->parseTemplate('index_gsrow', $gsrow, 1);
     }
-    $newsq=$sql->query($q[5],  array("db" => getConfig('settings', 'webdb', 'l2web'), "limit" => getConfig('news', 'news_in_index', '10')));
+    $newsq=$sql->query($q[5],  array("webdb" => $webdb, "limit" => getConfig('news', 'news_in_index', '10')));
     $parse['news'] = '';
-    while($news=$sql->fetch_array($newsq))
+    while($news=$sql->fetchArray($newsq))
     {
         $nparse=$news;
         $nparse['desc']=format_body($nparse['desc']);
         if($news['edited_by']!='')
         {
-            $nparse['edited']='Last edited <strong>'.$news['edited'].'</strong> by <strong>'.$news['edited_by'].'</strong>';
+            $nparse['edited']=sprintf(getLang('main','last_edit_by'),$news['edited'], $news['edited_by']);
         }
         if($user->mod())
         {
-            $nparse['add'] = '<a href="news.php?action=add"><img src="img/add.png" alt="'.$Lang['add'].'" title="'.$Lang['add'].'" border="0" /></a>';
-            $nparse['edit'] = '<a href="news.php?action=edit&amp;id='.$news['news_id'].'"><img src="img/edit.png" alt="'.$Lang['edit'].'" title="'.$Lang['edit'].'" border="0" /></a>';
-            $nparse['delete'] = '<a href="news.php?action=delete&amp;id='.$news['news_id'].'"><img src="img/delete.png" alt="'.$Lang['delete'].'" title="'.$Lang['delete'].'" border="0" /></a>';
+            $nparse['add'] = '<a href="news.php?action=add"><img src="img/add.png" alt="'.getLang('main','add').'" title="'.getLang('main','add').'" border="0" /></a>';
+            $nparse['edit'] = '<a href="news.php?action=edit&amp;id='.$news['news_id'].'"><img src="img/edit.png" alt="'.getLang('main','edit').'" title="'.getLang('main','edit').'" border="0" /></a>';
+            $nparse['delete'] = '<a href="news.php?action=delete&amp;id='.$news['news_id'].'"><img src="img/delete.png" alt="'.getLang('main','delete').'" title="'.getLang('main','delete').'" border="0" /></a>';
         }
         else
         {
@@ -50,16 +49,16 @@ if($cache->needUpdate('index', $params))
         {
             $nparse['thumb']=$md5[0].'_thumb.'.$md5[1];
         }
-        $nparse['read_more']='<a href="news.php?id='. $news['news_id'].'">'.$Lang['read_more'].'</a>';
-        $parse['news'].=$tpl->parsetemplate('news_row', $nparse, 1);
+        $nparse['read_more']='<a href="news.php?id='. $news['news_id'].'">'.getLang('main','read_more').'</a>';
+        $parse['news'].=$tpl->parseTemplate('news_row', $nparse, true);
     }
-    if(!$sql->num_rows())
+    if(!$sql->numRows())
     {
-        $parse['news']='Currently there isn\'t any news!';
+        $parse['news']=getLang('main','no_news');
         if($user->mod())
-            $parse['news'].='<br /><a href="news.php?action=add"><img src="img/add.png" alt="'.$Lang['add'].'" title="'.$Lang['add'].'" border="0" /></a>';
+            $parse['news'].='<br /><a href="news.php?action=add"><img src="img/add.png" alt="'.getLang('main','add').'" title="'.getLang('main','add').'" border="0" /></a>';
     }
-    $content=$tpl->parsetemplate('index2', $parse,1);
+    $content=$tpl->parseTemplate('index2', $parse,true);
     $cache->updateCache('index', $content, $params);
     
     echo $content;
