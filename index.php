@@ -1,71 +1,85 @@
 <?php
-define('INWEB', true);
-require_once ("include/config.php");
+
+define('L2WEB', true);
+require_once ("include/core.php");
 
 head("Home");
-$par['lang']=getLangName();
-$par['mod']=$user->mod()==true?'true':'false';
-$params = implode(';', $par);
 
-if($cache->needUpdate('index', $params))
+$par['lang'] = User::getVar('lang');
+$par['mod'] = User::isMod() == true ? 'true' : 'false';
+
+if (Cache::check('index', implode(';', $par)))
 {
-    includeLang('index');
-    $parse = getLang('main');
-    $gsquery = $sql->query($q[2], array("webdb" => $webdb));
+    $parse = $Lang;
+
     $parse['gsrows'] = "";
-    while ($gsrow = $sql->fetchArray($gsquery))
+    foreach ($GS as $gsrow)
     {
-	   $parse['gsrows'] .= $tpl->parseTemplate('index_gsrow', $gsrow, 1);
+            $parse['gsrows'] .= TplParser::parse('index_gsrow', $gsrow, 1);
     }
-    $newsq=$sql->query($q[5],  array("webdb" => $webdb, "limit" => getConfig('news', 'news_in_index', '10')));
+
     $parse['news'] = '';
-    while($news=$sql->fetchArray($newsq))
+    if (Config::get('news', 'enabled', '0'))
     {
-        $nparse=$news;
-        $nparse['desc']=format_body($nparse['desc']);
-        if($news['edited_by']!='')
+        
+        $lAdd = '<a href="news.php?a=a"><img src="img/add.png" alt="' . $Lang['add'] . '" title="' . $Lang['add'] . '" /></a>';
+        $lEdit = '<a href="news.php?a=e&amp;id=%d"><img src="img/edit.png" alt="' . $Lang['edit'] . '" title="' . $Lang['edit'] . '" /></a>';
+        $lDelete = '<a href="news.php?a=d&amp;id=%d"><img src="img/delete.png" alt="' . $Lang['delete'] . '" title="' . $Lang['delete'] . '" /></a>';
+        $lRead = '<a href="news.php?a=v&amp;id=%d">' . $Lang['read_more'] . '</a>';
+        $qry = $sql[0]->query('GET_NEWS_LIMITED', array("limit" => Config::get('news', 'news_in_index', '10')));
+        while ($news = SQL::fetchArray($qry))
         {
-            $nparse['edited']=sprintf(getLang('main','last_edit_by'),$news['edited'], $news['edited_by']);
+            $nparse = $news;
+            $nparse['img_title'] = $Lang['img_title'];
+            $nparse['content'] = html_entity_decode($news['desc']);
+            $parse['dots'] = '...';
+            if ($news['editBy'] != '')
+            {
+                $nparse['edited'] = sprintf($Lang['last_edit_by'], $news['editTime'], $news['editBy']);
+            }
+            if (User::isMod())
+            {
+                $nparse['add'] = $lAdd;
+                $nparse['edit'] = sprintf($lEdit, $news['id']);
+                $nparse['delete'] = sprintf($lDelete, $news['id']);
+            }
+            else
+            {
+                $nparse['add'] = '';
+                $nparse['edit'] = '';
+                $nparse['delete'] = '';
+            }
+            $md5 = explode(".", $news['image']);
+            if (!file_exists('news/' . $md5[0] . '.' . $md5[1]))
+            {
+                $nparse['image'] = 'image.png';
+                $nparse['thumb'] = 'image_thumb.png';
+            }
+            else
+            {
+                $nparse['thumb'] = $md5[0] . '_thumb.' . $md5[1];
+            }
+            $nparse['read_more'] = sprintf($lRead, $news['id']);
+            $parse['news'] .= TplParser::parse('news_row', $nparse, true);
         }
-        if($user->mod())
+        if (!SQL::numRows())
         {
-            $nparse['add'] = '<a href="news.php?action=add"><img src="img/add.png" alt="'.getLang('main','add').'" title="'.getLang('main','add').'" border="0" /></a>';
-            $nparse['edit'] = '<a href="news.php?action=edit&amp;id='.$news['news_id'].'"><img src="img/edit.png" alt="'.getLang('main','edit').'" title="'.getLang('main','edit').'" border="0" /></a>';
-            $nparse['delete'] = '<a href="news.php?action=delete&amp;id='.$news['news_id'].'"><img src="img/delete.png" alt="'.getLang('main','delete').'" title="'.getLang('main','delete').'" border="0" /></a>';
+                $parse['news'] = $Lang['no_news'];
+                if (User::isMod())
+                {
+                    $parse['news'] .= '<br />' . $lAdd;
+                }
         }
-        else
-        {
-            $nparse['add'] = '';
-            $nparse['edit'] = '';
-            $nparse['delete'] = '';
-        }
-        $md5=explode(".",$news['image']);
-        if(!file_exists('news/'.$md5[0].'.'.$md5[1]))
-        {
-            $nparse['image']='image.png';
-            $nparse['thumb']='image_thumb.png';
-        }
-        else
-        {
-            $nparse['thumb']=$md5[0].'_thumb.'.$md5[1];
-        }
-        $nparse['read_more']='<a href="news.php?id='. $news['news_id'].'">'.getLang('main','read_more').'</a>';
-        $parse['news'].=$tpl->parseTemplate('news_row', $nparse, true);
     }
-    if(!$sql->numRows())
-    {
-        $parse['news']=getLang('main','no_news');
-        if($user->mod())
-            $parse['news'].='<br /><a href="news.php?action=add"><img src="img/add.png" alt="'.getLang('main','add').'" title="'.getLang('main','add').'" border="0" /></a>';
-    }
-    $content=$tpl->parseTemplate('index2', $parse,true);
-    $cache->updateCache('index', $content, $params);
-    
+    $content = TplParser::parse('index2', $parse, true);
+    Cache::update($content);
+
     echo $content;
 }
 else
 {
-    echo $cache->getCache('index', $params);
+    echo Cache::get();
 }
 foot();
+
 ?>

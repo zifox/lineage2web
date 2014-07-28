@@ -1,19 +1,19 @@
 <?php
-if(!defined('IN_BLOCK'))
+if(!defined('CORE'))
 {
 	header("Location: ../index.php");
 	exit();
 }
 $cachefile = 'blocks/donate';
-if($cache->needUpdate($cachefile))
+if(Cache::check($cachefile))
 {
-	$content = $tpl->parseTemplate('blocks/donate', null, true);
-	$cache->updateCache($cachefile, $content);
+	$content = TplParser::parse('blocks/donate', $Lang, true);
+	Cache::update($content);
 	global $content;
 }
 else
 {
-	$content = $cache->getCache($cachefile);
+	$content = Cache::get();
 	global $content;
 }
 ?>

@@ -1,311 +1,305 @@
 <?php
-define('INWEB', true);
-require_once ("include/config.php");
-//пароль
-head("News");
+define('L2WEB', true);
+require_once ("include/core.php");
 
-$maxfilesize = 1024 * 1024 * 1024 * 5; // 5Mb
+User::loggedInOrReturn('news.php');
+head($Lang['news']);
 
-$allowed_types = array("image/gif" => "gif", "image/pjpeg" => "jpg", "image/jpeg" => "jpg", "image/jpg" => "jpg", "image/png" => "png" // Add more types here if you like
-	);
-includeLang('index');
-$action = addslashes($_GET['action']);
-$id = (int)$_GET['id'] + 0;
-if (! is_numeric($id) || $id <= 0) $id = null;
+$maxfilesize = 1024 * 1024 * 1024 * 5;
+
+$allowed_types = array(
+	"image/gif" => "gif",
+	"image/pjpeg" => "jpg",
+	"image/jpeg" => "jpg",
+	"image/jpg" => "jpg",
+	"image/png" => "png");
+$action = isset($_GET['a']) ? filter_input(INPUT_GET, 'a') : '';
+$id = isset($_GET['id']) ? fInt(filter_input(INPUT_GET, 'id')) + 0 : 0;
+if (!is_numeric($id) || $id <= 0) { $id = null; }
 $parse = $Lang;
 
 switch ($action)
 {
-	case 'add':
-		if ($user->mod())
+	case 'a':
+		if (User::isMod())
 		{
-			if ($_POST['add'])
+			if (isset($_POST['title']))
 			{
-                $name=getVar('name');
-                $desc=getVar('desc');
+				$name = fString(filter_input(INPUT_POST, 'title'));
+				$desc = fString(filter_input(INPUT_POST, 'desc'));
 				$error = 0;
-				if ($name=='')
+				if ($name == '')
 				{
-					echo 'Invalid or empty name! <br />';
+					msg($Lang['error'], $Lang['invalid_title'], 'error');
 					$error++;
 				}
-				if ($desc=='')
+				if ($desc == '')
 				{
-					echo 'Invalid or empty Content!  <br />';
+					msg($Lang['error'], $Lang['invalid_content'], 'error');
 					$error++;
 				}
-                if($_FILES['file']['name']!=null)
-                {
-				    if ($_FILES['file']['size'] > $maxfilesize)
-				    {
-					   echo 'File is too large! <br />';
-					   $error++;
-				    }
-				    if ($_FILES['file']['name'] == '')
-				    {
-				    	echo 'File is not specified! <br />';
-					   $error++;
-				    }
-				    if (! array_key_exists($_FILES['file']['type'], $allowed_types) && $_FILES['file']['name'] != '')
-				    {
-					   echo 'Wrong file type! <br />';
-					   $error++;
-				    }
-                }
+				if ($_FILES['file']['name'] != null)
+				{
+					if ($_FILES['file']['size'] > $maxfilesize)
+					{
+						msg($Lang['error'], $Lang['file_too_large'], 'error');
+						$error++;
+					}
+					if ($_FILES['file']['name'] == '')
+					{
+						msg($Lang['error'], $Lang['empty_file'], 'error');
+						$error++;
+					}
+					if (!array_key_exists($_FILES['file']['type'], $allowed_types) && $_FILES['file']['name'] != '')
+					{
+						msg($Lang['error'], $Lang['wrong_filetype'], 'error');
+						$error++;
+					}
+				}
 				if ($error === 0)
 				{
 					$descdb = substr($desc, 0, 500);
 					//$desc=str_replace('\r\n','<br />');
-					$ext = $allowed_types[$_FILES['file']['type']];
-                    $md5 = substr(md5($name .  time()), 0, 12);
-					$sql->query($q[10], array('db' => $webdb, 'page' => 'index'));
-					$sql->query($q[9], array("db" => $webdb, "desc" => $descdb, "name" => $name, "author" => $_SESSION['account'], "date" => date('Y-m-d H:i:s'), "image" => $md5 . '.' . $ext));
-					//$id = $sql->result($sql->query("SELECT LAST_INSERT_ID()"));
-                    if($sql->row_count)
-                    {
-					if (file_exists('news/' . $md5 . '.html')) unlink('news/' . $md5 . '.html');
-					file_put_contents('news/' . $md5 . '.html', $desc);
+					$ext = $_FILES['file']['name'] != '' ? $allowed_types[$_FILES['file']['type']] : '';
+					$md5 = substr(md5($name . time()), 0, 12);
+					$sql[0]->query('RECACHE_CACHE_BY_PAGE', array('page' => 'index'));
+					$qry = $sql[0]->query('ADD_NEW', array(
+						"desc" => $descdb,
+						"title" => $name,
+						"author" => User::getUser(),
+						"date" => date('Y-m-d H:i:s'),
+						"image" => $md5 . '.' . $ext));
+					if (SQL::numRows())
+					{
+						if (file_exists('news/' . $md5 . '.html'))
+							unlink('news/' . $md5 . '.html');
+						file_put_contents('news/' . $md5 . '.html', $desc);
 
-					if (file_exists('news/' . $md5 . '.' . $ext)) unlink('news/' . $md5 . '.' . $ext);
-                    if($_FILES['file'])
-                    {
-					   move_uploaded_file($_FILES['file']['tmp_name'], 'news/' . $md5 . '.' . $ext);
-					   convertPic($md5, $ext, 150, 150);
-                    }
-					msg('Success','News added');
-                    }
-                    else
-                    {
-                        msg('Error','Something went wrong');
-                    }
-                        
+						if (file_exists('news/' . $md5 . '.' . $ext))
+							unlink('news/' . $md5 . '.' . $ext);
+						if ($_FILES['file']['name'] != '')
+						{
+							move_uploaded_file($_FILES['file']['tmp_name'], 'news/' . $md5 . '.' . $ext);
+							convertPic($md5, $ext, 150, 150);
+						}
+						msg($Lang['success'], $Lang['news_added']);
+					}
+					else
+					{
+						msg($Lang['error'], $Lang['something_wrong'], 'error');
+					}
+
 				}
 				else
 				{
-					echo 'Please fix errors and try again!';
+					msg($Lang['error'], $Lang['fix_errors'], 'error');
 				}
 
 			}
-            ?>
-            <form name="news" action="news.php?action=add" method="post"  enctype="multipart/form-data">
-            <table>
-                <tr><td>
-                    <label for="name">Title:
-                        <input type="text" value="" title="News Title" accesskey="t" style="border: 0pt none; background: url('img/login_text.gif') no-repeat scroll 0% 0% transparent; color: rgb(217, 222, 218); width: 150px;" size="50" id="name" name="name" />
-                    </label>
-                </td></tr>
-                <tr><td>
-                    <label for="desc">
-                        <?php textbbcode("news","desc");?>
-                    </label>
-                </td></tr>
-                <tr><td>
-                    <label for="file">Image: 
-                        <input type="file" value="" title="Image" accesskey="f" style="border: 0pt none; background: url('img/login_text.gif') no-repeat scroll 0% 0% transparent; color: rgb(217, 222, 218); width:50px;" size="50" id="file" name="file" />
-                    </label>
-                </td></tr>
-                <tr><td>
-                    <input type="submit" value="Submit" />
-                    <input name="add" type="hidden" value="add" />
-                </td></tr>
-            </table>
-            </form>
-            <?php
+			$parse['a'] = 'a';
+			$parse['titleV'] = htmlspecialchars(html_entity_decode(fString(filter_input(INPUT_POST, 'title'))));
+			$parse['content'] = htmlspecialchars(html_entity_decode(fString(filter_input(INPUT_POST, 'desc'))));
+			$parse['bSubmit'] = button('submit');
+			TplParser::parse('news', $parse);
 		}
 		break;
-	case 'edit':
-		if (isset($id) && $user->mod() && $id != null)
+	case 'e':
+		if (isset($id) && User::isMod() && $id != null)
 		{
-			if ($_POST['edit'])
+			if ($_POST)
 			{
 				$error = 0;
-				if (! isset($_POST['name']) || $_POST['name'] == '')
+				if (!isset($_POST['title']) || $_POST['title'] == '')
 				{
-					echo 'Invalid or empty name! <br />';
+					msg($Lang['error'], $Lang['invalid_title'], 'error');
 					$error++;
 				}
-				if (! isset($_POST['desc']) || $_POST['desc'] == '')
+				if (!isset($_POST['desc']) || $_POST['desc'] == '')
 				{
-					echo 'Invalid or empty Content!  <br />';
+					msg($Lang['error'], $Lang['something_content'], 'error');
 					$error++;
 				}
-                if($_FILES['file'])
-                {
-				    if ($_FILES['file']['size'] > $maxfilesize)
-				    {
-					   echo 'File is too large! <br />';
-					   $error++;
-				    }
-				    if (! array_key_exists($_FILES['file']['type'], $allowed_types) && $_FILES['file']['name'] != '')
-				    {
-					   echo 'Wrong file type! <br />';
-					   $error++;
-				    }
-                }
+				if ($_FILES['file'])
+				{
+					if ($_FILES['file']['size'] > $maxfilesize)
+					{
+						msg($Lang['error'], $Lang['file_too_large'], 'error');
+						$error++;
+					}
+					if (!array_key_exists($_FILES['file']['type'], $allowed_types) && $_FILES['file']['name'] != '')
+					{
+						msg($Lang['error'], $Lang['wrong_filetype'], 'error');
+						$error++;
+					}
+				}
 				if ($error === 0)
 				{
-					$name = $sql->escape($_POST['name']);
-					$desc = $_POST['desc'];
-					$desc = str_replace(array('\r\n'), '<br />', $desc);
-					$desc = str_replace(array('\n'), '<br />', $desc);
-					$desc = str_replace(array('\r'), '<br />', $desc);
-					$newsq = $sql->query(6, array("db" => $webdb, "news_id" => $id));
-					if ($sql->num_rows($newsq))
+					$newsq = $sql[0]->query('GET_NEW_BY_ID', array("id" => $id));
+					if (SQL::numRows($newsq))
 					{
-						$news = $sql->fetch_array($newsq);
+						$news = SQL::fetchArray($newsq);
+						$name = htmlspecialchars(html_entity_decode(fString(filter_input(INPUT_POST, 'title'))));
+						$desc = htmlspecialchars(html_entity_decode(fString(filter_input(INPUT_POST, 'desc'))));
+						$desc = str_replace(array('\r\n'), '<br />', $desc);
+						$desc = str_replace(array('\n'), '<br />', $desc);
+						$desc = str_replace(array('\r'), '<br />', $desc);
 						$md5 = explode(".", $news['image']);
-						$md5 = $md5[0];
-						$ext = $allowed_types[$_FILES['file']['type']];
-						if (file_exists('news/' . $md5 . '.html'))
+						if (isset($_FILES['file']) && $_FILES['file']['name'] != '')
 						{
-							unlink('news/' . $md5 . '.html');
+							$ext = $allowed_types[$_FILES['file']['type']];
 						}
-						file_put_contents('news/' . $md5 . '.html', $desc);
-						$desc = $sql->escape(substr($desc, 0, 500));
-						$sql->query($q[10], array('db' => $webdb, 'page' => 'index'));
-						$sql->query($q[8], array("db" => $webdb, "news_id" => $id, "desc" => $desc, "name" => $name, "date" => date('Y-m-d H:i:s'), "editor" => $_SESSION['account']));
-						if ($_FILES['file'])
+						else
 						{
-							if (file_exists('news/' . $md5 . '.' . $ext)) unlink('news/' . $md5 . '.' . $ext);
-							move_uploaded_file($_FILES['file']['tmp_name'], 'news/' . $md5 . '.' . $ext);
-							convertPic($md5, $ext, 150, 150);
+							$ext = $md5[1];
+						}
+						if (file_exists('news/' . $md5[0] . '.html'))
+						{
+							unlink('news/' . $md5[0] . '.html');
+						}
+						file_put_contents('news/' . $md5[0] . '.html', $desc);
+						$desc = substr($desc, 0, 500);
+						$sql[0]->query('RECACHE_CACHE_BY_PAGE', array('page' => 'index'));
+						$sql[0]->query('UPDATE_NEW_BY_ID', array(
+							"id" => $id,
+							"desc" => $desc,
+							"title" => $name,
+							"date" => date('Y-m-d H:i:s'),
+							"editor" => $_SESSION['account']));
+						if (isset($_FILES['file']) && $_FILES['file']['tmp_name'] != '')
+						{
+							if (file_exists('news/' . $md5[0] . '.' . $ext))
+                                                        {
+								unlink('news/' . $md5[0] . '.' . $ext);
+                                                        }
+							move_uploaded_file($_FILES['file']['tmp_name'], 'news/' . $md5[0] . '.' . $ext);
+							convertPic($md5[0], $ext, 150, 150);
 
 						}
-						echo 'News updated!';
+						msg($Lang['success'], $Lang['news_updated']);
+					}
+					else
+					{
+						msg($Lang['error'], $Lang['news_not_found'], 'error');
 					}
 				}
 				else
 				{
-					echo 'Please fix errors and try again!';
+					echo msg($Lang['error'], $Lang['fix_errors'], 'error');
 				}
 
 			}
 
-			$newsq = $sql->query($q[6], array("db" => $webdb, "news_id" => $id));
-			if ($sql->num_rows($newsq))
+			$newsq = $sql[0]->query('GET_NEW_BY_ID', array("id" => $id));
+			if (SQL::numRows($newsq))
 			{
-				$news = $sql->fetch_array($newsq);
-                $md5 = explode(".", $news['image']);
+				$news = SQL::fetchArray($newsq);
+				$md5 = explode(".", $news['image']);
+
 				$desc = file_exists('news/' . $md5[0] . '.html') ? file_get_contents('news/' . $md5[0] . '.html') : $news['desc'];
-                $desc=str_replace('\\r\\n',"\n",$desc);
-                //$desc = nl2br($desc);
-                ?>
-                <form name="news" action="news.php?action=edit&amp;id=<?php echo $id; ?>" method="post"  enctype="multipart/form-data">
-                <table>
-                <tr><td>
-                    <label for="name">Title:
-                        <input type="text" value="<?php echo $news['name']; ?>" title="News Title" accesskey="t" style="border: 0pt none; background: url('img/login_text.gif') no-repeat scroll 0% 0% transparent; color: rgb(217, 222, 218); width: 150px;" size="50" id="name" name="name" />
-                    </label>
-                </td></tr>
-                <tr><td>
-                    <label for="desc">
-                        <?php textbbcode("news","desc",$desc);?>
-                    </label>
-                </td></tr>
-                <tr><td>
-                    <label for="file">Image: 
-                        <input type="file" value="" title="Image" accesskey="f" style="border: 0pt none; background: url('img/login_text.gif') no-repeat scroll 0% 0% transparent; color: rgb(217, 222, 218); width:50px;" size="50" id="file" name="file" />
-                    </label>
-                </td></tr>
-                <tr><td>
-                    <input type="submit" value="Submit" />
-                    <input name="edit" type="hidden" value="edit" />
-                </td></tr>
-                </table>
-                </form>
-                <?php
+				//$desc = str_replace('\\r\\n', "\n", $desc);
+				//$desc = nl2br($desc);
+				$parse['a'] = 'e';
+				$parse['id'] = '&amp;id=' . $id;
+				$parse['titleV'] = $news['title'];
+				$parse['content'] = htmlspecialchars(html_entity_decode($desc));
+				$parse['bSubmit'] = button('submit');
+				TplParser::parse('news', $parse);
 			}
 		}
 		break;
-	case 'delete':
+	case 'd':
 
-		if (isset($id) && isset($_GET['confirm']) && $id != null && $user->mod())
+		if (isset($id) && isset($_GET['c']) && $id != null && User::isMod())
 		{
-			$news = $sql->query($q[6], array("db" => $webdb, "news_id" => $id));
-			if ($sql->num_rows($news))
+			$news = $sql[0]->query('GET_NEW_BY_ID', array("id" => $id));
+			if (SQL::numRows($news))
 			{
-				$new = $sql->fetch_array($news);
-				$sql->query($q[7], array("db" => $webdb, "news_id" => $id));
+				$new = SQL::fetchArray($news);
+				$sql[0]->query('DELETE_NEW_BY_ID', array("id" => $id));
 				$md = explode(".", $new['image']);
-                $ext = $md[1];
+				$ext = $md[1];
 				$md5 = $md[0];
-				
+
 				if (file_exists('news/' . $md5 . '.html'))
 				{
 					if (unlink('news/' . $md5 . '.html'))
 					{
-						echo 'File <b>news/' . $md5 . '.html</b> deleted!<br />';
+						echo sprintf($Lang['file_f_deleted'], $md5 . '.html');
 					}
 				}
 				if (file_exists('news/' . $md5 . '.' . $ext))
 				{
 					if (unlink('news/' . $md5 . '.' . $ext))
 					{
-						echo 'File <b>news/' . $md5 . '.' . $ext . '</b> deleted!<br />';
+						echo sprintf($Lang['file_f_deleted'], 'news/' . $md5 . '.' . $ext);
 					}
 				}
 				if (file_exists('news/' . $md5 . '_thumb.' . $ext))
 				{
 					if (unlink('news/' . $md5 . '_thumb.' . $ext))
 					{
-						echo 'File <b>news/' . $md5 . '_thumb.' . $ext . '</b> deleted!<br />';
+						echo sprintf($Lang['file_f_deleted'], 'news/' . $md5 . '_thumb.' . $ext);
 					}
 				}
-				$sql->query($q[10], array('db' => $webdb, 'page' => 'index'));
-				echo 'Deleted from DataBase!';
+				$sql[0]->query('RECACHE_CACHE_BY_PAGE', array('page' => 'index'));
+				msg($Lang['success'], $Lang['news_deleted']);
 			}
 			else
 			{
-				echo 'Not Found!';
+				msg($Lang['error'], $Lang['news_not_found'], 'error');
 			}
 		}
 		else
 		{
-			if ($user->mod())
+			if (User::isMod())
 			{
-                echo 'Are you sure you want to delete this new?<br />';
-				echo '<a href="news.php?action=delete&amp;confirm=1&amp;id=' . $id . '">';
-				echo menubutton($Lang['delete']);
+				echo $Lang['are_u_sure_news'];
+				echo '<br/><a href="news.php?a=d&amp;c=1&amp;id=' . $id . '">';
+				echo menubutton('delete');
 				echo '</a>';
 			}
 		}
 		break;
 	default:
+		$lAdd = '<a href="news.php?a=a"><img src="img/add.png" alt="' . $Lang['add'] . '" title="' . $Lang['add'] . '" /></a>';
+		$lEdit = '<a href="news.php?a=e&amp;id=%d"><img src="img/edit.png" alt="' . $Lang['edit'] . '" title="' . $Lang['edit'] . '" /></a>';
+		$lDelete = '<a href="news.php?a=d&amp;id=%d"><img src="img/delete.png" alt="' . $Lang['delete'] . '" title="' . $Lang['delete'] . '" /></a>';
+		$lRead = '<a href="news.php?a=v&amp;id=%d">' . $Lang['read_more'] . '</a>';
 		if (isset($id) && $id != null)
 		{
-			$new = $sql->query($q[6], array("db" => $webdb, "news_id" => $id));
-			if ($sql->num_rows($new))
+			$new = $sql[0]->query('GET_NEW_BY_ID', array("id" => $id));
+			if (SQL::numRows())
 			{
-				$newid = $sql->fetch_array($new);
+				$newid = SQL::fetchArray();
 
 				$md5 = explode(".", $newid['image']);
-                $ext=$md5[1];
-				$md5 = $md5[0];
-
-				if (file_exists('news/' . $md5 . '.html'))
+				$ext = $md5[1];
+				$nid = $md5[0];
+				if (file_exists('news/' . $nid . '.html'))
 				{
 					$parse += $newid;
-                    if(!file_exists('news/'.$md5.'.'.$ext))
-                    {
-                        $parse['image']='image.png';
-                        $parse['thumb']='image.png';
-                    }
-                    else
-                    {
-                        $parse['thumb'] = $newid['image'];
-                    }
-					$parse['desc'] = format_body(file_get_contents('news/' . $md5 . '.html'), 'false');
-					$parse['read_more'] = '';
-					
-					if ($newid['edited_by'] != '')
+                    $parse['date']=$newid['date'];
+					if (!file_exists('news/' . $nid . '.' . $ext))
 					{
-						$parse['edited'] = 'Last edited <strong>' . $newid['edited'] . '</strong> by <strong>' . $newid['edited_by'] . '</strong>';
+						$parse['image'] = 'image.png';
 					}
-					if ($user->mod())
+					else
 					{
-						$parse['add'] = '<a href="news.php?action=add"><img src="img/add.png" alt="' . $Lang['add'] . '" title="' . $Lang['add'] . '" border="0" /></a>';
-						$parse['edit'] = '<a href="news.php?action=edit&amp;id=' . $newid['news_id'] . '"><img src="img/edit.png" alt="' . $Lang['edit'] . '" title="' . $Lang['edit'] . '" border="0" /></a>';
-						$parse['delete'] = '<a href="news.php?action=delete&amp;id=' . $newid['news_id'] . '"><img src="img/delete.png" alt="' . $Lang['delete'] . '" title="' . $Lang['delete'] . '" border="0" /></a>';
+                                                $parse['image'] = $newid['image'];
+					}
+                    $parse['content'] = html_entity_decode(file_exists('news/' . $nid . '.html') ? file_get_contents('news/' . $nid . '.html') : $newid['desc']);
+					$parse['title']=$newid['title'];
+                    $parse['read_more'] = '';
+
+					if ($newid['editBy'] != '')
+					{
+						$parse['edited'] = sprintf($Lang['last_edit'], $newid['editTime'], $newid['editBy']);
+					}
+					if (User::isMod())
+					{
+						$parse['add'] = $lAdd;
+						$parse['edit'] = sprintf($lEdit, $newid['id']);
+						$parse['delete'] = sprintf($lDelete, $newid['id']);
 					}
 					else
 					{
@@ -313,41 +307,55 @@ switch ($action)
 						$parse['edit'] = '';
 						$parse['delete'] = '';
 					}
-					$tpl->parsetemplate('news_row', $parse);
+					TplParser::parse('news_row', $parse);
 				}
-                else
-                {
-                    echo 'Not Found';
-                }
+				else
+				{
+					msg($Lang['error'], $Lang['news_not_found'], 'error');
+					if (User::isMod())
+					{
+						echo $Lang['are_u_sure_news'];
+						echo '<br/><a href="news.php?a=d&amp;c=1&amp;id=' . $id . '">';
+						echo menubutton('delete');
+						echo '</a>';
+					}
+				}
+			}
+			else
+			{
+				msg($Lang['error'], $Lang['news_not_found'], 'error');
 			}
 		}
 		else
 		{
-			$newsq = $sql->query($q[5], array("db" => $webdb, "limit" => $Config['news_limit']));
-			while ($news = $sql->fetch_array($newsq))
+			$newsq = $sql[0]->query('GET_NEWS_LIMITED', array("limit" => Config::get('news', 'news_limit', 10)));
+            //unset($parse);
+			while ($news = SQL::fetchArray($newsq))
 			{
-				$parse = $Lang;
-				$parse += $news;
-
-				$parse['read_more'] = '<a href="news.php?id=' . $news['news_id'] . '">' . $Lang['read_more'] . '</a>';
+			 //$parse=$Lang;
+				//$parse += $news;
+                $parse['content']=html_entity_decode($news['desc']);
+                $parse['title']=$news['title'];
+				$parse['read_more'] = sprintf($lRead, $news['id']);
+				$parse['dots'] = '...';
 				$md5 = explode(".", $news['image']);
-                if(!file_exists('news/'.$md5[0].'_thumb.'.$md5[1]))
-                {
-                    $parse['thumb']='image_thumb.png';
-                }
-                else
-                {
-				    $parse['thumb'] = $md5[0] . '_thumb.' . $md5[1];
-                }
-				if ($news['edited_by'] != '')
+				if (!file_exists('news/' . $md5[0] . '_thumb.' . $md5[1]))
 				{
-					$parse['edited'] = 'Last edited <strong>' . $news['edited'] . '</strong> by <strong>' . $news['edited_by'] . '</strong>';
+					$parse['thumb'] = 'image_thumb.png';
 				}
-				if ($user->mod())
+				else
 				{
-					$parse['add'] = '<a href="news.php?action=add"><img src="img/add.png" alt="' . $Lang['add'] . '" title="' . $Lang['add'] . '" border="0" /></a>';
-					$parse['edit'] = '<a href="news.php?action=edit&amp;id=' . $news['news_id'] . '"><img src="img/edit.png" alt="' . $Lang['edit'] . '" title="' . $Lang['edit'] . '" border="0" /></a>';
-					$parse['delete'] = '<a href="news.php?action=delete&amp;id=' . $news['news_id'] . '"><img src="img/delete.png" alt="' . $Lang['delete'] . '" title="' . $Lang['delete'] . '" border="0" /></a>';
+					$parse['thumb'] = $md5[0] . '_thumb.' . $md5[1];
+				}
+				if ($news['editBy'] != '')
+				{
+					$parse['edited'] = sprintf($Lang['last_edit'], $news['editTime'], $news['editBy']);
+				}
+				if (User::isMod())
+				{
+					$parse['add'] = $lAdd;
+					$parse['edit'] = sprintf($lEdit, $news['id']);
+					$parse['delete'] = sprintf($lDelete, $news['id']);
 				}
 				else
 				{
@@ -355,7 +363,7 @@ switch ($action)
 					$parse['edit'] = '';
 					$parse['delete'] = '';
 				}
-				$tpl->parsetemplate('news_row', $parse);
+				TplParser::parse('news_row', $parse);
 			}
 		}
 		break;

@@ -1,40 +1,33 @@
 <?php
-if(!defined('IN_BLOCK'))
+if(!defined('CORE'))
 {
 	header("Location: ../index.php");
 	exit();
 }
 
-$par['lang'] = getLangName();
-$par['use_cookie'] = isset($_COOKIE['lang']) ? 'true' : 'false';
+$par['lang'] = User::getVar('lang');
 $cachefile = 'bMenu';
-$params = implode(';', $par);
-if($cache->needUpdate($cachefile, $params))
+if(Cache::check($cachefile, implode(';', $par)))
 {
-	$parse = getLang();
-	$parse['home'] = menuButton(getLang('home'));
-	$parse['reg'] = menuButton(getLang('reg'));
-	$parse['connect'] = menuButton(getLang('connect'));
-	$parse['market'] = menuButton(getLang('market'));
-	$parse['forum'] = menuButton(getLang('forum'));
-	$parse['statistic'] = menuButton(getLang('statistic'));
-	$parse['rules'] = menuButton(getLang('rules'));
-	$parse['donate'] = menuButton(getLang('donate'));
-	$parse['skin'] = skinSelector(selectSkin(), true);
-	$parse['langpath'] = $langPath;
-	#TODO: build it dynamicly
-	$parse['lv_border'] = $_COOKIE['lang'] == 1 ? '1' : '0';
-	$parse['en_border'] = $_COOKIE['lang'] == 2 ? '1' : '0';
-	$parse['ru_border'] = $_COOKIE['lang'] == 3 ? '1' : '0';
-	$parse['img_link'] = 'skins/' . selectSkin();
-	$content = $tpl->parseTemplate('blocks/menu', $parse, true);
-	$cache->updateCache($cachefile, $content, $params);
+	$parse = $Lang;
+	$parse['home'] = menuButton('home');
+	$parse['reg'] = menuButton('reg');
+	$parse['connect'] = menuButton('connect');
+	$parse['market'] = menuButton('market');
+	$parse['forum'] = menuButton('forum');
+	$parse['statistic'] = menuButton('statistic');
+	$parse['rules'] = menuButton('rules');
+	$parse['donate'] = menuButton('donate');
+	$parse['theme'] = User::themeSelector(true);
+        $parse['lang_list'] = User::langSelector(true);
+	$content = TplParser::parse('blocks/menu', $parse, true);
+	Cache::update($content);
 
 	global $content;
 }
 else
 {
-	$content = $cache->getCache($cachefile, $params);
+	$content = Cache::get();
 	global $content;
 }
 ?>

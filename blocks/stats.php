@@ -1,81 +1,75 @@
 ﻿<?php
-if (! defined('IN_BLOCK'))
+if (! defined('CORE'))
 {
 	header("Location: ../index.php");
     exit();
 }
-$par['lang']=getLangName();
-$par['mod']=$user->mod()==true?'true':'false';
-$params = implode(';', $par);
+#TODO: move html to template?
+$par['lang']=User::getVar('lang');
+$par['mod']=User::isMod()==true?'true':'false';
 $content = '';
 $cachefile='bStats';
-if($cache->needUpdate($cachefile, $params))
+if(Cache::check($cachefile, implode(';', $par)))
 {
-    $parse = getLang();
-    $imgoffline = '<img src="img/status/offline.png" border="0" alt="' .getLang('offline') . '" title="' . getLang('offline') . '" />';
-    $imgonline = '<img src="img/status/online.png" border="0" alt="' . getLang('online') . '" title="' . getLang('online') . '" />';
-    if(getConfig('server', 'show_ls', '1'))
+    $parse = $Lang;
+    $imgoffline = '<img src="img/status/offline.png" alt="' .$Lang['offline'] . '" title="' .$Lang['offline'] . '" />';
+    $imgonline = '<img src="img/status/online.png" alt="' . $Lang['online'] . '" title="' .$Lang['online'] . '" />';
+    if(Config::get('server', 'show_ls', '1'))
     {
-	   $fp = @fsockopen(getConfig('server', 'ls_ip', '127.0.0.1'), getConfig('server', 'ls_port', '2106'), $errno, $errstr, 2);
-	   if ($fp) $loginonline = $imgonline;
-	   else $loginonline = $imgoffline;
+	   $fp = @fsockopen(Config::get('server', 'ls_ip', '127.0.0.1'), Config::get('server', 'ls_port', '2106'), $errno, $errstr, 0.1);
+           if ($fp) { $loginonline = $imgonline; }
+           else { $loginonline = $imgoffline; }
 
-	   $parse['login_server_status'] = '<tr onmouseover="this.bgColor = \'#505050\';" onmouseout="this.bgColor = \'\'"><td align="left">' . getLang('bStats', 'login_server') . ':</td><td align="left">' . $loginonline . '</td></tr>';
+	   $parse['login_server_status'] = '<tr><td>' . $Lang['login_server'] . ':</td><td>' . $loginonline . '</td></tr>';
     }
 
-    if(getConfig('server', 'show_cs', '1'))
+    if(Config::get('server', 'show_cs', '1'))
     {
-	   $fp = @fsockopen(getConfig('server', 'cs_ip', '127.0.0.1'), getConfig('server', 'cs_port', ''), $errno, $errstr, 2);
-	   if ($fp) $comunityonline = $imgonline;
-	   else $comunityonline = $imgoffline;
+	   $fp = @fsockopen(Config::get('server', 'cs_ip', '127.0.0.1'), Config::get('server', 'cs_port', ''), $errno, $errstr, 0.1);
+           if ($fp) { $comunityonline = $imgonline; }
+           else { $comunityonline = $imgoffline; }
 
-	   $parse['community_server_status'] = '<tr onmouseover="this.bgColor = \'#505050\';" onmouseout="this.bgColor = \'\'"><td align="left">' . getLang('community_server') . ':</td><td align="left">' . $comunityonline . '</td></tr>';
+	   $parse['community_server_status'] = '<tr><td>' . $Lang['community_server'] . ':</td><td>' . $comunityonline . '</td></tr>';
     }
 
     #Total accounts
-    $parse['acc_count'] = $sql->result($sql->query(100, array('db' => getConfig('settings', 'ac_db', 'l2jls'))));
-    $content.=$tpl->parseTemplate('blocks/stats', $parse, 1);
+    $parse['acc_count'] = $sql[1]->result($sql[1]->query('GET_ACC_COUNT'));
+    $parse['gs_rows']='';
 
-    $serverlist = $sql->query(2, array('webdb' => $webdb));
-    while ($server = $sql->fetchArray($serverlist))
+    foreach($GS as $server)
     {
-	   $parse = getLang();
-	   #Total clans
-	   $parse['clan_count'] = $sql->result($sql->query(201, array('db' => $server['database'])));
-
-	   #Total characters
-	   $parse['char_count'] = $sql->result($sql->query(202, array('db' => $server['database'])));
-
-        #Players Online
-	   $parse['online_count'] = $sql->result($sql->query(203, array('db' => $server['database'])));
+	   $parse1 = $Lang;
+	   $parse1['clan_count'] = $sql[SQL_NEXT_ID+$server['id']]->result($sql[SQL_NEXT_ID+$server['id']]->query('CLAN_COUNT'));
+	   $parse1['char_count'] = $sql[SQL_NEXT_ID+$server['id']]->result($sql[SQL_NEXT_ID+$server['id']]->query('CHAR_COUNT'));
+	   $parse1['online_count'] = $sql[SQL_NEXT_ID+$server['id']]->result($sql[SQL_NEXT_ID+$server['id']]->query('ONLINE_COUNT'));
     
-        if($user->logged() && $user->mod())
+        if(User::isMod())
         {
-            $real=$sql->result($sql->query(219, array('db' => $server['database'])));
-            $offline=$sql->result($sql->query(220, array('db' => $server['database'])));
-            $parse['on_off'] = "Tip('(&lt;font color=\'green\'>$real&lt;/font> / &lt;font color=\'red\'>$offline&lt;/font>)', FONTCOLOR, '#FFFFFF',BGCOLOR, '#AAAA00', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold', WIDTH, 50, ABOVE, true)";
+            $real=$sql[SQL_NEXT_ID+$server['id']]->result($sql[SQL_NEXT_ID+$server['id']]->query('ONLINE_COUNT1'));
+            $offline=$sql[SQL_NEXT_ID+$server['id']]->result($sql[SQL_NEXT_ID+$server['id']]->query('OFFLINE_TRADE_COUNT'));
+            //FIX HERE
+            $parse1['on_off'] = "Tip('$real / $offline', FONTCOLOR, '#FFFFFF',BGCOLOR, '#AAAA00', BORDERCOLOR, '#666666', FADEIN, 500, FADEOUT, 500, FONTWEIGHT, 'bold', WIDTH, 50, ABOVE, true)";
         }
 
         #GM Online
-        $parse['online_gm_count'] = $sql->result($sql->query(204, array('db' => $server['database'])));
+        $parse1['online_gm_count'] = $sql[SQL_NEXT_ID+$server['id']]->result($sql[SQL_NEXT_ID+$server['id']]->query('ONLINE_GM_COUNT'));
 
-        $fp = @fsockopen($server['ip'], $server['port'], $errno, $errstr, 0.5);
-        if ($fp)
-            $gameonline = $imgonline;
-        else
-            $gameonline = $imgoffline;
+        $fp = @fsockopen($server['gs_ip'], $server['gs_port'], $errno, $errstr, 0.1);
+        if ($fp) { $gameonline = $imgonline; }
+        else { $gameonline = $imgoffline; }
 
-        $parse['game_server_status'] = '<tr onmouseover="this.bgColor = \'#505050\';" onmouseout="this.bgColor = \'\'"><td align="left">' . $server['name'] . ':</td><td align="left">' . $gameonline . '</td></tr>';
-        $parse['br'] = '<br />';
-        $parse['ID'] = $server['id'];
-        $content .=$tpl->parseTemplate('blocks/stats_serverlist', $parse, 1);
+        $parse1['game_server_status'] = '<tr><td>' . $server['name'] . ':</td><td>' . $gameonline . '</td></tr>';
+        $parse1['br'] = '<br />';
+        $parse1['ID'] = $server['id'];
+        $parse['gs_rows'] .=TplParser::parse('blocks/stats_serverlist', $parse1, 1);
     }
-    $cache->updateCache($cachefile, $content, $params);
+    $content.=TplParser::parse('blocks/stats', $parse, 1);
+    Cache::update($content);
     global $content;
 }
 else
 {
-    $content= $cache->getCache($cachefile, $params);
+    $content= Cache::get();
     global $content;
 }
 ?>
