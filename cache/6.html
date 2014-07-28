@@ -1,79 +1,37 @@
-<h4>Registration</h4>
-<br /><br />
-<ul>
-<li>Account and password can not be empty.</li>
-<li>Account and password can not be less than 6 and Over 15 characters.</li>
-<li>Account and password are written in English letters and numerals.</li>
-<li>Verification code is case in-sensitive and contains leters and digits.</li>
-</ul>
-
-<script type="text/javascript">//<![CDATA[
-function isAlphaNumeric(value)
-{
-  if (value.match(/^[a-zA-Z0-9]+$/))
-    return true;
-  else
-    return false;
-}
-function checkform(f)
-{
-  if (f.account.value=="")
-  {
-    alert("Fill in all fields!");
-    return false;
-  }
-  if (!isAlphaNumeric(f.account.value))
-  {
-    alert("Fill in all fields!");
-    return false;
-  }
-  if (f.password.value=="")
-  {
-    alert("Fill in all fields!");
-    return false;
-  }
-  if (!isAlphaNumeric(f.password.value))
-  {
-    alert("Fill in all fields!");
-    return false;
-  }
-  if (f.password2.value=="")
-  {
-    alert("Fill in all fields!");
-    return false;
-  }
-  if (f.password.value!=f.password2.value)
-  {
-    alert("");
-    return false; 
-  }
-  return true;
-}
-//]]></script>
-<form method="post" action="reg.php" onsubmit="return checkform(this)">
-<table>
- <tr>
-  <td>Log In</td>
-  <td><input type="text" name="account" maxlength="15" /></td>
- </tr>
- <tr>
-  <td>Password</td>
-  <td><input type="password" name="password" maxlength="15" /></td>
- </tr>
- <tr>
-  <td>Repeat Password</td>
-  <td><input type="password" name="password2" maxlength="15" /></td>
- </tr>
- <tr>
-  <td>Verification Image</td>
-  <td><img src="captcha.php" alt="" /></td>
- </tr>
-  <tr>
-  <td>Verification Code</td>
-  <td><input type="text" name="captcha" maxlength="10" /><input type="hidden" name="ref" maxlength="16" value="" /></td>
- </tr>
- <tr>
-  <td colspan="2" style="text-align: center;"><input id="bt_37" type="image"  onmouseout="this.src = './login_b.php?text=   Register&amp;style=press';" onmousemove="this.src = './login_b.php?text=   Register&amp;style=hover';" src="./login_b.php?text=   Register&amp;style=normal" /></td>
- </tr>
-</table>
-</form>
+<div align="center">
+<h4>Server Statistics</h4><hr />
+ | <a href="stat.php?stat=home">Home</a>
+ | <a href="stat.php?stat=online">Online</a> 
+ | <a href="onlinemap.php?type=normal" target="_blank">Map</a> 
+ | <a href="stat.php?stat=castles">Castles</a>
+ | <a href="stat.php?stat=fort">Fortress</a> 
+ | <a href="stat.php?stat=clantop">Top Clans</a> |<br /><hr />
+ | <a href="stat.php?stat=gm">GMs</a>
+ | <a href="stat.php?stat=count">Rich Players</a> 
+ | <a href="stat.php?stat=top_pvp">PvP</a>  
+ | <a href="stat.php?stat=top_pk">PK</a>
+ | <a href="stat.php?stat=top_time"></a> 
+ | <a href="stat.php?stat=maxCp">CP</a>
+ | <a href="stat.php?stat=maxHp">HP</a>
+ | <a href="stat.php?stat=maxMp">MP</a> |<br /><hr />
+ | <a href="stat.php?stat=top">TOP </a>
+ | <a href="stat.php?stat=human">Human</a>
+ | <a href="stat.php?stat=elf">Elf</a>
+ | <a href="stat.php?stat=dark_elf">Dark Elf</a>
+ | <a href="stat.php?stat=orc">Orc</a>
+ | <a href="stat.php?stat=dwarf">Dwarf</a>
+ | <a href="stat.php?stat=kamael">Kamael</a> |<br /><hr />
+   </div>
+   <div>
+   <select name="server">
+   <option onclick="GoTo('stat.php?stat=online&amp;server=0')" >PvPLand</option>
+   </select>
+   </div><h1>Online</h1><hr />
+<table border="1" align="center">
+<thead>
+<tr><td>Place</td><td>Face</td><td><center>Name</center></td><td>Level</td><td><center>Class</center></td><td><center>Clan</center></td><td>PvP/PK</td><td>Status</td></tr>
+</thead>
+<tbody>
+<tr onmouseover="this.bgColor = '#505050';" onmouseout="this.bgColor = ''"><td align="center"><b>1</b></td><td><img src="./img/face/2_0.gif" alt="" /></td><td><a href="user.php?cid=268483030&amp;server=0"><font color="#8080FF">Evil</font></a></td><td><center> 85</center></td><td><center>Storm Screamer</center></td><td><a href="claninfo.php?clan=268487602&amp;server=0">FreeBorn</a></td><td><center><b>76</b>/<b><font color="red">0</font></b></center></td><td><font color="green">Online</font></td></tr><tr class="altRow" onmouseover="this.bgColor = '#505050';" onmouseout="this.bgColor = ''"><td align="center"><b>2</b></td><td><img src="./img/face/2_0.gif" alt="" /></td><td><a href="user.php?cid=268506303&amp;server=0"><font color="#8080FF">Owen</font></a></td><td><center> 85</center></td><td><center>Ghost Hunter</center></td><td><a href="claninfo.php?clan=268487602&amp;server=0">FreeBorn</a></td><td><center><b>30</b>/<b><font color="red">14</font></b></center></td><td><font color="green">Online</font></td></tr>
+</tbody>
+</table><br /><div class="page-choose" align="center"><br /><table align="center"><tr><td>  <a href="#" class="btn brown" title=" [1 - 2]"> 1 </a>  </td></tr></table>&nbsp;</div><br />

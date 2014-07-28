@@ -1,48 +1,43 @@
 <?php
-if(!defined('INCONFIG'))
+
+if (!defined('CORE'))
 {
-	header("Location: ../index.php");
-	exit();
+	header("Location: index.php");
+	die();
 }
 
 class TplParser
 {
-	private $tpldir = 'template';
-	private $defaultTpl = 'default';
-	private $tpl;
+    private static $tpl_dir = 'template';
+    private static $default_tpl = 'default';
+    private static $tpl;
 
-	function __construct($tpl)
-	{
-		$this->tpl = $tpl;
-	}
-
-	public function parseTemplate($template, $array, $return = false)
-	{
-		$template = $this->getTemplate($template);
-		if($template)
-		{
-			$content = preg_replace('#\{([a-z0-9\-_]*?)\}#Ssie', '( ( isset($array[\'\1\']) ) ? $array[\'\1\'] : \'\' );', $template);
-			if($return)
-				return $content;
-			echo $content;
-		}
-		return;
-	}
-
-	private function getTemplate($templatename)
-	{
-		if(file_exists($this->tpldir . '/' . $this->tpl . '/' . $templatename . '.tpl'))
-		{
-			return file_get_contents($this->tpldir . '/' . $this->tpl . '/' . $templatename . '.tpl');
-		}
-		elseif(file_exists($this->tpldir . '/' . $this->defaultTpl . '/' . $templatename . '.tpl'))
-		{
-			return file_get_contents($this->tpldir . '/' . $this->defaultTpl . '/' . $templatename . '.tpl');
-		}
-		else
-		{
-			return msg('Failed', 'Failed to get file ' . $templatename . ' contents', 'error',true);
-		}
-	}
+    public static function setDir($tpl)
+    {
+        TplParser::$tpl=$tpl;
+    }
+    private static function get($template_name)
+    {
+        global $Lang;
+        if (file_exists(TplParser::$tpl_dir . '/' . TplParser::$tpl . '/' . $template_name . '.tpl'))
+        {
+                return file_get_contents(TplParser::$tpl_dir . '/' . TplParser::$tpl . '/' . $template_name . '.tpl');
+        }
+        elseif (file_exists(TplParser::$tpl_dir . '/' . TplParser::$default_tpl . '/' . $template_name . '.tpl'))
+        {
+                return file_get_contents(TplParser::$tpl_dir . '/' . TplParser::$default_tpl . '/' . $template_name . '.tpl');
+        }
+        else
+        {
+                return msg($Lang['error'], sprintf($Lang['failed_to_get_content'], $template_name), 'error', true);
+        }
+    }
+    public static function parse($template, $array, $return = false)
+    {
+        $template = TplParser::get($template);
+        $content = preg_replace('#\{([a-z0-9\-_]*?)\}#Ssie', '( ( isset($array[\'\1\']) ) ? $array[\'\1\'] : \'\' );', $template);
+        if ($return) { return $content; }
+        echo $content;
+    }
 }
 ?>

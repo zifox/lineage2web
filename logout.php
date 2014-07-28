@@ -1,16 +1,16 @@
 <?php
-define('INWEB', True);
-require_once('include/config.php');
+define('L2WEB', True);
+require_once('include/core.php');
 
-if($user->logout())
+if(User::logout())
 {
-    head('Loging out...',1,'index.php',5);
-    msg('Success', 'You have been successfully logged out');
+    head($Lang['logging_out'],1,'index.php',5);
+    msg($Lang['success'], $Lang['success_log_out']);
 }
 else
 {
-    head('Loging out...',1,'index.php',5);
-    msg('Error', 'Failed to log out...');
+    head($Lang['logigng_out'],1,'index.php',5);
+    msg($Lang['success'], $Lang['fail_log_out']);
 }
 foot();
 ?>

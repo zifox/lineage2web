@@ -1,1 +1,1 @@
-<input id="{id}" type="image" {disabled} onmouseout="this.src = './login_b.php?text=   {text}&amp;style=press';" onmousemove="this.src = './login_b.php?text=   {text}&amp;style=hover';" src="./login_b.php?text=   {text}&amp;style=normal" />
+<input id="{id}" type="image" {disabled} onmouseout="this.src = '{link}press{png}';" onmousemove="this.src = '{link}hover{png}';" src="{link}normal{png}" alt="{alt}" />

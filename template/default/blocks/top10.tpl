@@ -1,4 +1,4 @@
-<font size="4" color="teal"><b>{server_name}</b></font>
-<table align="center" width="90%">
+<div style="color: teal; font-size: 16px;">{server_name}</div>
+<table class="menu">
 {rows}
 </table>

@@ -1,66 +1,70 @@
 <?php
-//пароль
-if (!defined('INCONFIG')) {
-    Header("Location: ../index.php");
+
+if (!defined('CORE')) {
+    header("Location: index.php");
     exit();
 }
 
-class Cache{
-    private $folder = "cache";
-    private $cacheId;
-    var $useCache=NULL;
-    
-    function __construct($useCache){
-        $this->useCache=$useCache;
+class Cache {
+
+    private static $folder = "cache";
+    private static $cacheId;
+    private static $enabled = false;
+
+    public static function init($active) {
+        Cache::$enabled = $active;
     }
 
-    function needUpdate($page, $params=NULL)
-    {
-        global $sql,$q,$webdb;
-        if($this->useCache)
-        {
-            $seconds=getConfig('cache', $page, getConfig('cache', 'default', '900'));
-            $time = time()-$seconds;
-            $qry=$sql->query(11, array('webdb'=> $webdb, 'page'=> $page, 'params'=>$params));
-            if($sql->numRows())
-            {
-                $cch=$sql->fetchArray($qry);
-                $this->cacheId=$cch['id'];
-                if($cch['time']>$time && $cch['recache']=='0')
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                $sql->query(12, array('webdb'=> $webdb, 'page'=> $page, 'params'=>$params));
-                $this->cacheId=$sql->getId();
-                return true;
-            }
-        }
-        else
+    private static function isEnabled() {
+        return Cache::$enabled;
+    }
+
+    private static function getId() {
+        return Cache::$cacheId;
+    }
+
+    private static function setId($id) {
+        Cache::$cacheId = $id;
+    }
+
+    public static function check($page, $params = null) {
+        if (!Cache::isEnabled()) { return true; }
+
+        global $sql;
+        $seconds = Config::get('cache', $page, Config::get('cache', 'default', '900'));
+        $time = time() - $seconds;
+        $qry = $sql[0]->query('GET_CACHE_BY_PAGE', array('page' => $page, 'params' => $params));
+        if (!SQL::numRows()) {
+            $sql[0]->query('ADD_CACHE', array('page' => $page, 'params' => $params));
+            Cache::setId($sql[0]->getLastId());
             return true;
+        }
+        $cch = SQL::fetchArray($qry);
+        Cache::setId($cch['id']);
+        if ($cch['time'] > $time && $cch['recache'] == '0') {
+            return false;
+        }
+        return true;
     }
-    
-    function updateCache($page, $content, $params=NULL)
-    {
-        global $sql,$webdb;
-        if(!$this->useCache) return;
-        $id=$this->cacheId;
-        $sql->query(13, array('webdb'=> $webdb, 'time'=>time(), 'id'=>$id));
-        if(file_exists($this->folder.'/'.$id.'.html'))
-            unlink($this->folder.'/'.$id.'.html');
-        file_put_contents($this->folder.'/'.$id.'.html', $content);
-        $this->cacheUpdated=true;
+
+    public static function update($content) {
+        if (!Cache::isEnabled()) {
+            return true;
+        }
+
+        global $sql;
+        $id = Cache::getId();
+        $sql[0]->query('UPDATE_CACHE_BY_ID', array('time' => time(), 'id' => $id));
+        if (file_exists(Cache::$folder . '/' . $id . '.html')) {
+            unlink(Cache::$folder . '/' . $id . '.html');
+        }
+        file_put_contents(Cache::$folder . '/' . $id . '.html', $content);
     }
-    
-    function getCache($page, $params=NULL)
-    {
-        return file_get_contents($this->folder.'/'.$this->cacheId.'.html');
+
+    public static function get() {
+        return file_get_contents(Cache::$folder . '/' . Cache::getId() . '.html');
     }
+
 }
+
 ?>

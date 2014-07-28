@@ -1,42 +1,51 @@
 <?php
-if(!defined('IN_BLOCK'))
+if(!defined('CORE'))
 {
 	header("Location: ../index.php");
 	exit();
 }
 
-$parse = getLang();
-if($user->logged())
+$parse = $Lang;
+if(User::logged())
 {
-	$parse['welcome_acc'] = sprintf(getLang('welcome'), $_SESSION['account']);
-	if($_SESSION['admin'])
+	$parse['welcome_acc'] = sprintf($Lang['welcome'], $_SESSION['account']);
+	if(User::isAdmin())
 	{
-		$parse['admin_link'] = '<tr><td><center><a href="admin.php"><font color="red">' . getLang('admin') . '</font></a></center></td></tr>';
+		//$parse['admin_link'] = '<tr><td><a href="admin.php">' . $Lang['admin'] . '</a></td></tr>';
+        $parse['admin_link'] = '<li><a href="admin.php">' . $Lang['admin'] . '</a></li>';
 	}
+    if(User::isMod())
+    {
+        //$parse['ban_link']  = '<tr><td><a href="bans.php">' . $Lang['ban_list'] . '</a></td></tr>';
+        //$parse['news_link'] = '<tr><td><a href="news.php">' . $Lang['news'] . '</a></td></tr>';
+        $parse['ban_link']  = '<li><a href="bans.php">' . $Lang['ban_list'] . '</a></li>';
+        $parse['news_link'] = '<li><a href="news.php">' . $Lang['news'] . '</a></li>';
+    }
 	$parse['time'] = $_SESSION['vote_time'] + 60 * 60 * 12;
 	if($parse['time'] > time())
 	{
-		$parse['vote_after_msg'] = getLang('vote_after') . '<br />';
+		$parse['vote_after_msg'] = $Lang['vote_after'] . '<br />';
 	}
-	$parse['unread'] = $_SESSION['new'];
-	$sql->query(39, array('webdb' => $webdb, 'sender' => $_SESSION['account']));
-	$msg = $sql->fetchArray();
+	$sql[0]->query('NEW_MESSAGES', array('acc'=>User::getUser()));
+	$msg = SQL::fetchArray();
+	$parse['unread'] = $_SESSION['new'] = $msg['new'];
+	$sql[0]->query('SENT_MESSAGES', array('sender' => User::getUser()));
+	$msg = SQL::fetchArray();
 	$parse['sent'] = $msg['sent'];
-	$sql->query(40, array('webdb' => $webdb, 'sender' => $_SESSION['account']));
-	$msg = $sql->fetchArray();
+	$sql[0]->query('RECEIVED_MESSAGES', array('receiver' => User::getUser()));
+	$msg = SQL::fetchArray();
 	$parse['rec'] = $msg['rec'];
-	$parse['new'] = ($new > 0) ? "new" : "";
-	$parse['in_mes'] = sprintf(getLang('in_mes'), $parse['rec'], $parse['unread']);
-	$parse['out_mes'] = sprintf(getLang('out_mes'), $parse['sent']);
-	$parse['wp_link'] = sprintf(getLang('webpoints'), $_SESSION['webpoints']);
-	$content = $tpl->parseTemplate('blocks/login_logged', $parse, true);
+	$parse['new'] = (User::getVar('new')> 0) ? "new" : "";
+	$parse['in_mes'] = sprintf($Lang['in_mes'], $parse['rec'], $parse['unread']);
+	$parse['out_mes'] = sprintf($Lang['out_mes'], $parse['sent']);
+	$parse['wp_link'] = sprintf($Lang['webpoints'], $_SESSION['webpoints']);
+	$content = TplParser::parse('blocks/login_logged', $parse, true);
 	global $content;
 }
 else
 {
-	$parse['static'] = $staticurl;
-	$parse['button'] = button(getLang('login'), '', true);
-	$content = $tpl->parseTemplate('blocks/login', $parse, true);
+	$parse['button'] = button('login', '', true);
+	$content = TplParser::parse('blocks/login', $parse, true);
 	global $content;
 }
 ?>

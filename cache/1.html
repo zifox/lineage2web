@@ -1,20 +1,15 @@
-<table width="100%" align="center">
-<tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="index.php"><img src="./button.php?text=Home" title="Home" alt="Home" border="0" width="138" height="34" /></a></td></tr>
-<tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="reg.php"><img src="./button.php?text=Registration" title="Registration" alt="Registration" border="0" width="138" height="34" /></a></td></tr>
-<tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="connect.php"><img src="./button.php?text=How to Connect" title="How to Connect" alt="How to Connect" border="0" width="138" height="34" /></a></td></tr>
-<tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="webshop.php"><img src="./button.php?text=WebShop" title="WebShop" alt="WebShop" border="0" width="138" height="34" /></a></td></tr>
-<tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="/forum/" target="_blank"><img src="./button.php?text=Forum" title="Forum" alt="Forum" border="0" width="138" height="34" /></a></td></tr>
-<tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="stat.php"><img src="./button.php?text=Statistic" title="Statistic" alt="Statistic" border="0" width="138" height="34" /></a></td></tr>
-<tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="rules.php"><img src="./button.php?text=Rules" title="Rules" alt="Rules" border="0" width="138" height="34" /></a></td></tr>
-<tr class="row" style="height: 34px;"><td align="center" class="menu"><a href="donate.php"><img src="./button.php?text=Donate" title="Donate" alt="Donate" border="0" width="138" height="34" /></a></td></tr>
-</table>
-<select name="skin" onchange="window.location='changeskin.php?skin='+this.options[this.selectedIndex].value">
-<option value="high5" selected="selected">high5</option>
+<ul class="menu">
+    <li class="menu"><a href="./"><img src="img/buttons/en_default_home.png" title="Home" alt="Home" width="138" height="34" /></a></li>
+    <li class="menu"><a href="reg.php"><img src="img/buttons/en_default_reg.png" title="Registration" alt="Registration" width="138" height="34" /></a></li>
+    <li class="menu"><a href="connect.php"><img src="img/buttons/en_default_connect.png" title="How to Connect" alt="How to Connect" width="138" height="34" /></a></li>
+    <li class="menu"><a href="webshop.php"><img src="img/buttons/en_default_market.png" title="WebShop" alt="WebShop" width="138" height="34" /></a></li>
+    <li class="menu"><a href="/forum/" target="_blank"><img src="img/buttons/en_default_forum.png" title="Forum" alt="Forum" width="138" height="34" /></a></li>
+    <li class="menu"><a href="stat.php"><img src="img/buttons/en_default_statistic.png" title="Statistic" alt="Statistic" width="138" height="34" /></a></li>
+    <li class="menu"><a href="rules.php"><img src="img/buttons/en_default_rules.png" title="Rules" alt="Rules" width="138" height="34" /></a></li>
+    <li class="menu"><a href="donate.php"><img src="img/buttons/en_default_donate.png" title="Donate" alt="Donate" width="138" height="34" /></a></li>
+</ul>
+<select name="theme" onchange="window.location='actions.php?a=theme%amp;theme='+this.options[this.selectedIndex].value">
+<option value="default" selected="selected">default</option>
 <option value="l2f">l2f</option>
-<option value="scorpion">scorpion</option>
 </select>
-<div id="lang2">
-<a href="server.php?lang=1"><img src="img/lang/lv.png" border="0" title="Latviski" alt="Latviski"/></a>
-<a href="server.php?lang=2"><img src="img/lang/en.png" border="0" title="English" alt="English"/></a>
-<a href="server.php?lang=3"><img src="img/lang/ru.png" border="0" title="по-русски" alt="по-русски"/></a>
-</div>
+<div id="lang2"><a href="actions.php?a=lng&amp;lang=en"><img src="lang/en.png" alt="en" class="img_border" width="32" height="32" /></a></div>
